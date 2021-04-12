@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
-const polyDark = Color(0x121212);
+import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class RoutesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: polyDark,
-    );
+    return Container(color: Constants.polyDark);
   }
 }

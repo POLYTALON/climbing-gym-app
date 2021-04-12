@@ -49,6 +49,7 @@ flutter:
 
   assets:
     - assets/img/polytalon_logo.png
+    - assets/img/polytalon_logo_notext.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
