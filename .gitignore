@@ -1,6 +1,9 @@
 # Environment variables (secrets)
 .env*
 
+# Bash profile
+.bash_profile
+
 # Miscellaneous
 *.class
 *.log
@@ -68,3 +71,4 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
