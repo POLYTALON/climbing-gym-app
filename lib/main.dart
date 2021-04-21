@@ -12,6 +12,14 @@ void main() async {
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, autoSendSessionId: true);
 
+  // Test: Create object in Back4App Storage
+  var firstObject = ParseObject('FirstClass')
+    ..set(
+        'message', 'Hey ! First message from Flutter. Parse is now connected');
+  await firstObject.save();
+  print('done');
+
+  // run app
   runApp(MyApp());
 }
 
