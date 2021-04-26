@@ -1,3 +1,6 @@
+import 'package:climbing_gym_app/validators/email_validator.dart';
+import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -10,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final controllerUsername = TextEditingController(text: "");
   final controllerEmail = TextEditingController(text: "");
   final controllerPassword = TextEditingController(text: "");
@@ -31,75 +35,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Spacer
             Spacer(flex: 1),
 
-            // Text Field Username
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-              child:
-                  Text("Benutzername:", style: TextStyle(color: Colors.white)),
-            ),
-            TextField(
-                controller: controllerUsername,
-                enabled: !isLoggedIn,
-                autocorrect: false,
-                textCapitalization: TextCapitalization.words,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: 'Max Mustermann',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // Text Field Username
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                    child: Text("Benutzername:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerUsername,
+                      enabled: !isLoggedIn,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.words,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      keyboardType: TextInputType.text,
+                      validator: NameFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: 'Max Mustermann',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
 
-            // Text Field E-Mail
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-              child: Text("E-Mail-Adresse:",
-                  style: TextStyle(color: Colors.white)),
-            ),
-            TextField(
-                controller: controllerEmail,
-                enabled: !isLoggedIn,
-                autocorrect: false,
-                textCapitalization: TextCapitalization.none,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: 'max.mustermann@polytalon.de',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
+                  // Text Field E-Mail
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                    child: Text("E-Mail-Adresse:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerEmail,
+                      enabled: !isLoggedIn,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: EmailFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: 'max.mustermann@polytalon.de',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
 
-            // Text Field Password
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-              child: Text("Passwort:", style: TextStyle(color: Colors.white)),
+                  // Text Field Password
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 4.0, bottom: 4.0),
+                    child: Text("Passwort:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerPassword,
+                      enabled: !isLoggedIn,
+                      textCapitalization: TextCapitalization.none,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: PasswordFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: '********',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
+                ],
+              ),
             ),
-            TextField(
-                controller: controllerPassword,
-                enabled: !isLoggedIn,
-                textCapitalization: TextCapitalization.none,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: '********',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
 
             // Spacer
             Spacer(flex: 1),
@@ -167,17 +183,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final String username = controllerUsername.text.trim();
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
-
-    // TODO: null check for empty input fields
     final user = ParseUser.createUser(username, password, email);
 
-    var response = await user.signUp();
+    if (_validateAndSave()) {
+      var response = await user.signUp();
 
-    if (response.success) {
-      navigateToLogin();
-    } else {
-      handleErrorMessage(response);
+      if (response.success) {
+        navigateToLogin();
+      } else {
+        handleErrorMessage(response);
+      }
     }
+  }
+
+  bool _validateAndSave() {
+    final FormState form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 
   void handleErrorMessage(ParseResponse response) {

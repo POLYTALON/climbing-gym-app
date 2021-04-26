@@ -7,7 +7,7 @@ class EmailFieldValidator {
   }
 
   static bool isValidEmail(String email) {
-    String p = r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    String p = r"^[a-zA-Z0-9.]+@[a-zA-Z0-9\-]+\.[a-zA-Z]+";
     RegExp regExp = new RegExp(p);
     return regExp.hasMatch(email);
   }

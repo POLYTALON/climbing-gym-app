@@ -1,5 +1,7 @@
 import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/screens/register.dart';
+import 'package:climbing_gym_app/validators/email_validator.dart';
+import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -10,7 +12,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final controllerUsername = TextEditingController(text: "");
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controllerEmail = TextEditingController(text: "");
   final controllerPassword = TextEditingController(text: "");
   String _errorMessage = "";
   bool isLoggedIn = false;
@@ -31,30 +34,26 @@ class _LoginScreenState extends State<LoginScreen> {
             Spacer(flex: 1),
 
             Form(
+              key: _formKey,
               child: Column(
                 children: [
-                  // Text Field E-Mail
+                  // Text Field Email-Address
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                    child: Text("Benutzername:",
+                    child: Text("E-Mail-Adresse:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
-                      controller: controllerUsername,
+                      controller: controllerEmail,
                       enabled: !isLoggedIn,
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
+                      keyboardType: TextInputType.emailAddress,
+                      validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 16.0),
-                          hintText: 'Max Mustermann',
+                          hintText: 'max.mustermann@polytalon.de',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(24.0),
                               borderSide: BorderSide(
@@ -78,12 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       enableSuggestions: false,
                       autocorrect: false,
                       keyboardType: TextInputType.visiblePassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
+                      validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 16.0),
                           hintText: '********',
@@ -180,18 +174,28 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void doUserLogin() async {
-    final username = controllerUsername.text.trim();
+    final email = controllerEmail.text.trim();
     final password = controllerPassword.text.trim();
-    final user = ParseUser(username, password, null);
+    final user = ParseUser(email, password, null);
 
-    // TODO: null check for empty input fields
-    var response = await user.login();
+    if (_validateAndSave()) {
+      var response = await user.login();
 
-    if (response.success) {
-      navigateToHome();
-    } else {
-      handleErrorMessage(response);
+      if (response.success) {
+        navigateToHome();
+      } else {
+        handleErrorMessage(response);
+      }
     }
+  }
+
+  bool _validateAndSave() {
+    final FormState form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 
   void handleErrorMessage(ParseResponse response) {
