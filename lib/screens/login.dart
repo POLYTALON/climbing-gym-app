@@ -10,8 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final controllerUsername = TextEditingController();
-  final controllerPassword = TextEditingController();
+  final controllerUsername = TextEditingController(text: "");
+  final controllerPassword = TextEditingController(text: "");
+  String _errorMessage = "";
   bool isLoggedIn = false;
 
   @override
@@ -75,6 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             BorderSide(width: 0, style: BorderStyle.none)),
                     fillColor: Colors.white,
                     filled: true)),
+
+            // Spacer
+            Spacer(flex: 1),
+
+            // Error Message
+            Center(
+                child: Text(_errorMessage,
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w800))),
 
             // Spacer
             Spacer(flex: 1),
@@ -153,17 +163,20 @@ class _LoginScreenState extends State<LoginScreen> {
   void doUserLogin() async {
     final username = controllerUsername.text.trim();
     final password = controllerPassword.text.trim();
+    final user = ParseUser(username, password, null);
 
-    final user = ParseUser(username, password, "");
-
-    // TODO: Fix error when input fields are empty
+    // TODO: null check for empty input fields
     var response = await user.login();
 
     if (response.success) {
       navigateToHome();
     } else {
-      // TODO: Error message
+      handleErrorMessage(response);
     }
+  }
+
+  void handleErrorMessage(ParseResponse response) {
+    _errorMessage = response.error.message;
   }
 
   void navigateToHome() {

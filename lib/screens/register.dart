@@ -10,9 +10,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final controllerUsername = TextEditingController();
-  final controllerEmail = TextEditingController();
-  final controllerPassword = TextEditingController();
+  final controllerUsername = TextEditingController(text: "");
+  final controllerEmail = TextEditingController(text: "");
+  final controllerPassword = TextEditingController(text: "");
+  String _errorMessage = "";
   bool isLoggedIn = false;
 
   @override
@@ -30,29 +31,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Spacer
             Spacer(flex: 1),
 
-            // Text Field E-Mail
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-              child: Text("E-Mail-Adresse:",
-                  style: TextStyle(color: Colors.white)),
-            ),
-            TextField(
-                controller: controllerEmail,
-                enabled: !isLoggedIn,
-                autocorrect: false,
-                textCapitalization: TextCapitalization.none,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: 'max.mustermann@polytalon.de',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
-
             // Text Field Username
             Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
@@ -69,6 +47,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 16.0),
                     hintText: 'Max Mustermann',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                        borderSide:
+                            BorderSide(width: 0, style: BorderStyle.none)),
+                    fillColor: Colors.white,
+                    filled: true)),
+
+            // Text Field E-Mail
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+              child: Text("E-Mail-Adresse:",
+                  style: TextStyle(color: Colors.white)),
+            ),
+            TextField(
+                controller: controllerEmail,
+                enabled: !isLoggedIn,
+                autocorrect: false,
+                textCapitalization: TextCapitalization.none,
+                style: TextStyle(fontWeight: FontWeight.w800),
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 16.0),
+                    hintText: 'max.mustermann@polytalon.de',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24.0),
                         borderSide:
@@ -99,6 +100,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             BorderSide(width: 0, style: BorderStyle.none)),
                     fillColor: Colors.white,
                     filled: true)),
+
+            // Spacer
+            Spacer(flex: 1),
+
+            // Error Message
+            Center(
+                child: Text(_errorMessage,
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w800))),
 
             // Spacer
             Spacer(flex: 1),
@@ -139,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {},
+              onPressed: () => navigateToLogin(),
               child: Text("Anmelden",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
@@ -154,10 +164,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void doUserRegistration() async {
-    final username = controllerUsername.text.trim();
-    final email = controllerEmail.text.trim();
-    final password = controllerPassword.text.trim();
+    final String username = controllerUsername.text.trim();
+    final String email = controllerEmail.text.trim();
+    final String password = controllerPassword.text.trim();
 
+    // TODO: null check for empty input fields
     final user = ParseUser.createUser(username, password, email);
 
     var response = await user.signUp();
@@ -165,8 +176,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (response.success) {
       navigateToLogin();
     } else {
-      // TODO: Error message
+      handleErrorMessage(response);
     }
+  }
+
+  void handleErrorMessage(ParseResponse response) {
+    _errorMessage = response.error.message;
   }
 
   void navigateToLogin() {

@@ -14,22 +14,20 @@ class NavigationContainer extends StatefulWidget {
 
 class _NavigationState extends State<NavigationContainer> {
   ParseUser currentUser;
-  Future<ParseUser> getUser() async {
+
+  getUser() async {
     currentUser = await ParseUser.currentUser() as ParseUser;
-    return currentUser;
+    this.currentUser = currentUser;
   }
 
   int _navBarIndex = 1;
   String _title;
-  final List<Widget> _children = [
-    GymsScreen(),
-    HomeScreen(),
-    NewsScreen(),
-    RoutesScreen()
-  ];
+  List<Widget> _children;
 
   @override
   initState() {
+    getUser();
+    _children = [GymsScreen(), HomeScreen(), NewsScreen(), RoutesScreen()];
     super.initState();
     _title = 'HOME';
   }
