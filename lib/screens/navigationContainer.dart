@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/screens/news.dart';
 import 'package:climbing_gym_app/screens/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/screens/home.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class NavigationContainer extends StatefulWidget {
   @override
@@ -12,6 +13,12 @@ class NavigationContainer extends StatefulWidget {
 }
 
 class _NavigationState extends State<NavigationContainer> {
+  ParseUser currentUser;
+  Future<ParseUser> getUser() async {
+    currentUser = await ParseUser.currentUser() as ParseUser;
+    return currentUser;
+  }
+
   int _navBarIndex = 1;
   String _title;
   final List<Widget> _children = [

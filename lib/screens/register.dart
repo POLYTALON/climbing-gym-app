@@ -1,16 +1,17 @@
-import 'package:climbing_gym_app/screens/navigationContainer.dart';
-import 'package:climbing_gym_app/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-class LoginScreen extends StatefulWidget {
+import 'login.dart';
+
+class RegisterScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final controllerUsername = TextEditingController();
+  final controllerEmail = TextEditingController();
   final controllerPassword = TextEditingController();
   bool isLoggedIn = false;
 
@@ -30,6 +31,29 @@ class _LoginScreenState extends State<LoginScreen> {
             Spacer(flex: 1),
 
             // Text Field E-Mail
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+              child: Text("E-Mail-Adresse:",
+                  style: TextStyle(color: Colors.white)),
+            ),
+            TextField(
+                controller: controllerEmail,
+                enabled: !isLoggedIn,
+                autocorrect: false,
+                textCapitalization: TextCapitalization.none,
+                style: TextStyle(fontWeight: FontWeight.w800),
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 16.0),
+                    hintText: 'max.mustermann@polytalon.de',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                        borderSide:
+                            BorderSide(width: 0, style: BorderStyle.none)),
+                    fillColor: Colors.white,
+                    filled: true)),
+
+            // Text Field Username
             Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
               child:
@@ -79,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Spacer
             Spacer(flex: 1),
 
-            // Button Login
+            // Button Register
             TextButton(
               style: ButtonStyle(
                   backgroundColor:
@@ -88,42 +112,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: isLoggedIn ? null : () => doUserLogin(),
-              child: Text("Anmelden",
+              onPressed: isLoggedIn ? null : () => doUserRegistration(),
+              child: Text("Registrieren",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
-            ),
-            Text(
-              "Passwort vergessen?",
-              style: TextStyle(
-                  color: Colors.blue[400],
-                  decoration: TextDecoration.underline),
-              textAlign: TextAlign.center,
             ),
 
             // Spacer
             Spacer(),
 
-            // Button Login with Google
-            TextButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0)),
-                  )),
-              onPressed: () {},
-              child: Text("Mit Google anmelden",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w900)),
-            ),
-
             // Spacer
             Spacer(flex: 2),
 
-            // Register Button
+            // Goto Login Button
             Text(
-              "Noch keinen Account?",
+              "Du hast bereits einen Account?",
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -136,8 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () => navigateToRegister(),
-              child: Text("Registrieren",
+              onPressed: () {},
+              child: Text("Anmelden",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),
@@ -150,34 +153,26 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void doUserLogin() async {
+  void doUserRegistration() async {
     final username = controllerUsername.text.trim();
+    final email = controllerEmail.text.trim();
     final password = controllerPassword.text.trim();
 
-    final user = ParseUser(username, password, "");
+    final user = ParseUser.createUser(username, password, email);
 
-    // TODO: Fix error when input fields are empty
-    var response = await user.login();
+    var response = await user.signUp();
 
     if (response.success) {
-      navigateToHome();
+      navigateToLogin();
     } else {
       // TODO: Error message
     }
   }
 
-  void navigateToHome() {
+  void navigateToLogin() {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => NavigationContainer()),
-      (Route<dynamic> route) => false,
-    );
-  }
-
-  void navigateToRegister() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => RegisterScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()),
       (Route<dynamic> route) => false,
     );
   }

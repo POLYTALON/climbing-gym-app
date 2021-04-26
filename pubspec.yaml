@@ -49,7 +49,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
     - assets/img/polytalon_logo.png
     - assets/img/polytalon_logo_notext.png
   # To add assets to your application, add an assets section, like this:
