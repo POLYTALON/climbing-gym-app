@@ -30,53 +30,72 @@ class _LoginScreenState extends State<LoginScreen> {
             // Spacer
             Spacer(flex: 1),
 
-            // Text Field E-Mail
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-              child:
-                  Text("Benutzername:", style: TextStyle(color: Colors.white)),
-            ),
-            TextField(
-                controller: controllerUsername,
-                enabled: !isLoggedIn,
-                autocorrect: false,
-                textCapitalization: TextCapitalization.words,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: 'Max Mustermann',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
+            Form(
+              child: Column(
+                children: [
+                  // Text Field E-Mail
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                    child: Text("Benutzername:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerUsername,
+                      enabled: !isLoggedIn,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.words,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: 'Max Mustermann',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
 
-            // Text Field Password
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-              child: Text("Passwort:", style: TextStyle(color: Colors.white)),
+                  // Text Field Password
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 4.0, bottom: 4.0),
+                    child: Text("Passwort:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerPassword,
+                      enabled: !isLoggedIn,
+                      textCapitalization: TextCapitalization.none,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: '********',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
+                ],
+              ),
             ),
-            TextField(
-                controller: controllerPassword,
-                enabled: !isLoggedIn,
-                textCapitalization: TextCapitalization.none,
-                style: TextStyle(fontWeight: FontWeight.w800),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: '********',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
-
             // Spacer
             Spacer(flex: 1),
 
