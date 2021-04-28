@@ -1,35 +1,34 @@
 import 'package:climbing_gym_app/screens/start.dart';
+import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final keyApplicationId = 'PfW1Xzrs8RNZ44jbnLRBRArDepC3WCLFLVvO75Ic';
-  final keyClientKey = 'Vxz2kY9cbXOH4LmOigiuGqkU3e9yrXxnRDe0cO3o';
-  final keyParseServerUrl = 'https://parseapi.back4app.com';
-
-  await Parse().initialize(keyApplicationId, keyParseServerUrl,
-      clientKey: keyClientKey, debug: true);
-
-  // Test: Create object in Back4App Storage
-  var firstObject = ParseObject('FirstClass')
-    ..set(
-        'message', 'Hey ! First message from Flutter. Parse is now connected');
-  await firstObject.save();
-
   // run app
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Climbing App',
-      theme: ThemeData(fontFamily: 'NunitoSans'),
-      home: StartScreen(),
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+              title: 'Climbing App',
+              theme: ThemeData(fontFamily: 'NunitoSans'),
+              home: FirebaseAuth.instance.currentUser != null
+                  ? NavigationContainer()
+                  : StartScreen());
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -176,15 +176,25 @@ class _LoginScreenState extends State<LoginScreen> {
   void doUserLogin() async {
     final email = controllerEmail.text.trim();
     final password = controllerPassword.text.trim();
-    final user = ParseUser(email, password, null);
-
     if (_validateAndSave()) {
-      var response = await user.login();
-
-      if (response.success) {
-        navigateToHome();
-      } else {
-        handleErrorMessage(response);
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+        if (userCredential != null) {
+          navigateToHome();
+        }
+      } on FirebaseAuthException catch (e) {
+        String message;
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided for that user.';
+        } else {
+          message = 'Something went wrong :(';
+        }
+        setState(() {
+          _errorMessage = message;
+        });
       }
     }
   }
@@ -196,10 +206,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return true;
     }
     return false;
-  }
-
-  void handleErrorMessage(ParseResponse response) {
-    _errorMessage = response.error.message;
   }
 
   void navigateToHome() {

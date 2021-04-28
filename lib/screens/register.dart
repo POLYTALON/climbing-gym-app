@@ -3,7 +3,7 @@ import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'login.dart';
 
@@ -180,18 +180,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void doUserRegistration() async {
-    final String username = controllerUsername.text.trim();
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
-    final user = ParseUser.createUser(username, password, email);
 
     if (_validateAndSave()) {
-      var response = await user.signUp();
-
-      if (response.success) {
-        navigateToLogin();
-      } else {
-        handleErrorMessage(response);
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        if (userCredential != null) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+            (Route<dynamic> route) => false,
+          );
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = e.toString();
+        });
       }
     }
   }
@@ -203,10 +209,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return true;
     }
     return false;
-  }
-
-  void handleErrorMessage(ParseResponse response) {
-    _errorMessage = response.error.message;
   }
 
   void navigateToLogin() {
