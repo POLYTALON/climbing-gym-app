@@ -1,6 +1,8 @@
 import 'package:climbing_gym_app/screens/gyms.dart';
 import 'package:climbing_gym_app/screens/news.dart';
 import 'package:climbing_gym_app/screens/routes.dart';
+import 'package:climbing_gym_app/screens/start.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/screens/home.dart';
 
@@ -35,7 +37,7 @@ class _NavigationState extends State<NavigationContainer> {
                 actions: [
                   IconButton(
                     icon: Image.asset('assets/img/polytalon_logo_notext.png'),
-                    onPressed: () {},
+                    onPressed: () => doUserLogout(),
                   )
                 ],
                 title: Text(_title,
@@ -109,5 +111,17 @@ class _NavigationState extends State<NavigationContainer> {
           break;
       }
     });
+  }
+
+  void doUserLogout() async {
+    await FirebaseAuth.instance.signOut();
+    navigateToStart();
+  }
+
+  void navigateToStart() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StartScreen()),
+    );
   }
 }
