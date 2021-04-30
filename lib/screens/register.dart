@@ -17,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final controllerUsername = TextEditingController(text: "");
   final controllerEmail = TextEditingController(text: "");
   final controllerPassword = TextEditingController(text: "");
+  final controllerPasswordRepeat = TextEditingController(text: "");
   String _errorMessage = "";
   bool isLoggedIn = false;
 
@@ -91,11 +92,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort:",
+                    child: Text("Passwort wiederholen:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
                       controller: controllerPassword,
+                      enabled: !isLoggedIn,
+                      textCapitalization: TextCapitalization.none,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: PasswordFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: '********',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
+
+                  // Text Field Password (repeat)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 4.0, bottom: 4.0),
+                    child: Text("Passwort:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerPasswordRepeat,
                       enabled: !isLoggedIn,
                       textCapitalization: TextCapitalization.none,
                       style: TextStyle(fontWeight: FontWeight.w800),
@@ -182,21 +210,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void doUserRegistration() async {
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
+    final String passwordRepeat = controllerPasswordRepeat.text.trim();
 
     if (_validateAndSave()) {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-        if (userCredential != null) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-            (Route<dynamic> route) => false,
-          );
+      if (password == passwordRepeat) {
+        try {
+          UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password);
+          if (userCredential != null) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+              (Route<dynamic> route) => false,
+            );
+          }
+        } catch (e) {
+          setState(() {
+            _errorMessage = e.toString();
+          });
         }
-      } catch (e) {
+      } else {
         setState(() {
-          _errorMessage = e.toString();
+          _errorMessage = "Die Passwörter stimmen nicht überein!";
         });
       }
     }
