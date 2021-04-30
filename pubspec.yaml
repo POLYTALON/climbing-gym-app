@@ -32,6 +32,7 @@ dependencies:
   animations: ^2.0.0
   flutter_svg: ^0.21.0+1
   touchable_opacity: ^1.2.0
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

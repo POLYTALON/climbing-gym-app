@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/screens/news.dart';
 import 'package:climbing_gym_app/screens/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/screens/home.dart';
+import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class NavigationContainer extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class _NavigationState extends State<NavigationContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
         // AppBar
+        backgroundColor: Constants.polyDark,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(64.0),
             child: AppBar(

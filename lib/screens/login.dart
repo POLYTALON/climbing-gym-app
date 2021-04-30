@@ -1,10 +1,13 @@
-import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/screens/register.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -178,11 +181,17 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = controllerPassword.text.trim();
     if (_validateAndSave()) {
       try {
+        final auth = Provider.of<AuthService>(context, listen: false);
+        await auth.loginUser(email, password);
+        await Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => MyApp()));
+        /*
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         if (userCredential != null) {
           navigateToHome();
         }
+        */
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'user-not-found') {
@@ -208,6 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return false;
   }
 
+/*
   void navigateToHome() {
     Navigator.pushAndRemoveUntil(
       context,
@@ -215,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
       (Route<dynamic> route) => false,
     );
   }
-
+*/
   void navigateToRegister() {
     Navigator.pushAndRemoveUntil(
       context,
