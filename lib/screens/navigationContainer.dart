@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/screens/news.dart';
 import 'package:climbing_gym_app/screens/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/screens/home.dart';
+import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class NavigationContainer extends StatefulWidget {
   @override
@@ -14,15 +15,11 @@ class NavigationContainer extends StatefulWidget {
 class _NavigationState extends State<NavigationContainer> {
   int _navBarIndex = 1;
   String _title;
-  final List<Widget> _children = [
-    GymsScreen(),
-    HomeScreen(),
-    NewsScreen(),
-    RoutesScreen()
-  ];
+  List<Widget> _children;
 
   @override
   initState() {
+    _children = [GymsScreen(), HomeScreen(), NewsScreen(), RoutesScreen()];
     super.initState();
     _title = 'HOME';
   }
@@ -31,6 +28,7 @@ class _NavigationState extends State<NavigationContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
         // AppBar
+        backgroundColor: Constants.polyDark,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(64.0),
             child: AppBar(

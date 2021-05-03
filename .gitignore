@@ -1,3 +1,11 @@
+# Firebase hosting directory (correct me if this should not be gitignored)
+public
+.firebase
+
+# Environment variables (secrets)
+.env*
+
+# Bash profile
 .bash_profile
 
 # Miscellaneous

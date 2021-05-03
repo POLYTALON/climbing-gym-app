@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Polytalon Test": {
+      "applicationId": "PfW1Xzrs8RNZ44jbnLRBRArDepC3WCLFLVvO75Ic"
+    },
+    "_default": {
+      "link": "Polytalon Test"
+    }
+  }
+}

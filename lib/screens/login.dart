@@ -1,8 +1,26 @@
-import 'package:climbing_gym_app/screens/navigationContainer.dart';
+import 'package:climbing_gym_app/screens/register.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/validators/email_validator.dart';
+import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../main.dart';
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controllerEmail = TextEditingController(text: "");
+  final controllerPassword = TextEditingController(text: "");
+  String _errorMessage = "";
+  bool isLoggedIn = false;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -18,45 +36,71 @@ class LoginScreen extends StatelessWidget {
             // Spacer
             Spacer(flex: 1),
 
-            // Text Field E-Mail
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-              child: Text("E-Mail-Adresse:",
-                  style: TextStyle(color: Colors.white)),
-            ),
-            TextField(
-                style: TextStyle(fontWeight: FontWeight.w800),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: 'max.mustermann@polytalon.de',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // Text Field Email-Address
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                    child: Text("E-Mail-Adresse:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerEmail,
+                      enabled: !isLoggedIn,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.words,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: EmailFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: 'max.mustermann@polytalon.de',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
 
-            // Text Field Password
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-              child: Text("Passwort:", style: TextStyle(color: Colors.white)),
+                  // Text Field Password
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 4.0, bottom: 4.0),
+                    child: Text("Passwort:",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  TextFormField(
+                      controller: controllerPassword,
+                      enabled: !isLoggedIn,
+                      textCapitalization: TextCapitalization.none,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: PasswordFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: '********',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
+                ],
+              ),
             ),
-            TextField(
-                style: TextStyle(fontWeight: FontWeight.w800),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 16.0),
-                    hintText: '********',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        borderSide:
-                            BorderSide(width: 0, style: BorderStyle.none)),
-                    fillColor: Colors.white,
-                    filled: true)),
+            // Spacer
+            Spacer(flex: 1),
+
+            // Error Message
+            Center(
+                child: Text(_errorMessage,
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w800))),
 
             // Spacer
             Spacer(flex: 1),
@@ -70,13 +114,7 @@ class LoginScreen extends StatelessWidget {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NavigationContainer()),
-                );
-              },
+              onPressed: isLoggedIn ? null : () => doUserLogin(),
               child: Text("Anmelden",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
@@ -124,7 +162,7 @@ class LoginScreen extends StatelessWidget {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {},
+              onPressed: () => navigateToRegister(),
               child: Text("Registrieren",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
@@ -135,6 +173,64 @@ class LoginScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void doUserLogin() async {
+    final email = controllerEmail.text.trim();
+    final password = controllerPassword.text.trim();
+    if (_validateAndSave()) {
+      try {
+        final auth = Provider.of<AuthService>(context, listen: false);
+        await auth.loginUser(email, password);
+        await Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => MyApp()));
+        /*
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+        if (userCredential != null) {
+          navigateToHome();
+        }
+        */
+      } on FirebaseAuthException catch (e) {
+        String message;
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided for that user.';
+        } else {
+          message = 'Something went wrong :(';
+        }
+        setState(() {
+          _errorMessage = message;
+        });
+      }
+    }
+  }
+
+  bool _validateAndSave() {
+    final FormState form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+/*
+  void navigateToHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => NavigationContainer()),
+      (Route<dynamic> route) => false,
+    );
+  }
+*/
+  void navigateToRegister() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => RegisterScreen()),
+      (Route<dynamic> route) => false,
     );
   }
 }
