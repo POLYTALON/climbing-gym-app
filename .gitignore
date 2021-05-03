@@ -7,9 +7,6 @@ web/index.html
 public
 .firebase
 
-# Environment variables (secrets)
-.env*
-
 # Bash profile
 .bash_profile
 
