@@ -7,7 +7,8 @@
     {
       "name": "climbing_gym_app",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": ["--web-port", "46700"],
     }
   ]
 }
