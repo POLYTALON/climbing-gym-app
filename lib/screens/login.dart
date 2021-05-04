@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {},
+              onPressed: () => doGoogleLogin(),
               child: Text("Mit Google anmelden",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
@@ -192,6 +192,29 @@ class _LoginScreenState extends State<LoginScreen> {
           navigateToHome();
         }
         */
+      } on FirebaseAuthException catch (e) {
+        String message;
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided for that user.';
+        } else {
+          message = 'Something went wrong :(';
+        }
+        setState(() {
+          _errorMessage = message;
+        });
+      }
+    }
+  }
+
+  void doGoogleLogin() async {
+    if (_validateAndSave()) {
+      try {
+        final auth = Provider.of<AuthService>(context, listen: false);
+        await auth.signInWithGoogle();
+        await Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => MyApp()));
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'user-not-found') {
