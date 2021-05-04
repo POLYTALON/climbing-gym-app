@@ -15,6 +15,9 @@ class AuthService with ChangeNotifier {
 
   Future<void> logout() async {
     await _auth.signOut();
+    await GoogleSignIn().isSignedIn().then((value) => {
+          if (value) {GoogleSignIn().signOut()}
+        });
     _loggedIn = false;
     notifyListeners();
   }
@@ -26,7 +29,7 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -39,7 +42,10 @@ class AuthService with ChangeNotifier {
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    _loggedIn = true;
+    notifyListeners();
   }
 
 /*

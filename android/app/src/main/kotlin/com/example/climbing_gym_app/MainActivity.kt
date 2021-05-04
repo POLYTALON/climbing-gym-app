@@ -1,4 +1,4 @@
-package com.example.climbing_gym_app
+package de.polytalon.polyapp
 
 import io.flutter.embedding.android.FlutterActivity
 
