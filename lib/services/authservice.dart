@@ -4,9 +4,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
+
   bool _loggedIn = false;
 
   bool get loggedIn => _loggedIn;
+
+  bool checkLoggedIn() {
+    _loggedIn = _auth.currentUser != null;
+    return _loggedIn;
+  }
 
   Future<void> register(String userEmail, String userPassword) async {
     await _auth.createUserWithEmailAndPassword(
