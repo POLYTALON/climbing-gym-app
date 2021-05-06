@@ -10,8 +10,7 @@ class AuthService with ChangeNotifier {
   bool get loggedIn => _loggedIn;
 
   bool checkLoggedIn() {
-    _loggedIn = _auth.currentUser != null;
-    return _loggedIn;
+    return _loggedIn = _auth.currentUser != null;
   }
 
   Future<void> register(String userEmail, String userPassword) async {
