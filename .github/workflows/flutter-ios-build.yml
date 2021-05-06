@@ -1,3 +1,7 @@
+on: [pull_request, push]
+
+name: flutter ios build
+
 jobs:
   build:
     runs-on: macos-latest
