@@ -1,9 +1,11 @@
+# Firebase API Keys
+android/app/google-services.json
+ios/GoogleService-Info.plist
+web/index.html
+
 # Firebase hosting directory (correct me if this should not be gitignored)
 public
 .firebase
-
-# Environment variables (secrets)
-.env*
 
 # Bash profile
 .bash_profile
