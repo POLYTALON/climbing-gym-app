@@ -32,6 +32,7 @@ class _NavigationState extends State<NavigationContainer> {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(64.0),
             child: AppBar(
+                brightness: Brightness.dark,
                 backgroundColor: Constants.polyDark,
                 automaticallyImplyLeading: false, // removes back-arrow
                 actions: [
