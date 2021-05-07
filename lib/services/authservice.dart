@@ -19,11 +19,15 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
-    await GoogleSignIn().isSignedIn().then((value) => {
-          if (value) {GoogleSignIn().signOut()}
-        });
-    _loggedIn = false;
+    try {
+      await _auth.signOut();
+      await GoogleSignIn().isSignedIn().then((value) => {
+            if (value) {GoogleSignIn().signOut()}
+          });
+      _loggedIn = false;
+    } catch (e) {
+      print(e);
+    }
     notifyListeners();
   }
 
