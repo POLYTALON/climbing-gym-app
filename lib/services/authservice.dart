@@ -1,21 +1,32 @@
+import 'package:climbing_gym_app/services/databaseservice.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class AuthService with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
+  //FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool _loggedIn = false;
 
   bool get loggedIn => _loggedIn;
+  //get auth => _auth;
 
   bool checkLoggedIn() {
     return _loggedIn = _auth.currentUser != null;
   }
 
-  Future<void> register(String userEmail, String userPassword) async {
-    await _auth.createUserWithEmailAndPassword(
+  Future<UserCredential> register(String userEmail, String userPassword) async {
+    return _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
+    //  .then((user) async {
+    //print("Got IT: " + user.user.toString());
+    //print("userid: " + user.user.uid.toString());
+    // create users record
+    //final auth = Provider.of<DatabaseService>(null, listen: false);
+    //await auth.userSetup(user.user.uid.toString());
+    //});
   }
 
   Future<void> logout() async {
