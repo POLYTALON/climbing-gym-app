@@ -16,8 +16,8 @@ class AuthService with ChangeNotifier {
 
   bool get loggedIn => _loggedIn;
 
-  Future<void> register(String userEmail, String userPassword) async {
-    await _auth.createUserWithEmailAndPassword(
+  Future<UserCredential> register(String userEmail, String userPassword) async {
+    return _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
   }
 
