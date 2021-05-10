@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/screens/gyms.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'login.dart';
@@ -55,7 +56,12 @@ class StartScreen extends StatelessWidget {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GymsScreen()),
+                );
+              },
               child: Text("Verfügbare Hallen",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),

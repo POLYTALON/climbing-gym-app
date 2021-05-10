@@ -65,34 +65,59 @@ class GymsScreen extends StatelessWidget {
 
       // SlidingUpPanelWidget
       SlidingUpPanelWidget(
-          child: Container(
-            // margin: EdgeInsets.symmetric(horizontal: 15.0),
-            decoration: ShapeDecoration(
-              color: Constants.lightGray,
-              shadows: [
-                BoxShadow(
-                    blurRadius: 5.0,
-                    spreadRadius: 2.0,
-                    color: const Color(0x11000000))
-              ],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0))),
-            ),
-          ),
-          controlHeight: 0.0,
+          controlHeight: 1.0,
           anchor: 0.6,
           panelController: _panelController,
-          enableOnTap: false,
-          onTap: () {
-            toggleSlidingPanel();
-          })
+          child: Container(
+              decoration: ShapeDecoration(
+                color: Constants.lightGray,
+                shadows: [
+                  BoxShadow(
+                      blurRadius: 8.0,
+                      spreadRadius: 16.0,
+                      color: const Color(0x11000000))
+                ],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0))),
+              ),
+
+              // SlidingUpPanel content
+              child: Column(children: <Widget>[
+                // Take photo button
+                Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16.0),
+                            topRight: Radius.circular(16.0))),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(12.0),
+                          elevation: 2,
+                          primary: Constants.polyGray,
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Icon(Icons.camera_alt_rounded,
+                                  size: 48.0, color: Colors.white),
+                              Text(
+                                'Logo oder Bild hinzufügen',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white),
+                              )
+                            ]))),
+              ])))
     ]);
   }
 
   void toggleSlidingPanel() {
-    if (SlidingUpPanelStatus.expanded == _panelController.status) {
+    if (_panelController.status == SlidingUpPanelStatus.expanded) {
       _panelController.collapse();
     } else {
       _panelController.anchor();

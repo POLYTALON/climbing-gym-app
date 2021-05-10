@@ -1,7 +1,17 @@
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GymsService with ChangeNotifier {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Stream<List<Gym>> streamGyms() {
+    _firestore
+        .collection('gyms')
+        .snapshots()
+        .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
+  }
+
   List<Gym> gymsList = [
     Gym(
         name: "Steinbock Konstanz",

@@ -1,12 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Gym extends Equatable {
-  Gym({@required this.name, @required this.imageUrl});
-
   final String name;
   final String imageUrl;
+  final String city;
 
   @override
-  List<Object> get props => [name, imageUrl];
+  List<Object> get props => [name, city, imageUrl];
+
+  Gym({this.name, this.imageUrl, this.city});
+
+  factory Gym.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data();
+    print(data);
+    return Gym(
+        name: data['name'] ?? '',
+        city: data['city'] ?? '',
+        imageUrl: data['imageUrl'] ?? '');
+  }
 }
