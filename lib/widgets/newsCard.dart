@@ -29,7 +29,8 @@ class SharingDialogState extends State<NewsCard> {
             Expanded(
               flex: 7,
               child: ClipRRect(
-                child: Image.network(this.news.imageUrl, fit: BoxFit.contain),
+                child:
+                    Image.network(this.news.imageUrls[0], fit: BoxFit.contain),
               ),
             ),
             Expanded(
@@ -39,7 +40,7 @@ class SharingDialogState extends State<NewsCard> {
                 child: Column(
                   children: [
                     Center(
-                      child: Text(this.news.text,
+                      child: Text(this.news.content,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.black,
@@ -57,7 +58,7 @@ class SharingDialogState extends State<NewsCard> {
                                 color: Colors.grey,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 15)),
-                        Text(this.news.publishDate.toString(),
+                        Text(this.news.date.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.grey,

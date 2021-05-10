@@ -6,12 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
+import 'models/News.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // run app
   runApp(
     MultiProvider(
       providers: [
+        StreamProvider<List<News>>(
+          initialData: [],
+          create: (context) => DatabaseService().streamNews("gym"),
+        ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         Provider(create: (_) => DatabaseService()),
       ],
