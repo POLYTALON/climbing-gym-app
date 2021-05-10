@@ -32,6 +32,7 @@ dependencies:
   provider: ^5.0.0
   touchable_opacity: ^1.2.0
   equatable: ^2.0.0
+  flutter_sliding_up_panel: ^1.2.1
 
 dev_dependencies:
   flutter_test:
