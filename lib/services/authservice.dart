@@ -37,7 +37,7 @@ class AuthService with ChangeNotifier {
         email: userEmail, password: userPassword);
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -50,6 +50,6 @@ class AuthService with ChangeNotifier {
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
     // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    return FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
