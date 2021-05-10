@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
@@ -93,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort wiederholen:",
+                    child: Text("Passwort:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -120,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort:",
+                    child: Text("Passwort wiederholen:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -217,7 +218,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (password == passwordRepeat) {
         try {
           final auth = Provider.of<AuthService>(context, listen: false);
-          await auth.register(email, password);
+          final usercred = await auth.register(email, password);
+          final db = Provider.of<DatabaseService>(context, listen: false);
+          await db.userSetup(usercred.user.uid.toString());
+
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -246,10 +250,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void navigateToLogin() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
-      (Route<dynamic> route) => false,
     );
   }
 }

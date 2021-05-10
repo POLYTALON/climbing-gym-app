@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>164298122076-g7rc2v0a026h5q4i338pqdi2t57rkr70.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.164298122076-g7rc2v0a026h5q4i338pqdi2t57rkr70</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>164298122076-da346u2k8t86vc2ke8m97ulve2n6r8kq.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDdtusvvXrg1J7IVwqDZm-TbXSM1AxZcco</string>
+	<key>GCM_SENDER_ID</key>
+	<string>164298122076</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>de.polytalon.polyapp</string>
+	<key>PROJECT_ID</key>
+	<string>polyapp-d3d40</string>
+	<key>STORAGE_BUCKET</key>
+	<string>polyapp-d3d40.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:164298122076:ios:defdc0b513241e3c28d799</string>
+</dict>
+</plist>

@@ -1,4 +1,4 @@
-# climbing_gym_app
+# Polytalon PolyApp
 
 A new Flutter project.
 
