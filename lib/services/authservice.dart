@@ -17,7 +17,7 @@ class AuthService with ChangeNotifier {
   bool get loggedIn => _loggedIn;
 
   Future<UserCredential> register(String userEmail, String userPassword) async {
-    return _auth.createUserWithEmailAndPassword(
+    return await _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
   }
 
@@ -50,6 +50,6 @@ class AuthService with ChangeNotifier {
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
     // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(credential);
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
