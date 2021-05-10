@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return Consumer<AuthService>(
             builder: (_, auth, __) {
-              if (auth.checkLoggedIn()) return NavigationContainer();
+              if (auth.loggedIn) return NavigationContainer();
               return StartScreen();
             },
           );
