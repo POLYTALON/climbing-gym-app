@@ -11,10 +11,7 @@ class DatabaseService {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (!documentSnapshot.exists) {
-        print('Document not exists');
-        _firestore.collection('users').doc(uid).set({'active': true});
-      } else {
-        print('Document exists');
+        _firestore.collection('users').doc(uid).set({'routes': {}});
       }
     });
   }
