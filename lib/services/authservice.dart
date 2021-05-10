@@ -7,10 +7,11 @@ class AuthService with ChangeNotifier {
   bool _loggedIn = false;
 
   AuthService() {
-    FirebaseAuth.instance.authStateChanges().listen((User user) {
+    _auth.authStateChanges().listen((User user) {
       _loggedIn = user != null;
       notifyListeners();
     });
+    notifyListeners();
   }
 
   bool get loggedIn => _loggedIn;
