@@ -28,20 +28,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Consumer<AuthService>(
-            builder: (_, auth, __) {
-              if (auth.loggedIn) return NavigationContainer();
-              return StartScreen();
-            },
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: FutureBuilder(
+          future: _initialization,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Consumer<AuthService>(
+                builder: (_, auth, __) {
+                  if (auth.loggedIn) return NavigationContainer();
+                  return StartScreen();
+                },
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ));
   }
 }
