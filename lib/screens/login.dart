@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/screens/register.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
@@ -169,7 +170,24 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             // Spacer
-            Spacer(flex: 2),
+            Spacer(flex: 1),
+
+            // back button
+            RawMaterialButton(
+                onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (countext) => StartScreen()))
+                    },
+                elevation: 2.0,
+                fillColor: Colors.grey,
+                child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                padding: EdgeInsets.all(8.0),
+                shape: CircleBorder()),
+
+            // Spacer
+            Spacer(flex: 1),
           ],
         ),
       ),
@@ -185,13 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
         await auth.loginUser(email, password);
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => MyApp()));
-        /*
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
-        if (userCredential != null) {
-          navigateToHome();
-        }
-        */
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'user-not-found') {
@@ -238,20 +249,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return false;
   }
 
-/*
-  void navigateToHome() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => NavigationContainer()),
-      (Route<dynamic> route) => false,
-    );
-  }
-*/
   void navigateToRegister() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegisterScreen()),
-      (Route<dynamic> route) => false,
     );
   }
 }
