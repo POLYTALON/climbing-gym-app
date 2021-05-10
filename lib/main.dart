@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
+import 'models/Gym.dart';
 import 'models/News.dart';
 
 void main() async {
@@ -17,6 +18,10 @@ void main() async {
         StreamProvider<List<News>>(
           initialData: [],
           create: (context) => DatabaseService().streamNews("gym"),
+        ),
+        StreamProvider<List<Gym>>(
+          initialData: [],
+          create: (context) => DatabaseService().streamGyms(),
         ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         Provider(create: (_) => DatabaseService()),

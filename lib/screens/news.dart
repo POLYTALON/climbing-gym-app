@@ -11,7 +11,6 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var news = Provider.of<List<News>>(context);
-    print("the news:" + news.toString());
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
@@ -23,7 +22,6 @@ class NewsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 itemCount: news.length,
                 itemBuilder: (BuildContext context, int index) {
-                  print("aha: " + news.toString());
                   return Container(
                       margin: const EdgeInsets.only(bottom: 10.0),
                       child: NewsCard(

@@ -13,7 +13,6 @@ class Gym extends Equatable {
 
   factory Gym.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
-    print(data);
     return Gym(
         name: data['name'] ?? '',
         city: data['city'] ?? '',
