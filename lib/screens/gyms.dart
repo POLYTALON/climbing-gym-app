@@ -1,4 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
+import 'package:climbing_gym_app/screens/takePictureScreen.dart';
 import 'package:climbing_gym_app/widgets/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter/material.dart';
@@ -86,7 +88,15 @@ class GymsScreen extends StatelessWidget {
                           elevation: 2,
                           primary: Constants.polyGray,
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          final cameras = await availableCameras();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TakePictureScreen(camera: cameras.first)),
+                          );
+                        },
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
