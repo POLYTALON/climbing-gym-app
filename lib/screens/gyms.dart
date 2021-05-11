@@ -343,7 +343,8 @@ class _GymsScreenState extends State<GymsScreen> {
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        db.addGym(gymName, gymLocation, _image);
+        await db.addGym(gymName, gymLocation, _image);
+        _panelController.collapse();
       } else {
         setState(() {
           _errorMessage = 'Bitte füge ein Banner hinzu.';

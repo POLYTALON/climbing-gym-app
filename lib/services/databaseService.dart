@@ -36,20 +36,24 @@ class DatabaseService {
 
   Future<void> addGym(String name, String city, File image) async {
     String imageUrl = await uploadFile(image);
-    _firestore
-        .collection('gyms')
-        .add({name: name, city: city, imageUrl: imageUrl}).catchError((e) {
+    try {
+      await _firestore
+          .collection('gyms')
+          .add({'name': name, 'city': city, 'imageUrl': imageUrl});
+    } on FirebaseException catch (e) {
       print(e);
-    });
+    }
   }
 
   Future<String> uploadFile(File file) async {
-    Future<String> url;
-    await _storage
-        .ref()
-        .child('${basename(file.path)}')
-        .putFile(file)
-        .whenComplete(() => {url = _storage.ref().getDownloadURL()});
+    String url;
+    try {
+      TaskSnapshot snapshot =
+          await _storage.ref().child(basename(file.path)).putFile(file);
+      url = await snapshot.ref.getDownloadURL();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
     return url;
   }
 }
