@@ -34,7 +34,7 @@ class GymsScreen extends StatelessWidget {
             // Text
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text("Choose your Gym",
+              child: Text("Halle auswählen",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
