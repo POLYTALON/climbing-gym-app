@@ -64,6 +64,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>Bilder hochladen</string>
+	<key>NSPhotoLibraryUsageDescription</key>
 </dict>
 </plist>
