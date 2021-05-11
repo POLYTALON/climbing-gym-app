@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/widgets/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -18,7 +17,7 @@ class GymsScreen extends StatefulWidget {
 class _GymsScreenState extends State<GymsScreen> {
   // The controller of the sliding panel
   final SlidingUpPanelController _panelController = SlidingUpPanelController();
-  File _image;
+  Image _image;
   final picker = ImagePicker();
 
   @override
@@ -182,7 +181,12 @@ class _GymsScreenState extends State<GymsScreen> {
     final pickedFile = await picker.getImage(source: source);
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        // check if app is running on web platform
+        if (kIsWeb) {
+          _image = Image.network(pickedFile.path);
+        } else {
+          _image = Image.file(File(pickedFile.path));
+        }
       } else {
         print('No image selected.');
       }
