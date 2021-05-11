@@ -65,7 +65,7 @@ class _GymsScreenState extends State<GymsScreen> {
       // SlidingUpPanelWidget
       SlidingUpPanelWidget(
           controlHeight: 1.0,
-          anchor: 0.6,
+          anchor: 0.75,
           panelController: _panelController,
           child: Container(
               decoration: ShapeDecoration(
@@ -83,44 +83,165 @@ class _GymsScreenState extends State<GymsScreen> {
               ),
 
               // SlidingUpPanel content
-              child: Column(children: <Widget>[
-                // Take photo button
-                Container(
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16.0),
-                            topRight: Radius.circular(16.0))),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(12.0),
-                          elevation: 2,
-                          primary: Constants.polyGray,
-                        ),
-                        /* onPressed: () async {
-                          final cameras = await availableCameras();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    TakePictureScreen(camera: cameras.first)),
-                          );
-                        }, */
-                        onPressed: () => _showImageSourceActionSheet(context),
-                        child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Take photo button
+                  Container(
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16.0),
+                              topRight: Radius.circular(16.0))),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(12.0),
+                            elevation: 2,
+                            primary: Constants.polyGray,
+                          ),
+                          onPressed: () => _showImageSourceActionSheet(context),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               Icon(Icons.camera_alt_rounded,
                                   size: 48.0, color: Colors.white),
                               Text(
-                                'Logo oder Bild hinzufügen',
+                                'Banner hinzufügen',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.white),
                               )
-                            ]))),
-              ])))
+                            ],
+                          ))),
+                  // Container for gym name
+                  Container(
+                      padding:
+                          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                      child: Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            // Name of Gym
+                            Text(
+                              'Name der Kletterhalle',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Divider(
+                              color: Constants.polyGray,
+                              thickness: 2,
+                              height: 20,
+                            ),
+                            TextField(
+                                autocorrect: false,
+                                textCapitalization: TextCapitalization.words,
+                                style: TextStyle(fontWeight: FontWeight.w800),
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 16.0),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        borderSide: BorderSide(
+                                            width: 0, style: BorderStyle.none)),
+                                    fillColor: Colors.white,
+                                    filled: true))
+                          ]))),
+
+                  // Location
+                  Container(
+                      padding:
+                          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                      child: Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            Text(
+                              'Standort',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Divider(
+                              color: Constants.polyGray,
+                              thickness: 2,
+                              height: 20,
+                            ),
+                            TextField(
+                                autocorrect: false,
+                                textCapitalization: TextCapitalization.words,
+                                style: TextStyle(fontWeight: FontWeight.w800),
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 16.0),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        borderSide: BorderSide(
+                                            width: 0, style: BorderStyle.none)),
+                                    fillColor: Colors.white,
+                                    filled: true))
+                          ]))),
+
+                  // Buttons
+                  Container(
+                    padding:
+                        EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Accept button
+                        TextButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Constants.polyGreen),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24.0)),
+                              )),
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Halle anlegen",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700)),
+                          ),
+                        ),
+
+                        // Cancel button
+                        TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Constants.polyRed),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24.0)),
+                              )),
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Abbrechen",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )))
     ]);
   }
 
@@ -143,13 +264,13 @@ class _GymsScreenState extends State<GymsScreen> {
                       child: Text('Kamera'),
                       onPressed: () {
                         Navigator.pop(context);
-                        // selectImageSource(ImageSource.camera);
+                        _getImage(ImageSource.camera);
                       }),
                   CupertinoActionSheetAction(
                     child: Text('Gallerie'),
                     onPressed: () {
                       Navigator.pop(context);
-                      // selectImageSource(ImageSource.gallery);
+                      _getImage(ImageSource.gallery);
                     },
                   )
                 ],
