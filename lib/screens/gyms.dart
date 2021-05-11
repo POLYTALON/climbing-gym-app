@@ -1,15 +1,25 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
-import 'package:climbing_gym_app/screens/takePictureScreen.dart';
 import 'package:climbing_gym_app/widgets/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class GymsScreen extends StatelessWidget {
+class GymsScreen extends StatefulWidget {
+  @override
+  _GymsScreenState createState() => _GymsScreenState();
+}
+
+class _GymsScreenState extends State<GymsScreen> {
   // The controller of the sliding panel
   final SlidingUpPanelController _panelController = SlidingUpPanelController();
+  File _image;
+  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +98,7 @@ class GymsScreen extends StatelessWidget {
                           elevation: 2,
                           primary: Constants.polyGray,
                         ),
-                        onPressed: () async {
+                        /* onPressed: () async {
                           final cameras = await availableCameras();
                           Navigator.push(
                             context,
@@ -96,7 +106,8 @@ class GymsScreen extends StatelessWidget {
                                 builder: (context) =>
                                     TakePictureScreen(camera: cameras.first)),
                           );
-                        },
+                        }, */
+                        onPressed: () => _showImageSourceActionSheet(context),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
@@ -120,5 +131,61 @@ class GymsScreen extends StatelessWidget {
     } else {
       _panelController.anchor();
     }
+  }
+
+  void _showImageSourceActionSheet(BuildContext context) {
+    // iOS
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+          context: context,
+          builder: (context) => CupertinoActionSheet(
+                actions: [
+                  CupertinoActionSheetAction(
+                      child: Text('Kamera'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // selectImageSource(ImageSource.camera);
+                      }),
+                  CupertinoActionSheetAction(
+                    child: Text('Gallerie'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // selectImageSource(ImageSource.gallery);
+                    },
+                  )
+                ],
+              ));
+      // Android
+    } else {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) => ListView(children: [
+                ListTile(
+                    leading: Icon(Icons.camera_alt_rounded),
+                    title: Text('Kamera'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.camera);
+                    }),
+                ListTile(
+                    leading: Icon(Icons.photo_album),
+                    title: Text('Gallerie'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.gallery);
+                    })
+              ]));
+    }
+  }
+
+  Future _getImage(ImageSource source) async {
+    final pickedFile = await picker.getImage(source: source);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

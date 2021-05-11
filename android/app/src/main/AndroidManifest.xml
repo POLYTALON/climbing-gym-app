@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.polytalon.polyapp">
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
    <application
         android:label="PolyApp"
         android:icon="@mipmap/ic_launcher"
