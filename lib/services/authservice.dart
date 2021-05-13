@@ -52,4 +52,9 @@ class AuthService with ChangeNotifier {
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+  Future<User> getUserDetails() async {
+    User user = await _auth.currentUser;
+    return user;
+  }
 }
