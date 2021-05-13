@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:html' as html;
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GymsScreen extends StatefulWidget {
@@ -285,53 +283,48 @@ class _GymsScreenState extends State<GymsScreen> {
   }
 
   void _showImageSourceActionSheet(BuildContext context) async {
-    if (!kIsWeb) {
-      // iOS
-      if (Platform.isIOS) {
-        showCupertinoModalPopup(
-            context: context,
-            builder: (context) => CupertinoActionSheet(
-                  actions: [
-                    CupertinoActionSheetAction(
-                        child: Text('Kamera'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _getImage(ImageSource.camera);
-                        }),
-                    CupertinoActionSheetAction(
-                      child: Text('Gallerie'),
+    // iOS
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+          context: context,
+          builder: (context) => CupertinoActionSheet(
+                actions: [
+                  CupertinoActionSheetAction(
+                      child: Text('Kamera'),
                       onPressed: () {
-                        Navigator.pop(context);
-                        _getImage(ImageSource.gallery);
-                      },
-                    )
-                  ],
-                ));
-      }
-      // Android
-      else {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) => ListView(children: [
-                  ListTile(
-                      leading: Icon(Icons.camera_alt_rounded),
-                      title: Text('Kamera'),
-                      onTap: () {
                         Navigator.pop(context);
                         _getImage(ImageSource.camera);
                       }),
-                  ListTile(
-                      leading: Icon(Icons.photo_album),
-                      title: Text('Gallerie'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _getImage(ImageSource.gallery);
-                      })
-                ]));
-      }
-      // Web
-    } else {
-      _getImageWeb();
+                  CupertinoActionSheetAction(
+                    child: Text('Gallerie'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.gallery);
+                    },
+                  )
+                ],
+              ));
+    }
+    // Android
+    else {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) => ListView(children: [
+                ListTile(
+                    leading: Icon(Icons.camera_alt_rounded),
+                    title: Text('Kamera'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.camera);
+                    }),
+                ListTile(
+                    leading: Icon(Icons.photo_album),
+                    title: Text('Gallerie'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.gallery);
+                    })
+              ]));
     }
   }
 
@@ -342,18 +335,6 @@ class _GymsScreenState extends State<GymsScreen> {
         _image = File(pickedFile.path);
       } else {
         print('No image selected.');
-      }
-    });
-  }
-
-  Future _getImageWeb() async {
-    final html.File pickedFile =
-        await ImagePickerWeb.getImage(outputType: ImageType.file);
-    setState(() {
-      if (pickedFile != null) {
-        _image = pickedFile;
-      } else {
-        print('No image selected');
       }
     });
   }

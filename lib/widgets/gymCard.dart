@@ -25,9 +25,11 @@ class GymCard extends StatelessWidget {
                 child: ClipRRect(
                     child: Stack(children: <Widget>[
                   Center(child: CircularProgressIndicator()),
-                  Container(
+                  Center(
                     child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage, image: gym.imageUrl),
+                        placeholder: kTransparentImage,
+                        image: gym.imageUrl,
+                        fit: BoxFit.fill),
                   ),
                 ]))),
             // Title

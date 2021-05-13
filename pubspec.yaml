@@ -36,10 +36,6 @@ dependencies:
   equatable: ^2.0.0
   flutter_sliding_up_panel: ^1.2.1
   image_picker: ^0.7.4
-  image_picker_web_redux: any
-  universal_html: ^2.0.8
-  firebase: ^9.0.1
-  uuid: ^3.0.4
   transparent_image: ^2.0.0
 
 dev_dependencies:
