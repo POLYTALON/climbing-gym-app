@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:transparent_image/transparent_image.dart';
 
 class GymCard extends StatelessWidget {
   final Gym gym;
@@ -20,7 +21,15 @@ class GymCard extends StatelessWidget {
           children: <Widget>[
             // Image
             Expanded(
-                flex: 5, child: Image.network(gym.imageUrl, fit: BoxFit.fill)),
+                flex: 5,
+                child: ClipRRect(
+                    child: Stack(children: <Widget>[
+                  Center(child: CircularProgressIndicator()),
+                  Container(
+                    child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage, image: gym.imageUrl),
+                  ),
+                ]))),
             // Title
             Expanded(
                 flex: 5,
