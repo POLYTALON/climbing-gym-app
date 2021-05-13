@@ -171,8 +171,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
                                       hintText: 'Text eingeben',
-                                      contentPadding:
-                                          const EdgeInsets.only(left: 16.0),
+                                      contentPadding: EdgeInsets.all(16.0),
                                       border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(24.0),
