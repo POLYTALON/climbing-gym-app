@@ -53,6 +53,26 @@ class DatabaseService {
     }
   }
 
+  Future<void> addNews(String title, String subtitle, String content,
+      String creator, File image) async {
+    String imageUrl = await uploadFile(image);
+    try {
+      await _firestore.collection('news').add({
+        'title': title,
+        'subtitle': subtitle,
+        'content': content,
+        'imageUrls': [
+          imageUrl //todo: more pictures
+        ],
+        'date': DateTime.now(),
+        'creator': creator,
+        'isGlobal': true, //todo
+      });
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+  }
+
   Future<String> uploadFile(File file) async {
     String url;
     try {

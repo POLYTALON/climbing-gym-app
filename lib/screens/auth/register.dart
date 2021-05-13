@@ -16,7 +16,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final controllerUsername = TextEditingController(text: "");
+  final controllerDisplayName = TextEditingController(text: "");
   final controllerEmail = TextEditingController(text: "");
   final controllerPassword = TextEditingController(text: "");
   final controllerPasswordRepeat = TextEditingController(text: "");
@@ -45,11 +45,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Text Field Username
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                    child: Text("Benutzername:",
-                        style: TextStyle(color: Colors.white)),
+                    child: Text("Name:", style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
-                      controller: controllerUsername,
+                      controller: controllerDisplayName,
                       enabled: !isLoggedIn,
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
@@ -210,6 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void doUserRegistration() async {
+    final String displayName = controllerDisplayName.text.trim();
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
     final String passwordRepeat = controllerPasswordRepeat.text.trim();
@@ -218,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (password == passwordRepeat) {
         try {
           final auth = Provider.of<AuthService>(context, listen: false);
-          final usercred = await auth.register(email, password);
+          final usercred = await auth.register(displayName, email, password);
           final db = Provider.of<DatabaseService>(context, listen: false);
           await db.userSetup(usercred.user.uid.toString());
 

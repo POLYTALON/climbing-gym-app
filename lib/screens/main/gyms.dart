@@ -41,7 +41,7 @@ class _GymsScreenState extends State<GymsScreen> {
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             backgroundColor: Constants.polyGreen,
-            onPressed: () => _toggleSlidingPanel(),
+            onPressed: () => toggleSlidingPanel(),
           ),
           backgroundColor: Constants.polyDark,
 
@@ -276,7 +276,7 @@ class _GymsScreenState extends State<GymsScreen> {
     ]);
   }
 
-  void _toggleSlidingPanel() {
+  void toggleSlidingPanel() {
     if (_panelController.status == SlidingUpPanelStatus.expanded) {
       _panelController.collapse();
     } else {

@@ -40,6 +40,7 @@ dependencies:
   universal_html: ^2.0.8
   firebase: ^9.0.1
   uuid: ^3.0.4
+  transparent_image: ^2.0.0
 
 dev_dependencies:
   flutter_test:
