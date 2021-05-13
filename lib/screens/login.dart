@@ -22,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final controllerPassword = TextEditingController(text: "");
   String _errorMessage = "";
   bool isLoggedIn = false;
+  bool _hidePassword = true;
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +85,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       enabled: !isLoggedIn,
                       textCapitalization: TextCapitalization.none,
                       style: TextStyle(fontWeight: FontWeight.w800),
-                      obscureText: true,
+                      obscureText: _hidePassword,
                       enableSuggestions: false,
                       autocorrect: false,
                       keyboardType: TextInputType.visiblePassword,
                       validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 16.0),
-                          hintText: '********',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                              borderSide: BorderSide(
-                                  width: 0, style: BorderStyle.none)),
-                          fillColor: Colors.white,
-                          filled: true)),
+                        contentPadding: const EdgeInsets.only(left: 16.0),
+                        hintText: '********',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24.0),
+                            borderSide:
+                                BorderSide(width: 0, style: BorderStyle.none)),
+                        fillColor: Colors.white,
+                        filled: true,
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              _hidePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Constants.polyDark,
+                            ),
+                            onPressed: _toggleHidePassword),
+                      )),
                 ],
               ),
             ),
