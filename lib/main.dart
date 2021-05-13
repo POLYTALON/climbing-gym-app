@@ -5,7 +5,6 @@ import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
 import 'models/Gym.dart';
 import 'models/News.dart';
 
