@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:html' as html;
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker_web_redux/image_picker_web_redux.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GymsScreen extends StatefulWidget {
   @override
@@ -21,7 +24,7 @@ class _GymsScreenState extends State<GymsScreen> {
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
   String _errorMessage = "";
-  File _image;
+  dynamic _image;
   final picker = ImagePicker();
 
   @override
@@ -106,7 +109,7 @@ class _GymsScreenState extends State<GymsScreen> {
                               elevation: 2,
                               primary: Constants.polyGray,
                             ),
-                            onPressed: () =>
+                            onPressed: () async =>
                                 _showImageSourceActionSheet(context),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -281,48 +284,54 @@ class _GymsScreenState extends State<GymsScreen> {
     }
   }
 
-  void _showImageSourceActionSheet(BuildContext context) {
-    // iOS
-    if (Platform.isIOS) {
-      showCupertinoModalPopup(
-          context: context,
-          builder: (context) => CupertinoActionSheet(
-                actions: [
-                  CupertinoActionSheetAction(
-                      child: Text('Kamera'),
+  void _showImageSourceActionSheet(BuildContext context) async {
+    if (!kIsWeb) {
+      // iOS
+      if (Platform.isIOS) {
+        showCupertinoModalPopup(
+            context: context,
+            builder: (context) => CupertinoActionSheet(
+                  actions: [
+                    CupertinoActionSheetAction(
+                        child: Text('Kamera'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _getImage(ImageSource.camera);
+                        }),
+                    CupertinoActionSheetAction(
+                      child: Text('Gallerie'),
                       onPressed: () {
+                        Navigator.pop(context);
+                        _getImage(ImageSource.gallery);
+                      },
+                    )
+                  ],
+                ));
+      }
+      // Android
+      else {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) => ListView(children: [
+                  ListTile(
+                      leading: Icon(Icons.camera_alt_rounded),
+                      title: Text('Kamera'),
+                      onTap: () {
                         Navigator.pop(context);
                         _getImage(ImageSource.camera);
                       }),
-                  CupertinoActionSheetAction(
-                    child: Text('Gallerie'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _getImage(ImageSource.gallery);
-                    },
-                  )
-                ],
-              ));
-      // Android
+                  ListTile(
+                      leading: Icon(Icons.photo_album),
+                      title: Text('Gallerie'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _getImage(ImageSource.gallery);
+                      })
+                ]));
+      }
+      // Web
     } else {
-      showModalBottomSheet(
-          context: context,
-          builder: (context) => ListView(children: [
-                ListTile(
-                    leading: Icon(Icons.camera_alt_rounded),
-                    title: Text('Kamera'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _getImage(ImageSource.camera);
-                    }),
-                ListTile(
-                    leading: Icon(Icons.photo_album),
-                    title: Text('Gallerie'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _getImage(ImageSource.gallery);
-                    })
-              ]));
+      _getImageWeb();
     }
   }
 
@@ -337,13 +346,29 @@ class _GymsScreenState extends State<GymsScreen> {
     });
   }
 
+  Future _getImageWeb() async {
+    final html.File pickedFile =
+        await ImagePickerWeb.getImage(outputType: ImageType.file);
+    setState(() {
+      if (pickedFile != null) {
+        _image = pickedFile;
+      } else {
+        print('No image selected');
+      }
+    });
+  }
+
   void createGym(DatabaseService db) async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await db.addGym(gymName, gymLocation, _image);
+        if (!kIsWeb) {
+          await db.addGym(gymName, gymLocation, _image);
+        } else {
+          await db.addGym(gymName, gymLocation, _image);
+        }
         _panelController.collapse();
       } else {
         setState(() {
