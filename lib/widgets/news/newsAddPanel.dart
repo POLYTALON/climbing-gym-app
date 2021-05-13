@@ -46,7 +46,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
-        anchor: 0.75,
+        anchor: 1.0,
         panelController: _panelController,
         child: Container(
             decoration: ShapeDecoration(

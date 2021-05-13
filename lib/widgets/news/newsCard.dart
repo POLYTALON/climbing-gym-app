@@ -1,20 +1,26 @@
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class NewsCard extends StatefulWidget {
-  @override
-  final News
-      news; // <--- generates the error, "Field doesn't override an inherited getter or setter"
-  NewsCard({News news}) : this.news = news;
+  //NewsCard({News news, Function onClickNews});
 
-  SharingDialogState createState() => new SharingDialogState(news);
+  NewsCard({@required News news, @required Function onClickNews})
+      : news = news,
+        onClickNews = onClickNews;
+
+  final News news;
+  final Function onClickNews;
+
+  _NewsCardState createState() => new _NewsCardState(news, onClickNews);
 }
 
-class SharingDialogState extends State<NewsCard> {
-  SharingDialogState(this.news);
+class _NewsCardState extends State<NewsCard> {
   final News news;
+  final Function onClickNews;
+  _NewsCardState(this.news, this.onClickNews);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,8 @@ class SharingDialogState extends State<NewsCard> {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                TextButton(
+                    onPressed: onClickNews(this.news), child: Text("open")),
                 Row(
                   mainAxisAlignment:
                       MainAxisAlignment.spaceBetween, // mainAxisAlignment
