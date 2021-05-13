@@ -1,80 +1,114 @@
 import 'dart:io';
 
-import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
-import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class NewsDetailPanel extends StatefulWidget {
   NewsDetailPanel({
     Key key,
-    @required SlidingUpPanelController panelController,
-  })  : _panelController = panelController,
-        super(key: key);
-
-  final SlidingUpPanelController _panelController;
+  }) : super(key: key);
 
   @override
-  _NewsDetailPanelState createState() =>
-      _NewsDetailPanelState(_panelController);
+  _NewsDetailPanelState createState() => _NewsDetailPanelState();
 }
 
 class _NewsDetailPanelState extends State<NewsDetailPanel> {
-  final SlidingUpPanelController _panelController;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  _NewsDetailPanelState();
 
-  _NewsDetailPanelState(this._panelController);
-
-  final TextEditingController controllerNewsTitle =
-      TextEditingController(text: "");
-  final TextEditingController controllerNewsSubtitle =
-      TextEditingController(text: "");
-  final TextEditingController controllerNewsContent =
-      TextEditingController(text: "");
-  String _errorMessage = "";
-  File _image;
-  final picker = ImagePicker();
+  final SlidingUpPanelController _panelController = SlidingUpPanelController();
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final newsProvider = Provider.of<NewsDetails>(context, listen: true);
 
-    return SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 1.0,
-        panelController: _panelController,
-        child: Container(
-            decoration: ShapeDecoration(
-              color: Constants.lightGray,
-              shadows: [
-                BoxShadow(
-                    blurRadius: 8.0,
-                    spreadRadius: 16.0,
-                    color: const Color(0x11000000))
-              ],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0))),
-            ),
+    newsProvider.addListener(() {
+      if (newsProvider.showPanel == true) {
+        _panelController.anchor();
+      } else {
+        _panelController.collapse();
+      }
+    });
 
-            // SlidingUpPanel content
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16),
+      child: SlidingUpPanelWidget(
+          controlHeight: 1.0,
+          anchor: 1.0,
+          panelController: _panelController,
+          child: SingleChildScrollView(
             child: Container(
-              child: Text("Lol"),
-            )));
-  }
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shadows: [
+                  BoxShadow(
+                      blurRadius: 8.0,
+                      spreadRadius: 16.0,
+                      color: const Color(0x11000000))
+                ],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0))),
+              ),
 
-  void toggleSlidingPanel() {
-    if (_panelController.status == SlidingUpPanelStatus.expanded) {
-      _panelController.collapse();
-    } else {
-      _panelController.anchor();
-    }
+              // SlidingUpPanel content
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          newsProvider.currentNewsDetails.title ?? "",
+                          style: Constants.headerText,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              this._panelController.collapse();
+                            },
+                            icon: const Icon(Icons.close)),
+                      ],
+                    ),
+                    Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 16.0,
+                        ),
+                        constraints:
+                            BoxConstraints(minHeight: 100, maxHeight: 200),
+                        child: Stack(
+                          children: <Widget>[
+                            Center(child: CircularProgressIndicator()),
+                            Center(
+                              child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: newsProvider.currentNews.imageUrls !=
+                                          null
+                                      ? newsProvider.currentNews.imageUrls[0]
+                                      : ""),
+                            ),
+                          ],
+                        )),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(newsProvider.currentNews.subtitle ?? "",
+                              style: Constants.subHeaderText),
+                          Text(newsProvider.currentNews.content ?? "",
+                              style: Constants.defaultText)
+                        ])
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
   }
 }

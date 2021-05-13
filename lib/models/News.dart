@@ -5,6 +5,7 @@ import 'dart:convert';
 
 class News extends Equatable {
   final String title;
+  final String subtitle;
   final String content;
   final String creator;
   final DateTime date;
@@ -13,10 +14,11 @@ class News extends Equatable {
 
   @override
   List<Object> get props =>
-      [title, content, creator, date, imageUrls, isGlobal];
+      [title, subtitle, content, creator, date, imageUrls, isGlobal];
 
   News(
       {this.title,
+      this.subtitle,
       this.content,
       this.creator,
       this.date,
@@ -27,6 +29,7 @@ class News extends Equatable {
     Map data = doc.data();
     return News(
       title: data['title'] ?? '',
+      subtitle: data['subtitle'] ?? '',
       content: data['content'] ?? '',
       creator: data['creator'] ?? '',
       date: data['date'] != null
