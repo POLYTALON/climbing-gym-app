@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/constants.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
@@ -27,7 +28,7 @@ void main() async {
       ],
       child: MaterialApp(
           title: 'Climbing App',
-          theme: ThemeData(fontFamily: 'NunitoSans'),
+          theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
           home: MyApp()),
     ),
   );

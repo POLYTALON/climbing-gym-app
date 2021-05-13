@@ -36,6 +36,7 @@ dependencies:
   equatable: ^2.0.0
   flutter_sliding_up_panel: ^1.2.1
   image_picker: ^0.7.4
+  transparent_image: ^2.0.0
 
 dev_dependencies:
   flutter_test:
