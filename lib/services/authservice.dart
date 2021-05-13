@@ -16,9 +16,12 @@ class AuthService with ChangeNotifier {
 
   bool get loggedIn => _loggedIn;
 
-  Future<UserCredential> register(String userEmail, String userPassword) async {
-    return await _auth.createUserWithEmailAndPassword(
+  Future<UserCredential> register(
+      String displayName, String userEmail, String userPassword) async {
+    UserCredential newUser = await _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
+    newUser.user.updateProfile(displayName: displayName);
+    return newUser;
   }
 
   Future<void> logout() async {
@@ -56,5 +59,9 @@ class AuthService with ChangeNotifier {
   Future<User> getUserDetails() async {
     User user = await _auth.currentUser;
     return user;
+  }
+
+  Future<void> resetPassword(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
   }
 }
