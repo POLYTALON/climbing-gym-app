@@ -4,9 +4,6 @@ import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase/firebase.dart' as fb;
-import 'package:universal_html/html.dart' as html;
-import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -37,13 +34,9 @@ class DatabaseService {
         .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
   }
 
-  Future<void> addGym(String name, String city, dynamic image) async {
+  Future<void> addGym(String name, String city, File image) async {
     String imageUrl;
-    if (image is File) {
-      imageUrl = await uploadFile(image);
-    } else if (image is html.File) {
-      imageUrl = await uploadFileWeb(image);
-    }
+    imageUrl = await uploadFile(image);
     try {
       await _firestore
           .collection('gyms')
@@ -83,15 +76,5 @@ class DatabaseService {
       print(e);
     }
     return url;
-  }
-
-  Future<String> uploadFileWeb(html.File file) async {
-    String name = Uuid().v4();
-    Uri url;
-    fb.StorageReference storageRef = fb.storage().ref(name);
-    fb.UploadTaskSnapshot uploadTaskSnapshot =
-        await storageRef.put(file).future;
-    url = await uploadTaskSnapshot.ref.getDownloadURL();
-    return url.toString();
   }
 }
