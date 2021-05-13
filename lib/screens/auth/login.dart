@@ -1,4 +1,5 @@
-import 'package:climbing_gym_app/screens/register.dart';
+import 'package:climbing_gym_app/screens/auth/passwordReset.dart';
+import 'package:climbing_gym_app/screens/auth/register.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
@@ -9,7 +10,7 @@ import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -137,12 +138,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
-            Text(
-              "Passwort vergessen?",
-              style: TextStyle(
-                  color: Colors.blue[400],
-                  decoration: TextDecoration.underline),
-              textAlign: TextAlign.center,
+            TextButton(
+              onPressed: navigateToPasswordReset,
+              child: Text(
+                "Passwort vergessen?",
+                style: TextStyle(
+                    color: Colors.blue[400],
+                    decoration: TextDecoration.underline),
+                textAlign: TextAlign.center,
+              ),
             ),
 
             // Spacer
@@ -273,6 +277,13 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegisterScreen()),
+    );
+  }
+
+  void navigateToPasswordReset() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PasswordResetScreen()),
     );
   }
 }
