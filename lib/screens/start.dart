@@ -1,7 +1,7 @@
-import 'package:climbing_gym_app/screens/gyms.dart';
+import 'package:climbing_gym_app/screens/main/gyms.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'login.dart';
+import 'auth/login.dart';
 
 class StartScreen extends StatelessWidget {
   @override
