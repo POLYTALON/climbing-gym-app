@@ -123,6 +123,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                               ),
                               TextFormField(
                                   controller: controllerGymName,
+                                  initialValue: _gym.name,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -164,6 +165,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                               ),
                               TextFormField(
                                   controller: controllerLocation,
+                                  initialValue: _gym.city,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -313,15 +315,9 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
     if (_validateAndSave()) {
-      if (_image != null) {
-        // edit Gym
-        await db.editGym(_gym.id, gymName, gymLocation, _image);
-        _panelController.collapse();
-      } else {
-        setState(() {
-          _errorMessage = 'Bitte füge ein Banner hinzu.';
-        });
-      }
+      // edit Gym
+      await db.editGym(_gym.id, gymName, gymLocation, _image);
+      _panelController.collapse();
     }
   }
 
