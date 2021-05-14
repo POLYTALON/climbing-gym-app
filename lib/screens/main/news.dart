@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:climbing_gym_app/widgets/news/newsAddPanel.dart';
