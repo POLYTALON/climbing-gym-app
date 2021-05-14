@@ -1,11 +1,20 @@
 import 'package:climbing_gym_app/models/Gym.dart';
+import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class GymCard extends StatelessWidget {
+class GymCard extends StatefulWidget {
   final Gym gym;
   GymCard({Gym gym}) : this.gym = gym;
+
+  _GymCardState createState() => new _GymCardState(gym);
+}
+
+class _GymCardState extends State<GymCard> {
+  final Gym gym;
+  _GymCardState(this.gym);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +75,7 @@ class GymCard extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           color: Colors.white,
-                          onPressed: () {},
+                          onPressed: onPressEdit,
                         ),
                       ],
                     )
@@ -76,5 +85,10 @@ class GymCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onPressEdit() {
+    final gymEdit = Provider.of<GymEdit>(context, listen: false);
+    gymEdit.showEdit(this.gym);
   }
 }
