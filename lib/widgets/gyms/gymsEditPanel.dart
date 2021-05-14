@@ -38,8 +38,12 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
     gymProvider.addListener(() {
       if (gymProvider.showPanel == true) {
+        controllerGymName.text = gymProvider.currentGymDetails.name;
+        controllerLocation.text = gymProvider.currentGymDetails.city;
         _panelController.anchor();
       } else {
+        controllerGymName.text = "";
+        controllerLocation.text = "";
         _panelController.collapse();
       }
     });
