@@ -35,7 +35,7 @@ class GymCard extends StatelessWidget {
                 ])),
             // Title
             Expanded(
-                flex: 5,
+                flex: 7,
                 child: Column(
                   children: [
                     Center(
@@ -60,6 +60,16 @@ class GymCard extends StatelessWidget {
                                 fontSize: 20)),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          color: Colors.white,
+                          onPressed: () {},
+                        ),
+                      ],
+                    )
                   ],
                 )),
           ],
