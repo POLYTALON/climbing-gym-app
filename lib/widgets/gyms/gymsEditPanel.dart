@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
@@ -9,24 +10,30 @@ import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class GymsAddPanel extends StatefulWidget {
-  GymsAddPanel({
+class GymsEditPanel extends StatefulWidget {
+  GymsEditPanel({
     Key key,
     @required SlidingUpPanelController panelController,
+    @required Gym gym,
   })  : _panelController = panelController,
+        _gym = gym,
         super(key: key);
 
   final SlidingUpPanelController _panelController;
+  final Gym _gym;
 
   @override
-  _GymsAddPanelState createState() => _GymsAddPanelState(_panelController);
+  _GymsEditPanelState createState() =>
+      _GymsEditPanelState(_panelController, _gym);
 }
 
-class _GymsAddPanelState extends State<GymsAddPanel> {
+class _GymsEditPanelState extends State<GymsEditPanel> {
   final SlidingUpPanelController _panelController;
+  final Gym _gym;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _GymsAddPanelState(this._panelController);
+  _GymsEditPanelState(this._panelController, this._gym);
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
   String _errorMessage = "";
@@ -201,10 +208,10 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () => createGym(db),
+                            onPressed: () => editGym(db),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Halle anlegen",
+                              child: Text("Halle ändern",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700)),
@@ -302,13 +309,13 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
     });
   }
 
-  void createGym(DatabaseService db) async {
+  void editGym(DatabaseService db) async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
     if (_validateAndSave()) {
       if (_image != null) {
-        // create Gym
-        await db.addGym(gymName, gymLocation, _image);
+        // edit Gym
+        await db.editGym(_gym.id, gymName, gymLocation, _image);
         _panelController.collapse();
       } else {
         setState(() {

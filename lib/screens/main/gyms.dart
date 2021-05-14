@@ -1,4 +1,3 @@
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -20,7 +19,6 @@ class _GymsScreenState extends State<GymsScreen> {
   @override
   Widget build(BuildContext context) {
     var gyms = Provider.of<List<Gym>>(context);
-    final db = Provider.of<DatabaseService>(context, listen: false);
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;

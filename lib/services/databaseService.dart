@@ -46,6 +46,19 @@ class DatabaseService {
     }
   }
 
+  Future<void> editGym(String id, String name, String city, File image) async {
+    String imageUrl;
+    imageUrl = await uploadFile(image);
+    try {
+      await _firestore
+          .collection('gyms')
+          .doc(id)
+          .update({'name': name, 'city': city, 'imageUrl': imageUrl});
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> addNews(String title, String subtitle, String content,
       String creator, File image) async {
     String imageUrl = await uploadFile(image);
