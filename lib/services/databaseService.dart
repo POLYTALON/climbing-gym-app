@@ -48,7 +48,7 @@ class DatabaseService {
 
   Future<void> editGym(String id, String name, String city,
       [File image]) async {
-    if (File != null) {
+    if (image != null) {
       String imageUrl;
       imageUrl = await uploadFile(image);
       try {
