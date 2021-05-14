@@ -22,29 +22,45 @@ class GymCard extends StatelessWidget {
             // Image
             Expanded(
                 flex: 5,
-                child: ClipRRect(
-                    child: Stack(children: <Widget>[
+                child: Stack(children: <Widget>[
                   Center(child: CircularProgressIndicator()),
-                  Center(
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
                     child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
                         image: gym.imageUrl,
                         fit: BoxFit.fill),
                   ),
-                ]))),
+                ])),
             // Title
             Expanded(
                 flex: 5,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(gym.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 20)),
-                  ),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(gym.name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 20)),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                        child: Text(gym.city,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 20)),
+                      ),
+                    ),
+                  ],
                 )),
           ],
         ),
