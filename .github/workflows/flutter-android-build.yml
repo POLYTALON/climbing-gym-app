@@ -1,10 +1,10 @@
+name: Flutter Android Build
+
 on:
   pull_request:
     branches:
       - development
       - main
-
-name: flutter android build
 
 jobs:
   build:

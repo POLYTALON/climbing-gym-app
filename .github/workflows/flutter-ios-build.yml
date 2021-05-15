@@ -1,9 +1,9 @@
+name: Flutter iOS build
+
 on:
   pull_request:
     branches:
       - main
-
-name: flutter ios build
 
 jobs:
   build:
