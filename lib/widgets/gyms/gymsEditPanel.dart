@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:climbing_gym_app/models/Gym.dart';
-import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
@@ -34,7 +32,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   Widget build(BuildContext context) {
     final gymProvider = Provider.of<GymEdit>(context, listen: true);
     final db = Provider.of<DatabaseService>(context, listen: false);
-    final auth = Provider.of<AuthService>(context, listen: false);
 
     gymProvider.addListener(() {
       if (gymProvider.showPanel == true) {

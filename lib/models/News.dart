@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
-import 'dart:convert';
 
 class News extends Equatable {
   final String title;

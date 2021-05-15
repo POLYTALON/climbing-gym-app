@@ -22,7 +22,7 @@ class DatabaseService {
   }
 
   Stream<List<News>> streamNews(String gym) {
-    //TODO: better so store gym id in news table?
+    //TODO: only get news from the current gym and global news
     return _firestore.collection('news').snapshots().map(
         (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
   }

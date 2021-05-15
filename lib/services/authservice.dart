@@ -57,7 +57,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<User> getUserDetails() async {
-    User user = await _auth.currentUser;
+    User user = _auth.currentUser;
     return user;
   }
 

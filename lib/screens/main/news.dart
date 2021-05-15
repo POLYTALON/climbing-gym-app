@@ -13,8 +13,6 @@ const polyDark = Color(0x121212);
 class NewsScreen extends StatelessWidget {
   final SlidingUpPanelController _newsAddPanelController =
       SlidingUpPanelController();
-  final SlidingUpPanelController _newsDetailPanelController =
-      SlidingUpPanelController();
 
   void _toggleAddPanel() {
     if (_newsAddPanelController.status == SlidingUpPanelStatus.expanded) {

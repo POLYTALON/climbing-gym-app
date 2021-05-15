@@ -17,7 +17,7 @@ void main() async {
       providers: [
         StreamProvider<List<News>>(
           initialData: [],
-          create: (context) => DatabaseService().streamNews("gym"),
+          create: (context) => DatabaseService().streamNews(""),
         ),
         StreamProvider<List<Gym>>(
           initialData: [],

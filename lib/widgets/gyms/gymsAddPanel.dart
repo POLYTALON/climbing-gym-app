@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +35,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
-    final auth = Provider.of<AuthService>(context, listen: false);
 
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
