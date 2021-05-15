@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/constants.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
@@ -5,7 +6,6 @@ import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
 import 'models/Gym.dart';
 import 'models/News.dart';
 
@@ -17,7 +17,7 @@ void main() async {
       providers: [
         StreamProvider<List<News>>(
           initialData: [],
-          create: (context) => DatabaseService().streamNews("gym"),
+          create: (context) => DatabaseService().streamNews(""),
         ),
         StreamProvider<List<Gym>>(
           initialData: [],
@@ -28,7 +28,7 @@ void main() async {
       ],
       child: MaterialApp(
           title: 'Climbing App',
-          theme: ThemeData(fontFamily: 'NunitoSans'),
+          theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
           home: MyApp()),
     ),
   );

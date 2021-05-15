@@ -56,6 +56,11 @@ class AuthService with ChangeNotifier {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  Future<User> getUserDetails() async {
+    User user = _auth.currentUser;
+    return user;
+  }
+
   Future<void> resetPassword(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
