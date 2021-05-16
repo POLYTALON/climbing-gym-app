@@ -11,6 +11,12 @@ An idea by [Polytalon](https://polytalon.com/?lang=en), designed and build by st
 PolyApp is an app build for climbing gyms and climbers alike.
 It provides gyms with the opportunity to publish routes and news, while climbers can track their progress and give feedback to the gym.
 
+## Feature overview
+
+Generally, the app allows registering as a user, choose a gym.
+Gyms can add, remove and edit routes, which can be used by a user to track progress and collect statistics about their progress.
+
+All of these features, including editing routes and gyms, can be used from withing the app and without manually touching the backend.
 
 ## Technology
 
