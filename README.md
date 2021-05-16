@@ -10,6 +10,14 @@ An idea by Polytalon, designed and build by students of the HTWG Konstanz.
 The PolyApp is an app build for climbing gyms and climbers alike.
 It provides gyms with the opportunity to publish routes and news, while climbers can track their progress and give feedback to the gym.
 
+
+## Technology
+
+To build the user-interface, we use [Flutter](https://flutter.dev/) which compiles down to iOS, Android and a Web-App.
+The backend is build with [Firebase](https://firebase.google.com/), as it provides an easy Flutter integration.
+
+We test and deploy our code using automated [GitHub Actions](https://github.com/POLYTALON/climbing-gym-app/actions) that ran on different points during the development process.
+
 ## Development Team
 
 - [Andreas Ly](https://github.com/hyerex)
