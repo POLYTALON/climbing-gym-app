@@ -1,13 +1,9 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/35730788/118362746-11e46c00-b591-11eb-8454-4ce166b9fe86.png" height="150">
-</p>
+# PolyApp
+[![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml) [![Firebase Deploy](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml)
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/35730788/118404186-15035900-b672-11eb-92ca-1f5e7d62a452.PNG">
 </p>
-
-# PolyApp
-
-[![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml) [![Firebase Deploy](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml)
 
 An idea by [Polytalon](https://polytalon.com/?lang=en), designed and build by students of the [HTWG Konstanz](https://www.htwg-konstanz.de/).
 
