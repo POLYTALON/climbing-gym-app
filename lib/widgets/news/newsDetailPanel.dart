@@ -101,10 +101,13 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(newsProvider.currentNews.subtitle ?? "",
-                            style: Constants.subHeaderText),
                         Text(newsProvider.currentNews.content ?? "",
-                            style: Constants.defaultText)
+                            style: Constants.defaultText),
+                        TextButton(
+                          onPressed: () {},
+                          style: Constants.polyGreenButton,
+                          child: Text("Open Link"),
+                        )
                       ]),
                 ],
               ),

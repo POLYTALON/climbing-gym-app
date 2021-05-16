@@ -72,13 +72,14 @@ class DatabaseService {
     }
   }
 
-  Future<void> addNews(
-      String title, String content, String creator, File image) async {
+  Future<void> addNews(String title, String content, String link,
+      String creator, File image) async {
     String imageUrl = await uploadFile(image, 'news');
     try {
       await _firestore.collection('news').add({
         'title': title,
         'content': content,
+        'link': link,
         'imageUrls': [
           imageUrl //TODO: allow / present multiple pictures
         ],
