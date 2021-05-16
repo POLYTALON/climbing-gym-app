@@ -3,11 +3,12 @@
 </p>
 
 # PolyApp
+
 [![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml) [![Firebase Deploy](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml)
 
-An idea by Polytalon, designed and build by students of the HTWG Konstanz.
+An idea by [Polytalon](https://polytalon.com/?lang=en), designed and build by students of the [HTWG Konstanz](https://www.htwg-konstanz.de/).
 
-The PolyApp is an app build for climbing gyms and climbers alike.
+PolyApp is an app build for climbing gyms and climbers alike.
 It provides gyms with the opportunity to publish routes and news, while climbers can track their progress and give feedback to the gym.
 
 
