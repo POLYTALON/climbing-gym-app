@@ -310,14 +310,13 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   void createNews(DatabaseService db, AuthService auth) async {
     final newsTitle = controllerNewsTitle.text.trim();
-    final newsSubtitle = controllerNewsSubtitle.text.trim();
     final newsContent = controllerNewsContent.text.trim();
     final user = await auth.getUserDetails();
     final creator = user.displayName;
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await db.addNews(newsTitle, newsSubtitle, newsContent, creator, _image);
+        await db.addNews(newsTitle, newsContent, creator, _image);
         _panelController.collapse();
       } else {
         setState(() {
