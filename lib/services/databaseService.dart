@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/News.dart';
@@ -92,6 +93,7 @@ class DatabaseService {
   }
 
   Future<String> uploadFile(File file) async {
+    file = await compressFile(file);
     String url;
     try {
       TaskSnapshot snapshot =
@@ -101,5 +103,11 @@ class DatabaseService {
       print(e);
     }
     return url;
+  }
+
+  Future<File> compressFile(File file) async {
+    File compressedFile =
+        await FlutterNativeImage.compressImage(file.path, quality: 5);
+    return compressedFile;
   }
 }

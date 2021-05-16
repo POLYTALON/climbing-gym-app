@@ -41,6 +41,7 @@ dependencies:
   universal_html: ^2.0.8
   firebase: ^9.0.1
   uuid: ^3.0.4
+  flutter_native_image: ^0.0.5
 
 dev_dependencies:
   flutter_test:
