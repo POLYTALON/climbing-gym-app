@@ -9,3 +9,13 @@ An idea by Polytalon, designed and build by students of the HTWG Konstanz.
 
 The PolyApp is an app build for climbing gyms and climbers alike.
 It provides gyms with the opportunity to publish routes and news, while climbers can track their progress and give feedback to the gym.
+
+## Development Team
+
+- [Andreas Ly](https://github.com/hyerex)
+- [Bernhard Gundel](https://github.com/BernhardGundel)
+- [Julian Sabo](https://github.com/Juelsen)
+- [Nail Özmen](https://github.com/nailomat)
+- [Sascha Villing](https://github.com/v1lling)
+- [Sebastian Voigt](https://github.com/VoigtSebastian)
+- [Timmy Pfau](https://github.com/LugsoIn2)
