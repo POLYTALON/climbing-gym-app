@@ -37,7 +37,7 @@ class DatabaseService {
 
   Future<void> addGym(String name, String city, File image) async {
     String imageUrl;
-    imageUrl = await uploadFile(image);
+    imageUrl = await uploadFile(image, 'gyms');
     try {
       await _firestore
           .collection('gyms')
@@ -51,7 +51,7 @@ class DatabaseService {
       [File image]) async {
     if (image != null) {
       String imageUrl;
-      imageUrl = await uploadFile(image);
+      imageUrl = await uploadFile(image, 'gyms');
       try {
         await _firestore
             .collection('gyms')
@@ -74,7 +74,7 @@ class DatabaseService {
 
   Future<void> addNews(String title, String subtitle, String content,
       String creator, File image) async {
-    String imageUrl = await uploadFile(image);
+    String imageUrl = await uploadFile(image, 'news');
     try {
       await _firestore.collection('news').add({
         'title': title,
@@ -92,12 +92,14 @@ class DatabaseService {
     }
   }
 
-  Future<String> uploadFile(File file) async {
-    file = await compressFile(file);
+  Future<String> uploadFile(File file, String subfolder) async {
     String url;
+    file = await compressFile(file);
     try {
-      TaskSnapshot snapshot =
-          await _storage.ref().child(basename(file.path)).putFile(file);
+      TaskSnapshot snapshot = await _storage
+          .ref()
+          .child(subfolder + '/' + basename(file.path))
+          .putFile(file);
       url = await snapshot.ref.getDownloadURL();
     } on FirebaseException catch (e) {
       print(e);
