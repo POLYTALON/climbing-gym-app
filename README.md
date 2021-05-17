@@ -1,4 +1,5 @@
 # PolyApp
+
 [![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml) [![Firebase Deploy](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml)
 
 <p align="center">
@@ -12,8 +13,12 @@ It provides gyms with the opportunity to publish routes and news, while climbers
 
 ## Feature overview
 
-Generally, the app allows registering as a user, choose a gym.
-Gyms can add, remove and edit routes, which can be used by a user to track progress and collect statistics about their progress.
+Generally, the app allows registering as a user and choosing your current gym.
+
+Gym owners and route setters can add, remove and edit routes.
+Additionally, gym owners can publish news to be displayed for every gym-user.
+
+Users can use the gym's routes to track their progress and get an overview of their current performance.
 
 All of these features, including editing routes and gyms, can be used from withing the app and without manually touching the backend.
 
@@ -23,6 +28,7 @@ To build the user-interface, we use [Flutter](https://flutter.dev/) which compil
 The backend is build with [Firebase](https://firebase.google.com/), as it provides an easy Flutter integration.
 
 We test and deploy our code using automated [GitHub Actions](https://github.com/POLYTALON/climbing-gym-app/actions) that ran on different points during the development process.
+Our GitHub Actions include automatic testing of builds for iOS and Android and deployment for our Web-App.
 
 ## Development Team
 
