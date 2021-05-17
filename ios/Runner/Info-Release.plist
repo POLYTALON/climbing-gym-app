@@ -57,5 +57,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>PolyApp wants to access your camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>PolyApp wants to access your Photo Library</string>
 </dict>
 </plist>
