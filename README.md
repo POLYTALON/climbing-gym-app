@@ -6,9 +6,9 @@
   <img src="https://user-images.githubusercontent.com/35730788/118404186-15035900-b672-11eb-92ca-1f5e7d62a452.PNG">
 </p>
 
-An idea by [Polytalon](https://polytalon.com/?lang=en), designed and build by students of the [HTWG Konstanz](https://www.htwg-konstanz.de/).
+An idea by [Polytalon](https://polytalon.com/?lang=en), designed and built by students of the [HTWG Konstanz](https://www.htwg-konstanz.de/).
 
-PolyApp is an app build for climbing gyms and climbers alike.
+PolyApp is an app designed for climbing gyms and climbers alike.
 It provides gyms with the opportunity to publish routes and news, while climbers can track their progress and give feedback to the gym.
 
 ## Feature overview
