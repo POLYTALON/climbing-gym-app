@@ -32,8 +32,9 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> loginUser(String userEmail, String userPassword) async {
-    await _auth.signInWithEmailAndPassword(
+  Future<UserCredential> loginUser(
+      String userEmail, String userPassword) async {
+    return await _auth.signInWithEmailAndPassword(
         email: userEmail, password: userPassword);
   }
 
