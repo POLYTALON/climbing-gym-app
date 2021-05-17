@@ -201,15 +201,24 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_validateAndSave()) {
       try {
         final auth = Provider.of<AuthService>(context, listen: false);
-        await auth.loginUser(email, password);
-        await Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => MyApp()));
+        final usercred = await auth.loginUser(email, password);
+        //update user.emailVerified status
+        await usercred.user.reload();
+
+        if (usercred.user.emailVerified) {
+          await Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => MyApp()));
+        } else {
+          throw FirebaseAuthException(code: 'invalid-email-verified');
+        }
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'user-not-found') {
           message = 'No user found for that email.';
         } else if (e.code == 'wrong-password') {
           message = 'Wrong password provided for that user.';
+        } else if (e.code == 'invalid-email-verified') {
+          message = 'Email has not been verified yet.';
         } else {
           message = 'Something went wrong :(';
         }
