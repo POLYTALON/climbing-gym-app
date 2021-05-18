@@ -110,9 +110,11 @@ class AuthService with ChangeNotifier {
             .collection('private')
             .doc('roles')
             .get();
-        userRoles.putIfAbsent(gym.id, () {
-          return UserRole(gymuser: roles.data()['gymuser'] ?? false);
-        });
+        if (roles.exists) {
+          userRoles.putIfAbsent(gym.id, () {
+            return UserRole(gymuser: roles.data()['gymuser'] ?? false);
+          });
+        }
       }));
     } on FirebaseException catch (e) {
       print(e);
