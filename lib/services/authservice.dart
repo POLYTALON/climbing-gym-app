@@ -1,9 +1,12 @@
+import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _loggedIn = false;
 
   AuthService() {
@@ -63,5 +66,54 @@ class AuthService with ChangeNotifier {
 
   Future<void> resetPassword(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
+  }
+
+  Stream<AppUser> streamAppUser() {
+    return _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .snapshots()
+        .asyncMap((userDoc) async {
+      bool isOperator = await _getIsOperator();
+      Map<String, Object> userRoles = await _getUserRoles();
+      return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
+    });
+  }
+
+  Future<bool> _getIsOperator() async {
+    try {
+      DocumentSnapshot snapshot = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser.uid)
+          .collection('private')
+          .doc('operator')
+          .get();
+      return snapshot.data()['operator'];
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  Future _getUserRoles() async {
+    Map<String, Object> userRoles = Map<String, Object>();
+    try {
+      CollectionReference privileges = _firestore
+          .collection('users')
+          .doc(_auth.currentUser.uid)
+          .collection('privileges');
+      QuerySnapshot snapshot = await privileges.snapshots().first;
+      await Future.wait(snapshot.docs.map((gym) async {
+        DocumentSnapshot roles = await privileges
+            .doc(gym.id)
+            .collection('private')
+            .doc('roles')
+            .get();
+        userRoles.putIfAbsent(gym.id, () => roles.data());
+      }));
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    return userRoles;
   }
 }

@@ -1,5 +1,8 @@
 import 'package:climbing_gym_app/models/Gym.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:provider/provider.dart';
@@ -18,7 +21,16 @@ class _GymCardState extends State<GymCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final auth = Provider.of<AuthService>(context, listen: false);
+    final db = Provider.of<DatabaseService>(context, listen: false);
+
+    return //FutureBuilder<bool>(
+        //future: _getPrivileges(db, auth, gym),
+        //builder: (context, snapshot) {
+        // if (snapshot.connectionState != ConnectionState.done) {
+        //  return Container(width: 0.0, height: 0.0);
+        // } else {
+        Container(
       padding: const EdgeInsets.all(8),
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -69,6 +81,7 @@ class _GymCardState extends State<GymCard> {
                                 fontSize: 20)),
                       ),
                     ),
+                    //if (snapshot.data)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -91,4 +104,21 @@ class _GymCardState extends State<GymCard> {
     final gymEdit = Provider.of<GymEdit>(context, listen: false);
     gymEdit.showEdit(this.gym);
   }
+
+  /* Privileges */
+  /*Future<bool> _getIsGymUser(
+      DatabaseService db, AuthService auth, Gym gym) async {
+    User currentUser = await auth.getUserDetails();
+    return await db.hasRoleGymUser(currentUser.uid, gym.id);
+  }
+
+  Future<bool> _getIsOperator(DatabaseService db, AuthService auth) async {
+    User currentUser = await auth.getUserDetails();
+    return await db.hasRoleOperator(currentUser.uid);
+  }
+
+  Future<bool> _getPrivileges(
+      DatabaseService db, AuthService auth, Gym gym) async {
+    return await _getIsOperator(db, auth) || await _getIsGymUser(db, auth, gym);
+  } */
 }
