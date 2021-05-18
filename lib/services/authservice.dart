@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,7 +76,7 @@ class AuthService with ChangeNotifier {
         .snapshots()
         .asyncMap((userDoc) async {
       bool isOperator = await _getIsOperator();
-      Map<String, Object> userRoles = await _getUserRoles();
+      Map<String, UserRole> userRoles = await _getUserRoles();
       return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
     });
   }
@@ -95,8 +96,8 @@ class AuthService with ChangeNotifier {
     return false;
   }
 
-  Future _getUserRoles() async {
-    Map<String, Object> userRoles = Map<String, Object>();
+  Future<Map<String, UserRole>> _getUserRoles() async {
+    Map<String, UserRole> userRoles = Map<String, UserRole>();
     try {
       CollectionReference privileges = _firestore
           .collection('users')
@@ -109,7 +110,9 @@ class AuthService with ChangeNotifier {
             .collection('private')
             .doc('roles')
             .get();
-        userRoles.putIfAbsent(gym.id, () => roles.data());
+        userRoles.putIfAbsent(gym.id, () {
+          return UserRole(gymuser: roles.data()['gymuser'] ?? false);
+        });
       }));
     } on FirebaseException catch (e) {
       print(e);

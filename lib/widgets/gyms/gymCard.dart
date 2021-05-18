@@ -1,8 +1,6 @@
+import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
-import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:provider/provider.dart';
@@ -10,27 +8,22 @@ import 'package:transparent_image/transparent_image.dart';
 
 class GymCard extends StatefulWidget {
   final Gym gym;
-  GymCard({Gym gym}) : this.gym = gym;
+  final AppUser appUser;
+  GymCard({Gym gym, AppUser appUser})
+      : this.gym = gym,
+        this.appUser = appUser;
 
-  _GymCardState createState() => new _GymCardState(gym);
+  _GymCardState createState() => new _GymCardState(gym, appUser);
 }
 
 class _GymCardState extends State<GymCard> {
   final Gym gym;
-  _GymCardState(this.gym);
+  final AppUser appUser;
+  _GymCardState(this.gym, this.appUser);
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
-    final db = Provider.of<DatabaseService>(context, listen: false);
-
-    return //FutureBuilder<bool>(
-        //future: _getPrivileges(db, auth, gym),
-        //builder: (context, snapshot) {
-        // if (snapshot.connectionState != ConnectionState.done) {
-        //  return Container(width: 0.0, height: 0.0);
-        // } else {
-        Container(
+    return Container(
       padding: const EdgeInsets.all(8),
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -81,17 +74,17 @@ class _GymCardState extends State<GymCard> {
                                 fontSize: 20)),
                       ),
                     ),
-                    //if (snapshot.data)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          color: Colors.white,
-                          onPressed: onPressEdit,
-                        ),
-                      ],
-                    )
+                    if (_getIsPrivileged())
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            color: Colors.white,
+                            onPressed: onPressEdit,
+                          ),
+                        ],
+                      )
                   ],
                 )),
           ],
@@ -105,20 +98,9 @@ class _GymCardState extends State<GymCard> {
     gymEdit.showEdit(this.gym);
   }
 
-  /* Privileges */
-  /*Future<bool> _getIsGymUser(
-      DatabaseService db, AuthService auth, Gym gym) async {
-    User currentUser = await auth.getUserDetails();
-    return await db.hasRoleGymUser(currentUser.uid, gym.id);
+  bool _getIsPrivileged() {
+    if (appUser == null) return false;
+    return appUser.isOperator ||
+        (appUser.roles[gym.id] != null && appUser.roles[gym.id].gymuser);
   }
-
-  Future<bool> _getIsOperator(DatabaseService db, AuthService auth) async {
-    User currentUser = await auth.getUserDetails();
-    return await db.hasRoleOperator(currentUser.uid);
-  }
-
-  Future<bool> _getPrivileges(
-      DatabaseService db, AuthService auth, Gym gym) async {
-    return await _getIsOperator(db, auth) || await _getIsGymUser(db, auth, gym);
-  } */
 }

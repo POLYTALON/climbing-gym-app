@@ -102,41 +102,4 @@ class DatabaseService {
     }
     return url;
   }
-
-  /* Privileges */
-  Future<bool> hasRoleGymUser(String uid, String gymId) async {
-    bool isGymUser = false;
-    try {
-      CollectionReference privileges =
-          _firestore.collection('users').doc(uid).collection('privileges');
-      CollectionReference private = privileges.doc(gymId).collection('private');
-      DocumentSnapshot docRoles = await private.doc('roles').get();
-      if (docRoles.exists) {
-        isGymUser = docRoles.data()['gymuser'];
-      }
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    return isGymUser;
-  }
-
-  Future<bool> isAnyGymUser(String uid) async {
-    bool isAnyGymUser = false;
-    try {
-      CollectionReference privileges =
-          _firestore.collection('users').doc(uid).collection('privileges');
-      QuerySnapshot snapshot = await privileges.snapshots().first;
-      await Future.wait(snapshot.docs.map((doc) async {
-        DocumentSnapshot roles = await privileges
-            .doc(doc.id)
-            .collection('private')
-            .doc('roles')
-            .get();
-        if (roles.data()['gymuser']) isAnyGymUser = true;
-      }));
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    return isAnyGymUser;
-  }
 }

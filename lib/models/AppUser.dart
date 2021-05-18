@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AppUser {
@@ -7,7 +7,7 @@ class AppUser {
   final String displayName;
   final String imageUrl;
   final bool isOperator;
-  final Map<String, Object> roles;
+  final Map<String, UserRole> roles;
 
   @override
   List<Object> get props =>
@@ -22,14 +22,14 @@ class AppUser {
       this.roles});
 
   factory AppUser.fromFirebase(
-      User firebaseUser, bool isOperator, Map<String, Object> userRoles) {
+      User firebaseUser, bool isOperator, Map<String, UserRole> userRoles) {
     return AppUser(
         uid: firebaseUser.uid ?? '',
         email: firebaseUser.email ?? '',
         displayName: firebaseUser.displayName ?? '',
         imageUrl: firebaseUser.photoURL ?? '',
         isOperator: isOperator ?? false,
-        roles: userRoles ?? Map<String, Object>());
+        roles: userRoles ?? Map<String, UserRole>());
   }
 
   AppUser empty() {
@@ -39,6 +39,6 @@ class AppUser {
         displayName: '',
         imageUrl: '',
         isOperator: false,
-        roles: Map<String, Object>());
+        roles: Map<String, UserRole>());
   }
 }
