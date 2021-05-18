@@ -52,28 +52,33 @@ class _GymCardState extends State<GymCard> {
                 flex: 7,
                 child: Column(
                   children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(gym.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 20)),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-                        child: Text(gym.city,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 20)),
-                      ),
-                    ),
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(gym.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 20)),
+                          ),
+                        )),
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Center(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                            child: Text(gym.city,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 20)),
+                          ),
+                        )),
                     if (_getIsPrivileged())
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
