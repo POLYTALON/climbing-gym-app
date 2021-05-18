@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/News.dart';
@@ -36,7 +37,7 @@ class DatabaseService {
 
   Future<void> addGym(String name, String city, File image) async {
     String imageUrl;
-    imageUrl = await uploadFile(image);
+    imageUrl = await uploadFile(image, 'gyms');
     try {
       await _firestore
           .collection('gyms')
@@ -50,7 +51,7 @@ class DatabaseService {
       [File image]) async {
     if (image != null) {
       String imageUrl;
-      imageUrl = await uploadFile(image);
+      imageUrl = await uploadFile(image, 'gyms');
       try {
         await _firestore
             .collection('gyms')
@@ -73,7 +74,7 @@ class DatabaseService {
 
   Future<void> addNews(String title, String subtitle, String content,
       String creator, File image) async {
-    String imageUrl = await uploadFile(image);
+    String imageUrl = await uploadFile(image, 'news');
     try {
       await _firestore.collection('news').add({
         'title': title,
@@ -91,15 +92,24 @@ class DatabaseService {
     }
   }
 
-  Future<String> uploadFile(File file) async {
+  Future<String> uploadFile(File file, String subfolder) async {
     String url;
+    file = await compressFile(file);
     try {
-      TaskSnapshot snapshot =
-          await _storage.ref().child(basename(file.path)).putFile(file);
+      TaskSnapshot snapshot = await _storage
+          .ref()
+          .child(subfolder + '/' + basename(file.path))
+          .putFile(file);
       url = await snapshot.ref.getDownloadURL();
     } on FirebaseException catch (e) {
       print(e);
     }
     return url;
+  }
+
+  Future<File> compressFile(File file) async {
+    File compressedFile =
+        await FlutterNativeImage.compressImage(file.path, quality: 5);
+    return compressedFile;
   }
 }
