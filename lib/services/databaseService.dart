@@ -37,11 +37,15 @@ class DatabaseService {
 
   Future<void> addGym(String name, String city, File image) async {
     String imageUrl;
-    imageUrl = await uploadFile(image, 'gyms');
+    DocumentReference docRef;
     try {
-      await _firestore
-          .collection('gyms')
-          .add({'name': name, 'city': city, 'imageUrl': imageUrl});
+      docRef = _firestore.collection('gyms').doc();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    imageUrl = await uploadFile(image, docRef.path);
+    try {
+      await docRef.set({'name': name, 'city': city, 'imageUrl': imageUrl});
     } on FirebaseException catch (e) {
       print(e);
     }
@@ -51,7 +55,7 @@ class DatabaseService {
       [File image]) async {
     if (image != null) {
       String imageUrl;
-      imageUrl = await uploadFile(image, 'gyms');
+      imageUrl = await uploadFile(image, 'gyms' + '/' + id);
       try {
         await _firestore
             .collection('gyms')
@@ -74,9 +78,15 @@ class DatabaseService {
 
   Future<void> addNews(String title, String subtitle, String content,
       String creator, File image) async {
-    String imageUrl = await uploadFile(image, 'news');
+    DocumentReference docRef;
     try {
-      await _firestore.collection('news').add({
+      docRef = _firestore.collection('news').doc();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    String imageUrl = await uploadFile(image, docRef.path);
+    try {
+      await docRef.set({
         'title': title,
         'subtitle': subtitle,
         'content': content,
@@ -92,13 +102,13 @@ class DatabaseService {
     }
   }
 
-  Future<String> uploadFile(File file, String subfolder) async {
+  Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);
     try {
       TaskSnapshot snapshot = await _storage
           .ref()
-          .child(subfolder + '/' + basename(file.path))
+          .child(path + '/' + basename(file.path))
           .putFile(file);
       url = await snapshot.ref.getDownloadURL();
     } on FirebaseException catch (e) {
