@@ -87,13 +87,14 @@ class AuthService with ChangeNotifier {
   Future<bool> _getIsOperator() async {
     if (_auth.currentUser != null) {
       try {
-        DocumentSnapshot snapshot = await _firestore
+        CollectionReference docRef = _firestore
             .collection('users')
             .doc(_auth.currentUser.uid)
-            .collection('private')
-            .doc('operator')
-            .get();
-        return snapshot.data()['operator'];
+            .collection('private');
+        DocumentSnapshot snapshot = await docRef.doc('operator').get();
+        if (snapshot.exists) {
+          return snapshot.data()['operator'];
+        }
       } on FirebaseException catch (e) {
         print(e);
       }
