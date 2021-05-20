@@ -82,7 +82,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                               Icon(Icons.camera_alt_rounded,
                                   size: 48.0, color: Colors.white),
                               Text(
-                                'Banner hinzufügen',
+                                'Add picture',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
@@ -100,7 +100,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             children: [
                               // Name of Gym
                               Text(
-                                'Name der Kletterhalle',
+                                'Gym name',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w300,
@@ -141,7 +141,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Standort',
+                                'Location',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w300,
@@ -161,7 +161,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                   style: TextStyle(fontWeight: FontWeight.w800),
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
-                                      hintText: 'Stadt',
+                                      hintText: 'Location',
                                       contentPadding:
                                           const EdgeInsets.only(left: 16.0),
                                       border: OutlineInputBorder(
@@ -202,7 +202,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             onPressed: () => createGym(db),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Halle anlegen",
+                              child: Text("Create Gym",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700)),
@@ -223,7 +223,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             onPressed: () => _panelController.collapse(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Abbrechen",
+                              child: Text("Cancel",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700)),
@@ -252,13 +252,13 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
           builder: (context) => CupertinoActionSheet(
                 actions: [
                   CupertinoActionSheetAction(
-                      child: Text('Kamera'),
+                      child: Text('Camera'),
                       onPressed: () {
                         Navigator.pop(context);
                         _getImage(ImageSource.camera);
                       }),
                   CupertinoActionSheetAction(
-                    child: Text('Gallerie'),
+                    child: Text('Gallery'),
                     onPressed: () {
                       Navigator.pop(context);
                       _getImage(ImageSource.gallery);
@@ -273,14 +273,14 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
           builder: (context) => ListView(children: [
                 ListTile(
                     leading: Icon(Icons.camera_alt_rounded),
-                    title: Text('Kamera'),
+                    title: Text('Camera'),
                     onTap: () {
                       Navigator.pop(context);
                       _getImage(ImageSource.camera);
                     }),
                 ListTile(
                     leading: Icon(Icons.photo_album),
-                    title: Text('Gallerie'),
+                    title: Text('Gallery'),
                     onTap: () {
                       Navigator.pop(context);
                       _getImage(ImageSource.gallery);
@@ -310,7 +310,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
         _panelController.collapse();
       } else {
         setState(() {
-          _errorMessage = 'Bitte füge ein Banner hinzu.';
+          _errorMessage = 'Please add a picture.';
         });
       }
     }

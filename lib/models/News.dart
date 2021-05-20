@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class News extends Equatable {
   final String title;
-  final String subtitle;
+  final String link;
   final String content;
   final String creator;
   final DateTime date;
@@ -12,11 +12,11 @@ class News extends Equatable {
 
   @override
   List<Object> get props =>
-      [title, subtitle, content, creator, date, imageUrls, isGlobal];
+      [title, link, content, creator, date, imageUrls, isGlobal];
 
   News(
       {this.title,
-      this.subtitle,
+      this.link,
       this.content,
       this.creator,
       this.date,
@@ -27,7 +27,7 @@ class News extends Equatable {
     Map data = doc.data();
     return News(
       title: data['title'] ?? '',
-      subtitle: data['subtitle'] ?? '',
+      link: data['link'] ?? '',
       content: data['content'] ?? '',
       creator: data['creator'] ?? '',
       date: data['date'] != null
