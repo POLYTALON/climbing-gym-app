@@ -351,7 +351,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
         _panelController.collapse();
       } else {
         setState(() {
-          _errorMessage = 'Bitte füge ein Banner hinzu.';
+          _errorMessage = 'Please add a picture.';
         });
       }
     }

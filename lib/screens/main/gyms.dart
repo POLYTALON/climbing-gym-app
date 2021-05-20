@@ -51,7 +51,7 @@ class _GymsScreenState extends State<GymsScreen> {
                         // Text
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text("Halle auswählen",
+                          child: Text("Choose Your Gym",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,

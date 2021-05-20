@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort:",
+                    child: Text("Password:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -128,14 +128,14 @@ class _LoginScreenState extends State<LoginScreen> {
             TextButton(
               style: Constants.polyGreenButton,
               onPressed: isLoggedIn ? null : () => doUserLogin(),
-              child: Text("Anmelden",
+              child: Text("SignIn",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
             TextButton(
               onPressed: navigateToPasswordReset,
               child: Text(
-                "Passwort vergessen?",
+                "Forgot your password?",
                 style: TextStyle(
                     color: Colors.blue[400],
                     decoration: TextDecoration.underline),
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: () => doGoogleLogin(),
-              child: Text("Mit Google anmelden",
+              child: Text("SignIn with Google",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             // Register Button
             Text(
-              "Noch keinen Account?",
+              "No account yet?",
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: () => navigateToRegister(),
-              child: Text("Registrieren",
+              child: Text("SignUp",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),

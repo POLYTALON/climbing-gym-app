@@ -14,12 +14,12 @@ class AppUser {
       [uid, email, displayName, imageUrl, isOperator, roles];
 
   AppUser(
-      {this.uid,
-      this.email,
-      this.displayName,
-      this.imageUrl,
-      this.isOperator,
-      this.roles});
+      {this.uid = '',
+      this.email = '',
+      this.displayName = '',
+      this.imageUrl = '',
+      this.isOperator = false,
+      this.roles = const {}});
 
   factory AppUser.fromFirebase(
       User firebaseUser, bool isOperator, Map<String, UserRole> userRoles) {

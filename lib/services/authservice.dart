@@ -70,55 +70,63 @@ class AuthService with ChangeNotifier {
   }
 
   Stream<AppUser> streamAppUser() {
-    return _firestore
-        .collection('users')
-        .doc(_auth.currentUser.uid)
-        .snapshots()
-        .asyncMap((userDoc) async {
-      bool isOperator = await _getIsOperator();
-      Map<String, UserRole> userRoles = await _getUserRoles();
-      return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
-    });
+    if (_auth.currentUser != null) {
+      return _firestore
+          .collection('users')
+          .doc(_auth.currentUser?.uid ?? '')
+          .snapshots()
+          .asyncMap((userDoc) async {
+        bool isOperator = await _getIsOperator();
+        Map<String, UserRole> userRoles = await _getUserRoles();
+        return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
+      });
+    }
+    return Stream.empty();
   }
 
   Future<bool> _getIsOperator() async {
-    try {
-      DocumentSnapshot snapshot = await _firestore
-          .collection('users')
-          .doc(_auth.currentUser.uid)
-          .collection('private')
-          .doc('operator')
-          .get();
-      return snapshot.data()['operator'];
-    } on FirebaseException catch (e) {
-      print(e);
+    if (_auth.currentUser != null) {
+      try {
+        DocumentSnapshot snapshot = await _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .collection('private')
+            .doc('operator')
+            .get();
+        return snapshot.data()['operator'];
+      } on FirebaseException catch (e) {
+        print(e);
+      }
     }
     return false;
   }
 
   Future<Map<String, UserRole>> _getUserRoles() async {
-    Map<String, UserRole> userRoles = Map<String, UserRole>();
-    try {
-      CollectionReference privileges = _firestore
-          .collection('users')
-          .doc(_auth.currentUser.uid)
-          .collection('privileges');
-      QuerySnapshot snapshot = await privileges.snapshots().first;
-      await Future.wait(snapshot.docs.map((gym) async {
-        DocumentSnapshot roles = await privileges
-            .doc(gym.id)
-            .collection('private')
-            .doc('roles')
-            .get();
-        if (roles.exists) {
-          userRoles.putIfAbsent(gym.id, () {
-            return UserRole(gymuser: roles.data()['gymuser'] ?? false);
-          });
-        }
-      }));
-    } on FirebaseException catch (e) {
-      print(e);
+    if (_auth.currentUser != null) {
+      Map<String, UserRole> userRoles = Map<String, UserRole>();
+      try {
+        CollectionReference privileges = _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .collection('privileges');
+        QuerySnapshot snapshot = await privileges.snapshots().first;
+        await Future.wait(snapshot.docs.map((gym) async {
+          DocumentSnapshot roles = await privileges
+              .doc(gym.id)
+              .collection('private')
+              .doc('roles')
+              .get();
+          if (roles.exists) {
+            userRoles.putIfAbsent(gym.id, () {
+              return UserRole(gymuser: roles.data()['gymuser'] ?? false);
+            });
+          }
+        }));
+      } on FirebaseException catch (e) {
+        print(e);
+      }
+      return userRoles;
     }
-    return userRoles;
+    return Map<String, UserRole>();
   }
 }
