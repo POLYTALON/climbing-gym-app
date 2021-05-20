@@ -62,6 +62,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                   top: 8, bottom: 8, left: 16.0, right: 16.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,23 +100,22 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                             ),
                           ],
                         )),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(newsProvider.currentNews.content ?? "",
+                              style: Constants.defaultText)
+                        ]),
                     Visibility(
-                      visible: newsProvider.currentNews.link != "",
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(newsProvider.currentNews.content ?? "",
-                                style: Constants.defaultText),
-                            TextButton(
-                                onPressed: () => {
-                                      if (newsProvider.currentNews.link != null)
-                                        {launch(newsProvider.currentNews.link)},
-                                    },
-                                style: Constants.polyGreenButton,
-                                child: Text("Open Link",
-                                    style: Constants.defaultTextWhite))
-                          ]),
-                    ),
+                        visible: newsProvider.currentNews.link != "",
+                        child: TextButton(
+                            onPressed: () => {
+                                  if (newsProvider.currentNews.link != null)
+                                    {launch(newsProvider.currentNews.link)},
+                                },
+                            style: Constants.polyGreenButton,
+                            child: Text("Open Link",
+                                style: Constants.defaultTextWhite)))
                   ]),
             ),
           ),
