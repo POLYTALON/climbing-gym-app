@@ -35,11 +35,29 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Material(
       color: Constants.polyDark,
-      child: Container(
+      child: Container(  
         margin: const EdgeInsets.only(left: 64.0, right: 64.0, top: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: [ 
+          Row(children:[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
+              // back button
+              child: RawMaterialButton(
+                onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (countext) => StartScreen()))
+                    },
+                elevation: 2.0,
+                fillColor: Colors.grey,
+                child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                padding: EdgeInsets.all(8.0),
+                shape: CircleBorder()),
+              )],
+            ),
             // Polytalon Logo
             Image.asset('assets/img/polytalon_logo.png'),
 
@@ -183,23 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),
-
-            // Spacer
-            Spacer(flex: 1),
-
-            // back button
-            RawMaterialButton(
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (countext) => StartScreen()))
-                    },
-                elevation: 2.0,
-                fillColor: Colors.grey,
-                child: Icon(Icons.arrow_back_rounded, size: 32.0),
-                padding: EdgeInsets.all(8.0),
-                shape: CircleBorder()),
 
             // Spacer
             Spacer(flex: 1),
