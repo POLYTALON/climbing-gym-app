@@ -126,13 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             // Button Login
             TextButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Constants.polyGreen),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0)),
-                  )),
+              style: Constants.polyGreenButton,
               onPressed: isLoggedIn ? null : () => doUserLogin(),
               child: Text("Anmelden",
                   style: TextStyle(

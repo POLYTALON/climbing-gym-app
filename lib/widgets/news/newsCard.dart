@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class NewsCard extends StatefulWidget {
   NewsCard({@required News news}) : news = news;
@@ -20,7 +21,7 @@ class _NewsCardState extends State<NewsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 3,
+      height: MediaQuery.of(context).size.height / 2.5,
       child: GestureDetector(
         onTap: onPressNews,
         child: new Card(
@@ -59,13 +60,11 @@ class _NewsCardState extends State<NewsCard> {
                       child: Column(
                         children: [
                           Center(
-                            child: Text(this.news.title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 15)),
-                          ),
+                              child: Text(
+                            this.news.title,
+                            textAlign: TextAlign.center,
+                            style: Constants.subHeaderText,
+                          )),
                         ],
                       ),
                     ),
