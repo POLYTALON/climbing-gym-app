@@ -5,7 +5,6 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
-import 'package:firebase/firebase.dart' hide UserCredential;
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
