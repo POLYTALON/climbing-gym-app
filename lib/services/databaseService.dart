@@ -24,8 +24,12 @@ class DatabaseService {
 
   Stream<List<News>> streamNews(String gym) {
     //TODO: only get news from the current gym and global news
-    return _firestore.collection('news').snapshots().map(
-        (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
+    return _firestore
+        .collection('news')
+        .orderBy("date", descending: true)
+        .snapshots()
+        .map(
+            (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
   }
 
   Stream<List<Gym>> streamGyms() {
@@ -72,20 +76,20 @@ class DatabaseService {
     }
   }
 
-  Future<void> addNews(String title, String subtitle, String content,
+  Future<void> addNews(String title, String content, String link,
       String creator, File image) async {
     String imageUrl = await uploadFile(image, 'news');
     try {
       await _firestore.collection('news').add({
         'title': title,
-        'subtitle': subtitle,
         'content': content,
+        'link': link,
         'imageUrls': [
-          imageUrl //todo: more pictures
+          imageUrl //TODO: allow / present multiple pictures
         ],
         'date': DateTime.now(),
         'creator': creator,
-        'isGlobal': true, //todo
+        'isGlobal': true, //TODO: check if operator or gymuser
       });
     } on FirebaseException catch (e) {
       print(e);

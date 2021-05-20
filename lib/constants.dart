@@ -13,8 +13,24 @@ const Color lightGray = Color(0xFF808080);
 const TextStyle headerText =
     TextStyle(color: polyDark, fontWeight: FontWeight.w800, fontSize: 22);
 
+const TextStyle headerTextWhite =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 22);
+
 const TextStyle subHeaderText =
     TextStyle(color: polyDark, fontWeight: FontWeight.w800, fontSize: 18);
 
+const TextStyle subHeaderTextWhite =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18);
+
 const TextStyle defaultText =
     TextStyle(color: polyDark, fontWeight: FontWeight.w500, fontSize: 16);
+
+const TextStyle defaultTextWhite =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16);
+
+// custom button styles
+ButtonStyle polyGreenButton = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(polyGreen),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
+    ));
