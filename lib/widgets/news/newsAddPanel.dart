@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/validators/content_validator.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/validators/title_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -113,7 +115,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                             ),
                             TextFormField(
                                 controller: controllerNewsTitle,
-                                validator: NameFieldValidator.validate,
+                                validator: TitleFieldValidator.validate,
                                 autocorrect: false,
                                 textCapitalization: TextCapitalization.words,
                                 style: Constants.defaultText,
@@ -149,7 +151,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                 minLines: 5,
                                 maxLines: 30,
                                 controller: controllerNewsContent,
-                                validator: NameFieldValidator.validate,
+                                validator: ContentFieldValidator.validate,
                                 autocorrect: false,
                                 textCapitalization: TextCapitalization.words,
                                 style: Constants.defaultText,
@@ -182,7 +184,6 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                             ),
                             TextFormField(
                                 controller: controllerNewsLink,
-                                validator: NameFieldValidator.validate,
                                 autocorrect: false,
                                 textCapitalization: TextCapitalization.words,
                                 style: Constants.defaultText,
