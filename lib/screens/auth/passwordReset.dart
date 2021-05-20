@@ -84,7 +84,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: resetPassword,
-              child: Text("Passwort zurücksetzen",
+              child: Text("Reset password",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),

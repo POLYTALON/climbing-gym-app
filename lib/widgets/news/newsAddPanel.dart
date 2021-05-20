@@ -31,7 +31,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   final TextEditingController controllerNewsTitle =
       TextEditingController(text: "");
-  final TextEditingController controllerNewsSubtitle =
+  final TextEditingController controllerNewsLink =
       TextEditingController(text: "");
   final TextEditingController controllerNewsContent =
       TextEditingController(text: "");
@@ -45,203 +45,230 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
     final auth = Provider.of<AuthService>(context, listen: false);
 
     return SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 1.0,
-        panelController: _panelController,
-        child: Container(
-            decoration: ShapeDecoration(
-              color: Constants.lightGray,
-              shadows: [
-                BoxShadow(
-                    blurRadius: 8.0,
-                    spreadRadius: 16.0,
-                    color: const Color(0x11000000))
-              ],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0))),
-            ),
+      controlHeight: 1.0,
+      anchor: 1.0,
+      panelController: _panelController,
+      child: Container(
+          decoration: ShapeDecoration(
+            color: Constants.lightGray,
+            shadows: [
+              BoxShadow(
+                  blurRadius: 8.0,
+                  spreadRadius: 16.0,
+                  color: const Color(0x11000000))
+            ],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0))),
+          ),
 
-            // SlidingUpPanel content
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // Take photo button
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(16.0),
-                              topRight: Radius.circular(16.0))),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(12.0),
-                            elevation: 2,
-                            primary: Constants.polyGray,
-                          ),
-                          onPressed: () => _showImageSourceActionSheet(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Icon(Icons.camera_alt_rounded,
-                                  size: 48.0, color: Colors.white),
-                              Text(
-                                'Titelbild hinzufügen',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          )),
-                    ),
-                    // Container for gym name
-                    Container(
-                        padding:
-                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Name of Gym
-                              Text(
-                                'News Titel',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Divider(
-                                color: Constants.polyGray,
-                                thickness: 2,
-                                height: 20,
-                              ),
-                              TextFormField(
-                                  controller: controllerNewsTitle,
-                                  validator: NameFieldValidator.validate,
-                                  autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
-                                  decoration: InputDecoration(
-                                      hintText: 'Titel eingeben',
-                                      contentPadding:
-                                          const EdgeInsets.only(left: 16.0),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24.0),
-                                          borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none)),
-                                      fillColor: Colors.white,
-                                      filled: true))
-                            ])),
-
-                    // Location
-                    Container(
-                        padding:
-                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'News Text',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Divider(
-                                color: Constants.polyGray,
-                                thickness: 2,
-                                height: 20,
-                              ),
-                              TextFormField(
-                                  minLines: 5,
-                                  maxLines: 30,
-                                  controller: controllerNewsContent,
-                                  validator: NameFieldValidator.validate,
-                                  autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
-                                  decoration: InputDecoration(
-                                      hintText: 'Text eingeben',
-                                      contentPadding: EdgeInsets.all(16.0),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24.0),
-                                          borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none)),
-                                      fillColor: Colors.white,
-                                      filled: true)),
-
-                              // Error Message
-                              Center(
-                                  child: Text(_errorMessage,
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.w800))),
-                            ])),
-
-                    // Buttons
-                    Container(
+          // SlidingUpPanel content
+          child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Take photo button
+                  Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16.0),
+                            topRight: Radius.circular(16.0))),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(12.0),
+                          elevation: 2,
+                          primary: Constants.polyGray,
+                        ),
+                        onPressed: () => _showImageSourceActionSheet(context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Icon(Icons.camera_alt_rounded,
+                                size: 48.0, color: Colors.white),
+                            Text(
+                              'Add News Picture',
+                              style: Constants.subHeaderTextWhite,
+                            ),
+                          ],
+                        )),
+                  ),
+                  // Title
+                  Container(
                       padding:
-                          EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          // Accept button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyGreen),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => createNews(db, auth),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("News veröffentlichen",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Name of Gym
+                            Text('News Title',
+                                style: Constants.defaultTextWhite),
+                            Divider(
+                              color: Constants.polyGray,
+                              thickness: 2,
+                              height: 20,
                             ),
-                          ),
+                            TextFormField(
+                                controller: controllerNewsTitle,
+                                validator: NameFieldValidator.validate,
+                                autocorrect: false,
+                                textCapitalization: TextCapitalization.words,
+                                style: Constants.defaultText,
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                    hintText: 'Title',
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 16.0),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        borderSide: BorderSide(
+                                            width: 0, style: BorderStyle.none)),
+                                    fillColor: Colors.white,
+                                    filled: true))
+                          ])),
 
-                          // Cancel button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyRed),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => _panelController.collapse(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Abbrechen",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                  // Content
+                  Container(
+                      padding:
+                          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('News Text',
+                                style: Constants.defaultTextWhite),
+                            Divider(
+                              color: Constants.polyGray,
+                              thickness: 2,
+                              height: 20,
+                            ),
+                            TextFormField(
+                                minLines: 5,
+                                maxLines: 30,
+                                controller: controllerNewsContent,
+                                validator: NameFieldValidator.validate,
+                                autocorrect: false,
+                                textCapitalization: TextCapitalization.words,
+                                style: Constants.defaultText,
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                    hintText: 'Text',
+                                    contentPadding: EdgeInsets.all(16.0),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        borderSide: BorderSide(
+                                            width: 0, style: BorderStyle.none)),
+                                    fillColor: Colors.white,
+                                    filled: true))
+                          ])),
+
+                  // Link
+                  Container(
+                      padding:
+                          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Forward Link',
+                                style: Constants.defaultTextWhite),
+                            Divider(
+                              color: Constants.polyGray,
+                              thickness: 2,
+                              height: 20,
+                            ),
+                            TextFormField(
+                                controller: controllerNewsLink,
+                                validator: NameFieldValidator.validate,
+                                autocorrect: false,
+                                textCapitalization: TextCapitalization.words,
+                                style: Constants.defaultText,
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                    hintText: 'Link',
+                                    contentPadding: EdgeInsets.all(16.0),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        borderSide: BorderSide(
+                                            width: 0, style: BorderStyle.none)),
+                                    fillColor: Colors.white,
+                                    filled: true)),
+                            // Error Message
+                            Center(
+                                child: Text(_errorMessage,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w800))),
+                          ])),
+
+                  // Buttons
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Accept button
+
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Constants.polyGreen),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0)),
+                                  )),
+                              onPressed: () => createNews(db, auth),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Publish",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    )
-                  ],
-                ))));
+                        ),
+
+                        // Cancel button
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Constants.polyRed),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0)),
+                                  )),
+                              onPressed: () => _panelController.collapse(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Cancel",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )))),
+    );
   }
 
   void toggleSlidingPanel() {
@@ -310,18 +337,21 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   void createNews(DatabaseService db, AuthService auth) async {
     final newsTitle = controllerNewsTitle.text.trim();
-    final newsSubtitle = controllerNewsSubtitle.text.trim();
     final newsContent = controllerNewsContent.text.trim();
+    final newsLink = controllerNewsLink.text.trim();
     final user = await auth.getUserDetails();
     final creator = user.displayName;
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await db.addNews(newsTitle, newsSubtitle, newsContent, creator, _image);
+        await db.addNews(newsTitle, newsContent, newsLink, creator, _image);
+        controllerNewsTitle.clear();
+        controllerNewsContent.clear();
+        controllerNewsLink.clear();
         _panelController.collapse();
       } else {
         setState(() {
-          _errorMessage = 'Bitte füge ein Banner hinzu.';
+          _errorMessage = 'Please add a picture.';
         });
       }
     }
