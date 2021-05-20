@@ -5,6 +5,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
+import 'package:firebase/firebase.dart' hide UserCredential;
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -229,6 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => MyApp()));
         } else {
+          createInvalidVerificationDialog(context, usercred);
           throw FirebaseAuthException(code: 'invalid-email-verified');
         }
       } on FirebaseAuthException catch (e) {
@@ -294,5 +296,34 @@ class _LoginScreenState extends State<LoginScreen> {
       context,
       MaterialPageRoute(builder: (context) => PasswordResetScreen()),
     );
+  }
+
+  createInvalidVerificationDialog(
+      BuildContext context, UserCredential usercred) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+                "Email has not been verified. Please check your spam mailbox.",
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Constants.polyDark,
+            actions: <Widget>[
+              MaterialButton(
+                  elevation: 5.0,
+                  child: Text('Resend Verification Email',
+                      style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    usercred.user.sendEmailVerification();
+                  }),
+              MaterialButton(
+                  elevation: 5.0,
+                  child: Text('Exit', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  })
+            ],
+          );
+        });
   }
 }
