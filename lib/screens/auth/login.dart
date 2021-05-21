@@ -38,11 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container( 
         child: Stack(children:[
         Container(
-          child: Row(children:[
-          Positioned(
+          child: Positioned(
           top:0.0, 
           left: 0.0,
-          child: Padding(
+          child: Row(children:[
+            Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
               // back button
               child: RawMaterialButton(
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Icon(Icons.arrow_back_rounded, size: 32.0),
                 padding: EdgeInsets.all(8.0),
                 shape: CircleBorder()),
-              ))],
+              )]),
             ),
         ),
         Container(  
