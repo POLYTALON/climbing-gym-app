@@ -86,7 +86,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                           bottom: 16.0,
                         ),
                         constraints:
-                            BoxConstraints(minHeight: 100, maxHeight: 200),
+                            BoxConstraints(minHeight: 100, maxHeight: 250),
                         child: Stack(
                           children: <Widget>[
                             Center(child: CircularProgressIndicator()),
