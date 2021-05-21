@@ -215,15 +215,25 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_validateAndSave()) {
       try {
         final auth = Provider.of<AuthService>(context, listen: false);
-        await auth.loginUser(email, password);
-        await Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => MyApp()));
+        final usercred = await auth.loginUser(email, password);
+        //update user.emailVerified status
+        await usercred.user.reload();
+
+        if (usercred.user.emailVerified) {
+          await Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => MyApp()));
+        } else {
+          createInvalidVerificationDialog(context, usercred);
+          throw FirebaseAuthException(code: 'invalid-email-verified');
+        }
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'user-not-found') {
           message = 'No user found for that email.';
         } else if (e.code == 'wrong-password') {
           message = 'Wrong password provided for that user.';
+        } else if (e.code == 'invalid-email-verified') {
+          message = 'Email has not been verified yet.';
         } else {
           message = 'Something went wrong :(';
         }
@@ -279,5 +289,34 @@ class _LoginScreenState extends State<LoginScreen> {
       context,
       MaterialPageRoute(builder: (context) => PasswordResetScreen()),
     );
+  }
+
+  createInvalidVerificationDialog(
+      BuildContext context, UserCredential usercred) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+                "Email has not been verified. Please check your spam mailbox.",
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Constants.polyDark,
+            actions: <Widget>[
+              MaterialButton(
+                  elevation: 5.0,
+                  child: Text('Resend Verification Email',
+                      style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    usercred.user.sendEmailVerification();
+                  }),
+              MaterialButton(
+                  elevation: 5.0,
+                  child: Text('Exit', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  })
+            ],
+          );
+        });
   }
 }

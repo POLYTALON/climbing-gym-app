@@ -39,8 +39,9 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> loginUser(String userEmail, String userPassword) async {
-    await _auth.signInWithEmailAndPassword(
+  Future<UserCredential> loginUser(
+      String userEmail, String userPassword) async {
+    return await _auth.signInWithEmailAndPassword(
         email: userEmail, password: userPassword);
   }
 
@@ -58,6 +59,10 @@ class AuthService with ChangeNotifier {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<void> sendVerifyMail(UserCredential usercred) async {
+    return await usercred.user.sendEmailVerification();
   }
 
   Future<User> getUserDetails() async {

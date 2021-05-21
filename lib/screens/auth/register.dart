@@ -219,6 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         try {
           final auth = Provider.of<AuthService>(context, listen: false);
           final usercred = await auth.register(displayName, email, password);
+          await auth.sendVerifyMail(usercred);
           final db = Provider.of<DatabaseService>(context, listen: false);
           await db.userSetup(usercred.user.uid.toString());
 
