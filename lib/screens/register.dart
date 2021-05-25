@@ -196,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: () => navigateToLogin(),
-              child: Text("Anmelden",
+              child: Text("Test123",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),
