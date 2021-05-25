@@ -15,14 +15,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        StreamProvider<List<News>>(
-          initialData: [],
-          create: (context) => DatabaseService().streamNews(""),
-        ),
-        StreamProvider<List<Gym>>(
-          initialData: [],
-          create: (context) => DatabaseService().streamGyms(),
-        ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         Provider(create: (_) => DatabaseService()),
       ],

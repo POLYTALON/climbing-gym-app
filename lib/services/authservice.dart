@@ -65,11 +65,6 @@ class AuthService with ChangeNotifier {
     return await usercred.user.sendEmailVerification();
   }
 
-  Future<User> getUserDetails() async {
-    User user = _auth.currentUser;
-    return user;
-  }
-
   Future<void> resetPassword(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
@@ -83,7 +78,8 @@ class AuthService with ChangeNotifier {
           .asyncMap((userDoc) async {
         bool isOperator = await _getIsOperator();
         Map<String, UserRole> userRoles = await _getUserRoles();
-        return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
+        return AppUser.fromFirebase(
+            _auth.currentUser, isOperator, userRoles, userDoc.data());
       });
     }
     return Stream.empty();
@@ -134,5 +130,12 @@ class AuthService with ChangeNotifier {
       return userRoles;
     }
     return Map<String, UserRole>();
+  }
+
+  Future<void> selectGym(String gymid) async {
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .set({"selectedGym": gymid});
   }
 }
