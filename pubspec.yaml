@@ -32,8 +32,17 @@ dependencies:
   provider: ^5.0.0
   touchable_opacity: ^1.2.0
   cloud_firestore: "1.0.7"
+  firebase_storage: ^8.0.6
   equatable: ^2.0.0
   flutter_sliding_up_panel: ^1.2.1
+  image_picker: ^0.7.4
+  transparent_image: ^2.0.0
+  image_picker_web_redux: any
+  universal_html: ^2.0.8
+  firebase: ^9.0.1
+  uuid: ^3.0.4
+  flutter_native_image: ^0.0.5
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:

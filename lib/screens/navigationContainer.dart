@@ -13,7 +13,10 @@ class NavigationContainer extends StatefulWidget {
 }
 
 class _NavigationState extends State<NavigationContainer> {
-  int _navBarIndex = 1;
+  PageController _pageController = new PageController(
+    initialPage: 0,
+  );
+  int _navBarIndex = 0;
   String _title;
   List<Widget> _children;
 
@@ -21,7 +24,7 @@ class _NavigationState extends State<NavigationContainer> {
   initState() {
     _children = [GymsScreen(), HomeScreen(), NewsScreen(), RoutesScreen()];
     super.initState();
-    _title = 'HOME';
+    _title = 'GYM';
   }
 
   @override
@@ -52,7 +55,20 @@ class _NavigationState extends State<NavigationContainer> {
                     margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                   ),
                 ))),
-        body: _children[_navBarIndex],
+        body: PageView(
+            //Swipe through screens
+            controller: _pageController,
+            onPageChanged: (index) {
+              onTabTapped(index);
+            },
+            children: <Widget>[
+              _children[0],
+              _children[1],
+              _children[2],
+              _children[3],
+            ]),
+
+        // body: _children[_navBarIndex],
 
         // BottomNavigationBar
         bottomNavigationBar: SizedBox(
@@ -87,6 +103,7 @@ class _NavigationState extends State<NavigationContainer> {
   }
 
   void onTabTapped(int index) {
+    _pageController.jumpToPage(index);
     setState(() {
       _navBarIndex = index;
       switch (index) {

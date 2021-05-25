@@ -1,8 +1,8 @@
 import 'package:climbing_gym_app/screens/about.dart';
-import 'package:climbing_gym_app/screens/gyms.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'login.dart';
+import 'auth/login.dart';
+import 'main/gymsPreviewScreen.dart';
 
 class StartScreen extends StatelessWidget {
   @override
@@ -45,7 +45,7 @@ class StartScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LoginScreen()),
                 );
               },
-              child: Text("Anmelden",
+              child: Text("SignIn",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
@@ -59,10 +59,10 @@ class StartScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GymsScreen()),
+                  MaterialPageRoute(builder: (context) => GymsPreviewScreen()),
                 );
               },
-              child: Text("Verfügbare Hallen",
+              child: Text("Available Gyms",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),
@@ -84,7 +84,7 @@ class StartScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AboutScreen()),
                 );
               },
-              child: Text("Über Polytalon",
+              child: Text("About Polytalon",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),

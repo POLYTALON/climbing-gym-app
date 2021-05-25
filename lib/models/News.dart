@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
-import 'dart:convert';
 
 class News extends Equatable {
   final String title;
+  final String link;
   final String content;
   final String creator;
   final DateTime date;
@@ -13,10 +12,11 @@ class News extends Equatable {
 
   @override
   List<Object> get props =>
-      [title, content, creator, date, imageUrls, isGlobal];
+      [title, link, content, creator, date, imageUrls, isGlobal];
 
   News(
       {this.title,
+      this.link,
       this.content,
       this.creator,
       this.date,
@@ -27,6 +27,7 @@ class News extends Equatable {
     Map data = doc.data();
     return News(
       title: data['title'] ?? '',
+      link: data['link'] ?? '',
       content: data['content'] ?? '',
       creator: data['creator'] ?? '',
       date: data['date'] != null
