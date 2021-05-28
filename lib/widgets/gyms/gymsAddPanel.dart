@@ -224,29 +224,25 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   }
 
   Row _bannerRow() {
-    if (_image == null) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Icon(Icons.camera_alt_rounded, size: 48.0, color: Colors.white),
-          Text(
-            'Add banner',
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
-          ),
-        ],
+    String text = 'Add banner';
+    Widget preview =
+        Icon(Icons.camera_alt_rounded, size: 48.0, color: Colors.white);
+
+    if (_image != null) {
+      text = 'Banner added';
+      preview = Image.file(
+        _image,
+        // fit: BoxFit.fitWidth,
+        height: 48,
       );
     }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        Image.file(
-          _image,
-          // fit: BoxFit.fitWidth,
-          height: 48,
-        ),
+        preview,
         Text(
-          'Banner added',
+          text,
           style: TextStyle(
               fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
         ),
