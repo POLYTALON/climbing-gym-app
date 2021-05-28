@@ -76,20 +76,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                           ),
                           onPressed: () async =>
                               _showImageSourceActionSheet(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Icon(Icons.camera_alt_rounded,
-                                  size: 48.0, color: Colors.white),
-                              Text(
-                                'Add picture',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          )),
+                          child: _bannerRow()),
                     ),
                     // Container for gym name
                     Container(
@@ -234,6 +221,37 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                     )
                   ],
                 ))));
+  }
+
+  Row _bannerRow() {
+    if (_image == null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Icon(Icons.camera_alt_rounded, size: 48.0, color: Colors.white),
+          Text(
+            'Add banner',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
+          ),
+        ],
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Image.file(
+          _image,
+          // fit: BoxFit.fitWidth,
+          height: 48,
+        ),
+        Text(
+          'Banner added',
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
+        ),
+      ],
+    );
   }
 
   void toggleSlidingPanel() {
