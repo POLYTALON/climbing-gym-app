@@ -35,186 +35,197 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Material(
       color: Constants.polyDark,
-      child: Container( 
-        child: Stack(children:[
-        Container(
-          child: Positioned(
-          top:0.0, 
-          left: 0.0,
-          child: Row(children:[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
-              // back button
-              child: RawMaterialButton(
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (countext) => StartScreen()))
-                    },
-                elevation: 2.0,
-                fillColor: Colors.grey,
-                child: Icon(Icons.arrow_back_rounded, size: 32.0),
-                padding: EdgeInsets.all(8.0),
-                shape: CircleBorder()),
-              )]),
+      child: Container(
+        child: Stack(children: [
+          Container(
+            child: Positioned(
+              top: 0.0,
+              left: 0.0,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
+                    // back button
+                    child: RawMaterialButton(
+                        onPressed: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (countext) => StartScreen()))
+                            },
+                        elevation: 2.0,
+                        fillColor: Colors.grey,
+                        child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                        padding: EdgeInsets.all(8.0),
+                        shape: CircleBorder()),
+                  )
+                ],
+              ),
             ),
-        ),
-        Container(  
-          margin: const EdgeInsets.only(left: 64.0, right: 64.0, top: 32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [           
-              // Polytalon Logo
-              Image.asset('assets/img/polytalon_logo.png'),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 64.0, right: 64.0, top: 32),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Polytalon Logo
+                  Image.asset('assets/img/polytalon_logo.png'),
 
-              // Spacer
-              Spacer(flex: 1),
+                  // Spacer
+                  Spacer(flex: 1),
 
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // Text Field Email-Address
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                      child: Text("E-Mail-Adresse:",
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                    TextFormField(
-                        controller: controllerEmail,
-                        enabled: !isLoggedIn,
-                        autocorrect: false,
-                        textCapitalization: TextCapitalization.words,
-                        style: TextStyle(fontWeight: FontWeight.w800),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: EmailFieldValidator.validate,
-                        decoration: InputDecoration(
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        // Text Field Email-Address
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                          child: Text("E-Mail-Adresse:",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                        TextFormField(
+                            controller: controllerEmail,
+                            enabled: !isLoggedIn,
+                            autocorrect: false,
+                            textCapitalization: TextCapitalization.words,
+                            style: TextStyle(fontWeight: FontWeight.w800),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: EmailFieldValidator.validate,
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.only(left: 16.0),
+                                hintText: 'max.mustermann@polytalon.de',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(24.0),
+                                    borderSide: BorderSide(
+                                        width: 0, style: BorderStyle.none)),
+                                fillColor: Colors.white,
+                                filled: true),
+                            autofillHints: [AutofillHints.email]),
+
+                        // Text Field Password
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, top: 4.0, bottom: 4.0),
+                          child: Text("Password:",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                        TextFormField(
+                          controller: controllerPassword,
+                          enabled: !isLoggedIn,
+                          textCapitalization: TextCapitalization.none,
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                          obscureText: _hidePassword,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: PasswordFieldValidator.validate,
+                          decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 16.0),
-                            hintText: 'max.mustermann@polytalon.de',
+                            hintText: '********',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(24.0),
                                 borderSide: BorderSide(
                                     width: 0, style: BorderStyle.none)),
                             fillColor: Colors.white,
-                            filled: true)),
-
-                    // Text Field Password
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, top: 4.0, bottom: 4.0),
-                      child: Text("Password:",
-                          style: TextStyle(color: Colors.white)),
+                            filled: true,
+                            suffixIcon: IconButton(
+                                icon: Icon(
+                                  _hidePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: Constants.polyDark,
+                                ),
+                                onPressed: _toggleHidePassword),
+                          ),
+                          autofillHints: [AutofillHints.password],
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                        controller: controllerPassword,
-                        enabled: !isLoggedIn,
-                        textCapitalization: TextCapitalization.none,
-                        style: TextStyle(fontWeight: FontWeight.w800),
-                        obscureText: _hidePassword,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: PasswordFieldValidator.validate,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 16.0),
-                          hintText: '********',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                              borderSide:
-                                  BorderSide(width: 0, style: BorderStyle.none)),
-                          fillColor: Colors.white,
-                          filled: true,
-                          suffixIcon: IconButton(
-                              icon: Icon(
-                                _hidePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Constants.polyDark,
-                              ),
-                              onPressed: _toggleHidePassword),
-                        )),
-                  ],
-                ),
-              ),
-              // Spacer
-              Spacer(flex: 1),
+                  ),
+                  // Spacer
+                  Spacer(flex: 1),
 
-              // Error Message
-              Center(
-                  child: Text(_errorMessage,
+                  // Error Message
+                  Center(
+                      child: Text(_errorMessage,
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w800))),
+
+                  // Spacer
+                  Spacer(flex: 1),
+
+                  // Button Login
+                  TextButton(
+                    style: Constants.polyGreenButton,
+                    onPressed: isLoggedIn ? null : () => doUserLogin(),
+                    child: Text("SignIn",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w900)),
+                  ),
+                  TextButton(
+                    onPressed: navigateToPasswordReset,
+                    child: Text(
+                      "Forgot your password?",
                       style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.w800))),
+                          color: Colors.blue[400],
+                          decoration: TextDecoration.underline),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
 
-              // Spacer
-              Spacer(flex: 1),
+                  // Spacer
+                  Spacer(),
 
-              // Button Login
-              TextButton(
-                style: Constants.polyGreenButton,
-                onPressed: isLoggedIn ? null : () => doUserLogin(),
-                child: Text("SignIn",
+                  // Button Login with Google
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0)),
+                        )),
+                    onPressed: () => doGoogleLogin(),
+                    child: Text("SignIn with Google",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w900)),
+                  ),
+
+                  // Spacer
+                  Spacer(flex: 2),
+
+                  // Register Button
+                  Text(
+                    "No account yet?",
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w900)),
-              ),
-              TextButton(
-                onPressed: navigateToPasswordReset,
-                child: Text(
-                  "Forgot your password?",
-                  style: TextStyle(
-                      color: Colors.blue[400],
-                      decoration: TextDecoration.underline),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0)),
+                        )),
+                    onPressed: () => navigateToRegister(),
+                    child: Text("SignUp",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w900)),
+                  ),
 
-              // Spacer
-              Spacer(),
-
-              // Button Login with Google
-              TextButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0)),
-                    )),
-                onPressed: () => doGoogleLogin(),
-                child: Text("SignIn with Google",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w900)),
-              ),
-
-              // Spacer
-              Spacer(flex: 2),
-
-              // Register Button
-              Text(
-                "No account yet?",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              TextButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0)),
-                    )),
-                onPressed: () => navigateToRegister(),
-                child: Text("SignUp",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w900)),
-              ),
-
-              // Spacer
-              Spacer(flex: 1),
-            ]),
+                  // Spacer
+                  Spacer(flex: 1),
+                ]),
           ),
         ]),
-      )
+      ),
     );
   }
 

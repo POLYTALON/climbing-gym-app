@@ -43,21 +43,23 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
-                      controller: controllerEmail,
-                      autocorrect: false,
-                      textCapitalization: TextCapitalization.words,
-                      style: TextStyle(fontWeight: FontWeight.w800),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: EmailFieldValidator.validate,
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 16.0),
-                          hintText: 'max.mustermann@polytalon.de',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                              borderSide: BorderSide(
-                                  width: 0, style: BorderStyle.none)),
-                          fillColor: Colors.white,
-                          filled: true)),
+                    controller: controllerEmail,
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.words,
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: EmailFieldValidator.validate,
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(left: 16.0),
+                        hintText: 'max.mustermann@polytalon.de',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24.0),
+                            borderSide:
+                                BorderSide(width: 0, style: BorderStyle.none)),
+                        fillColor: Colors.white,
+                        filled: true),
+                    autofillHints: [AutofillHints.email],
+                  ),
                 ],
               ),
             ),
