@@ -70,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Text Field E-Mail
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                    child: Text("E-Mail-Adresse:",
+                    child: Text("E-Mail-Address:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -97,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort:",
+                    child: Text("Password:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -126,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16.0, top: 4.0, bottom: 4.0),
-                    child: Text("Passwort wiederholen:",
+                    child: Text("Repeat password:",
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: isLoggedIn ? null : () => doUserRegistration(),
-              child: Text("Registrieren",
+              child: Text("Register",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             // Goto Login Button
             Text(
-              "Du hast bereits einen Account?",
+              "You are already signed up?",
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -202,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: () => navigateToLogin(),
-              child: Text("Anmelden",
+              child: Text("Sign In",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w900)),
             ),
