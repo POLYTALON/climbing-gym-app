@@ -4,7 +4,7 @@ class Route {
   final String id;
   final String name;
   final String type;
-  final List<String> comments;
+  final List<Map<String, DateTime>> comments;
   final List<int> rating;
   final List<String> builders;
   final DateTime date;
@@ -41,20 +41,20 @@ class Route {
       this.holds,
       this.imageUrls});
 
-  factory Route.fromFirestore(DocumentSnapshot doc, DocumentSnapshot fields) {
+  factory Route.fromFirestore(DocumentSnapshot doc, DocumentSnapshot ratings) {
     Map docData = doc.data();
-    Map fieldsData = fields.data();
+    Map ratingsData = ratings.data();
     return Route(
         id: doc.id ?? '',
-        comments: docData['comments'] ?? [],
-        rating: docData['rating'] ?? [],
-        builders: fieldsData['builders'] ?? [],
-        date: fieldsData['date'] ?? DateTime.now(),
-        difficulty: fieldsData['difficulty'] ?? '',
-        gymId: fieldsData['gymid'] ?? '',
-        holds: fieldsData['holds'] ?? '',
-        name: fieldsData['name'] ?? '',
-        type: fieldsData['type'] ?? '',
-        imageUrls: fieldsData['imageUrls'] ?? []);
+        name: docData['name'] ?? '',
+        builders: docData['builders'] ?? [],
+        date: docData['date'] ?? DateTime.now(),
+        difficulty: docData['difficulty'] ?? '',
+        gymId: ratingsData['gymid'] ?? '',
+        holds: docData['holds'] ?? '',
+        type: docData['type'] ?? '',
+        imageUrls: docData['imageUrls'] ?? [],
+        comments: ratingsData['comments'] ?? [],
+        rating: ratingsData['rating'] ?? []);
   }
 }

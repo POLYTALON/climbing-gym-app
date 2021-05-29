@@ -82,8 +82,10 @@ class AuthService with ChangeNotifier {
           .snapshots()
           .asyncMap((userDoc) async {
         bool isOperator = await _getIsOperator();
+        String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
-        return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
+        return AppUser.fromFirebase(
+            _auth.currentUser, isOperator, userRoles, selectedGym);
       });
     }
     return Stream.empty();
