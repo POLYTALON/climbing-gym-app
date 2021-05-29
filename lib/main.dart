@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/constants.dart';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
@@ -13,6 +14,7 @@ import 'models/News.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //setupLocator();
   // run app
   runApp(
     MultiProvider(
@@ -20,10 +22,6 @@ void main() async {
         StreamProvider<List<News>>(
           initialData: [],
           create: (context) => DatabaseService().streamNews(""),
-        ),
-        StreamProvider<List<Gym>>(
-          initialData: [],
-          create: (context) => DatabaseService().streamGyms(),
         ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         Provider(create: (_) => DatabaseService()),
@@ -51,6 +49,7 @@ class MyApp extends StatelessWidget {
           future: _initialization,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              setupLocator();
               return Consumer<AuthService>(
                 builder: (_, auth, __) {
                   if (auth.loggedIn) return NavigationContainer();

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,15 +30,17 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   File _image;
   final picker = ImagePicker();
 
+  final gymService = locator<GymService>();
+
   @override
   Widget build(BuildContext context) {
-    final gymProvider = Provider.of<GymEdit>(context, listen: true);
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
+    final gymService = locator<GymService>();
 
-    gymProvider.addListener(() {
-      if (gymProvider.showPanel == true) {
-        controllerGymName.text = gymProvider.currentGymDetails.name;
-        controllerLocation.text = gymProvider.currentGymDetails.city;
+    gymService.addListener(() {
+      if (gymService.showEditPanel == true) {
+        controllerGymName.text = gymService.currentGym.name;
+        controllerLocation.text = gymService.currentGym.city;
         _panelController.anchor();
       } else {
         controllerGymName.text = "";
@@ -201,8 +205,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () =>
-                                editGym(db, gymProvider.currentGymDetails.id),
+                            onPressed: () => editGym(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Update Gym",
@@ -303,12 +306,14 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     });
   }
 
-  void editGym(DatabaseService db, String id) async {
+  void editGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
+    final id = gymService.currentGym.id;
+
     if (_validateAndSave()) {
       // edit Gym
-      await db.editGym(id, gymName, gymLocation, _image);
+      await gymService.editGym(id, gymName, gymLocation, _image);
       _panelController.collapse();
     }
   }

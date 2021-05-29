@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +36,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
-
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
         anchor: 0.75,
@@ -199,7 +199,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () => createGym(db),
+                            onPressed: () => createGym(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Create Gym",
@@ -300,13 +300,15 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
     });
   }
 
-  void createGym(DatabaseService db) async {
+  void createGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
+
+    final gymService = locator<GymService>();
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await db.addGym(gymName, gymLocation, _image);
+        await gymService.addGym(gymName, gymLocation, _image);
         _panelController.collapse();
       } else {
         setState(() {

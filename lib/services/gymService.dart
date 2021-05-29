@@ -1,13 +1,24 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class GymService {
+class GymService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
+
+  Gym currentGym;
+
+  bool showEditPanel = false;
+
+  void showEdit(Gym gym) {
+    currentGym = gym;
+    showEditPanel = true;
+    notifyListeners();
+  }
 
   Stream<List<Gym>> streamGyms() {
     return _firestore
