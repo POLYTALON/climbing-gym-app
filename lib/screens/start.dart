@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/screens/about.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'auth/login.dart';
@@ -13,19 +14,18 @@ class StartScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Spacer
+            Spacer(flex: 2),
+            // Polytalon Logo
+            Image.asset('assets/img/polytalon_logo.png'),
+
             // Headline
-            Text("Climbing\nApp",
+            Text("\nCLIMBING -APP",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
-                    fontSize: 48)),
-
-            // Spacer
-            Spacer(flex: 2),
-
-            // Polytalon Logo
-            Image.asset('assets/img/polytalon_logo.png'),
+                    fontSize: 34)),
 
             // Spacer
             Spacer(flex: 2),
@@ -78,7 +78,12 @@ class StartScreen extends StatelessWidget {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutScreen()),
+                );
+              },
               child: Text("About Polytalon",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
