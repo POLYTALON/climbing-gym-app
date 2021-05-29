@@ -1,6 +1,6 @@
-import 'package:climbing_gym_app/screens/gyms.dart';
-import 'package:climbing_gym_app/screens/news.dart';
-import 'package:climbing_gym_app/screens/routes.dart';
+import 'package:climbing_gym_app/screens/main/gyms.dart';
+import 'package:climbing_gym_app/screens/main/news.dart';
+import 'package:climbing_gym_app/screens/main/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/screens/home.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
