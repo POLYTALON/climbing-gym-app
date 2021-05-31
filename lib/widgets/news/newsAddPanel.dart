@@ -83,20 +83,44 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                         children: <Widget>[
                           // Take photo button
                           Container(
-                              padding: EdgeInsets.all(16.0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16.0),
-                                      topRight: Radius.circular(16.0))),
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.all(12.0),
-                                    elevation: 2,
-                                    primary: Constants.polyGray,
+                            padding: EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16.0),
+                                    topRight: Radius.circular(16.0))),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(12.0),
+                                elevation: 2,
+                                primary: Constants.polyGray,
+                              ),
+                              onPressed: () =>
+                                  _showImageSourceActionSheet(context),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  _image == null
+                                      ? Icon(Icons.camera_alt_rounded,
+                                          size: 48.0, color: Colors.white)
+                                      : Image.file(
+                                          _image,
+                                          // fit: BoxFit.fitWidth,
+                                          height: 48,
+                                        ),
+                                  Text(
+                                    _image == null
+                                        ? 'Add banner'
+                                        : 'Banner added',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white),
                                   ),
-                                  onPressed: () =>
-                                      _showImageSourceActionSheet(context),
-                                  child: _bannerRow())),
+                                ],
+                              ),
+                            ),
+                          ),
 
                           // Title
                           Container(
@@ -290,33 +314,6 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
             );
           }
         });
-  }
-
-  Row _bannerRow() {
-    String text = 'Add banner';
-    Widget preview =
-        Icon(Icons.camera_alt_rounded, size: 48.0, color: Colors.white);
-
-    if (_image != null) {
-      text = 'Banner added';
-      preview = Image.file(
-        _image,
-        // fit: BoxFit.fitWidth,
-        height: 48,
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        preview,
-        Text(
-          text,
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
-        ),
-      ],
-    );
   }
 
   void toggleSlidingPanel() {
