@@ -12,6 +12,7 @@ import 'models/News.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   setupLocator();
   // run app
   runApp(
@@ -33,7 +34,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +44,10 @@ class MyApp extends StatelessWidget {
     ]);
     return WillPopScope(
         onWillPop: () => Future.value(false),
-        child: FutureBuilder(
-          future: _initialization,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              // setupLocator();
-              return Consumer<AuthService>(
-                builder: (_, auth, __) {
-                  if (auth.loggedIn) return NavigationContainer();
-                  return StartScreen();
-                },
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
+        child: Consumer<AuthService>(
+          builder: (_, auth, __) {
+            if (auth.loggedIn) return NavigationContainer();
+            return StartScreen();
           },
         ));
   }

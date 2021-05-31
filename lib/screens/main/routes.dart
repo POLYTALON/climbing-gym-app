@@ -23,7 +23,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
         initialData: new AppUser().empty(),
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active) {
-            return Container(width: 0.0, height: 0.0);
+            return Center(child: CircularProgressIndicator());
           } else {
             return StreamBuilder<List<AppRoute>>(
                 stream: routes.streamRoutes(userSnapshot.data.selectedGym),
