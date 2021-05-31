@@ -60,14 +60,6 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
               anchor: 1.0,
               panelController: _panelController,
               child: Container(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(12.0),
-                        elevation: 2,
-                        primary: Constants.polyGray,
-                      ),
-                      onPressed: () => _showImageSourceActionSheet(context),
-                      child: _bannerRow()),
                   decoration: ShapeDecoration(
                     color: Constants.lightGray,
                     shadows: [
@@ -91,32 +83,21 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                         children: <Widget>[
                           // Take photo button
                           Container(
-                            padding: EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16.0),
-                                    topRight: Radius.circular(16.0))),
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(12.0),
-                                  elevation: 2,
-                                  primary: Constants.polyGray,
-                                ),
-                                onPressed: () =>
-                                    _showImageSourceActionSheet(context),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Icon(Icons.camera_alt_rounded,
-                                        size: 48.0, color: Colors.white),
-                                    Text(
-                                      'Add News Picture',
-                                      style: Constants.subHeaderTextWhite,
-                                    ),
-                                  ],
-                                )),
-                          ),
+                              padding: EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16.0),
+                                      topRight: Radius.circular(16.0))),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(12.0),
+                                    elevation: 2,
+                                    primary: Constants.polyGray,
+                                  ),
+                                  onPressed: () =>
+                                      _showImageSourceActionSheet(context),
+                                  child: _bannerRow())),
+
                           // Title
                           Container(
                               padding: EdgeInsets.only(
