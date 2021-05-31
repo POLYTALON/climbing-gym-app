@@ -80,26 +80,17 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                             icon: const Icon(Icons.close)),
                       ],
                     ),
-                    Container(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 16.0,
-                        ),
-                        constraints:
-                            BoxConstraints(minHeight: 100, maxHeight: 250),
-                        child: Stack(
-                          children: <Widget>[
-                            Center(child: CircularProgressIndicator()),
-                            Center(
-                              child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: newsProvider.currentNews.imageUrls !=
-                                          null
-                                      ? newsProvider.currentNews.imageUrls[0]
-                                      : ""),
+                    newsProvider.currentNews.imageUrls != null
+                        ? Container(
+                            padding: const EdgeInsets.only(
+                              top: 8,
+                              bottom: 16.0,
                             ),
-                          ],
-                        )),
+                            constraints:
+                                BoxConstraints(minHeight: 100, maxHeight: 250),
+                            child: Image.network(
+                                newsProvider.currentNews.imageUrls[0]))
+                        : Container(),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

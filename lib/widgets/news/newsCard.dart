@@ -21,7 +21,7 @@ class _NewsCardState extends State<NewsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2.5,
+      height: MediaQuery.of(context).size.height / 2.3,
       child: GestureDetector(
         onTap: onPressNews,
         child: new Card(
@@ -30,7 +30,7 @@ class _NewsCardState extends State<NewsCard> {
           elevation: 2,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -58,6 +58,7 @@ class _NewsCardState extends State<NewsCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
                               child: Text(
