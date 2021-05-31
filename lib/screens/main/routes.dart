@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/models/Rating.dart';
 import 'package:climbing_gym_app/services/RoutesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
@@ -28,16 +29,21 @@ class _RoutesScreenState extends State<RoutesScreen> {
             return StreamBuilder<List<AppRoute>>(
                 stream: routes.streamRoutes(userSnapshot.data.selectedGym),
                 initialData: [],
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState != ConnectionState.active) {
+                builder: (context, routeSnapshot) {
+                  if (routeSnapshot.connectionState != ConnectionState.active) {
                     return Container(width: 0.0, height: 0.0);
                   } else {
-                    return Container(
-                        color: Constants.polyDark,
-                        child: Text(snapshot.toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900)));
+                    return FutureBuilder<Rating>(
+                        future: routes
+                            .getRatingByRouteId(routeSnapshot.data[0].id ?? ''),
+                        builder: (context, snapshot) {
+                          return Container(
+                              color: Constants.polyDark,
+                              child: Text(snapshot.data.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900)));
+                        });
                   }
                 });
           }

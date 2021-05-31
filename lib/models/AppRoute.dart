@@ -5,8 +5,6 @@ class AppRoute extends Equatable {
   final String id;
   final String name;
   final String type;
-  //final List<Map<String, DateTime>> comments;
-  //final List<int> rating;
   final List<dynamic> builders;
   final DateTime date;
   final String difficulty;
@@ -15,26 +13,13 @@ class AppRoute extends Equatable {
   final List<dynamic> imageUrls;
 
   @override
-  List<Object> get props => [
-        id,
-        name,
-        type,
-        //comments,
-        //rating,
-        builders,
-        date,
-        difficulty,
-        gymId,
-        holds,
-        imageUrls
-      ];
+  List<Object> get props =>
+      [id, name, type, builders, date, difficulty, gymId, holds, imageUrls];
 
   AppRoute(
       {this.id,
       this.name,
       this.type,
-      //this.comments,
-      //this.rating,
       this.builders,
       this.date,
       this.difficulty,
@@ -44,8 +29,6 @@ class AppRoute extends Equatable {
 
   factory AppRoute.fromFirestore(DocumentSnapshot doc) {
     Map docData = doc.data();
-    print(docData);
-    // Map ratingsData = ratings.data();
     return AppRoute(
         id: doc.id ?? '',
         name: docData['name'] ?? '',
@@ -59,7 +42,5 @@ class AppRoute extends Equatable {
         holds: docData['holds'] ?? '',
         type: docData['type'] ?? '',
         imageUrls: docData['imageUrls'] ?? []);
-    //comments: ratingsData['comments'] ?? [],
-    //rating: ratingsData['rating'] ?? []);
   }
 }
