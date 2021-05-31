@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/RoutesService.dart';
@@ -15,27 +16,31 @@ class _RoutesScreenState extends State<RoutesScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
-    final routes = Provider.of<RoutesService>(context, listen: false);
+    final routes = locator<RoutesService>();
 
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, userSnapshot) {
-          if (userSnapshot.connectionState != ConnectionState.active) {
+          if (userSnapshot.connectionState != ConnectionState.active ||
+              !userSnapshot.hasData) {
             return Container(width: 0.0, height: 0.0);
           } else {
+            print(userSnapshot.data);
             return StreamBuilder<List<AppRoute>>(
                 stream: routes.streamRoutes(userSnapshot.data.selectedGym),
                 initialData: [],
-                builder: (context, routesSnapshot) {
-                  if (routesSnapshot.connectionState !=
-                          ConnectionState.active ||
-                      !routesSnapshot.hasData) {
+                builder: (context, snapshot) {
+                  print(snapshot);
+                  if (snapshot.connectionState != ConnectionState.active ||
+                      snapshot.data == null) {
                     return Container(width: 0.0, height: 0.0);
+                  } else if (snapshot.hasError) {
+                    print('dei mudda');
                   } else {
                     return Container(
                         color: Constants.polyDark,
-                        child: Text(routesSnapshot.data.toString(),
+                        child: Text(snapshot.toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900)));

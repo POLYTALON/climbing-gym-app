@@ -7,12 +7,12 @@ class AppRoute extends Equatable {
   final String type;
   //final List<Map<String, DateTime>> comments;
   //final List<int> rating;
-  final List<String> builders;
+  final List<dynamic> builders;
   final DateTime date;
   final String difficulty;
   final String gymId;
   final String holds;
-  final List<String> imageUrls;
+  final List<dynamic> imageUrls;
 
   @override
   List<Object> get props => [
@@ -50,7 +50,10 @@ class AppRoute extends Equatable {
         id: doc.id ?? '',
         name: docData['name'] ?? '',
         builders: docData['builders'] ?? [],
-        date: docData['date'] ?? DateTime.now(),
+        date: docData['date'] != null
+            ? new DateTime.fromMillisecondsSinceEpoch(
+                docData['date'].seconds * 1000)
+            : '',
         difficulty: docData['difficulty'] ?? '',
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
