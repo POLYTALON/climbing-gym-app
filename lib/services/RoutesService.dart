@@ -16,21 +16,25 @@ class RoutesService {
   }
 
   Future<Rating> getRatingByRouteId(String routeId) async {
-    List<String> comments = [];
-    List<int> ratings = [];
+    List<Map<String, Timestamp>> commentsList = [{}];
+    List<int> ratingsList = [];
     await _firestore
         .collection('routes')
         .doc(routeId)
         .collection('ratings')
-        .snapshots()
-        .forEach((list) => list.docs.forEach((doc) {
-              if (doc.exists) {
-                comments.addAll(doc.data()['comments']);
-                ratings.add(doc.data()['rating']);
+        .get()
+        .then((doc) => doc.docs.forEach((rating) {
+              if (rating.exists) {
+                rating.data().entries.forEach((entry) {
+                  commentsList.add(entry.value['date'] = entry.value['date']);
+                  print(commentsList);
+                });
+                ratingsList.add(rating.data()['rating']);
               }
-            }));
-    Rating rating = Rating.fromFirestore(comments, ratings);
-    print(rating);
-    return rating;
+            }))
+        .then((value) {
+      return Rating.fromFirestore(commentsList, ratingsList);
+    });
+    return Rating();
   }
 }

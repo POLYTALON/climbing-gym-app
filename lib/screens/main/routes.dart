@@ -34,8 +34,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
                     return Container(width: 0.0, height: 0.0);
                   } else {
                     return FutureBuilder<Rating>(
-                        future: routes
-                            .getRatingByRouteId(routeSnapshot.data[0].id ?? ''),
+                        future:
+                            routes.getRatingByRouteId(routeSnapshot.data[0].id),
                         builder: (context, snapshot) {
                           return Container(
                               color: Constants.polyDark,

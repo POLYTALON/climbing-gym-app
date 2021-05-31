@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Rating extends Equatable {
-  final List<dynamic> comments;
+  final List<Map<String, Timestamp>> comments;
   final List<dynamic> ratings;
 
   @override
@@ -9,7 +10,10 @@ class Rating extends Equatable {
 
   Rating({this.comments, this.ratings});
 
-  factory Rating.fromFirestore(List<String> comments, List<int> ratings) {
-    return Rating(comments: comments, ratings: ratings);
+  factory Rating.fromFirestore(
+      List<Map<String, Timestamp>> comments, List<int> ratings) {
+    var rating = Rating(comments: comments, ratings: ratings);
+    print('Inside Model: ' + rating.toString());
+    return rating;
   }
 }
