@@ -22,21 +22,15 @@ class _RoutesScreenState extends State<RoutesScreen> {
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, userSnapshot) {
-          if (userSnapshot.connectionState != ConnectionState.active ||
-              !userSnapshot.hasData) {
+          if (userSnapshot.connectionState != ConnectionState.active) {
             return Container(width: 0.0, height: 0.0);
           } else {
-            print(userSnapshot.data);
             return StreamBuilder<List<AppRoute>>(
                 stream: routes.streamRoutes(userSnapshot.data.selectedGym),
                 initialData: [],
                 builder: (context, snapshot) {
-                  print(snapshot);
-                  if (snapshot.connectionState != ConnectionState.active ||
-                      snapshot.data == null) {
+                  if (snapshot.connectionState != ConnectionState.active) {
                     return Container(width: 0.0, height: 0.0);
-                  } else if (snapshot.hasError) {
-                    print('dei mudda');
                   } else {
                     return Container(
                         color: Constants.polyDark,

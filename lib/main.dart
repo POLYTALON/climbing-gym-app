@@ -12,7 +12,7 @@ import 'models/News.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //setupLocator();
+  setupLocator();
   // run app
   runApp(
     MultiProvider(
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           future: _initialization,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              setupLocator();
+              // setupLocator();
               return Consumer<AuthService>(
                 builder: (_, auth, __) {
                   if (auth.loggedIn) return NavigationContainer();

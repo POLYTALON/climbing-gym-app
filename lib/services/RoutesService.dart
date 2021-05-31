@@ -5,15 +5,12 @@ class RoutesService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<List<AppRoute>> streamRoutes(String gymId) {
-    print('GymId: ' + gymId);
-    var result = _firestore
+    return _firestore
         .collection('routes')
         .orderBy('date', descending: true)
         .where('gymid', isEqualTo: gymId)
         .snapshots()
         .map((list) =>
             list.docs.map((doc) => AppRoute.fromFirestore(doc)).toList());
-    print(result);
-    return result;
   }
 }
