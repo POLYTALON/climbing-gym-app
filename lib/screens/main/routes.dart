@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/RoutesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
@@ -19,21 +20,25 @@ class _RoutesScreenState extends State<RoutesScreen> {
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState != ConnectionState.active) {
             return Container(width: 0.0, height: 0.0);
           } else {
-            return StreamBuilder<List<Route>>(
-                stream: routes.streamRoutes(snapshot.data.selectedGym ?? '')
-                    as Stream<List<Route>>,
+            return StreamBuilder<List<AppRoute>>(
+                stream: routes.streamRoutes(userSnapshot.data.selectedGym),
                 initialData: [],
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState != ConnectionState.active) {
+                builder: (context, routesSnapshot) {
+                  if (routesSnapshot.connectionState !=
+                          ConnectionState.active ||
+                      !routesSnapshot.hasData) {
                     return Container(width: 0.0, height: 0.0);
                   } else {
                     return Container(
                         color: Constants.polyDark,
-                        child: Text(routes.toString()));
+                        child: Text(routesSnapshot.data.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900)));
                   }
                 });
           }
