@@ -32,54 +32,6 @@ class DatabaseService {
             (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
   }
 
-  Stream<List<Gym>> streamGyms() {
-    return _firestore
-        .collection('gyms')
-        .snapshots()
-        .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
-  }
-
-  Future<void> addGym(String name, String city, File image) async {
-    String imageUrl;
-    DocumentReference docRef;
-    try {
-      docRef = _firestore.collection('gyms').doc();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    imageUrl = await uploadFile(image, docRef.path);
-    try {
-      await docRef.set({'name': name, 'city': city, 'imageUrl': imageUrl});
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> editGym(String id, String name, String city,
-      [File image]) async {
-    if (image != null) {
-      String imageUrl;
-      imageUrl = await uploadFile(image, 'gyms' + '/' + id);
-      try {
-        await _firestore
-            .collection('gyms')
-            .doc(id)
-            .update({'name': name, 'city': city, 'imageUrl': imageUrl});
-      } on FirebaseException catch (e) {
-        print(e);
-      }
-    } else {
-      try {
-        await _firestore
-            .collection('gyms')
-            .doc(id)
-            .update({'name': name, 'city': city});
-      } on FirebaseException catch (e) {
-        print(e);
-      }
-    }
-  }
-
   Future<void> addNews(String title, String content, String link,
       String creator, File image) async {
     DocumentReference docRef;

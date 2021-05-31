@@ -1,7 +1,9 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -24,7 +26,6 @@ class _GymsScreenState extends State<GymsScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
-    var gyms = Provider.of<List<Gym>>(context);
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
@@ -61,15 +62,29 @@ class _GymsScreenState extends State<GymsScreen> {
 
                         // GridView (with GymCards)
                         Expanded(
-                          child: GridView.count(
-                              crossAxisCount: 2,
-                              childAspectRatio: (itemWidth / itemHeight),
-                              children: List.generate(gyms.length, (index) {
-                                return Container(
-                                    child: GymCard(
-                                        gym: gyms[index],
-                                        appUser: snapshot.data));
-                              })),
+                          child: StreamBuilder(
+                              stream: locator<GymService>().streamGyms(),
+                              builder: (context, gymsSnapshot) {
+                                if (snapshot.connectionState !=
+                                        ConnectionState.active ||
+                                    !gymsSnapshot.hasData) {
+                                  //return Container(width: 0.0, height: 0.0);
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return GridView.count(
+                                      crossAxisCount: 2,
+                                      childAspectRatio:
+                                          (itemWidth / itemHeight),
+                                      children: List.generate(
+                                          gymsSnapshot.data.length, (index) {
+                                        return Container(
+                                            child: GymCard(
+                                                gym: gymsSnapshot.data[index],
+                                                appUser: snapshot.data));
+                                      }));
+                                }
+                              }),
                         )
                       ]))),
                   if (snapshot.data.isOperator)
