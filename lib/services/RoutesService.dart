@@ -1,9 +1,20 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
-class RoutesService {
+class RoutesService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  AppRoute currentRoute;
+
+  bool showEditPanel = false;
+
+  void showEdit(AppRoute route) {
+    currentRoute = route;
+    showEditPanel = true;
+    notifyListeners();
+  }
 
   Stream<List<AppRoute>> streamRoutes(String gymId) {
     return _firestore
