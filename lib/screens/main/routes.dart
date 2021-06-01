@@ -58,8 +58,6 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                     onPressed: () => {}),
                               )
                             ]),
-                        // padding: const EdgeInsets.all(8.0),
-
                         // Grid view (with RouteCards)
                         Expanded(
                             child: StreamBuilder(
