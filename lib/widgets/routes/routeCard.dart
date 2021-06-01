@@ -104,10 +104,11 @@ class _RouteCardState extends State<RouteCard> {
     locator<RoutesService>().showEdit(this.route);
   }
 
-  /* TODO: get builder */
   bool _getIsPrivileged() {
     if (appUser == null) return false;
     return appUser.isOperator ||
-        (appUser.roles[route.id] != null && appUser.roles[route.id].gymuser);
+        (appUser.roles[appUser.selectedGym] != null &&
+            (appUser.roles[appUser.selectedGym].gymuser ||
+                appUser.roles[appUser.selectedGym].builder));
   }
 }

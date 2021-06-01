@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/RoutesService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,32 +9,43 @@ import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 
-class GymsAddPanel extends StatefulWidget {
-  GymsAddPanel({
+class RouteEditPanel extends StatefulWidget {
+  RouteEditPanel({
     Key key,
-    @required SlidingUpPanelController panelController,
-  })  : _panelController = panelController,
-        super(key: key);
-
-  final SlidingUpPanelController _panelController;
+  }) : super(key: key);
 
   @override
-  _GymsAddPanelState createState() => _GymsAddPanelState(_panelController);
+  _RouteEditPanelState createState() => _RouteEditPanelState();
 }
 
-class _GymsAddPanelState extends State<GymsAddPanel> {
-  final SlidingUpPanelController _panelController;
+class _RouteEditPanelState extends State<RouteEditPanel> {
+  final SlidingUpPanelController _panelController = SlidingUpPanelController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _GymsAddPanelState(this._panelController);
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
-  String _errorMessage = "";
   File _image;
   final picker = ImagePicker();
 
+  final routesService = locator<RoutesService>();
+
   @override
   Widget build(BuildContext context) {
+    final routesService = locator<RoutesService>();
+
+    routesService.addListener(() {
+      if (routesService.showEditPanel == true) {
+        controllerGymName.text = routesService.currentRoute.name;
+        controllerLocation.text = routesService.currentRoute.difficulty.color;
+        _panelController.anchor();
+      } else {
+        controllerGymName.text = "";
+        controllerLocation.text = "";
+        _panelController.collapse();
+      }
+    });
+
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
         anchor: 0.75,
@@ -80,7 +92,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                               Icon(Icons.camera_alt_rounded,
                                   size: 48.0, color: Colors.white),
                               Text(
-                                'Add picture',
+                                'Change photo',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
@@ -170,13 +182,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                               style: BorderStyle.none)),
                                       fillColor: Colors.white,
                                       filled: true)),
-
-                              // Error Message
-                              Center(
-                                  child: Text(_errorMessage,
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.w800))),
                             ])),
 
                     // Buttons
@@ -197,10 +202,10 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () => createGym(),
+                            onPressed: () => editRoute(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Create Gym",
+                              child: Text("Update Gym",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700)),
@@ -298,22 +303,16 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
     });
   }
 
-  void createGym() async {
-    final gymName = controllerGymName.text.trim();
+  void editRoute() async {
+    /*final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
+    final id = routesService.currentGym.id;
 
-    final gymService = locator<GymService>();
     if (_validateAndSave()) {
-      if (_image != null) {
-        // create Gym
-        await gymService.addGym(gymName, gymLocation, _image);
-        _panelController.collapse();
-      } else {
-        setState(() {
-          _errorMessage = 'Please add a picture.';
-        });
-      }
-    }
+      // edit Gym
+      await routesService.editGym(id, gymName, gymLocation, _image);
+      _panelController.collapse();
+    }*/
   }
 
   bool _validateAndSave() {

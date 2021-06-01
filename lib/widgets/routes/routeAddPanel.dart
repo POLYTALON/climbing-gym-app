@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +6,8 @@ import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 
-class GymsAddPanel extends StatefulWidget {
-  GymsAddPanel({
+class RouteAddPanel extends StatefulWidget {
+  RouteAddPanel({
     Key key,
     @required SlidingUpPanelController panelController,
   })  : _panelController = panelController,
@@ -18,15 +16,15 @@ class GymsAddPanel extends StatefulWidget {
   final SlidingUpPanelController _panelController;
 
   @override
-  _GymsAddPanelState createState() => _GymsAddPanelState(_panelController);
+  _RouteAddPanelState createState() => _RouteAddPanelState(_panelController);
 }
 
-class _GymsAddPanelState extends State<GymsAddPanel> {
+class _RouteAddPanelState extends State<RouteAddPanel> {
   final SlidingUpPanelController _panelController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _GymsAddPanelState(this._panelController);
-  final controllerGymName = TextEditingController(text: "");
+  _RouteAddPanelState(this._panelController);
+  final controllerRouteName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
   String _errorMessage = "";
   File _image;
@@ -111,7 +109,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                 height: 20,
                               ),
                               TextFormField(
-                                  controller: controllerGymName,
+                                  controller: controllerRouteName,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -197,7 +195,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () => createGym(),
+                            onPressed: () => createRoute(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Create Gym",
@@ -298,22 +296,22 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
     });
   }
 
-  void createGym() async {
-    final gymName = controllerGymName.text.trim();
+  void createRoute() async {
+    /*final gymName = controllerRouteName.text.trim();
     final gymLocation = controllerLocation.text.trim();
 
-    final gymService = locator<GymService>();
+    final routesService = locator<RoutesService>();
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await gymService.addGym(gymName, gymLocation, _image);
+        await routesService.addRoute(gymName, gymLocation, _image);
         _panelController.collapse();
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';
         });
       }
-    }
+    } */
   }
 
   bool _validateAndSave() {

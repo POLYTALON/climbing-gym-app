@@ -3,7 +3,9 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/RoutesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/view_models/routeEdit.dart';
+import 'package:climbing_gym_app/widgets/routes/routeAddPanel.dart';
 import 'package:climbing_gym_app/widgets/routes/routeCard.dart';
+import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
@@ -29,7 +31,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
+          if (snapshot.connectionState != ConnectionState.active ||
+              !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
             return ChangeNotifierProvider<RouteEdit>(
@@ -38,8 +41,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                   Scaffold(
                       // Add route button
                       floatingActionButton:
-                          // TODO: Get isBuilder instead
-                          _getFloatingActionButton(snapshot.data.isOperator),
+                          _getFloatingActionButton(snapshot.data),
                       backgroundColor: Constants.polyDark,
 
                       // Page content
@@ -85,7 +87,10 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                         }));
                                   }
                                 }))
-                      ])))
+                      ]))),
+                  if (_getPrivileges(snapshot.data))
+                    RouteAddPanel(panelController: _routesAddPanelController),
+                  if (_getPrivileges(snapshot.data)) RouteEditPanel()
                 ]));
           }
         });
@@ -99,8 +104,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
     }
   }
 
-  Widget _getFloatingActionButton(bool value) {
-    if (value) {
+  Widget _getFloatingActionButton(AppUser user) {
+    if (_getPrivileges(user)) {
       return FloatingActionButton(
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
@@ -108,5 +113,12 @@ class _RoutesScreenState extends State<RoutesScreen> {
       );
     }
     return Container(width: 0.0, height: 0.0);
+  }
+
+  bool _getPrivileges(AppUser user) {
+    return user.roles[user.selectedGym] != null &&
+        (user.roles[user.selectedGym].builder ||
+            user.roles[user.selectedGym].gymuser ||
+            user.isOperator);
   }
 }

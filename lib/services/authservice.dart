@@ -121,7 +121,9 @@ class AuthService with ChangeNotifier {
             .then((doc) {
           doc.docs.forEach((gym) {
             userRoles.putIfAbsent(gym.id, () {
-              return UserRole(gymuser: gym.data()['gymuser'] ?? false);
+              return UserRole(
+                  gymuser: gym.data()['gymuser'] ?? false,
+                  builder: gym.data()['builder'] ?? false);
             });
           });
         });
