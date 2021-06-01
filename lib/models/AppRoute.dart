@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -7,7 +8,7 @@ class AppRoute extends Equatable {
   final String type;
   final List<dynamic> builders;
   final DateTime date;
-  final String difficulty;
+  final RouteColor difficulty;
   final String gymId;
   final String holds;
   final List<dynamic> imageUrls;
@@ -37,7 +38,7 @@ class AppRoute extends Equatable {
             ? new DateTime.fromMillisecondsSinceEpoch(
                 docData['date'].seconds * 1000)
             : '',
-        difficulty: docData['difficulty'] ?? '',
+        difficulty: RouteColor(docData['difficulty'] ?? ''),
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
         type: docData['type'] ?? '',

@@ -54,32 +54,33 @@ class _RouteCardState extends State<RouteCard> {
                 child: Column(
                   children: [
                     FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(route.name,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 20)),
-                          ),
-                        )),
+                      fit: BoxFit.fitWidth,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(route.name,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 20)),
+                      ),
+                    ),
                     FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Center(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-                            child: Text(route.difficulty,
-                                textAlign: TextAlign.center,
+                      fit: BoxFit.fitWidth,
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                          child: Row(children: [
+                            Text('Level: ',
+                                textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
                                     fontSize: 20)),
-                          ),
-                        )),
+                            Icon(Icons.circle,
+                                color: route.difficulty.colorCode, size: 24)
+                          ])),
+                    ),
                     if (_getIsPrivileged())
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
