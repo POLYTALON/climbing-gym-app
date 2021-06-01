@@ -26,12 +26,12 @@ class NewsScreen extends StatelessWidget {
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState != ConnectionState.active) {
             return Container(width: 0.0, height: 0.0);
           } else {
-            if (snapshot.data.selectedGym == null ||
-                snapshot.data.selectedGym.isEmpty) {
+            if (userSnapshot.data.selectedGym == null ||
+                userSnapshot.data.selectedGym.isEmpty) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -53,15 +53,15 @@ class NewsScreen extends StatelessWidget {
             } else {
               return StreamProvider<List<News>>.value(
                   initialData: [],
-                  value:
-                      DatabaseService().streamNews(snapshot.data.selectedGym),
+                  value: DatabaseService()
+                      .streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
                     return ChangeNotifierProvider<NewsDetails>(
                       create: (_) => NewsDetails(),
                       child: Stack(children: <Widget>[
                         Scaffold(
                             floatingActionButton:
-                                _getIsPrivileged(snapshot.data)
+                                _getIsPrivileged(userSnapshot.data)
                                     ? FloatingActionButton(
                                         child: const Icon(Icons.add),
                                         backgroundColor: Constants.polyGreen,
@@ -80,9 +80,12 @@ class NewsScreen extends StatelessWidget {
                                               bottom: 10.0),
                                           child: NewsCard(news: news[index]));
                                     }))),
-                        if (_getIsPrivileged(snapshot.data))
+                        if (_getIsPrivileged(userSnapshot.data))
                           NewsAddPanel(
-                              panelController: _newsAddPanelController),
+                              panelController: _newsAddPanelController,
+                              gymid: userSnapshot.data.isOperator
+                                  ? ""
+                                  : userSnapshot.data.selectedGym),
                         NewsDetailPanel()
                       ]),
                     );

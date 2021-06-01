@@ -82,24 +82,21 @@ class DatabaseService {
 
   Future<void> addNews(String title, String content, String link, File image,
       String gymid) async {
-    DocumentReference docRef;
     try {
+      DocumentReference docRef;
       docRef = _firestore.collection('news').doc();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    String imageUrl = await uploadFile(image, docRef.path);
 
-    String creator;
-    if (gymid.isNotEmpty) {
-      DocumentSnapshot gymDoc =
-          await _firestore.collection('gyms').doc(gymid).get();
-      creator = gymDoc.data()['name'];
-    } else {
-      creator = 'Polytalon';
-    }
+      String imageUrl = await uploadFile(image, docRef.path);
 
-    try {
+      String creator;
+      if (gymid.isNotEmpty) {
+        DocumentSnapshot gymDoc =
+            await _firestore.collection('gyms').doc(gymid).get();
+        creator = gymDoc.data()['name'];
+      } else {
+        creator = 'Polytalon';
+      }
+
       await docRef.set({
         'title': title,
         'content': content,
