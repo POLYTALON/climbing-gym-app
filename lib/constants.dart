@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:flutter/material.dart';
 
 // custom colors
@@ -34,3 +35,19 @@ ButtonStyle polyGreenButton = ButtonStyle(
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
       new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
     ));
+
+// Route colors
+List<RouteColor> get availableRouteColors {
+  return [
+    RouteColor('black'),
+    RouteColor('blue'),
+    RouteColor('green'),
+    RouteColor('lightBlue'),
+    RouteColor('orange'),
+    RouteColor('pink'),
+    RouteColor('purple'),
+    RouteColor('red'),
+    RouteColor('white'),
+    RouteColor('yellow')
+  ];
+}

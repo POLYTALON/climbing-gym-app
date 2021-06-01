@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/RoutesService.dart';
-import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
   File _image;
+  int selectedColorIndex;
   final picker = ImagePicker();
 
   final routesService = locator<RoutesService>();
@@ -68,7 +68,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
             // SlidingUpPanel content
             child: Form(
                 key: _formKey,
-                child: Column(
+                child: SingleChildScrollView(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Take photo button
@@ -101,16 +102,16 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                             ],
                           )),
                     ),
-                    // Container for gym name
+                    // Container for route name
                     Container(
                         padding:
                             EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Name of Gym
+                              // Name of route
                               Text(
-                                'Gym name',
+                                'Route Name',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w300,
@@ -143,7 +144,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                       filled: true))
                             ])),
 
-                    // Location
+                    // Setter (Builder)
                     Container(
                         padding:
                             EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
@@ -151,7 +152,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Location',
+                                'Setter',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w300,
@@ -171,7 +172,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   style: TextStyle(fontWeight: FontWeight.w800),
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
-                                      hintText: 'Location',
+                                      hintText: 'Name',
                                       contentPadding:
                                           const EdgeInsets.only(left: 16.0),
                                       border: OutlineInputBorder(
@@ -182,6 +183,81 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                               style: BorderStyle.none)),
                                       fillColor: Colors.white,
                                       filled: true)),
+                            ])),
+
+                    // Difficulty (Color)
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Difficulty',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Divider(
+                                color: Constants.polyGray,
+                                thickness: 2,
+                                height: 20,
+                              ),
+                              SizedBox(
+                                  height: 300,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(16.0),
+                                              topRight: Radius.circular(16.0))),
+                                      child: GridView.count(
+                                          shrinkWrap: true,
+                                          crossAxisCount: 5,
+                                          padding: EdgeInsets.all(8.0),
+                                          children: List.generate(
+                                              Constants.availableRouteColors
+                                                  .length, (index) {
+                                            return Center(
+                                                child:
+                                                    Column(children: <Widget>[
+                                              RawMaterialButton(
+                                                  child: Icon(Icons.circle,
+                                                      color: Constants
+                                                          .availableRouteColors[
+                                                              index]
+                                                          .colorCode,
+                                                      size: 24),
+                                                  onPressed: () =>
+                                                      _setSelectedRouteColorIndex(
+                                                          index),
+                                                  shape: (selectedColorIndex != null &&
+                                                          Constants.availableRouteColors[selectedColorIndex] ==
+                                                              Constants.availableRouteColors[
+                                                                  index])
+                                                      ? CircleBorder(
+                                                          side: BorderSide(
+                                                              width: 3.0,
+                                                              color: Constants
+                                                                  .polyGray))
+                                                      : CircleBorder(
+                                                          side: BorderSide(
+                                                              width: 0.0,
+                                                              color: Colors
+                                                                  .transparent))),
+                                              Text(
+                                                  Constants
+                                                      .availableRouteColors[
+                                                          index]
+                                                      .color,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700)),
+                                            ]));
+                                          }))))
                             ])),
 
                     // Buttons
@@ -236,7 +312,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                       ),
                     )
                   ],
-                ))));
+                )))));
   }
 
   void toggleSlidingPanel() {
@@ -322,5 +398,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
       return true;
     }
     return false;
+  }
+
+  void _setSelectedRouteColorIndex(int index) {
+    print(index);
+    selectedColorIndex = index;
   }
 }
