@@ -72,18 +72,40 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                   return Center(
                                       child: CircularProgressIndicator());
                                 } else {
-                                  return GridView.count(
-                                      crossAxisCount: 2,
-                                      childAspectRatio:
-                                          (itemWidth / itemHeight),
-                                      children: List.generate(
-                                          routesSnapshot.data.length, (index) {
-                                        return Container(
-                                            child: RouteCard(
-                                                route:
-                                                    routesSnapshot.data[index],
-                                                appUser: snapshot.data));
-                                      }));
+                                  if (routesSnapshot.data.length < 1) {
+                                    return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          FittedBox(
+                                              fit: BoxFit.fitWidth,
+                                              child: Text(
+                                                  'There are no routes for this gym yet.',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w700))),
+                                          Icon(Icons.mood_bad_rounded,
+                                              color: Colors.white, size: 32.0)
+                                        ]);
+                                  } else {
+                                    return GridView.count(
+                                        crossAxisCount: 2,
+                                        childAspectRatio:
+                                            (itemWidth / itemHeight),
+                                        children: List.generate(
+                                            routesSnapshot.data.length,
+                                            (index) {
+                                          return Container(
+                                              child: RouteCard(
+                                                  route: routesSnapshot
+                                                      .data[index],
+                                                  appUser: snapshot.data));
+                                        }));
+                                  }
                                 }
                               }),
                         )
