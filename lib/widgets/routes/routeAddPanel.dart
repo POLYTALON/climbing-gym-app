@@ -49,7 +49,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   Widget build(BuildContext context) {
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
-        anchor: 0.9,
+        anchor: 1.0,
         panelController: _panelController,
         child: Container(
             decoration: ShapeDecoration(
@@ -358,55 +358,67 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                 fontWeight: FontWeight.w800))),
                     // Buttons
                     Container(
-                        padding:
-                            EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                        padding: EdgeInsets.all(16),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Accept button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Constants.polyGreen),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => addRoute(appUser.selectedGym),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Create Route",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyGreen),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () =>
+                                      addRoute(appUser.selectedGym),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Create Route",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
                               ),
                             ),
-
                             // Cancel button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Constants.polyRed),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => _panelController.collapse(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Cancel",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => _panelController.collapse(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Cancel",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         )),
-                    SizedBox(height: 100)
                   ],
                 )))));
   }
