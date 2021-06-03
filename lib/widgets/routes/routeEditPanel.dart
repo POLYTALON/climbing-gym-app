@@ -348,58 +348,57 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                       fillColor: Colors.white,
                                       filled: true)),
                             ])),
-
                     // Buttons
                     Container(
-                      padding:
-                          EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          // Accept button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyGreen),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => editRoute(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Update Gym",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                        padding:
+                            EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // Accept button
+                            TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Constants.polyGreen),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0)),
+                                  )),
+                              onPressed: () => editRoute(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Update Gym",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ),
                             ),
-                          ),
 
-                          // Cancel button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyRed),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => _panelController.collapse(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Cancel",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                            // Cancel button
+                            TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Constants.polyRed),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0)),
+                                  )),
+                              onPressed: () => _panelController.collapse(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Cancel",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
+                          ],
+                        )),
+                    SizedBox(height: 100)
                   ],
                 )))));
   }
