@@ -68,6 +68,22 @@ class GymService extends ChangeNotifier {
     }
   }
 
+  Future<bool> deleteGym(String id) async {
+    try {
+      dynamic route = await _firestore.collection('gyms').doc(id).get();
+      await _storage.refFromURL(route.data()['imageUrl']).delete();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    try {
+      await _firestore.collection('gyms').doc(id).delete();
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);

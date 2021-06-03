@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class GymsEditPanel extends StatefulWidget {
   GymsEditPanel({
@@ -254,6 +255,42 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                           ),
                         ],
                       ),
+                    ),
+
+                    // Delete Button
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 100, right: 100),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyRed),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                //onPressed: () => _panelController.collapse(),
+                                onPressed: () => onPressDelete(context),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Delete Gym",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ))));
@@ -333,6 +370,48 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
       await gymService.editGym(id, gymName, gymLocation, _image);
       _panelController.collapse();
     }
+  }
+
+  void onPressDelete(BuildContext context) {
+    //final db = Provider.of<DatabaseService>(context, listen: false);
+    //final routesService = locator<RoutesService>();
+    final gymService = locator<GymService>();
+    final id = gymService.currentGym.id;
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Delete Gym',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Would you like to delete this gym?',
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("No")),
+            TextButton(
+                onPressed: () async {
+                  bool isDeleted = await gymService.deleteGym(id);
+                  if (isDeleted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    _panelController.collapse();
+                  }
+                },
+                child: Text("Yes")),
+          ],
+        );
+      },
+    );
   }
 
   bool _validateAndSave() {
