@@ -1,6 +1,6 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/services/RoutesService.dart';
+import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:transparent_image/transparent_image.dart';

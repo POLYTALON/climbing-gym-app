@@ -1,6 +1,6 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/services/RoutesService.dart';
+import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/view_models/routeEdit.dart';
 import 'package:climbing_gym_app/widgets/routes/routeAddPanel.dart';

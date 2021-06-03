@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/services/RoutesService.dart';
+import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
