@@ -1,8 +1,8 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -33,66 +33,67 @@ class _GymsScreenState extends State<GymsScreen> {
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, snapshot) {
-          print("new state");
-          print(snapshot.connectionState);
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            return StreamProvider<List<Gym>>.value(
-                initialData: [],
-                value: DatabaseService().streamGyms(),
-                child: Consumer<List<Gym>>(
-                  builder: (context, gyms, _) {
-                    return ChangeNotifierProvider<GymEdit>(
-                        create: (_) => GymEdit(),
-                        child: Stack(children: <Widget>[
-                          Scaffold(
-                              // Add gym button
-                              floatingActionButton: _getFloatingActionButton(
-                                  snapshot.data.isOperator),
-                              backgroundColor: Constants.polyDark,
+            return ChangeNotifierProvider<GymEdit>(
+                create: (_) => GymEdit(),
+                child: Stack(children: <Widget>[
+                  Scaffold(
+                      // Add gym button
+                      floatingActionButton:
+                          _getFloatingActionButton(snapshot.data.isOperator),
+                      backgroundColor: Constants.polyDark,
 
-                              // Page content
-                              body: Container(
-                                  child: Column(children: [
-                                // Text
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text("Choose Your Gym",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 24)),
-                                ),
+                      // Page content
+                      body: Container(
+                          child: Column(children: [
+                        // Text
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text("Choose Your Gym",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 24)),
+                        ),
 
-                                // GridView (with GymCards)
-                                Expanded(
-                                  child: GridView.count(
+                        // GridView (with GymCards)
+                        Expanded(
+                          child: StreamBuilder(
+                              stream: locator<GymService>().streamGyms(),
+                              builder: (context, gymsSnapshot) {
+                                if (snapshot.connectionState !=
+                                        ConnectionState.active ||
+                                    !gymsSnapshot.hasData) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return GridView.count(
                                       crossAxisCount: 2,
                                       childAspectRatio:
                                           (itemWidth / itemHeight),
-                                      children:
-                                          List.generate(gyms.length, (index) {
+                                      children: List.generate(
+                                          gymsSnapshot.data.length, (index) {
                                         return Container(
                                             child: GymCard(
-                                                gym: gyms[index],
+                                                gym: gymsSnapshot.data[index],
                                                 appUser: snapshot.data));
-                                      })),
-                                )
-                              ]))),
-                          if (snapshot.data.isOperator)
-                            GymsAddPanel(
-                                panelController: _gymsAddPanelController),
-                          if (snapshot.data.isOperator ||
-                              _getIsAnyGymUser(snapshot.data.roles))
-                            GymsEditPanel()
-                        ]));
-                  },
-                ));
+                                      }));
+                                }
+                              }),
+                        )
+                      ]))),
+                  if (snapshot.data.isOperator)
+                    GymsAddPanel(panelController: _gymsAddPanelController),
+                  if (snapshot.data.isOperator ||
+                      _getIsAnyGymUser(snapshot.data.roles))
+                    GymsEditPanel()
+                ]));
           }
         });
   }

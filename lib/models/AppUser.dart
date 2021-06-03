@@ -24,15 +24,15 @@ class AppUser {
       this.roles = const {}});
 
   factory AppUser.fromFirebase(User firebaseUser, bool isOperator,
-      Map<String, UserRole> userRoles, Map<String, dynamic> userDoc) {
+      Map<String, UserRole> userRoles, String selectedGym) {
     return AppUser(
         uid: firebaseUser.uid ?? '',
         email: firebaseUser.email ?? '',
         displayName: firebaseUser.displayName ?? '',
         imageUrl: firebaseUser.photoURL ?? '',
-        selectedGym: userDoc['selectedGym'] ?? '',
         isOperator: isOperator ?? false,
-        roles: userRoles ?? Map<String, UserRole>());
+        roles: userRoles ?? Map<String, UserRole>(),
+        selectedGym: selectedGym ?? '');
   }
 
   AppUser empty() {

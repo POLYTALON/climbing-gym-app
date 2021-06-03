@@ -77,9 +77,10 @@ class AuthService with ChangeNotifier {
           .snapshots()
           .asyncMap((userDoc) async {
         bool isOperator = await _getIsOperator();
+        String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
         return AppUser.fromFirebase(
-            _auth.currentUser, isOperator, userRoles, userDoc.data());
+            _auth.currentUser, isOperator, userRoles, selectedGym);
       });
     }
     return Stream.empty();
@@ -115,7 +116,9 @@ class AuthService with ChangeNotifier {
             .then((doc) {
           doc.docs.forEach((gym) {
             userRoles.putIfAbsent(gym.id, () {
-              return UserRole(gymuser: gym.data()['gymuser'] ?? false);
+              return UserRole(
+                  gymuser: gym.data()['gymuser'] ?? false,
+                  builder: gym.data()['builder'] ?? false);
             });
           });
         });
