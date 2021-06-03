@@ -8,7 +8,7 @@ class AppRoute extends Equatable {
   final String type;
   final String builder;
   final DateTime date;
-  final RouteColor difficulty;
+  final String difficulty;
   final String gymId;
   final String holds;
   final String imageUrl;
@@ -38,7 +38,7 @@ class AppRoute extends Equatable {
             ? new DateTime.fromMillisecondsSinceEpoch(
                 docData['date'].seconds * 1000)
             : '',
-        difficulty: RouteColor(docData['difficulty'] ?? ''),
+        difficulty: docData['difficulty'] ?? '',
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
         type: docData['type'] ?? '',

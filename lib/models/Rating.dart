@@ -13,7 +13,6 @@ class Rating extends Equatable {
   factory Rating.fromFirestore(
       List<Map<String, Timestamp>> comments, List<int> ratings) {
     var rating = Rating(comments: comments, ratings: ratings);
-    print('Inside Model: ' + rating.toString());
     return rating;
   }
 }
