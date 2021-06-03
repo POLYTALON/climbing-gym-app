@@ -44,7 +44,7 @@ class _RouteCardState extends State<RouteCard> {
                     height: MediaQuery.of(context).size.height,
                     child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
-                        image: route.imageUrls[0],
+                        image: route.imageUrl,
                         fit: BoxFit.fill),
                   ),
                 ])),

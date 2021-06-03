@@ -39,8 +39,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     routesService.addListener(() {
       if (routesService.showEditPanel == true) {
         controllerRouteName.text = routesService.currentRoute.name;
-        controllerRouteSetter.text =
-            routesService.currentRoute.builders.toString();
+        controllerRouteSetter.text = routesService.currentRoute.builder;
         controllerRouteType.text = routesService.currentRoute.type;
         controllerRouteHolds.text = routesService.currentRoute.holds;
 
@@ -468,16 +467,20 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void editRoute() async {
-    /*final routeName = controllerRouteName.text.trim();
-    final routeSetter = controllerRouteSetter.text.trim();
+    final routeName = controllerRouteName.text.trim();
+    final builder = controllerRouteSetter.text.trim();
     final difficulty = Constants.availableRouteColors[this.selectedColorIndex];
     final id = routesService.currentRoute.id;
+    final gymId = routesService.currentRoute.gymId;
+    final holds = controllerRouteHolds.text.trim();
+    final type = controllerRouteType.text.trim();
 
     if (_validateAndSave()) {
       // edit Route
-      await routesService.editRoute(id, gymName, gymLocation, _image);
+      await routesService.editRoute(id, routeName, gymId, difficulty.color,
+          type, holds, builder, DateTime.now(), _image);
       _panelController.collapse();
-    }*/
+    }
   }
 
   bool _validateAndSave() {

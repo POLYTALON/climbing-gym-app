@@ -78,7 +78,7 @@ class RoutesService extends ChangeNotifier {
         'difficulty': difficulty,
         'type': type,
         'holds': holds,
-        'imageUrls': [imageUrl],
+        'imageUrl': imageUrl,
         'date': date,
         'builder': builder,
       });
@@ -95,25 +95,39 @@ class RoutesService extends ChangeNotifier {
       String type,
       String holds,
       String builder,
-      File image,
-      DateTime date) async {
+      DateTime date,
+      [File image]) async {
     String imageUrl;
     if (image != null) {
       imageUrl = await uploadFile(image, 'routes' + '/' + id);
-    }
-    try {
-      await _firestore.collection('routes').doc(id).update({
-        'name': name,
-        'gymid': gymid,
-        'difficulty': difficulty,
-        'type': type,
-        'holds': holds,
-        'imageUrls': imageUrl != null ? [imageUrl] : "",
-        'date': date,
-        'builder': builder,
-      });
-    } on FirebaseException catch (e) {
-      print(e);
+      try {
+        await _firestore.collection('routes').doc(id).update({
+          'name': name,
+          'gymid': gymid,
+          'difficulty': difficulty,
+          'type': type,
+          'holds': holds,
+          'imageUrl': imageUrl,
+          'date': date,
+          'builder': builder,
+        });
+      } on FirebaseException catch (e) {
+        print(e);
+      }
+    } else {
+      try {
+        await _firestore.collection('routes').doc(id).update({
+          'name': name,
+          'gymid': gymid,
+          'difficulty': difficulty,
+          'type': type,
+          'holds': holds,
+          'date': date,
+          'builder': builder,
+        });
+      } on FirebaseException catch (e) {
+        print(e);
+      }
     }
   }
 
