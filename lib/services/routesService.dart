@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/Rating.dart';
-import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -134,9 +133,13 @@ class RoutesService extends ChangeNotifier {
 
   Future<bool> deleteRoute(String id) async {
     try {
-      dynamic news = await _firestore.collection('routes').doc(id).get();
-      await _storage.refFromURL(news.data()['imageUrl']).delete();
-      await _firestore.collection('news').doc(id).delete();
+      dynamic route = await _firestore.collection('routes').doc(id).get();
+      await _storage.refFromURL(route.data()['imageUrl']).delete();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    try {
+      await _firestore.collection('routes').doc(id).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);
