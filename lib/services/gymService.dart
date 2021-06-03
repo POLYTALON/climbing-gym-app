@@ -77,6 +77,27 @@ class GymService extends ChangeNotifier {
     }
     try {
       await _firestore.collection('gyms').doc(id).delete();
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                _firestore
+                    .collection('users')
+                    .doc(user.id)
+                    .collection('privileges')
+                    .get()
+                    .then((docu) => docu.docs.forEach((gym) {
+                          if (gym.id == id) {
+                            _firestore
+                                .collection('users')
+                                .doc(user.id)
+                                .collection('privileges')
+                                .doc(gym.id)
+                                .delete();
+                          }
+                        }));
+              }));
+
       return true;
     } on FirebaseException catch (e) {
       print(e);
