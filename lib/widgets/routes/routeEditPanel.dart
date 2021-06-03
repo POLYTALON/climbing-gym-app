@@ -27,7 +27,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
   File _image;
-  int selectedColorIndex = -1;
+  int selectedColorIndex = 0;
   final picker = ImagePicker();
 
   final routesService = locator<RoutesService>();
@@ -468,13 +468,14 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void editRoute() async {
-    /*final gymName = controllerGymName.text.trim();
-    final gymLocation = controllerLocation.text.trim();
-    final id = routesService.currentGym.id;
+    /*final routeName = controllerRouteName.text.trim();
+    final routeSetter = controllerRouteSetter.text.trim();
+    final difficulty = Constants.availableRouteColors[this.selectedColorIndex];
+    final id = routesService.currentRoute.id;
 
     if (_validateAndSave()) {
-      // edit Gym
-      await routesService.editGym(id, gymName, gymLocation, _image);
+      // edit Route
+      await routesService.editRoute(id, gymName, gymLocation, _image);
       _panelController.collapse();
     }*/
   }
