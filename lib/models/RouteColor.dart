@@ -24,7 +24,7 @@ class RouteColor {
       case 'red':
         return Color(0xFFFF0000);
       case 'white':
-        return Color(0xFFFFFFFF);
+        return Color(0xFFDDDDDD);
       case 'yellow':
         return Color(0xFFFFFF00);
       default:

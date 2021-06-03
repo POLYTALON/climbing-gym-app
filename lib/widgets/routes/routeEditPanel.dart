@@ -22,10 +22,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final controllerGymName = TextEditingController(text: "");
-  final controllerLocation = TextEditingController(text: "");
+  final controllerRouteName = TextEditingController(text: "");
+  final controllerRouteSetter = TextEditingController(text: "");
+  final controllerRouteType = TextEditingController(text: "");
+  final controllerRouteHolds = TextEditingController(text: "");
   File _image;
-  int selectedColorIndex;
+  int selectedColorIndex = -1;
   final picker = ImagePicker();
 
   final routesService = locator<RoutesService>();
@@ -36,19 +38,25 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
     routesService.addListener(() {
       if (routesService.showEditPanel == true) {
-        controllerGymName.text = routesService.currentRoute.name;
-        controllerLocation.text = routesService.currentRoute.difficulty.color;
+        controllerRouteName.text = routesService.currentRoute.name;
+        controllerRouteSetter.text =
+            routesService.currentRoute.builders.toString();
+        controllerRouteType.text = routesService.currentRoute.type;
+        controllerRouteHolds.text = routesService.currentRoute.holds;
+
         _panelController.anchor();
       } else {
-        controllerGymName.text = "";
-        controllerLocation.text = "";
+        controllerRouteName.text = "";
+        controllerRouteSetter.text = "";
+        controllerRouteType.text = "";
+        controllerRouteHolds.text = "";
         _panelController.collapse();
       }
     });
 
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
-        anchor: 0.75,
+        anchor: 0.9,
         panelController: _panelController,
         child: Container(
             decoration: ShapeDecoration(
@@ -124,7 +132,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               TextFormField(
-                                  controller: controllerGymName,
+                                  controller: controllerRouteName,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -165,7 +173,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               TextFormField(
-                                  controller: controllerLocation,
+                                  controller: controllerRouteSetter,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -234,10 +242,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                   onPressed: () =>
                                                       _setSelectedRouteColorIndex(
                                                           index),
-                                                  shape: (selectedColorIndex != null &&
-                                                          Constants.availableRouteColors[selectedColorIndex] ==
-                                                              Constants.availableRouteColors[
-                                                                  index])
+                                                  shape: (selectedColorIndex !=
+                                                              null &&
+                                                          selectedColorIndex ==
+                                                              index)
                                                       ? CircleBorder(
                                                           side: BorderSide(
                                                               width: 3.0,
@@ -281,7 +289,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               TextFormField(
-                                  controller: controllerLocation,
+                                  controller: controllerRouteType,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -321,7 +329,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               TextFormField(
-                                  controller: controllerLocation,
+                                  controller: controllerRouteHolds,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -482,7 +490,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void _setSelectedRouteColorIndex(int index) {
-    print(index);
-    selectedColorIndex = index;
+    setState(() {
+      selectedColorIndex = index;
+    });
   }
 }
