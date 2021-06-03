@@ -4,7 +4,6 @@ import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:transparent_image/transparent_image.dart';
-
 import '../../locator.dart';
 
 class RouteCard extends StatefulWidget {

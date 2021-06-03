@@ -62,34 +62,36 @@ class _RoutesScreenState extends State<RoutesScreen> {
                             ]),
                         // Grid view (with RouteCards)
                         Expanded(
-                            child: StreamBuilder(
-                                stream: locator<RoutesService>()
-                                    .streamRoutes(snapshot.data.selectedGym),
-                                builder: (context, routesSnapshot) {
-                                  if (snapshot.connectionState !=
-                                          ConnectionState.active ||
-                                      !routesSnapshot.hasData) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    return GridView.count(
-                                        crossAxisCount: 2,
-                                        childAspectRatio:
-                                            (itemWidth / itemHeight),
-                                        children: List.generate(
-                                            routesSnapshot.data.length,
-                                            (index) {
-                                          return Container(
-                                              child: RouteCard(
-                                                  route: routesSnapshot
-                                                      .data[index],
-                                                  appUser: snapshot.data));
-                                        }));
-                                  }
-                                }))
+                          child: StreamBuilder(
+                              stream: locator<RoutesService>()
+                                  .streamRoutes(snapshot.data.selectedGym),
+                              builder: (context, routesSnapshot) {
+                                if (snapshot.connectionState !=
+                                        ConnectionState.active ||
+                                    !routesSnapshot.hasData) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return GridView.count(
+                                      crossAxisCount: 2,
+                                      childAspectRatio:
+                                          (itemWidth / itemHeight),
+                                      children: List.generate(
+                                          routesSnapshot.data.length, (index) {
+                                        return Container(
+                                            child: RouteCard(
+                                                route:
+                                                    routesSnapshot.data[index],
+                                                appUser: snapshot.data));
+                                      }));
+                                }
+                              }),
+                        )
                       ]))),
                   if (_getPrivileges(snapshot.data))
-                    RouteAddPanel(panelController: _routesAddPanelController),
+                    RouteAddPanel(
+                        appUser: snapshot.data,
+                        panelController: _routesAddPanelController),
                   if (_getPrivileges(snapshot.data)) RouteEditPanel()
                 ]));
           }

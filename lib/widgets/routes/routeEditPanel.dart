@@ -21,7 +21,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final SlidingUpPanelController _panelController = SlidingUpPanelController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final routesService = locator<RoutesService>();
   final controllerRouteName = TextEditingController(text: "");
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
@@ -29,8 +29,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   File _image;
   int selectedColorIndex = 0;
   final picker = ImagePicker();
-
-  final routesService = locator<RoutesService>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
         controllerRouteSetter.text = routesService.currentRoute.builder;
         controllerRouteType.text = routesService.currentRoute.type;
         controllerRouteHolds.text = routesService.currentRoute.holds;
-
         _panelController.anchor();
       } else {
         controllerRouteName.text = "";
@@ -241,10 +238,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                   onPressed: () =>
                                                       _setSelectedRouteColorIndex(
                                                           index),
-                                                  shape: (selectedColorIndex !=
-                                                              null &&
-                                                          selectedColorIndex ==
-                                                              index)
+                                                  shape: (selectedColorIndex ==
+                                                          index)
                                                       ? CircleBorder(
                                                           side: BorderSide(
                                                               width: 3.0,
@@ -368,7 +363,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                               onPressed: () => editRoute(),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text("Update Gym",
+                                child: Text("Update Route",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700)),
