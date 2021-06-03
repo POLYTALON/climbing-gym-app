@@ -1,7 +1,5 @@
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/News.dart';
-import 'package:climbing_gym_app/screens/main/gyms.dart';
-import 'package:climbing_gym_app/screens/navigationContainer.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/view_models/newsDetails.dart';
@@ -78,7 +76,16 @@ class NewsScreen extends StatelessWidget {
                                       return Container(
                                           margin: const EdgeInsets.only(
                                               bottom: 10.0),
-                                          child: NewsCard(news: news[index]));
+                                          child: NewsCard(
+                                              news: news[index],
+                                              isDeletable: userSnapshot
+                                                      .data.isOperator
+                                                  ? true
+                                                  : userSnapshot.data
+                                                              .selectedGym ==
+                                                          news[index].gymid &&
+                                                      _getIsPrivileged(
+                                                          userSnapshot.data)));
                                     }))),
                         if (_getIsPrivileged(userSnapshot.data))
                           NewsAddPanel(

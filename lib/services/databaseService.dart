@@ -72,6 +72,20 @@ class DatabaseService {
     }
   }
 
+  Future<bool> deleteNews(String id) async {
+    try {
+      dynamic news = await _firestore.collection('news').doc(id).get();
+      await news.data()['imageUrls'].forEach((imageUrl) async {
+        await _storage.refFromURL(imageUrl).delete();
+      });
+      await _firestore.collection('news').doc(id).delete();
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);
