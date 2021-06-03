@@ -22,18 +22,25 @@ class DatabaseService {
     });
   }
 
-  Stream<List<News>> streamNews(String gym) {
-    //TODO: only get news from the current gym and global news
+  Stream<List<News>> streamNews(String gymid) {
     return _firestore
         .collection('news')
+        .where('gymid', whereIn: [gymid, ""])
         .orderBy("date", descending: true)
         .snapshots()
         .map(
             (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
   }
 
-  Future<void> addNews(String title, String content, String link,
-      String creator, File image) async {
+  Stream<List<Gym>> streamGyms() {
+    return _firestore
+        .collection('gyms')
+        .snapshots()
+        .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
+  }
+
+  Future<void> addNews(String title, String content, String link, File image,
+      String gymid) async {
     DocumentReference docRef;
     try {
       docRef = _firestore.collection('news').doc();
@@ -41,6 +48,16 @@ class DatabaseService {
       print(e);
     }
     String imageUrl = await uploadFile(image, docRef.path);
+
+    String creator;
+    if (gymid.isNotEmpty) {
+      DocumentSnapshot gymDoc =
+          await _firestore.collection('gyms').doc(gymid).get();
+      creator = gymDoc.data()['name'];
+    } else {
+      creator = 'Polytalon';
+    }
+
     try {
       await docRef.set({
         'title': title,
@@ -51,7 +68,7 @@ class DatabaseService {
         ],
         'date': DateTime.now(),
         'creator': creator,
-        'isGlobal': true, //TODO: check if operator or gymuser
+        'gymid': gymid,
       });
     } on FirebaseException catch (e) {
       print(e);

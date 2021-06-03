@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -33,8 +34,13 @@ class _GymsScreenState extends State<GymsScreen> {
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
-            return Container(width: 0.0, height: 0.0);
+          print("new state");
+          print(snapshot.connectionState);
+          if (snapshot.connectionState != ConnectionState.active ||
+              !snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             return ChangeNotifierProvider<GymEdit>(
                 create: (_) => GymEdit(),

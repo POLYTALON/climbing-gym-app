@@ -18,10 +18,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        StreamProvider<List<News>>(
-          initialData: [],
-          create: (context) => DatabaseService().streamNews(""),
-        ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         Provider(create: (_) => DatabaseService()),
       ],

@@ -6,22 +6,22 @@ class AppUser {
   final String email;
   final String displayName;
   final String imageUrl;
+  final String selectedGym;
   final bool isOperator;
   final Map<String, UserRole> roles;
-  final String selectedGym;
 
   @override
   List<Object> get props =>
-      [uid, email, displayName, imageUrl, isOperator, roles, selectedGym];
+      [uid, email, displayName, imageUrl, selectedGym, isOperator, roles];
 
   AppUser(
       {this.uid = '',
       this.email = '',
       this.displayName = '',
       this.imageUrl = '',
+      this.selectedGym = '',
       this.isOperator = false,
-      this.roles = const {},
-      this.selectedGym = ''});
+      this.roles = const {}});
 
   factory AppUser.fromFirebase(User firebaseUser, bool isOperator,
       Map<String, UserRole> userRoles, String selectedGym) {
@@ -41,8 +41,8 @@ class AppUser {
         email: '',
         displayName: '',
         imageUrl: '',
+        selectedGym: '',
         isOperator: false,
-        roles: Map<String, UserRole>(),
-        selectedGym: '');
+        roles: Map<String, UserRole>());
   }
 }
