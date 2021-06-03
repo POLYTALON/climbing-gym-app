@@ -133,9 +133,13 @@ class RoutesService extends ChangeNotifier {
 
   Future<bool> deleteRoute(String id) async {
     try {
-      dynamic news = await _firestore.collection('routes').doc(id).get();
-      await _storage.refFromURL(news.data()['imageUrl']).delete();
-      await _firestore.collection('news').doc(id).delete();
+      dynamic route = await _firestore.collection('routes').doc(id).get();
+      await _storage.refFromURL(route.data()['imageUrl']).delete();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    try {
+      await _firestore.collection('routes').doc(id).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);

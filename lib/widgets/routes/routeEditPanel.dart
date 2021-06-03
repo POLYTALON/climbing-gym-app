@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
+  final routeColorService = locator<RouteColorService>();
   final controllerRouteName = TextEditingController(text: "");
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
@@ -210,57 +212,67 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               SizedBox(
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(16.0))),
-                                      child: GridView.count(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          primary: true,
-                                          shrinkWrap: true,
-                                          crossAxisCount: 5,
-                                          padding: EdgeInsets.all(8.0),
-                                          children: List.generate(
-                                              Constants.availableRouteColors
-                                                  .length, (index) {
-                                            return Center(
-                                                child:
-                                                    Column(children: <Widget>[
-                                              RawMaterialButton(
-                                                  child: Icon(Icons.circle,
-                                                      color: Constants
-                                                          .availableRouteColors[
-                                                              index]
-                                                          .colorCode,
-                                                      size: 24),
-                                                  onPressed: () =>
-                                                      _setSelectedRouteColorIndex(
-                                                          index),
-                                                  shape: (selectedColorIndex ==
-                                                          index)
-                                                      ? CircleBorder(
-                                                          side: BorderSide(
-                                                              width: 3.0,
-                                                              color: Constants
-                                                                  .polyGray))
-                                                      : CircleBorder(
-                                                          side: BorderSide(
-                                                              width: 0.0,
-                                                              color: Colors
-                                                                  .transparent))),
-                                              Text(
-                                                  Constants
-                                                      .availableRouteColors[
-                                                          index]
-                                                      .color,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700)),
-                                            ]));
-                                          }))))
+                                  child: FutureBuilder(
+                                      future: routeColorService
+                                          .getAvailableRouteColors(),
+                                      builder: (context, routeColorSnapshot) {
+                                        if (!routeColorSnapshot.hasData) {
+                                          return Container(
+                                              width: 0.0, height: 0.0);
+                                        }
+                                        return Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(16.0))),
+                                            child: GridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                primary: true,
+                                                shrinkWrap: true,
+                                                crossAxisCount: 5,
+                                                padding: EdgeInsets.all(8.0),
+                                                children: List.generate(
+                                                    routeColorSnapshot
+                                                        .data.length, (index) {
+                                                  return Center(
+                                                      child: Column(children: <
+                                                          Widget>[
+                                                    RawMaterialButton(
+                                                        child: Icon(
+                                                            Icons.circle,
+                                                            color: Color(
+                                                                routeColorSnapshot
+                                                                    .data[index]
+                                                                    .colorCode),
+                                                            size: 24),
+                                                        onPressed: () =>
+                                                            _setSelectedRouteColorIndex(
+                                                                index),
+                                                        shape: (selectedColorIndex ==
+                                                                index)
+                                                            ? CircleBorder(
+                                                                side: BorderSide(
+                                                                    width: 3.0,
+                                                                    color: Constants
+                                                                        .polyGray))
+                                                            : CircleBorder(
+                                                                side: BorderSide(
+                                                                    width: 0.0,
+                                                                    color: Colors
+                                                                        .transparent))),
+                                                    Text(
+                                                        routeColorSnapshot
+                                                            .data[index].color,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700)),
+                                                  ]));
+                                                })));
+                                      }))
                             ])),
                     // Type
                     Container(
@@ -476,7 +488,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   void editRoute() async {
     final routeName = controllerRouteName.text.trim();
     final builder = controllerRouteSetter.text.trim();
-    final difficulty = Constants.availableRouteColors[this.selectedColorIndex];
+    final routeColors = await routeColorService.getAvailableRouteColors();
+    final difficulty = routeColors[this.selectedColorIndex].color;
     final id = routesService.currentRoute.id;
     final gymId = routesService.currentRoute.gymId;
     final holds = controllerRouteHolds.text.trim();
@@ -484,8 +497,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
     if (_validateAndSave()) {
       // edit Route
-      await routesService.editRoute(id, routeName, gymId, difficulty.color,
-          type, holds, builder, DateTime.now(), _image);
+      await routesService.editRoute(id, routeName, gymId, difficulty, type,
+          holds, builder, DateTime.now(), _image);
       _panelController.collapse();
     }
   }
