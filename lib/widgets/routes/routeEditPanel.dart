@@ -206,14 +206,15 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                 height: 20,
                               ),
                               SizedBox(
-                                  height: 300,
                                   child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(16.0),
-                                              topRight: Radius.circular(16.0))),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(16.0))),
                                       child: GridView.count(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          primary: true,
                                           shrinkWrap: true,
                                           crossAxisCount: 5,
                                           padding: EdgeInsets.all(8.0),
@@ -258,6 +259,86 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                           FontWeight.w700)),
                                             ]));
                                           }))))
+                            ])),
+                    // Type
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Route Type',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Divider(
+                                color: Constants.polyGray,
+                                thickness: 2,
+                                height: 20,
+                              ),
+                              TextFormField(
+                                  controller: controllerLocation,
+                                  validator: NameFieldValidator.validate,
+                                  autocorrect: false,
+                                  textCapitalization: TextCapitalization.words,
+                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                  keyboardType: TextInputType.name,
+                                  decoration: InputDecoration(
+                                      hintText: 'e.g. Competition',
+                                      contentPadding:
+                                          const EdgeInsets.only(left: 16.0),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0),
+                                          borderSide: BorderSide(
+                                              width: 0,
+                                              style: BorderStyle.none)),
+                                      fillColor: Colors.white,
+                                      filled: true)),
+                            ])),
+                    // Holds
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Holds',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Divider(
+                                color: Constants.polyGray,
+                                thickness: 2,
+                                height: 20,
+                              ),
+                              TextFormField(
+                                  controller: controllerLocation,
+                                  validator: NameFieldValidator.validate,
+                                  autocorrect: false,
+                                  textCapitalization: TextCapitalization.words,
+                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                  keyboardType: TextInputType.name,
+                                  decoration: InputDecoration(
+                                      hintText: 'Name',
+                                      contentPadding:
+                                          const EdgeInsets.only(left: 16.0),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0),
+                                          borderSide: BorderSide(
+                                              width: 0,
+                                              style: BorderStyle.none)),
+                                      fillColor: Colors.white,
+                                      filled: true)),
                             ])),
 
                     // Buttons
