@@ -227,7 +227,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                             ),
                           ),
 
-                          // Cancel button
+                          // Delete button
                           Expanded(
                             child: Container(
                               margin:
@@ -242,10 +242,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.collapse(),
+                                onPressed: () => onPressDelete(context),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("Cancel",
+                                  child: Text("Delete Gym",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700)),
@@ -257,7 +257,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                       ),
                     ),
 
-                    // Delete Button
+                    // Cancel Button
                     Container(
                       padding: EdgeInsets.all(16),
                       child: Row(
@@ -278,10 +278,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                               BorderRadius.circular(24.0)),
                                     )),
                                 //onPressed: () => _panelController.collapse(),
-                                onPressed: () => onPressDelete(context),
+                                onPressed: () => _panelController.collapse(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("Delete Gym",
+                                  child: Text("Cancel",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700)),
