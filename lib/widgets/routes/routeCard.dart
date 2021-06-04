@@ -96,18 +96,13 @@ class _RouteCardState extends State<RouteCard> {
                             ),
                             if (_getIsPrivileged())
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.edit),
                                     color: Colors.white,
                                     onPressed: onPressEdit,
                                   ),
-                                  IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      color: Constants.polyRed,
-                                      onPressed: () => onPressDelete())
                                 ],
                               )
                           ],
@@ -162,9 +157,8 @@ class _RouteCardState extends State<RouteCard> {
 
   bool _getIsPrivileged() {
     if (appUser == null) return false;
-    return appUser.isOperator ||
-        (appUser.roles[appUser.selectedGym] != null &&
-            (appUser.roles[appUser.selectedGym].gymuser ||
-                appUser.roles[appUser.selectedGym].builder));
+    return (appUser.roles[appUser.selectedGym] != null &&
+        (appUser.roles[appUser.selectedGym].gymuser ||
+            appUser.roles[appUser.selectedGym].builder));
   }
 }
