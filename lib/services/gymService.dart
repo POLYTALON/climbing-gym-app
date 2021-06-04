@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
@@ -79,36 +77,6 @@ class GymService extends ChangeNotifier {
     }
     try {
       await _firestore.collection('gyms').doc(id).delete();
-      await _firestore
-          .collection('users')
-          .get()
-          .then((doc) => doc.docs.forEach((user) {
-                _firestore
-                    .collection('users')
-                    .doc(user.id)
-                    .collection('privileges')
-                    .get()
-                    .then((docu) => docu.docs.forEach((gym) {
-                          if (gym.id == id) {
-                            _firestore
-                                .collection('users')
-                                .doc(user.id)
-                                .collection('privileges')
-                                .doc(gym.id)
-                                .delete();
-                          }
-                        }));
-              }));
-      await _firestore
-          .collection('routes')
-          .get()
-          .then((doc) => doc.docs.forEach((route) {
-                if (route.data().containsValue(id)) {
-                  final routeService = locator<RoutesService>();
-                  routeService.deleteRoute(id);
-                }
-              }));
-
       return true;
     } on FirebaseException catch (e) {
       print(e);

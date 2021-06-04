@@ -147,6 +147,25 @@ class RoutesService extends ChangeNotifier {
     }
   }
 
+  Future<bool> cleanUpRoutesForGym(String gymid) async {
+    try {
+      await _firestore
+          .collection('routes')
+          .get()
+          .then((doc) => doc.docs.forEach((route) {
+                if (route.exists) {
+                  if (route.data()['gymid'] == gymid) {
+                    deleteRoute(route.id);
+                  }
+                }
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);

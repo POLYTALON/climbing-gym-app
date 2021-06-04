@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +13,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class GymsEditPanel extends StatefulWidget {
-  GymsEditPanel({
-    Key key,
-  }) : super(key: key);
+  final AppUser appUser;
+  GymsEditPanel({Key key, this.appUser}) : super(key: key);
 
   @override
-  _GymsEditPanelState createState() => _GymsEditPanelState();
+  _GymsEditPanelState createState() => _GymsEditPanelState(this.appUser);
 }
 
 class _GymsEditPanelState extends State<GymsEditPanel> {
   final SlidingUpPanelController _panelController = SlidingUpPanelController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final AppUser appUser;
+  _GymsEditPanelState(this.appUser);
 
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
@@ -227,7 +232,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                             ),
                           ),
 
-                          // Delete button
+                          // Cancel button
                           Expanded(
                             child: Container(
                               margin:
@@ -242,42 +247,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => onPressDelete(context),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("Delete Gym",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Cancel Button
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.only(left: 100, right: 100),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Constants.polyRed),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24.0)),
-                                    )),
-                                //onPressed: () => _panelController.collapse(),
                                 onPressed: () => _panelController.collapse(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -291,7 +260,44 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+
+                    // Delete Button
+                    if (_getIsOperator())
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    left: 100, right: 100),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => onPressDelete(context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Delete Gym",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                   ],
                 ))));
   }
@@ -373,9 +379,9 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   void onPressDelete(BuildContext context) {
-    //final db = Provider.of<DatabaseService>(context, listen: false);
-    //final routesService = locator<RoutesService>();
     final gymService = locator<GymService>();
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final routeService = locator<RoutesService>();
     final id = gymService.currentGym.id;
 
     showDialog(
@@ -401,8 +407,14 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
-                  bool isDeleted = await gymService.deleteGym(id);
-                  if (isDeleted) {
+                  bool isRoutesForGymDelted =
+                      await routeService.cleanUpRoutesForGym(id);
+                  bool isGymDeleted = await gymService.deleteGym(id);
+                  bool isUserPrivilegesDeleted =
+                      await authService.deleteUsersGymPrivileges(id);
+                  if (isRoutesForGymDelted &&
+                      isGymDeleted &&
+                      isUserPrivilegesDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
                     _panelController.collapse();
                   }
@@ -421,5 +433,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
       return true;
     }
     return false;
+  }
+
+  bool _getIsOperator() {
+    if (appUser == null) return false;
+    return appUser.isOperator;
   }
 }
