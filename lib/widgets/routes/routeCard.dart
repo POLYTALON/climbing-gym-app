@@ -117,44 +117,6 @@ class _RouteCardState extends State<RouteCard> {
     locator<RoutesService>().showEdit(this.route);
   }
 
-  void onPressDelete() {
-    final routesService = locator<RoutesService>();
-
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(
-            'Delete Route',
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Would you like to delete this route?',
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("No")),
-            TextButton(
-                onPressed: () async {
-                  bool isDeleted =
-                      await routesService.deleteRoute(this.route.id);
-                  if (isDeleted) {
-                    Navigator.of(context, rootNavigator: true).pop();
-                  }
-                },
-                child: Text("Yes")),
-          ],
-        );
-      },
-    );
-  }
-
   bool _getIsPrivileged() {
     if (appUser == null) return false;
     return (appUser.roles[appUser.selectedGym] != null &&
