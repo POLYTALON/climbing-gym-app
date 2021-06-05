@@ -5,7 +5,6 @@ import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
@@ -24,6 +23,7 @@ class _RouteCardState extends State<RouteCard> {
   final AppUser appUser;
   _RouteCardState(this.route, this.appUser);
   final routeColorService = locator<RouteColorService>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,6 +115,42 @@ class _RouteCardState extends State<RouteCard> {
 
   void onPressEdit() {
     locator<RoutesService>().showEdit(this.route);
+  }
+
+  void onPressDelete() {
+    final routesService = locator<RoutesService>();
+    if (this.mounted) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Delete Route',
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'Would you like to delete this route?',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("No")),
+              TextButton(
+                  onPressed: () async {
+                    routesService.deleteRoute(this.route.id);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Yes")),
+            ],
+          );
+        },
+      );
+    }
   }
 
   bool _getIsPrivileged() {

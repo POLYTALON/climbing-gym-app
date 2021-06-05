@@ -556,38 +556,38 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   void onPressDelete(BuildContext context) {
     final routesService = locator<RoutesService>();
     final id = routesService.currentRoute.id;
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(
-            'Delete Route',
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Would you like to delete this route?',
-                ),
-              ],
+    if (this.mounted) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Delete Route',
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("No")),
-            TextButton(
-                onPressed: () async {
-                  bool isDeleted = await routesService.deleteRoute(id);
-                  if (isDeleted) {
-                    Navigator.of(context, rootNavigator: true).pop();
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'Would you like to delete this route?',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("No")),
+              TextButton(
+                  onPressed: () async {
+                    routesService.deleteRoute(id);
+                    Navigator.of(context).pop();
                     _panelController.collapse();
-                  }
-                },
-                child: Text("Yes")),
-          ],
-        );
-      },
-    );
+                  },
+                  child: Text("Yes")),
+            ],
+          );
+        },
+      );
+    }
   }
 }

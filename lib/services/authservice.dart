@@ -136,4 +136,33 @@ class AuthService with ChangeNotifier {
         .doc(_auth.currentUser.uid)
         .set({"selectedGym": gymid});
   }
+
+  Future<bool> deleteUsersGymPrivileges(String gymid) async {
+    try {
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                _firestore
+                    .collection('users')
+                    .doc(user.id)
+                    .collection('privileges')
+                    .get()
+                    .then((docu) => docu.docs.forEach((gym) {
+                          if (gym.id == gymid) {
+                            _firestore
+                                .collection('users')
+                                .doc(user.id)
+                                .collection('privileges')
+                                .doc(gym.id)
+                                .delete();
+                          }
+                        }));
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

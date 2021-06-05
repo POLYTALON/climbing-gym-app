@@ -92,7 +92,7 @@ class _GymsScreenState extends State<GymsScreen> {
                     GymsAddPanel(panelController: _gymsAddPanelController),
                   if (snapshot.data.isOperator ||
                       _getIsAnyGymUser(snapshot.data.roles))
-                    GymsEditPanel()
+                    GymsEditPanel(appUser: snapshot.data)
                 ]));
           }
         });
