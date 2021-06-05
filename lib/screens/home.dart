@@ -2,6 +2,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:provider/provider.dart';
+import 'package:climbing_gym_app/locator.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24.0)),
                   )),
               onPressed: () async {
-                final auth = Provider.of<AuthService>(context, listen: false);
+                final auth = locator<AuthService>();
                 await auth.logout();
               },
               child: Text("Logout",

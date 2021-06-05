@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
@@ -217,10 +218,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_validateAndSave()) {
       if (password == passwordRepeat) {
         try {
-          final auth = Provider.of<AuthService>(context, listen: false);
+          final auth = locator<AuthService>();
           final usercred = await auth.register(displayName, email, password);
           await auth.sendVerifyMail(usercred);
-          final db = Provider.of<DatabaseService>(context, listen: false);
+          final db = locator<DatabaseService>();
           await db.userSetup(usercred.user.uid.toString());
 
           Navigator.pushAndRemoveUntil(

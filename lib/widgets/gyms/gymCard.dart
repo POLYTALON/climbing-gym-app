@@ -24,7 +24,7 @@ class _GymCardState extends State<GymCard> {
   _GymCardState(this.gym, this.appUser);
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),

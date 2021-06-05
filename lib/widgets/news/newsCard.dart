@@ -1,5 +1,6 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/News.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -110,12 +111,12 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void onPressNews() {
-    final newsDetails = Provider.of<NewsDetails>(context, listen: false);
+    final newsDetails = locator<NewsDetails>();
     newsDetails.showNews(this.news);
   }
 
   void onPressDelete(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    final db = locator<NewsService>();
 
     showDialog(
       context: context,

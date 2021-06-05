@@ -31,7 +31,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
     final gymService = locator<GymService>();
 
     gymService.addListener(() {

@@ -1,7 +1,8 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:climbing_gym_app/widgets/news/newsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
@@ -19,7 +20,7 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
 
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
@@ -51,8 +52,8 @@ class NewsScreen extends StatelessWidget {
             } else {
               return StreamProvider<List<News>>.value(
                   initialData: [],
-                  value: DatabaseService()
-                      .streamNews(userSnapshot.data.selectedGym),
+                  value:
+                      NewsService().streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
                     return ChangeNotifierProvider<NewsDetails>(
                       create: (_) => NewsDetails(),
