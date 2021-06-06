@@ -86,6 +86,22 @@ class DatabaseService {
     }
   }
 
+  Future<bool> cleanUpNewsForGym(String gymid) async {
+    try {
+      await _firestore
+          .collection('news')
+          .where('gymid', isEqualTo: gymid)
+          .get()
+          .then((doc) => doc.docs.forEach((news) {
+                deleteNews(news.id);
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);
