@@ -1,13 +1,12 @@
 import 'dart:io';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
-import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class GymsEditPanel extends StatefulWidget {
   GymsEditPanel({
@@ -28,15 +27,17 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   File _image;
   final picker = ImagePicker();
 
+  final gymService = locator<GymService>();
+
   @override
   Widget build(BuildContext context) {
-    final gymProvider = Provider.of<GymEdit>(context, listen: true);
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
+    final gymService = locator<GymService>();
 
-    gymProvider.addListener(() {
-      if (gymProvider.showPanel == true) {
-        controllerGymName.text = gymProvider.currentGymDetails.name;
-        controllerLocation.text = gymProvider.currentGymDetails.city;
+    gymService.addListener(() {
+      if (gymService.showEditPanel == true) {
+        controllerGymName.text = gymService.currentGym.name;
+        controllerLocation.text = gymService.currentGym.city;
         _panelController.anchor();
       } else {
         controllerGymName.text = "";
@@ -47,7 +48,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
-        anchor: 0.75,
+        anchor: 0.9,
         panelController: _panelController,
         child: Container(
             decoration: ShapeDecoration(
@@ -78,27 +79,36 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                               topLeft: Radius.circular(16.0),
                               topRight: Radius.circular(16.0))),
                       child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(12.0),
-                            elevation: 2,
-                            primary: Constants.polyGray,
-                          ),
-                          onPressed: () async =>
-                              _showImageSourceActionSheet(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Icon(Icons.camera_alt_rounded,
-                                  size: 48.0, color: Colors.white),
-                              Text(
-                                'Change photo',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          )),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(12.0),
+                          elevation: 2,
+                          primary: Constants.polyGray,
+                        ),
+                        onPressed: () async =>
+                            _showImageSourceActionSheet(context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            _image == null
+                                ? Icon(Icons.camera_alt_rounded,
+                                    size: 48.0, color: Colors.white)
+                                : Image.file(
+                                    _image,
+                                    // fit: BoxFit.fitWidth,
+                                    height: 48,
+                                  ),
+                            Text(
+                              _image == null
+                                  ? 'Change banner'
+                                  : 'Banner changed',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     // Container for gym name
                     Container(
@@ -185,51 +195,61 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
                     // Buttons
                     Container(
-                      padding:
-                          EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                      padding: EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           // Accept button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyGreen),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () =>
-                                editGym(db, gymProvider.currentGymDetails.id),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Update Gym",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyGreen),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                onPressed: () => editGym(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Update Gym",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
                             ),
                           ),
 
                           // Cancel button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyRed),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => _panelController.collapse(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Cancel",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyRed),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                onPressed: () => _panelController.collapse(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Cancel",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -303,12 +323,14 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     });
   }
 
-  void editGym(DatabaseService db, String id) async {
+  void editGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
+    final id = gymService.currentGym.id;
+
     if (_validateAndSave()) {
       // edit Gym
-      await db.editGym(id, gymName, gymLocation, _image);
+      await gymService.editGym(id, gymName, gymLocation, _image);
       _panelController.collapse();
     }
   }

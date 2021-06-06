@@ -22,10 +22,10 @@ class DatabaseService {
     });
   }
 
-  Stream<List<News>> streamNews(String gym) {
-    //TODO: only get news from the current gym and global news
+  Stream<List<News>> streamNews(String gymid) {
     return _firestore
         .collection('news')
+        .where('gymid', whereIn: [gymid, ""])
         .orderBy("date", descending: true)
         .snapshots()
         .map(
@@ -39,57 +39,23 @@ class DatabaseService {
         .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
   }
 
-  Future<void> addGym(String name, String city, File image) async {
-    String imageUrl;
-    DocumentReference docRef;
+  Future<void> addNews(String title, String content, String link, File image,
+      String gymid) async {
     try {
-      docRef = _firestore.collection('gyms').doc();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    imageUrl = await uploadFile(image, docRef.path);
-    try {
-      await docRef.set({'name': name, 'city': city, 'imageUrl': imageUrl});
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> editGym(String id, String name, String city,
-      [File image]) async {
-    if (image != null) {
-      String imageUrl;
-      imageUrl = await uploadFile(image, 'gyms' + '/' + id);
-      try {
-        await _firestore
-            .collection('gyms')
-            .doc(id)
-            .update({'name': name, 'city': city, 'imageUrl': imageUrl});
-      } on FirebaseException catch (e) {
-        print(e);
-      }
-    } else {
-      try {
-        await _firestore
-            .collection('gyms')
-            .doc(id)
-            .update({'name': name, 'city': city});
-      } on FirebaseException catch (e) {
-        print(e);
-      }
-    }
-  }
-
-  Future<void> addNews(String title, String content, String link,
-      String creator, File image) async {
-    DocumentReference docRef;
-    try {
+      DocumentReference docRef;
       docRef = _firestore.collection('news').doc();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    String imageUrl = await uploadFile(image, docRef.path);
-    try {
+
+      String imageUrl = await uploadFile(image, docRef.path);
+
+      String creator;
+      if (gymid.isNotEmpty) {
+        DocumentSnapshot gymDoc =
+            await _firestore.collection('gyms').doc(gymid).get();
+        creator = gymDoc.data()['name'];
+      } else {
+        creator = 'Polytalon';
+      }
+
       await docRef.set({
         'title': title,
         'content': content,
@@ -99,10 +65,24 @@ class DatabaseService {
         ],
         'date': DateTime.now(),
         'creator': creator,
-        'isGlobal': true, //TODO: check if operator or gymuser
+        'gymid': gymid,
       });
     } on FirebaseException catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> deleteNews(String id) async {
+    try {
+      dynamic news = await _firestore.collection('news').doc(id).get();
+      await news.data()['imageUrls'].forEach((imageUrl) async {
+        await _storage.refFromURL(imageUrl).delete();
+      });
+      await _firestore.collection('news').doc(id).delete();
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
     }
   }
 

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class News extends Equatable {
+  final String id;
+  final String gymid;
   final String title;
   final String link;
   final String content;
@@ -12,10 +14,12 @@ class News extends Equatable {
 
   @override
   List<Object> get props =>
-      [title, link, content, creator, date, imageUrls, isGlobal];
+      [id, gymid, title, link, content, creator, date, imageUrls, isGlobal];
 
   News(
-      {this.title,
+      {this.id,
+      this.gymid,
+      this.title,
       this.link,
       this.content,
       this.creator,
@@ -26,6 +30,8 @@ class News extends Equatable {
   factory News.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
     return News(
+      id: doc.id,
+      gymid: data['gymid'] ?? '',
       title: data['title'] ?? '',
       link: data['link'] ?? '',
       content: data['content'] ?? '',

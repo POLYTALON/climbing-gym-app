@@ -82,7 +82,8 @@ class _NavigationState extends State<NavigationContainer> {
             currentIndex: _navBarIndex,
             items: [
               new BottomNavigationBarItem(
-                icon: new Icon(Icons.location_on),
+                icon: ImageIcon(AssetImage('assets/img/holdsFilled.ico'),
+                    size: 24.0),
                 label: 'Gyms',
               ),
               new BottomNavigationBarItem(
@@ -94,7 +95,7 @@ class _NavigationState extends State<NavigationContainer> {
                 label: 'News',
               ),
               new BottomNavigationBarItem(
-                icon: new Icon(Icons.alt_route),
+                icon: new Icon(Icons.book_rounded),
                 label: 'Routenbuch',
               ),
             ],

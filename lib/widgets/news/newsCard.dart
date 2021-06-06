@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/models/News.dart';
+import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,21 +8,25 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class NewsCard extends StatefulWidget {
-  NewsCard({@required News news}) : news = news;
+  NewsCard({@required News news, @required bool isDeletable})
+      : news = news,
+        isDeletable = isDeletable;
 
   final News news;
+  final bool isDeletable;
 
-  _NewsCardState createState() => new _NewsCardState(news);
+  _NewsCardState createState() => new _NewsCardState(news, isDeletable);
 }
 
 class _NewsCardState extends State<NewsCard> {
   final News news;
-  _NewsCardState(this.news);
+  final bool isDeletable;
+  _NewsCardState(this.news, this.isDeletable);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2.5,
+      height: MediaQuery.of(context).size.height / 2.3,
       child: GestureDetector(
         onTap: onPressNews,
         child: new Card(
@@ -30,7 +35,7 @@ class _NewsCardState extends State<NewsCard> {
           elevation: 2,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -58,6 +63,7 @@ class _NewsCardState extends State<NewsCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
                               child: Text(
@@ -81,6 +87,17 @@ class _NewsCardState extends State<NewsCard> {
                               image: this.news.imageUrls[0],
                             ),
                           ),
+                          if (this.isDeletable)
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                    onPressed: () {
+                                      onPressDelete(context);
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Constants.polyRed,
+                                    )))
                         ],
                       ),
                     ),
@@ -95,5 +112,43 @@ class _NewsCardState extends State<NewsCard> {
   void onPressNews() {
     final newsDetails = Provider.of<NewsDetails>(context, listen: false);
     newsDetails.showNews(this.news);
+  }
+
+  void onPressDelete(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Delete News',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Would you like to delete this news?',
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("No")),
+            TextButton(
+                onPressed: () async {
+                  bool isDeleted = await db.deleteNews(this.news.id);
+                  if (isDeleted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  }
+                },
+                child: Text("Yes")),
+          ],
+        );
+      },
+    );
   }
 }

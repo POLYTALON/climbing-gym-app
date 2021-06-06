@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class GymsAddPanel extends StatefulWidget {
   GymsAddPanel({
@@ -34,8 +34,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
-
     return SlidingUpPanelWidget(
         controlHeight: 1.0,
         anchor: 0.75,
@@ -69,27 +67,34 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                               topLeft: Radius.circular(16.0),
                               topRight: Radius.circular(16.0))),
                       child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(12.0),
-                            elevation: 2,
-                            primary: Constants.polyGray,
-                          ),
-                          onPressed: () async =>
-                              _showImageSourceActionSheet(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Icon(Icons.camera_alt_rounded,
-                                  size: 48.0, color: Colors.white),
-                              Text(
-                                'Add picture',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          )),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(12.0),
+                          elevation: 2,
+                          primary: Constants.polyGray,
+                        ),
+                        onPressed: () async =>
+                            _showImageSourceActionSheet(context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            _image == null
+                                ? Icon(Icons.camera_alt_rounded,
+                                    size: 48.0, color: Colors.white)
+                                : Image.file(
+                                    _image,
+                                    // fit: BoxFit.fitWidth,
+                                    height: 48,
+                                  ),
+                            Text(
+                              _image == null ? 'Add banner' : 'Banner added',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     // Container for gym name
                     Container(
@@ -183,50 +188,62 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
 
                     // Buttons
                     Container(
-                      padding:
-                          EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                      padding: EdgeInsets.all(16),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Accept button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyGreen),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => createGym(db),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Create Gym",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child:
+                                  // Accept button
+                                  TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyGreen),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                onPressed: () => createGym(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Create Gym",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
                             ),
                           ),
 
                           // Cancel button
-                          TextButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Constants.polyRed),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.0)),
-                                )),
-                            onPressed: () => _panelController.collapse(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Cancel",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyRed),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                onPressed: () => _panelController.collapse(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Cancel",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -300,13 +317,15 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
     });
   }
 
-  void createGym(DatabaseService db) async {
+  void createGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
+
+    final gymService = locator<GymService>();
     if (_validateAndSave()) {
       if (_image != null) {
         // create Gym
-        await db.addGym(gymName, gymLocation, _image);
+        await gymService.addGym(gymName, gymLocation, _image);
         _panelController.collapse();
       } else {
         setState(() {

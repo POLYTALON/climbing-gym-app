@@ -65,11 +65,6 @@ class AuthService with ChangeNotifier {
     return await usercred.user.sendEmailVerification();
   }
 
-  Future<User> getUserDetails() async {
-    User user = _auth.currentUser;
-    return user;
-  }
-
   Future<void> resetPassword(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
@@ -82,8 +77,10 @@ class AuthService with ChangeNotifier {
           .snapshots()
           .asyncMap((userDoc) async {
         bool isOperator = await _getIsOperator();
+        String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
-        return AppUser.fromFirebase(_auth.currentUser, isOperator, userRoles);
+        return AppUser.fromFirebase(
+            _auth.currentUser, isOperator, userRoles, selectedGym);
       });
     }
     return Stream.empty();
@@ -111,28 +108,32 @@ class AuthService with ChangeNotifier {
     if (_auth.currentUser != null) {
       Map<String, UserRole> userRoles = Map<String, UserRole>();
       try {
-        CollectionReference privileges = _firestore
+        await _firestore
             .collection('users')
             .doc(_auth.currentUser.uid)
-            .collection('privileges');
-        QuerySnapshot snapshot = await privileges.snapshots().first;
-        await Future.wait(snapshot.docs.map((gym) async {
-          DocumentSnapshot roles = await privileges
-              .doc(gym.id)
-              .collection('private')
-              .doc('roles')
-              .get();
-          if (roles.exists) {
+            .collection('privileges')
+            .get()
+            .then((doc) {
+          doc.docs.forEach((gym) {
             userRoles.putIfAbsent(gym.id, () {
-              return UserRole(gymuser: roles.data()['gymuser'] ?? false);
+              return UserRole(
+                  gymuser: gym.data()['gymuser'] ?? false,
+                  builder: gym.data()['builder'] ?? false);
             });
-          }
-        }));
+          });
+        });
       } on FirebaseException catch (e) {
         print(e);
       }
       return userRoles;
     }
     return Map<String, UserRole>();
+  }
+
+  Future<void> selectGym(String gymid) async {
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .set({"selectedGym": gymid});
   }
 }
