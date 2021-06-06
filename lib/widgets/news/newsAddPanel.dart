@@ -196,7 +196,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.url,
                               decoration: InputDecoration(
                                   hintText: 'Link',
                                   contentPadding: EdgeInsets.all(16.0),
