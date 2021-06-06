@@ -135,7 +135,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The route should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -176,7 +180,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
+                                  // The name keyboard is optimized for names (and phone numbers)
                                   keyboardType: TextInputType.name,
+                                  // The setter should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -300,7 +307,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The route should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'e.g. Competition',
                                       contentPadding:
@@ -340,7 +351,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The holds should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:

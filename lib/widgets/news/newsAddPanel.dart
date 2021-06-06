@@ -131,7 +131,10 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              // Default keyboard to enter news-title
+                              keyboardType: TextInputType.text,
+                              // The title should contain only a single line
+                              maxLines: 1,
                               decoration: InputDecoration(
                                   hintText: 'Title',
                                   contentPadding:
@@ -165,7 +168,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              // The news body may contains multiple lines, so enter should insert a newline
+                              keyboardType: TextInputType.multiline,
                               decoration: InputDecoration(
                                   hintText: 'Text',
                                   contentPadding: EdgeInsets.all(16.0),
@@ -196,6 +200,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
+                              // The forward link should be an url, therefore we provice the url-keyboard
                               keyboardType: TextInputType.url,
                               decoration: InputDecoration(
                                   hintText: 'Link',
