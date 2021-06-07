@@ -9,9 +9,9 @@ import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditPanel extends StatefulWidget {
   final AppUser appUser;
@@ -22,7 +22,7 @@ class GymsEditPanel extends StatefulWidget {
 }
 
 class _GymsEditPanelState extends State<GymsEditPanel> {
-  final SlidingUpPanelController _panelController = SlidingUpPanelController();
+  final PanelController _panelController = PanelController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -36,6 +36,9 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   final gymService = locator<GymService>();
 
+  BorderRadiusGeometry radius = BorderRadius.only(
+      topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+
   @override
   Widget build(BuildContext context) {
     //final gymProvider = Provider.of<GymEdit>(context, listen: true);
@@ -45,19 +48,20 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
       if (gymService.showEditPanel == true) {
         controllerGymName.text = gymService.currentGym.name;
         controllerLocation.text = gymService.currentGym.city;
-        _panelController.anchor();
+        _panelController.open();
       } else {
         controllerGymName.text = "";
         controllerLocation.text = "";
-        _panelController.collapse();
+        _panelController.close();
       }
     });
 
-    return SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 0.9,
-        panelController: _panelController,
-        child: Container(
+    return SlidingUpPanel(
+        minHeight: 0.0,
+        snapPoint: 0.75,
+        borderRadius: radius,
+        controller: _panelController,
+        panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
               shadows: [
@@ -256,7 +260,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.collapse(),
+                                onPressed: () => _panelController.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Cancel",
@@ -312,10 +316,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   void toggleSlidingPanel() {
-    if (_panelController.status == SlidingUpPanelStatus.expanded) {
-      _panelController.collapse();
+    if (_panelController.isPanelOpen) {
+      _panelController.close();
     } else {
-      _panelController.anchor();
+      _panelController.open();
     }
   }
 
@@ -383,7 +387,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     if (_validateAndSave()) {
       // edit Gym
       await gymService.editGym(id, gymName, gymLocation, _image);
-      _panelController.collapse();
+      _panelController.close();
     }
   }
 
@@ -431,7 +435,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                       isUserPrivilegesDeleted &&
                       isNewsForGymDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
-                    _panelController.collapse();
+                    _panelController.close();
                   }
                 },
                 child: Text("Yes")),
@@ -455,3 +459,5 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     return appUser.isOperator;
   }
 }
+
+class SlidingUpPanelController {}
