@@ -17,6 +17,7 @@ class GymService extends ChangeNotifier {
 
   void showEdit(Gym gym) {
     currentGym = gym;
+    showSetOwnerPanel = false;
     showEditPanel = true;
     notifyListeners();
   }
@@ -24,8 +25,6 @@ class GymService extends ChangeNotifier {
   void showSetOwner(Gym gym) {
     showEditPanel = false;
     showSetOwnerPanel = true;
-    print(showSetOwnerPanel);
-    print(showEditPanel);
     notifyListeners();
   }
 
