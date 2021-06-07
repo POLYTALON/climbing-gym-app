@@ -1,6 +1,5 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
@@ -220,8 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           final auth = locator<AuthService>();
           final usercred = await auth.register(displayName, email, password);
           await auth.sendVerifyMail(usercred);
-          final db = locator<DatabaseService>();
-          await db.userSetup(usercred.user.uid.toString());
+          await auth.userSetup(usercred.user.uid.toString());
 
           Navigator.pushAndRemoveUntil(
             context,

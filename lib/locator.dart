@@ -1,5 +1,4 @@
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';

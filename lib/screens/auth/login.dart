@@ -2,7 +2,6 @@ import 'package:climbing_gym_app/screens/auth/passwordReset.dart';
 import 'package:climbing_gym_app/screens/auth/register.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
@@ -268,8 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final auth = locator<AuthService>();
       final usercred = await auth.signInWithGoogle();
-      final db = locator<DatabaseService>();
-      await db.userSetup(usercred.user.uid.toString());
+      await auth.userSetup(usercred.user.uid.toString());
 
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));
