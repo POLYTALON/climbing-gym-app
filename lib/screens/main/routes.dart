@@ -114,10 +114,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                       int index) {
                                                 return Container(
                                                     child: RouteCard(
-                                                        route: routes[
-                                                            routes.length -
-                                                                index -
-                                                                1],
+                                                        route: routes[index],
                                                         appUser:
                                                             snapshot.data));
                                               });

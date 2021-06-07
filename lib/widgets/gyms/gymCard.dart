@@ -19,9 +19,21 @@ class GymCard extends StatefulWidget {
 }
 
 class _GymCardState extends State<GymCard> {
-  final Gym gym;
-  final AppUser appUser;
+  Gym gym;
+  AppUser appUser;
   _GymCardState(this.gym, this.appUser);
+
+  @override
+  void didUpdateWidget(GymCard oldWidget) {
+    if (gym != widget.gym || appUser != widget.appUser) {
+      setState(() {
+        gym = widget.gym;
+        appUser = widget.appUser;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);

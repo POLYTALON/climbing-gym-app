@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
@@ -381,6 +382,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   void onPressDelete(BuildContext context) {
     final gymService = locator<GymService>();
     final authService = Provider.of<AuthService>(context, listen: false);
+    final databaseService =
+        Provider.of<DatabaseService>(context, listen: false);
     final routeService = locator<RoutesService>();
     final id = gymService.currentGym.id;
 
@@ -409,12 +412,16 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                 onPressed: () async {
                   bool isRoutesForGymDelted =
                       await routeService.cleanUpRoutesForGym(id);
+                  bool isNewsForGymDeleted =
+                      await databaseService.cleanUpNewsForGym(id);
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);
+
                   if (isRoutesForGymDelted &&
                       isGymDeleted &&
-                      isUserPrivilegesDeleted) {
+                      isUserPrivilegesDeleted &&
+                      isNewsForGymDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
                     _panelController.collapse();
                   }
