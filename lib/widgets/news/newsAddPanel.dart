@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/validators/content_validator.dart';
 import 'package:climbing_gym_app/validators/title_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class NewsAddPanel extends StatefulWidget {
   NewsAddPanel(
@@ -46,7 +46,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    final db = locator<NewsService>();
 
     return SlidingUpPanelWidget(
       controlHeight: 1.0,
@@ -352,7 +352,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
     });
   }
 
-  void createNews(DatabaseService db, AppUser user) async {
+  void createNews(NewsService db, AppUser user) async {
     final newsTitle = controllerNewsTitle.text.trim();
     final newsContent = controllerNewsContent.text.trim();
     final newsLink = controllerNewsLink.text.trim();

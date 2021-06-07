@@ -2,13 +2,12 @@ import 'package:climbing_gym_app/screens/auth/passwordReset.dart';
 import 'package:climbing_gym_app/screens/auth/register.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
+import 'package:climbing_gym_app/locator.dart';
 
 import '../../main.dart';
 
@@ -236,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = controllerPassword.text.trim();
     if (_validateAndSave()) {
       try {
-        final auth = Provider.of<AuthService>(context, listen: false);
+        final auth = locator<AuthService>();
         final usercred = await auth.loginUser(email, password);
         //update user.emailVerified status
         await usercred.user.reload();
@@ -268,10 +267,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void doGoogleLogin() async {
     try {
-      final auth = Provider.of<AuthService>(context, listen: false);
+      final auth = locator<AuthService>();
       final usercred = await auth.signInWithGoogle();
-      final db = Provider.of<DatabaseService>(context, listen: false);
-      await db.userSetup(usercred.user.uid.toString());
+      await auth.userSetup(usercred.user.uid.toString());
 
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));

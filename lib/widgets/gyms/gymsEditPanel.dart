@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +38,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
     final gymService = locator<GymService>();
 
     gymService.addListener(() {
@@ -389,9 +388,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   void onPressDelete(BuildContext context) {
     final gymService = locator<GymService>();
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final databaseService =
-        Provider.of<DatabaseService>(context, listen: false);
+    final authService = locator<AuthService>();
+    final newsService = locator<NewsService>();
     final routeService = locator<RoutesService>();
     final id = gymService.currentGym.id;
 
@@ -421,7 +419,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                   bool isRoutesForGymDelted =
                       await routeService.cleanUpRoutesForGym(id);
                   bool isNewsForGymDeleted =
-                      await databaseService.cleanUpNewsForGym(id);
+                      await newsService.cleanUpNewsForGym(id);
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);

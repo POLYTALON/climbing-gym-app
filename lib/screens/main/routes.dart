@@ -3,7 +3,6 @@ import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/view_models/routeEdit.dart';
 import 'package:climbing_gym_app/widgets/routes/routeAddPanel.dart';
 import 'package:climbing_gym_app/widgets/routes/routeCard.dart';
 import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
@@ -23,7 +22,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
@@ -41,8 +40,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
                 initialData: [],
                 value: routesService.streamRoutes(snapshot.data.selectedGym),
                 child: Consumer<List<AppRoute>>(builder: (context, routes, _) {
-                  return ChangeNotifierProvider<RouteEdit>(
-                      create: (_) => RouteEdit(),
+                  return ChangeNotifierProvider<RoutesService>(
+                      create: (_) => RoutesService(),
                       child: Stack(children: <Widget>[
                         Scaffold(
                             // Add route button

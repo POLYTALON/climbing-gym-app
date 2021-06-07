@@ -1,8 +1,7 @@
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/screens/start.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
-import 'package:climbing_gym_app/view_models/gymEdit.dart';
+import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter/cupertino.dart';
@@ -27,10 +26,10 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
 
     return StreamProvider<List<Gym>>.value(
         initialData: [],
-        value: DatabaseService().streamGyms(),
+        value: GymService().streamGyms(),
         child: Consumer<List<Gym>>(builder: (context, gyms, _) {
-          return ChangeNotifierProvider<GymEdit>(
-              create: (_) => GymEdit(),
+          return ChangeNotifierProvider<GymService>(
+              create: (_) => GymService(),
               child: Stack(children: <Widget>[
                 Scaffold(
                     backgroundColor: Constants.polyDark,
