@@ -418,11 +418,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);
 
-                  print(isRoutesForGymDelted);
-                  print(isGymDeleted);
-                  print(isUserPrivilegesDeleted);
-                  print(isNewsForGymDeleted);
-
                   if (isRoutesForGymDelted &&
                       isGymDeleted &&
                       isUserPrivilegesDeleted &&
