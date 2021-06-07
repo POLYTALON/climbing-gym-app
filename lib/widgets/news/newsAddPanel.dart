@@ -6,20 +6,18 @@ import 'package:climbing_gym_app/validators/title_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NewsAddPanel extends StatefulWidget {
   NewsAddPanel(
-      {Key key,
-      @required SlidingUpPanelController panelController,
-      String gymid})
+      {Key key, @required PanelController panelController, String gymid})
       : _panelController = panelController,
         gymid = gymid,
         super(key: key);
 
-  final SlidingUpPanelController _panelController;
+  final PanelController _panelController;
   final String gymid;
 
   @override
@@ -28,7 +26,7 @@ class NewsAddPanel extends StatefulWidget {
 }
 
 class _NewsAddPanelState extends State<NewsAddPanel> {
-  final SlidingUpPanelController _panelController;
+  final PanelController _panelController;
   final String gymid;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -48,11 +46,15 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
   Widget build(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
 
-    return SlidingUpPanelWidget(
-      controlHeight: 1.0,
-      anchor: 1.0,
-      panelController: _panelController,
-      child: Container(
+    BorderRadiusGeometry radius = BorderRadius.only(
+        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+
+    return SlidingUpPanel(
+      minHeight: 0.0,
+      snapPoint: 0.75,
+      borderRadius: radius,
+      controller: _panelController,
+      panel: Container(
         decoration: ShapeDecoration(
           color: Constants.lightGray,
           shadows: [
@@ -261,7 +263,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                       borderRadius:
                                           BorderRadius.circular(24.0)),
                                 )),
-                            onPressed: () => _panelController.collapse(),
+                            onPressed: () => _panelController.close(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Cancel",
@@ -284,10 +286,10 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
   }
 
   void toggleSlidingPanel() {
-    if (_panelController.status == SlidingUpPanelStatus.expanded) {
-      _panelController.collapse();
+    if (_panelController.isPanelOpen) {
+      _panelController.close();
     } else {
-      _panelController.anchor();
+      _panelController.open();
     }
   }
 
@@ -359,7 +361,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
         controllerNewsTitle.clear();
         controllerNewsContent.clear();
         controllerNewsLink.clear();
-        _panelController.collapse();
+        _panelController.close();
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';

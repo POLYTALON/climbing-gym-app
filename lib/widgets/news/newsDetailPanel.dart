@@ -2,9 +2,8 @@ import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailPanel extends StatefulWidget {
@@ -19,28 +18,31 @@ class NewsDetailPanel extends StatefulWidget {
 class _NewsDetailPanelState extends State<NewsDetailPanel> {
   _NewsDetailPanelState();
 
-  final SlidingUpPanelController _panelController = SlidingUpPanelController();
+  final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsDetails>(context, listen: true);
+    BorderRadiusGeometry radius = BorderRadius.only(
+        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
     newsProvider.addListener(() {
       if (newsProvider.showPanel == true) {
-        _panelController.anchor();
+        _panelController.open();
       } else {
-        _panelController.collapse();
+        _panelController.close();
       }
     });
 
     return Container(
       constraints: BoxConstraints.expand(),
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 1.0,
-        panelController: _panelController,
-        child: Container(
+      child: SlidingUpPanel(
+        margin: EdgeInsets.only(left: 16, right: 16),
+        minHeight: 0.0,
+        snapPoint: 0.99,
+        borderRadius: radius,
+        controller: _panelController,
+        panel: Container(
           decoration: ShapeDecoration(
             color: Colors.white,
             shadows: [
@@ -75,7 +77,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                         ),
                         IconButton(
                             onPressed: () {
-                              this._panelController.collapse();
+                              this._panelController.close();
                             },
                             icon: const Icon(Icons.close)),
                       ],

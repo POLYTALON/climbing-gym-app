@@ -7,8 +7,8 @@ import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsPreviewScreen extends StatefulWidget {
   @override
@@ -16,8 +16,7 @@ class GymsPreviewScreen extends StatefulWidget {
 }
 
 class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
-  final SlidingUpPanelController _gymsAddPanelController =
-      SlidingUpPanelController();
+  final PanelController _gymsAddPanelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +84,10 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
   }
 
   void toggleSlidingPanel() {
-    if (_gymsAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _gymsAddPanelController.collapse();
+    if (_gymsAddPanelController.isPanelOpen) {
+      _gymsAddPanelController.close();
     } else {
-      _gymsAddPanelController.anchor();
+      _gymsAddPanelController.open();
     }
   }
 }
