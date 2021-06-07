@@ -19,10 +19,21 @@ class RouteCard extends StatefulWidget {
 }
 
 class _RouteCardState extends State<RouteCard> {
-  final AppRoute route;
-  final AppUser appUser;
+  AppRoute route;
+  AppUser appUser;
   _RouteCardState(this.route, this.appUser);
   final routeColorService = locator<RouteColorService>();
+
+  @override
+  void didUpdateWidget(RouteCard oldWidget) {
+    if (route != widget.route || appUser != widget.appUser) {
+      setState(() {
+        route = widget.route;
+        appUser = widget.appUser;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
