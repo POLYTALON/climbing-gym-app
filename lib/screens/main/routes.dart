@@ -156,7 +156,6 @@ class _RoutesScreenState extends State<RoutesScreen> {
   bool _getPrivileges(AppUser user) {
     return user.roles[user.selectedGym] != null &&
         (user.roles[user.selectedGym].builder ||
-            user.roles[user.selectedGym].gymuser ||
-            user.isOperator);
+            user.roles[user.selectedGym].gymuser);
   }
 }
