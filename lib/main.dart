@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/constants.dart';
+import 'package:climbing_gym_app/environment.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/screens/navigationContainer.dart';
@@ -15,12 +16,15 @@ void main() async {
   runApp(MaterialApp(
       title: 'Climbing App',
       theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
-      home: MyApp()));
+      home: MyApp(environment: EnvironmentValue.development)));
 }
 
 class MyApp extends StatelessWidget {
   //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final auth = locator<AuthService>();
+  final Environment environment;
+
+  MyApp({Key key, this.environment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

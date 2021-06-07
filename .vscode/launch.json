@@ -8,7 +8,30 @@
       "name": "climbing_gym_app",
       "request": "launch",
       "type": "dart",
-      "args": ["--web-port", "46700"],
+      "args": [
+        "--web-port",
+        "46700"
+      ],
+    },
+    {
+      "name": "Development",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": [
+        "--flavor",
+        "development"
+      ]
+    },
+    {
+      "name": "Production",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "production"
+      ]
     }
   ]
 }

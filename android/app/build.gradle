@@ -49,6 +49,31 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        production {
+            applicationId "de.polytalon.polyapp"
+            minSdkVersion 19
+            targetSdkVersion 30
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
+            multiDexEnabled true
+            resValue "string", "app_name", "PolyApp"
+        }
+
+        development {
+            applicationId "de.polytalon.polyappdev"
+            minSdkVersion 19
+            targetSdkVersion 30
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
+            multiDexEnabled true
+            resValue "string", "app_name", "DEV-PolyApp"
+        }
+
+    }
 }
 
 flutter {
