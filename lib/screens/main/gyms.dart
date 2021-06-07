@@ -8,6 +8,7 @@ import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymsEditPanel.dart';
+import 'package:climbing_gym_app/widgets/gyms/gymsSetOwnerPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
@@ -90,6 +91,7 @@ class _GymsScreenState extends State<GymsScreen> {
                       ]))),
                   if (snapshot.data.isOperator)
                     GymsAddPanel(panelController: _gymsAddPanelController),
+                  if (snapshot.data.isOperator) GymsSetOwnerPanel(),
                   if (snapshot.data.isOperator ||
                       _getIsAnyGymUser(snapshot.data.roles))
                     GymsEditPanel(appUser: snapshot.data)
