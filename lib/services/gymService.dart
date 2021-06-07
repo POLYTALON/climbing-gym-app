@@ -13,10 +13,19 @@ class GymService extends ChangeNotifier {
   Gym currentGym;
 
   bool showEditPanel = false;
+  bool showSetOwnerPanel = false;
 
   void showEdit(Gym gym) {
     currentGym = gym;
     showEditPanel = true;
+    notifyListeners();
+  }
+
+  void showSetOwner(Gym gym) {
+    showEditPanel = false;
+    showSetOwnerPanel = true;
+    print(showSetOwnerPanel);
+    print(showEditPanel);
     notifyListeners();
   }
 
@@ -103,5 +112,11 @@ class GymService extends ChangeNotifier {
     File compressedFile =
         await FlutterNativeImage.compressImage(file.path, quality: 5);
     return compressedFile;
+  }
+
+  Future<bool> addOwner(String id) async {
+    try {} on FirebaseException catch (e) {
+      print(e);
+    }
   }
 }

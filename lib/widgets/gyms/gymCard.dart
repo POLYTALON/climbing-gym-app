@@ -85,7 +85,7 @@ class _GymCardState extends State<GymCard> {
                                         icon: const Icon(
                                             Icons.account_circle_outlined),
                                         color: Colors.white,
-                                        onPressed: onPressEdit,
+                                        onPressed: onPressAccountButton,
                                       )
                                     ],
                                   )),
@@ -141,5 +141,9 @@ class _GymCardState extends State<GymCard> {
     if (appUser == null) return false;
     return appUser.isOperator ||
         (appUser.roles[gym.id] != null && appUser.roles[gym.id].gymuser);
+  }
+
+  void onPressAccountButton() {
+    locator<GymService>().showSetOwner(this.gym);
   }
 }
