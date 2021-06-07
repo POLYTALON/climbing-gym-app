@@ -2,7 +2,6 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/view_models/routeEdit.dart';
 import 'package:climbing_gym_app/widgets/routes/routeAddPanel.dart';
 import 'package:climbing_gym_app/widgets/routes/routeCard.dart';
 import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
@@ -35,8 +34,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
               !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
-            return ChangeNotifierProvider<RouteEdit>(
-                create: (_) => RouteEdit(),
+            return ChangeNotifierProvider<RoutesService>(
+                create: (_) => RoutesService(),
                 child: Stack(children: <Widget>[
                   Scaffold(
                       // Add route button

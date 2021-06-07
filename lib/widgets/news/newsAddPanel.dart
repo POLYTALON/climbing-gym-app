@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class NewsAddPanel extends StatefulWidget {
   NewsAddPanel(

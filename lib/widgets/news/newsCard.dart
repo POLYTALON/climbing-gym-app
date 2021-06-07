@@ -1,10 +1,8 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -111,7 +109,7 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void onPressNews() {
-    final newsDetails = locator<NewsDetails>();
+    final newsDetails = locator<NewsService>();
     newsDetails.showNews(this.news);
   }
 

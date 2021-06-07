@@ -8,7 +8,6 @@ import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:climbing_gym_app/locator.dart';
 
 import '../../main.dart';

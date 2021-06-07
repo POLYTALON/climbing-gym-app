@@ -10,6 +10,17 @@ class NewsService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
+  News currentNews = News();
+  bool showPanel = true;
+
+  News get currentNewsDetails => currentNews;
+
+  void showNews(News news) {
+    currentNews = news;
+    showPanel = true;
+    notifyListeners();
+  }
+
   Stream<List<News>> streamNews(String gymid) {
     return _firestore
         .collection('news')

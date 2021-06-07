@@ -1,10 +1,9 @@
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +23,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = locator<NewsDetails>();
+    final newsProvider = locator<NewsService>();
 
     newsProvider.addListener(() {
       if (newsProvider.showPanel == true) {

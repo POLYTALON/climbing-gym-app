@@ -3,7 +3,6 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
-import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
@@ -39,8 +38,8 @@ class _GymsScreenState extends State<GymsScreen> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return ChangeNotifierProvider<GymEdit>(
-                create: (_) => GymEdit(),
+            return ChangeNotifierProvider<GymService>(
+                create: (_) => GymService(),
                 child: Stack(children: <Widget>[
                   Scaffold(
                       // Add gym button

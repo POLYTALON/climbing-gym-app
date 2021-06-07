@@ -5,7 +5,6 @@ import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   @override

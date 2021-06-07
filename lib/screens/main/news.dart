@@ -3,7 +3,6 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
 import 'package:climbing_gym_app/widgets/news/newsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsCard.dart';
@@ -55,8 +54,8 @@ class NewsScreen extends StatelessWidget {
                   value:
                       NewsService().streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
-                    return ChangeNotifierProvider<NewsDetails>(
-                      create: (_) => NewsDetails(),
+                    return ChangeNotifierProvider<NewsService>(
+                      create: (_) => NewsService(),
                       child: Stack(children: <Widget>[
                         Scaffold(
                             floatingActionButton:
