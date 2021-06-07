@@ -122,17 +122,6 @@ class _GymCardState extends State<GymCard> {
                                               fontSize: 20)),
                                     ),
                                   )),
-                              if (_getIsPrivileged())
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.white,
-                                      onPressed: onPressEdit,
-                                    ),
-                                  ],
-                                )
                             ],
                           )),
                     ],
