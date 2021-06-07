@@ -144,7 +144,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The name should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -185,7 +189,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The location should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Location',
                                       contentPadding:
@@ -417,11 +425,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);
-
-                  print(isRoutesForGymDelted);
-                  print(isGymDeleted);
-                  print(isUserPrivilegesDeleted);
-                  print(isNewsForGymDeleted);
 
                   if (isRoutesForGymDelted &&
                       isGymDeleted &&

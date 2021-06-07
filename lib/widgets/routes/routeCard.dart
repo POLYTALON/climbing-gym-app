@@ -5,7 +5,6 @@ import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
@@ -20,10 +19,22 @@ class RouteCard extends StatefulWidget {
 }
 
 class _RouteCardState extends State<RouteCard> {
-  final AppRoute route;
-  final AppUser appUser;
+  AppRoute route;
+  AppUser appUser;
   _RouteCardState(this.route, this.appUser);
   final routeColorService = locator<RouteColorService>();
+
+  @override
+  void didUpdateWidget(RouteCard oldWidget) {
+    if (route != widget.route || appUser != widget.appUser) {
+      setState(() {
+        route = widget.route;
+        appUser = widget.appUser;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,18 +107,13 @@ class _RouteCardState extends State<RouteCard> {
                             ),
                             if (_getIsPrivileged())
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.edit),
                                     color: Colors.white,
                                     onPressed: onPressEdit,
                                   ),
-                                  IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      color: Constants.polyRed,
-                                      onPressed: () => onPressDelete())
                                 ],
                               )
                           ],
@@ -122,49 +128,10 @@ class _RouteCardState extends State<RouteCard> {
     locator<RoutesService>().showEdit(this.route);
   }
 
-  void onPressDelete() {
-    final routesService = locator<RoutesService>();
-
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(
-            'Delete Route',
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Would you like to delete this route?',
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("No")),
-            TextButton(
-                onPressed: () async {
-                  bool isDeleted =
-                      await routesService.deleteRoute(this.route.id);
-                  if (isDeleted) {
-                    Navigator.of(context, rootNavigator: true).pop();
-                  }
-                },
-                child: Text("Yes")),
-          ],
-        );
-      },
-    );
-  }
-
   bool _getIsPrivileged() {
     if (appUser == null) return false;
-    return appUser.isOperator ||
-        (appUser.roles[appUser.selectedGym] != null &&
-            (appUser.roles[appUser.selectedGym].gymuser ||
-                appUser.roles[appUser.selectedGym].builder));
+    return (appUser.roles[appUser.selectedGym] != null &&
+        (appUser.roles[appUser.selectedGym].gymuser ||
+            appUser.roles[appUser.selectedGym].builder));
   }
 }

@@ -135,7 +135,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The route should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -176,7 +180,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
+                                  // The name keyboard is optimized for names (and phone numbers)
                                   keyboardType: TextInputType.name,
+                                  // The setter should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -300,7 +307,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The route should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'e.g. Competition',
                                       contentPadding:
@@ -340,7 +351,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The holds should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -417,6 +432,41 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                             ),
                           ],
                         )),
+
+                    // Delete Button
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 100, right: 100),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Constants.polyRed),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24.0)),
+                                    )),
+                                onPressed: () => onPressDelete(context),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Delete Route",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 )))));
   }
@@ -516,5 +566,43 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     setState(() {
       selectedColorIndex = index;
     });
+  }
+
+  void onPressDelete(BuildContext context) {
+    final routesService = locator<RoutesService>();
+    final id = routesService.currentRoute.id;
+    if (this.mounted) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Delete Route',
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'Would you like to delete this route?',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("No")),
+              TextButton(
+                  onPressed: () async {
+                    routesService.deleteRoute(id);
+                    Navigator.of(context).pop();
+                    _panelController.collapse();
+                  },
+                  child: Text("Yes")),
+            ],
+          );
+        },
+      );
+    }
   }
 }
