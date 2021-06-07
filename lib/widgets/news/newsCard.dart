@@ -18,9 +18,20 @@ class NewsCard extends StatefulWidget {
 }
 
 class _NewsCardState extends State<NewsCard> {
-  final News news;
-  final bool isDeletable;
+  News news;
+  bool isDeletable;
   _NewsCardState(this.news, this.isDeletable);
+
+  @override
+  void didUpdateWidget(NewsCard oldWidget) {
+    if (news != widget.news || isDeletable != widget.isDeletable) {
+      setState(() {
+        news = widget.news;
+        isDeletable = widget.isDeletable;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {

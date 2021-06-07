@@ -88,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: TextStyle(fontWeight: FontWeight.w800),
+                              // it's a text field to type in an email address, duh!
                               keyboardType: TextInputType.emailAddress,
                               validator: EmailFieldValidator.validate,
                               decoration: InputDecoration(
@@ -116,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               obscureText: _hidePassword,
                               enableSuggestions: false,
                               autocorrect: false,
+                              // it's a text field to type in a password, duh!
                               keyboardType: TextInputType.visiblePassword,
                               validator: PasswordFieldValidator.validate,
                               decoration: InputDecoration(

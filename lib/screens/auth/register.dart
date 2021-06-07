@@ -52,7 +52,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
-                      keyboardType: TextInputType.text,
+                      // Provides a keyboard optimized for typing in names
+                      keyboardType: TextInputType.name,
                       validator: NameFieldValidator.validate,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 16.0),
@@ -76,6 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.none,
                       style: TextStyle(fontWeight: FontWeight.w800),
+                      // it's a text field to type in an email-address, duh!
                       keyboardType: TextInputType.emailAddress,
                       validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
@@ -103,6 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      // it's a text field to type in a password, duh!
                       keyboardType: TextInputType.visiblePassword,
                       validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(
@@ -130,6 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      // it's a text field to type in a password, duh!
                       keyboardType: TextInputType.visiblePassword,
                       validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(

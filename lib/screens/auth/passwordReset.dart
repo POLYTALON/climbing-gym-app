@@ -47,6 +47,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
+                      // it's a text field to type in an email address, duh!
                       keyboardType: TextInputType.emailAddress,
                       validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
