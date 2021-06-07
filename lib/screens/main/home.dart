@@ -1,7 +1,9 @@
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -22,6 +24,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () async {
                 final auth = locator<AuthService>();
                 await auth.logout();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => StartScreen()));
               },
               child: Text("Logout",
                   style: TextStyle(

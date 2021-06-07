@@ -26,6 +26,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
     final newsProvider = locator<NewsService>();
 
     newsProvider.addListener(() {
+      setState(() {}); //TODO: Work around!!!!!
       if (newsProvider.showPanel == true) {
         _panelController.anchor();
       } else {

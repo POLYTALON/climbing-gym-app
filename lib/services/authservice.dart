@@ -18,6 +18,18 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> userSetup(String uid) async {
+    _firestore
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (!documentSnapshot.exists) {
+        _firestore.collection('users').doc(uid).set({'routes': {}});
+      }
+    });
+  }
+
   bool get loggedIn => _loggedIn;
 
   Future<UserCredential> register(
