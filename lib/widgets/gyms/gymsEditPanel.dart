@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -14,11 +13,10 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditPanel extends StatefulWidget {
-  final AppUser appUser;
-  GymsEditPanel({Key key, this.appUser}) : super(key: key);
+  GymsEditPanel({Key key}) : super(key: key);
 
   @override
-  _GymsEditPanelState createState() => _GymsEditPanelState(this.appUser);
+  _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
 class _GymsEditPanelState extends State<GymsEditPanel> {
@@ -26,8 +24,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final AppUser appUser;
-  _GymsEditPanelState(this.appUser);
+  _GymsEditPanelState();
 
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
@@ -41,17 +38,18 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
     final gymService = locator<GymService>();
 
     gymService.addListener(() {
       if (gymService.showEditPanel == true) {
         controllerGymName.text = gymService.currentGym.name;
         controllerLocation.text = gymService.currentGym.city;
+        _panelController.show();
         _panelController.open();
       } else {
         controllerGymName.text = "";
         controllerLocation.text = "";
+        _panelController.hide();
         _panelController.close();
       }
     });
@@ -447,8 +445,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   bool _getIsOperator() {
-    if (appUser == null) return false;
-    return appUser.isOperator;
+    locator<AuthService>().streamAppUser().first.then((appUser) {
+      if (appUser == null) return false;
+      return appUser.isOperator;
+    });
+    return false;
   }
 }
 
