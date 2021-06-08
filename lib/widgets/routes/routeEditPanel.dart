@@ -22,7 +22,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final PanelController _panelController = PanelController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
   final controllerRouteName = TextEditingController(text: "");
   final controllerRouteSetter = TextEditingController(text: "");
@@ -31,11 +30,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   File _image;
   int selectedColorIndex = 0;
   final picker = ImagePicker();
+  final routesService = locator<RoutesService>();
 
   @override
   Widget build(BuildContext context) {
-    final routesService = locator<RoutesService>();
-
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
@@ -573,7 +571,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void onPressDelete(BuildContext context) {
-    final routesService = locator<RoutesService>();
     final id = routesService.currentRoute.id;
     if (this.mounted) {
       showDialog(
