@@ -34,7 +34,7 @@ dependencies:
   cloud_firestore: "1.0.7"
   firebase_storage: ^8.0.6
   equatable: ^2.0.0
-  flutter_sliding_up_panel: ^1.2.1
+  sliding_up_panel: ^2.0.0+1
   image_picker: ^0.7.4
   transparent_image: ^2.0.0
   image_picker_web_redux: any
