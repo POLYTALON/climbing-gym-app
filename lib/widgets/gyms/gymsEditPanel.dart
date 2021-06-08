@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditPanel extends StatefulWidget {
@@ -38,18 +37,14 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final gymService = locator<GymService>();
-
     gymService.addListener(() {
       if (gymService.showEditPanel == true) {
         controllerGymName.text = gymService.currentGym.name;
         controllerLocation.text = gymService.currentGym.city;
-        _panelController.show();
         _panelController.open();
       } else {
         controllerGymName.text = "";
         controllerLocation.text = "";
-        _panelController.hide();
         _panelController.close();
       }
     });
@@ -146,7 +141,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The name should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -187,7 +186,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The location should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Location',
                                       contentPadding:
@@ -383,9 +386,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   void onPressDelete(BuildContext context) {
     final gymService = locator<GymService>();
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final databaseService =
-        Provider.of<DatabaseService>(context, listen: false);
+    final authService = locator<AuthService>();
+    final newsService = locator<NewsService>();
     final routeService = locator<RoutesService>();
     final id = gymService.currentGym.id;
 
@@ -415,7 +417,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                   bool isRoutesForGymDelted =
                       await routeService.cleanUpRoutesForGym(id);
                   bool isNewsForGymDeleted =
-                      await databaseService.cleanUpNewsForGym(id);
+                      await newsService.cleanUpNewsForGym(id);
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);

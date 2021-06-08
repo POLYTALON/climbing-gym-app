@@ -1,25 +1,24 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
-import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class DatabaseService {
+class NewsService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<void> userSetup(String uid) async {
-    _firestore
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (!documentSnapshot.exists) {
-        _firestore.collection('users').doc(uid).set({'routes': {}});
-      }
-    });
+  News currentNews = News();
+  bool showPanel = true;
+
+  News get currentNewsDetails => currentNews;
+
+  void showNews(News news) {
+    currentNews = news;
+    showPanel = true;
+    notifyListeners();
   }
 
   Stream<List<News>> streamNews(String gymid) {
@@ -30,13 +29,6 @@ class DatabaseService {
         .snapshots()
         .map(
             (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
-  }
-
-  Stream<List<Gym>> streamGyms() {
-    return _firestore
-        .collection('gyms')
-        .snapshots()
-        .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
   }
 
   Future<void> addNews(String title, String content, String link, File image,

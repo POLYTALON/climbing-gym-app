@@ -1,11 +1,10 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 
 import 'login.dart';
 
@@ -53,7 +52,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
-                      keyboardType: TextInputType.text,
+                      // Provides a keyboard optimized for typing in names
+                      keyboardType: TextInputType.name,
                       validator: NameFieldValidator.validate,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 16.0),
@@ -77,6 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.none,
                       style: TextStyle(fontWeight: FontWeight.w800),
+                      // it's a text field to type in an email-address, duh!
                       keyboardType: TextInputType.emailAddress,
                       validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
@@ -104,6 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      // it's a text field to type in a password, duh!
                       keyboardType: TextInputType.visiblePassword,
                       validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(
@@ -131,6 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      // it's a text field to type in a password, duh!
                       keyboardType: TextInputType.visiblePassword,
                       validator: PasswordFieldValidator.validate,
                       decoration: InputDecoration(
@@ -217,11 +220,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_validateAndSave()) {
       if (password == passwordRepeat) {
         try {
-          final auth = Provider.of<AuthService>(context, listen: false);
+          final auth = locator<AuthService>();
           final usercred = await auth.register(displayName, email, password);
           await auth.sendVerifyMail(usercred);
-          final db = Provider.of<DatabaseService>(context, listen: false);
-          await db.userSetup(usercred.user.uid.toString());
+          await auth.userSetup(usercred.user.uid.toString());
 
           Navigator.pushAndRemoveUntil(
             context,

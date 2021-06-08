@@ -1,10 +1,10 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   @override
@@ -47,6 +47,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
+                      // it's a text field to type in an email address, duh!
                       keyboardType: TextInputType.emailAddress,
                       validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
@@ -117,7 +118,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
     final email = controllerEmail.text.trim();
     if (_validateAndSave()) {
       try {
-        final auth = Provider.of<AuthService>(context, listen: false);
+        final auth = locator<AuthService>();
         await auth.resetPassword(email);
         controllerEmail.clear();
         setState(() {

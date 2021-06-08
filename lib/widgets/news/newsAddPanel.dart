@@ -1,13 +1,13 @@
 import 'dart:io';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/validators/content_validator.dart';
 import 'package:climbing_gym_app/validators/title_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NewsAddPanel extends StatefulWidget {
@@ -44,7 +44,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    final db = locator<NewsService>();
 
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
@@ -133,7 +133,10 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              // Default keyboard to enter news-title
+                              keyboardType: TextInputType.text,
+                              // The title should contain only a single line
+                              maxLines: 1,
                               decoration: InputDecoration(
                                   hintText: 'Title',
                                   contentPadding:
@@ -167,7 +170,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              // The news body may contains multiple lines, so enter should insert a newline
+                              keyboardType: TextInputType.multiline,
                               decoration: InputDecoration(
                                   hintText: 'Text',
                                   contentPadding: EdgeInsets.all(16.0),
@@ -198,7 +202,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
                               style: Constants.defaultText,
-                              keyboardType: TextInputType.name,
+                              // The forward link should be an url, therefore we provice the url-keyboard
+                              keyboardType: TextInputType.url,
                               decoration: InputDecoration(
                                   hintText: 'Link',
                                   contentPadding: EdgeInsets.all(16.0),
@@ -349,7 +354,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
     });
   }
 
-  void createNews(DatabaseService db, AppUser user) async {
+  void createNews(NewsService db, AppUser user) async {
     final newsTitle = controllerNewsTitle.text.trim();
     final newsContent = controllerNewsContent.text.trim();
     final newsLink = controllerNewsLink.text.trim();

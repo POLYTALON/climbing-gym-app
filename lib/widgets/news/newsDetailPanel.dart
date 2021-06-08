@@ -1,8 +1,8 @@
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
+import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,11 +22,13 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = Provider.of<NewsDetails>(context, listen: true);
+    final newsProvider = locator<NewsService>();
+
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
     newsProvider.addListener(() {
+      setState(() {}); //TODO: Work around!!!!!
       if (newsProvider.showPanel == true) {
         _panelController.open();
       } else {
