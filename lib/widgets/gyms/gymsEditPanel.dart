@@ -51,7 +51,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
     return SlidingUpPanel(
         minHeight: 0.0,
-        snapPoint: 0.75,
+        maxHeight: MediaQuery.of(context).size.height,
         borderRadius: radius,
         controller: _panelController,
         panel: Container(

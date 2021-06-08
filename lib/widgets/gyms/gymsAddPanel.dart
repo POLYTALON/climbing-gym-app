@@ -37,7 +37,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   Widget build(BuildContext context) {
     return SlidingUpPanel(
         minHeight: 0.0,
-        snapPoint: 0.75,
+        maxHeight: MediaQuery.of(context).size.height,
         controller: _panelController,
         borderRadius: radius,
         panel: Container(

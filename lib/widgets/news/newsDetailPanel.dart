@@ -41,7 +41,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
       child: SlidingUpPanel(
           margin: EdgeInsets.only(left: 16, right: 16),
           minHeight: 0.0,
-          snapPoint: 0.99,
+          maxHeight: MediaQuery.of(context).size.height,
           borderRadius: radius,
           controller: _panelController,
           panelBuilder: (ScrollController sc) {
