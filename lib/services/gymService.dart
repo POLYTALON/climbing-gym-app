@@ -84,6 +84,15 @@ class GymService extends ChangeNotifier {
     }
   }
 
+  Future<String> getGymNameById(String gymId) async {
+    return _firestore
+            .collection('gyms')
+            .doc(gymId)
+            .get()
+            .then((gym) => gym.data()['name']) ??
+        '';
+  }
+
   Future<String> uploadFile(File file, String path) async {
     String url;
     file = await compressFile(file);

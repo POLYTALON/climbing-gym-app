@@ -46,7 +46,6 @@ class RoutesService extends ChangeNotifier {
                 result[difficulty] = result[difficulty] + 1;
               }
             }));
-    print(result);
     return result;
   }
 

@@ -7,6 +7,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
+import 'package:climbing_gym_app/widgets/routes/home/profileCard.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -72,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.stretch,
                                             children: [
+                                              ProfileCard(
+                                                  appUser: userSnapshot.data),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       top: 16.0, bottom: 16.0),
