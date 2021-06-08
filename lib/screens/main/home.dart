@@ -58,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     }
                                     return FutureBuilder<Map<String, int>>(
                                         future: _getRouteAmountPerColor(
-                                            routeColorSnapshot.data,
                                             userSnapshot.data.selectedGym),
                                         builder: (context,
                                             routeAmountColorSnapshot) {
@@ -92,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   center: Text('50%',
                                                       style: Constants
                                                           .defaultTextWhite700)),
+                                              // Currently accomplished routes
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       top: 16.0, bottom: 16.0),
@@ -109,42 +109,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   shrinkWrap: true,
                                                   itemCount:
                                                       routeAmountColorSnapshot
-                                                          .data.length,
+                                                          .data.entries.length,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    return Column(
-                                                        children: <Widget>[
-                                                          CircularPercentIndicator(
-                                                              radius: 80.0,
-                                                              backgroundColor:
-                                                                  Constants
-                                                                      .polyGray,
-                                                              animation: true,
-                                                              animationDuration:
-                                                                  1000,
-                                                              percent: 0.7,
-                                                              center: Text(
-                                                                  routeAmountColorSnapshot
-                                                                      .data[routes[
-                                                                              index]
-                                                                          .difficulty]
-                                                                      .toString(),
-                                                                  style: Constants
-                                                                      .headerTextWhite),
-                                                              progressColor: Color(
-                                                                  _getRouteColor(
-                                                                          routeColorSnapshot
-                                                                              .data,
-                                                                          routes,
-                                                                          index)
-                                                                      .colorCode)),
-                                                          Text(
-                                                              routes[index]
-                                                                  .difficulty,
+                                                    final colorStrings =
+                                                        routeAmountColorSnapshot
+                                                            .data.keys
+                                                            .toList();
+                                                    final amount =
+                                                        routeAmountColorSnapshot
+                                                            .data.values
+                                                            .toList();
+                                                    return Column(children: <
+                                                        Widget>[
+                                                      CircularPercentIndicator(
+                                                          radius: 80.0,
+                                                          backgroundColor:
+                                                              Constants
+                                                                  .polyGray,
+                                                          animation: true,
+                                                          animationDuration:
+                                                              1000,
+                                                          percent: 0.7,
+                                                          center: Text(
+                                                              amount[index]
+                                                                  .toString(),
                                                               style: Constants
-                                                                  .smallTextWhite600)
-                                                        ]);
+                                                                  .headerTextWhite),
+                                                          progressColor:
+                                                              _getRouteColor(
+                                                                  colorStrings[
+                                                                      index],
+                                                                  routeColorSnapshot
+                                                                      .data)),
+                                                      Text(colorStrings[index],
+                                                          style: Constants
+                                                              .smallTextWhite600)
+                                                    ]);
                                                   }),
                                               TextButton(
                                                 style: ButtonStyle(
@@ -186,14 +188,13 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  RouteColor _getRouteColor(
-      List<RouteColor> availableColors, List<AppRoute> routes, int index) {
-    return availableColors.firstWhere(
-        (routeColor) => routeColor.color == routes[index].difficulty);
+  Color _getRouteColor(String color, List<RouteColor> availableColors) {
+    return Color(availableColors
+        .firstWhere((routeColor) => routeColor.color == color)
+        .colorCode);
   }
 
-  Future<Map<String, int>> _getRouteAmountPerColor(
-      List<RouteColor> colors, String gymId) async {
-    return await routesService.getRouteAmountPerColor(colors, gymId);
+  Future<Map<String, int>> _getRouteAmountPerColor(String gymId) async {
+    return await routesService.getRouteAmountPerColor(gymId);
   }
 }

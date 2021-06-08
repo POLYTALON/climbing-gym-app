@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/Rating.dart';
-import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,8 +32,7 @@ class RoutesService extends ChangeNotifier {
             list.docs.map((doc) => AppRoute.fromFirestore(doc)).toList());
   }
 
-  Future<Map<String, int>> getRouteAmountPerColor(
-      List<RouteColor> colors, String gymId) async {
+  Future<Map<String, int>> getRouteAmountPerColor(String gymId) async {
     Map<String, int> result = {};
     await _firestore
         .collection('routes')
