@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -21,6 +22,7 @@ class _ProfileCardState extends State<ProfileCard> {
   _ProfileCardState(this.route, this.appUser);
 
   final gymService = locator<GymService>();
+  final authService = locator<AuthService>();
 
   @override
   void didUpdateWidget(ProfileCard oldWidget) {
@@ -45,34 +47,47 @@ class _ProfileCardState extends State<ProfileCard> {
             child: Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(children: <Widget>[
                         Expanded(
                             flex: 3,
-                            child: CircleAvatar(
-                                minRadius: 16.0,
-                                maxRadius: 32.0,
-                                //backgroundImage: NetworkImage(appUser.imageUrl),
-                                child: Text(
-                                    _getUserInitials(appUser.displayName),
-                                    style: Constants.subHeaderTextWhite))),
+                            child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: CircleAvatar(
+                                    minRadius: 16.0,
+                                    maxRadius: 32.0,
+                                    //backgroundImage: NetworkImage(appUser.imageUrl),
+                                    child: Text(
+                                        _getUserInitials(appUser.displayName),
+                                        style: Constants.subHeaderTextWhite)))),
                         Expanded(
                             flex: 7,
                             child: FittedBox(
                                 fit: BoxFit.fitWidth,
-                                child: Column(children: <Widget>[
-                                  Text(
-                                    appUser.displayName ?? '',
-                                    style: Constants.headerTextWhite,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Text(
-                                    appUser.email ?? '',
-                                    style: Constants.smallTextWhite600,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ])))
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        appUser.displayName ?? '',
+                                        style: Constants.headerTextWhite,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        appUser.email ?? '',
+                                        style: Constants.smallTextWhite600,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        'Registered since: ' +
+                                                authService
+                                                    .getRegistrationDateFormatted() ??
+                                            '',
+                                        style: Constants.smallTextWhite600,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ])))
                       ]),
                       Divider(
                         color: Colors.white24,
@@ -81,17 +96,19 @@ class _ProfileCardState extends State<ProfileCard> {
                       ),
                       Row(children: <Widget>[
                         Expanded(
+                            flex: 3,
                             child: Text(
-                          'Gym:',
-                          style: Constants.headerTextWhite,
-                          textAlign: TextAlign.left,
-                        )),
+                              'Gym:',
+                              style: Constants.headerTextWhite,
+                              textAlign: TextAlign.left,
+                            )),
                         Expanded(
+                            flex: 7,
                             child: FutureBuilder<String>(
                                 future: _getGymNameById(appUser.selectedGym),
                                 builder: (context, gymSnapshot) {
                                   return Text(
-                                    gymSnapshot.data,
+                                    gymSnapshot.data ?? '',
                                     style: Constants.headerTextWhite,
                                     textAlign: TextAlign.right,
                                   );

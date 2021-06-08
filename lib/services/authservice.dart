@@ -177,4 +177,14 @@ class AuthService with ChangeNotifier {
       return false;
     }
   }
+
+  String getRegistrationDateFormatted() {
+    String convertedDateTime = '';
+    if (_auth.currentUser != null) {
+      DateTime time = _auth.currentUser.metadata.creationTime;
+      convertedDateTime =
+          "${time.day.toString().padLeft(2, '0')}.${time.month.toString().padLeft(2, '0')}.${time.year.toString()}";
+    }
+    return convertedDateTime;
+  }
 }

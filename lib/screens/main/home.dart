@@ -148,9 +148,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .data)),
                                                       Text(colorStrings[index],
                                                           style: Constants
-                                                              .smallTextWhite600)
+                                                              .smallTextWhite600),
                                                     ]);
                                                   }),
+                                              // All accomplished routes
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 16.0, bottom: 16.0),
+                                                  child: Text(
+                                                      'All accomplished routes:',
+                                                      style: Constants
+                                                          .subHeaderTextWhite600)),
+                                              // Pie chart
+                                              /*PieChart(
+                                                _getPieChartData(),
+                                                swapAnimationDuration: Duration(milliseconds: 150),
+                                                swapAnimationCurve: Curves.linear,
+                                              ),*/
+
                                               TextButton(
                                                 style: ButtonStyle(
                                                     backgroundColor:
@@ -200,4 +215,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Map<String, int>> _getRouteAmountPerColor(String gymId) async {
     return await routesService.getRouteAmountPerColor(gymId);
   }
+
+  /* PieChartData _getPieChartData() {
+    return PieChartData();
+      sections:
+    )
+  } */
 }

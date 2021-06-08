@@ -89,7 +89,7 @@ class GymService extends ChangeNotifier {
             .collection('gyms')
             .doc(gymId)
             .get()
-            .then((gym) => gym.data()['name']) ??
+            .then((gym) => gym.data()['name'] + ' ' + gym.data()['city']) ??
         '';
   }
 
