@@ -263,12 +263,19 @@ class _HomeScreenState extends State<HomeScreen> {
         .value;
     if (gymRoutes.isNotEmpty) {
       gymRoutes.entries.forEach((entry) {
-        Map<String, dynamic> entries = entry.value;
-        entries.entries.forEach((e) {
-          print(entry.value);
+        Map<String, dynamic> values = entry.value;
+        values.entries.forEach((entry) {
+          if (entry.key == 'difficulty') {
+            if (result.containsKey(entry.value)) {
+              result[entry.value] = result[entry.value] + 1;
+            } else {
+              result[entry.value] = 1;
+            }
+          }
         });
       });
     }
+    print(result);
     return result;
   }
 
