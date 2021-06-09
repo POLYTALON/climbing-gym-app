@@ -84,14 +84,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           .subHeaderTextWhite600)),
                                               LinearPercentIndicator(
                                                   lineHeight: 24.0,
-                                                  percent: 0.5,
+                                                  percent:
+                                                      _getAccomplishedRoutesRatioInCurrentGym(
+                                                          userSnapshot.data,
+                                                          routes),
                                                   backgroundColor:
                                                       Constants.polyGray,
                                                   progressColor:
                                                       Constants.polyGreen,
                                                   animation: true,
                                                   animationDuration: 1000,
-                                                  center: Text('50%',
+                                                  center: Text(
+                                                      (_getAccomplishedRoutesRatioInCurrentGym(
+                                                                      userSnapshot
+                                                                          .data,
+                                                                      routes) *
+                                                                  100)
+                                                              .toStringAsPrecision(
+                                                                  3) +
+                                                          '%',
                                                       style: Constants
                                                           .defaultTextWhite700)),
                                               // Currently accomplished routes
@@ -214,6 +225,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Map<String, int>> _getRouteAmountPerColor(String gymId) async {
     return await routesService.getRouteAmountPerColor(gymId);
+  }
+
+  double _getAccomplishedRoutesRatioInCurrentGym(
+      AppUser user, List<AppRoute> routes) {
+    if (user.userRoutes.isEmpty || (routes != null && routes.length <= 0))
+      return 0.0;
+    Map<String, dynamic> gymRoutes = user.userRoutes.entries
+        .firstWhere((element) => element.key == user.selectedGym)
+        .value;
+    int doneCounter = 0;
+    if (gymRoutes.entries.isNotEmpty)
+      gymRoutes.entries.forEach((entry) {
+        if (entry.value['isDone'] != null && entry.value['isDone'])
+          doneCounter++;
+      });
+    return doneCounter / routes.length;
   }
 
   /* PieChartData _getPieChartData() {

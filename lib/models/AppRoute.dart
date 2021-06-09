@@ -1,4 +1,3 @@
-import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 

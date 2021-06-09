@@ -91,8 +91,9 @@ class AuthService with ChangeNotifier {
         bool isOperator = await _getIsOperator();
         String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
+        Map<String, dynamic> userRoutes = await _getUserRoutes();
         return AppUser.fromFirebase(
-            _auth.currentUser, isOperator, userRoles, selectedGym);
+            _auth.currentUser, isOperator, userRoles, selectedGym, userRoutes);
       });
     }
     return Stream.empty();
@@ -142,11 +143,36 @@ class AuthService with ChangeNotifier {
     return Map<String, UserRole>();
   }
 
+  Future<Map<String, dynamic>> _getUserRoutes() async {
+    if (_auth.currentUser != null) {
+      Map<String, dynamic> userRoutes = {};
+      try {
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .snapshots()
+            .first
+            .then((snapshot) {
+          Map<String, dynamic> data = snapshot.data();
+
+          if (data.containsKey('routes')) {
+            userRoutes =
+                data.entries.firstWhere((entry) => entry.key == 'routes').value;
+          }
+        });
+      } on FirebaseException catch (e) {
+        print(e);
+      }
+      return userRoutes;
+    }
+    return {};
+  }
+
   Future<void> selectGym(String gymid) async {
     await _firestore
         .collection('users')
         .doc(_auth.currentUser.uid)
-        .set({"selectedGym": gymid});
+        .update({"selectedGym": gymid});
   }
 
   Future<bool> deleteUsersGymPrivileges(String gymid) async {
