@@ -8,6 +8,7 @@ import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/widgets/routes/home/profileCard.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -169,22 +170,105 @@ class _HomeScreenState extends State<HomeScreen> {
                                               // All accomplished routes
                                               Padding(
                                                   padding: EdgeInsets.only(
-                                                      top: 16.0, bottom: 16.0),
+                                                      top: 16.0),
                                                   child: Text(
                                                       'All accomplished routes:',
                                                       style: Constants
                                                           .subHeaderTextWhite600)),
-                                              // Pie chart
-                                              /*PieChart(
-                                                _getPieChartData(),
-                                                swapAnimationDuration: Duration(milliseconds: 150),
-                                                swapAnimationCurve: Curves.linear,
-                                              ),*/
-                                              Text(
-                                                  _getTotalAccomplishedRouteAmountPerColor(
-                                                          userSnapshot.data)
-                                                      .toString()),
 
+                                              Row(children: <Widget>[
+                                                Expanded(
+                                                    flex: 5,
+                                                    child: Column(
+                                                        children: <Widget>[
+                                                          SizedBox(
+                                                            height: 256,
+                                                            child:
+                                                                // Pie chart
+                                                                PieChart(
+                                                              _getPieChartData(
+                                                                  userSnapshot
+                                                                      .data,
+                                                                  routeColorSnapshot
+                                                                      .data),
+                                                              swapAnimationDuration:
+                                                                  Duration(
+                                                                      milliseconds:
+                                                                          150),
+                                                              swapAnimationCurve:
+                                                                  Curves.linear,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              "total: " +
+                                                                  _getTotalAccomplishedRoutesAmount(
+                                                                          userSnapshot
+                                                                              .data)
+                                                                      .toString(),
+                                                              style: Constants
+                                                                  .smallTextWhite600)
+                                                        ])),
+                                                Expanded(
+                                                  flex: 5,
+                                                  child: GridView.builder(
+                                                      gridDelegate:
+                                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 2,
+                                                        childAspectRatio: 1,
+                                                      ),
+                                                      controller:
+                                                          scrollController,
+                                                      shrinkWrap: true,
+                                                      itemCount:
+                                                          _getTotalAccomplishedRouteAmountPerColor(
+                                                                  userSnapshot
+                                                                      .data)
+                                                              .entries
+                                                              .length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        List<
+                                                                MapEntry<String,
+                                                                    int>> data =
+                                                            _getTotalAccomplishedRouteAmountPerColor(
+                                                                    userSnapshot
+                                                                        .data)
+                                                                .entries
+                                                                .toList();
+                                                        return Container(
+                                                            child:
+                                                                Row(children: <
+                                                                    Widget>[
+                                                          Icon(Icons.circle,
+                                                              color: Color(routeColorSnapshot
+                                                                  .data
+                                                                  .firstWhere((routeColor) =>
+                                                                      routeColor
+                                                                          .color ==
+                                                                      data[index]
+                                                                          .key)
+                                                                  .colorCode),
+                                                              size: 24),
+                                                          Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left: 8.0,
+                                                                      right:
+                                                                          8.0),
+                                                              child: Text(
+                                                                  data[index]
+                                                                      .value
+                                                                      .toString(),
+                                                                  style: Constants
+                                                                      .subHeaderTextWhite600))
+                                                        ]));
+                                                      }),
+                                                )
+                                              ]),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 64.0)),
                                               TextButton(
                                                 style: ButtonStyle(
                                                     backgroundColor:
@@ -256,6 +340,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return doneCounter / routes.length;
   }
 
+  int _getTotalAccomplishedRoutesAmount(AppUser user) {
+    Map<String, dynamic> gymRoutes = user.userRoutes.entries
+        .firstWhere((element) => element.key == user.selectedGym)
+        .value;
+    int doneCounter = 0;
+    // Black magic. Handle with care. May need to get more efficient.
+    if (gymRoutes.entries.isNotEmpty) {
+      gymRoutes.entries.forEach((entry) {
+        if (entry.value['isDone'] != null && entry.value['isDone'])
+          doneCounter++;
+      });
+    }
+    return doneCounter;
+  }
+
   Map<String, int> _getTotalAccomplishedRouteAmountPerColor(AppUser user) {
     Map<String, int> result = {};
     Map<String, dynamic> gymRoutes = user.userRoutes.entries
@@ -275,13 +374,24 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
     }
-    print(result);
     return result;
   }
 
-  /* PieChartData _getPieChartData() {
-    return PieChartData();
-      sections:
-    )
-  } */
+  PieChartData _getPieChartData(
+      AppUser user, List<RouteColor> availableColors) {
+    Map<String, int> data = _getTotalAccomplishedRouteAmountPerColor(user);
+    List<PieChartSectionData> sectionData = [];
+    data.entries.forEach((entry) {
+      sectionData.add(PieChartSectionData(
+        value: entry.value.toDouble(),
+        color: Color(availableColors
+            .firstWhere((routeColor) => routeColor.color == entry.key)
+            .colorCode),
+        radius: 80.0,
+        showTitle: false,
+      ));
+    });
+
+    return PieChartData(sections: sectionData, centerSpaceRadius: 0.0);
+  }
 }
