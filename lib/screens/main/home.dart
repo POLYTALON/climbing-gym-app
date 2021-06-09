@@ -145,7 +145,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           animation: true,
                                                           animationDuration:
                                                               1000,
-                                                          percent: 0.7,
+                                                          percent: (amount[
+                                                                      index] /
+                                                                  routes.length)
+                                                              .clamp(0.0, 1.0)
+                                                              .toDouble(),
                                                           center: Text(
                                                               amount[index]
                                                                   .toString(),
