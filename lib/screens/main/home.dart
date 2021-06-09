@@ -180,6 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 swapAnimationDuration: Duration(milliseconds: 150),
                                                 swapAnimationCurve: Curves.linear,
                                               ),*/
+                                              Text(
+                                                  _getTotalAccomplishedRouteAmountPerColor(
+                                                          userSnapshot.data)
+                                                      .toString()),
 
                                               TextButton(
                                                 style: ButtonStyle(
@@ -240,14 +244,32 @@ class _HomeScreenState extends State<HomeScreen> {
         .firstWhere((element) => element.key == user.selectedGym)
         .value;
     int doneCounter = 0;
-    if (gymRoutes.entries.isNotEmpty && routes.isNotEmpty)
+    // Black magic. Handle with care. May need to get more efficient.
+    if (gymRoutes.entries.isNotEmpty && routes.isNotEmpty) {
       gymRoutes.entries.forEach((entry) {
         if (entry.value['isDone'] != null && entry.value['isDone'])
           routes.forEach((route) {
             if (route.id == entry.key) doneCounter++;
           });
       });
+    }
     return doneCounter / routes.length;
+  }
+
+  Map<String, int> _getTotalAccomplishedRouteAmountPerColor(AppUser user) {
+    Map<String, int> result = {};
+    Map<String, dynamic> gymRoutes = user.userRoutes.entries
+        .firstWhere((element) => element.key == user.selectedGym)
+        .value;
+    if (gymRoutes.isNotEmpty) {
+      gymRoutes.entries.forEach((entry) {
+        Map<String, dynamic> entries = entry.value;
+        entries.entries.forEach((e) {
+          print(entry.value);
+        });
+      });
+    }
+    return result;
   }
 
   /* PieChartData _getPieChartData() {
