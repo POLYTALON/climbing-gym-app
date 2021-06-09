@@ -50,7 +50,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
 
     return SlidingUpPanel(
         minHeight: 0.0,
-        maxHeight: MediaQuery.of(context).size.height,
         borderRadius: radius,
         controller: _panelController,
         panelBuilder: (ScrollController sc) {
