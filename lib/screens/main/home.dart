@@ -136,36 +136,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         routeAmountColorSnapshot
                                                             .data.values
                                                             .toList();
-                                                    return Column(children: <
-                                                        Widget>[
-                                                      CircularPercentIndicator(
-                                                          radius: 80.0,
-                                                          backgroundColor:
-                                                              Constants
-                                                                  .polyGray,
-                                                          animation: true,
-                                                          animationDuration:
-                                                              1000,
-                                                          percent: (amount[
-                                                                      index] /
-                                                                  routes.length)
-                                                              .clamp(0.0, 1.0)
-                                                              .toDouble(),
-                                                          center: Text(
-                                                              amount[index]
-                                                                  .toString(),
+                                                    return Column(
+                                                        children: <Widget>[
+                                                          CircularPercentIndicator(
+                                                              radius: 80.0,
+                                                              backgroundColor:
+                                                                  Constants
+                                                                      .polyGray,
+                                                              animation: true,
+                                                              animationDuration:
+                                                                  1000,
+                                                              percent: (amount[index] /
+                                                                      routes
+                                                                          .length)
+                                                                  .clamp(
+                                                                      0.0, 1.0)
+                                                                  .toDouble(),
+                                                              center: Text(
+                                                                  _getAccomplishedRoutesAmount(userSnapshot.data, colorStrings, index)
+                                                                          .toString() +
+                                                                      '/' +
+                                                                      amount[index]
+                                                                          .toString(),
+                                                                  style: Constants
+                                                                      .headerTextWhite),
+                                                              progressColor:
+                                                                  _getRouteColor(
+                                                                      colorStrings[
+                                                                          index],
+                                                                      routeColorSnapshot
+                                                                          .data)),
+                                                          Text(
+                                                              colorStrings[
+                                                                  index],
                                                               style: Constants
-                                                                  .headerTextWhite),
-                                                          progressColor:
-                                                              _getRouteColor(
-                                                                  colorStrings[
-                                                                      index],
-                                                                  routeColorSnapshot
-                                                                      .data)),
-                                                      Text(colorStrings[index],
-                                                          style: Constants
-                                                              .smallTextWhite600),
-                                                    ]);
+                                                                  .smallTextWhite600),
+                                                        ]);
                                                   }),
                                               // All accomplished routes
                                               Padding(
@@ -353,6 +359,23 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     return doneCounter;
+  }
+
+  int _getAccomplishedRoutesAmount(
+      AppUser user, List<String> colorStrings, int index) {
+    Map<String, int> amountPerColor =
+        _getTotalAccomplishedRouteAmountPerColor(user);
+    if (amountPerColor.isNotEmpty &&
+        amountPerColor.containsKey(colorStrings[index]) &&
+        amountPerColor.entries.isNotEmpty &&
+        amountPerColor.entries
+                .firstWhere((entry) => entry.key == colorStrings[index]) !=
+            null) {
+      return amountPerColor.entries
+          .firstWhere((entry) => entry.key == colorStrings[index])
+          .value;
+    }
+    return 0;
   }
 
   Map<String, int> _getTotalAccomplishedRouteAmountPerColor(AppUser user) {
