@@ -100,31 +100,30 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                 delegate: SliverChildListDelegate(
                   [
                     Container(
-                      padding: EdgeInsets.all(16),
-                      color: Constants.polyDark,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Setter: Nils",
-                              style: Constants.defaultTextWhite),
-                          Row(
-                            children: [
-                              Text("Date: ", style: Constants.defaultTextWhite),
-                              Text(
-                                  DateFormat('dd.MM.yyyy')
-                                      .format(this.route.date),
-                                  style: Constants.defaultTextWhite),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
                       color: Constants.polyGray,
                       child: Column(
                         children: [
                           SizedBox(height: 25),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Date", style: Constants.defaultTextWhite),
+                                Text(
+                                    DateFormat('dd.MM.yyyy')
+                                        .format(this.route.date),
+                                    style: Constants.defaultTextWhite)
+                              ]),
+                          Divider(color: Constants.lightGray, height: 50),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Setter",
+                                    style: Constants.defaultTextWhite),
+                                Text(this.route.builder,
+                                    style: Constants.defaultTextWhite)
+                              ]),
+                          Divider(color: Constants.lightGray, height: 50),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -211,7 +210,47 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                 Icon(Icons.check, color: Constants.polyGreen)
                               ])
                             ],
-                          )
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.lightGray),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => {},
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Route tried",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextButton(
+                                  style: Constants.polyGreenButton,
+                                  onPressed: () => {},
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Route done",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
