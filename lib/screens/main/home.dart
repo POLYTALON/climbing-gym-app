@@ -233,16 +233,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _getAccomplishedRoutesRatioInCurrentGym(
       AppUser user, List<AppRoute> routes) {
-    if (user.userRoutes.isEmpty || (routes != null && routes.length <= 0))
-      return 0.0;
+    if (routes.isEmpty ||
+        user.userRoutes.isEmpty ||
+        (routes.isNotEmpty && routes.length <= 0)) return 0.0;
     Map<String, dynamic> gymRoutes = user.userRoutes.entries
         .firstWhere((element) => element.key == user.selectedGym)
         .value;
     int doneCounter = 0;
-    if (gymRoutes.entries.isNotEmpty)
+    if (gymRoutes.entries.isNotEmpty && routes.isNotEmpty)
       gymRoutes.entries.forEach((entry) {
         if (entry.value['isDone'] != null && entry.value['isDone'])
-          doneCounter++;
+          routes.forEach((route) {
+            if (route.id == entry.key) doneCounter++;
+          });
       });
     return doneCounter / routes.length;
   }
