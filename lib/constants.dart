@@ -23,11 +23,20 @@ const TextStyle subHeaderText =
 const TextStyle subHeaderTextWhite =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18);
 
+const TextStyle subHeaderTextWhite600 =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18);
+
 const TextStyle defaultText =
     TextStyle(color: polyDark, fontWeight: FontWeight.w500, fontSize: 16);
 
 const TextStyle defaultTextWhite =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16);
+
+const TextStyle smallTextWhite600 =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14);
+
+const TextStyle defaultTextWhite700 =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16);
 
 // custom button styles
 ButtonStyle polyGreenButton = ButtonStyle(

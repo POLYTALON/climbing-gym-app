@@ -32,6 +32,23 @@ class RoutesService extends ChangeNotifier {
             list.docs.map((doc) => AppRoute.fromFirestore(doc)).toList());
   }
 
+  Future<Map<String, int>> getRouteAmountPerColor(String gymId) async {
+    Map<String, int> result = {};
+    await _firestore
+        .collection('routes')
+        .where('gymid', isEqualTo: gymId)
+        .get()
+        .then((list) => list.docs.forEach((doc) {
+              String difficulty = doc.data()['difficulty'];
+              if (!result.containsKey(difficulty)) {
+                result[difficulty] = 1;
+              } else {
+                result[difficulty] = result[difficulty] + 1;
+              }
+            }));
+    return result;
+  }
+
   Future<Rating> getRatingByRouteId(String routeId) async {
     List<Map<String, Timestamp>> commentsList = [{}];
     List<int> ratingsList = [];
