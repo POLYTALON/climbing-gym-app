@@ -151,11 +151,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 animation: true,
                                                                 animationDuration:
                                                                     1000,
-                                                                percent: (amount[index] /
-                                                                        routes
-                                                                            .length)
-                                                                    .clamp(0.0,
-                                                                        1.0)
+                                                                percent: (_getAccomplishedRoutesAmount(
+                                                                            userSnapshot
+                                                                                .data,
+                                                                            colorStrings,
+                                                                            index) /
+                                                                        amount[
+                                                                            index])
+                                                                    .clamp(
+                                                                        0.0, 1.0)
                                                                     .toDouble(),
                                                                 center: Text(
                                                                     _getAccomplishedRoutesAmount(userSnapshot.data, colorStrings, index)
@@ -165,11 +169,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .toString(),
                                                                     style: Constants
                                                                         .headerTextWhite),
-                                                                progressColor: _getRouteColor(
-                                                                    colorStrings[
-                                                                        index],
-                                                                    routeColorSnapshot
-                                                                        .data)),
+                                                                progressColor:
+                                                                    _getRouteColor(
+                                                                        colorStrings[index],
+                                                                        routeColorSnapshot.data)),
                                                             Text(
                                                                 colorStrings[
                                                                     index],
