@@ -4,7 +4,6 @@ import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
@@ -36,7 +35,7 @@ class _GymCardState extends State<GymCard> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),

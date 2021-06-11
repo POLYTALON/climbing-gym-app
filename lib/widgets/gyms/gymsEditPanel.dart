@@ -1,24 +1,21 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditPanel extends StatefulWidget {
-  final AppUser appUser;
-  GymsEditPanel({Key key, this.appUser}) : super(key: key);
+  GymsEditPanel({Key key}) : super(key: key);
 
   @override
-  _GymsEditPanelState createState() => _GymsEditPanelState(this.appUser);
+  _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
 class _GymsEditPanelState extends State<GymsEditPanel> {
@@ -26,8 +23,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final AppUser appUser;
-  _GymsEditPanelState(this.appUser);
+  _GymsEditPanelState();
 
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
@@ -41,9 +37,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
-    final gymService = locator<GymService>();
-
     gymService.addListener(() {
       if (gymService.showEditPanel == true) {
         controllerGymName.text = gymService.currentGym.name;
@@ -58,7 +51,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
     return SlidingUpPanel(
         minHeight: 0.0,
-        snapPoint: 0.75,
         borderRadius: radius,
         controller: _panelController,
         panel: Container(
@@ -393,9 +385,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   void onPressDelete(BuildContext context) {
     final gymService = locator<GymService>();
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final databaseService =
-        Provider.of<DatabaseService>(context, listen: false);
+    final authService = locator<AuthService>();
+    final newsService = locator<NewsService>();
     final routeService = locator<RoutesService>();
     final id = gymService.currentGym.id;
 
@@ -425,7 +416,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                   bool isRoutesForGymDelted =
                       await routeService.cleanUpRoutesForGym(id);
                   bool isNewsForGymDeleted =
-                      await databaseService.cleanUpNewsForGym(id);
+                      await newsService.cleanUpNewsForGym(id);
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
                       await authService.deleteUsersGymPrivileges(id);
@@ -455,8 +446,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   bool _getIsOperator() {
-    if (appUser == null) return false;
-    return appUser.isOperator;
+    locator<AuthService>().streamAppUser().first.then((appUser) {
+      if (appUser == null) return false;
+      return appUser.isOperator;
+    });
+    return false;
   }
 }
 

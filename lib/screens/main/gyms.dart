@@ -3,7 +3,6 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
-import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
@@ -24,7 +23,7 @@ class _GymsScreenState extends State<GymsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
@@ -39,8 +38,8 @@ class _GymsScreenState extends State<GymsScreen> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return ChangeNotifierProvider<GymEdit>(
-                create: (_) => GymEdit(),
+            return ChangeNotifierProvider<GymService>(
+                create: (_) => GymService(),
                 child: Stack(children: <Widget>[
                   Scaffold(
                       // Add gym button
@@ -93,7 +92,7 @@ class _GymsScreenState extends State<GymsScreen> {
                   if (snapshot.data.isOperator) GymsSetOwnerPanel(),
                   if (snapshot.data.isOperator ||
                       _getIsAnyGymUser(snapshot.data.roles))
-                    GymsEditPanel(appUser: snapshot.data)
+                    GymsEditPanel()
                 ]));
           }
         });
