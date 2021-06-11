@@ -14,23 +14,63 @@
       ],
     },
     {
-      "name": "Development",
+      "name": "Android-Development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_dev.dart",
+      //"program": "lib/main_dev.dart",
       "args": [
         "--flavor",
         "development"
       ]
     },
     {
-      "name": "Production",
+      "name": "Android-Productive",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main.dart",
+      //"program": "lib/main.dart",
       "args": [
         "--flavor",
-        "production"
+        "productive"
+      ]
+    },
+    {
+      "name": "iOS-Debug-DEV",
+      "request": "launch",
+      "type": "dart",
+      //"program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "debug-development"
+      ]
+    },
+    {
+      "name": "iOS-Debug-Prod",
+      "request": "launch",
+      "type": "dart",
+      //"program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "debug-productive"
+      ]
+    },
+    {
+      "name": "iOS-Release-Prod",
+      "request": "launch",
+      "type": "dart",
+      //"program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "release-productive"
+      ]
+    },
+    {
+      "name": "iOS-Release-DEV",
+      "request": "launch",
+      "type": "dart",
+      //"program": "lib/main_dev.dart",
+      "args": [
+        "--flavor",
+        "release-development"
       ]
     }
   ]

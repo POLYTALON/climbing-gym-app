@@ -53,7 +53,7 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        production {
+        productive {
             applicationId "de.polytalon.polyapp"
             minSdkVersion 19
             targetSdkVersion 30
