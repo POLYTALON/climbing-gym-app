@@ -67,5 +67,7 @@
 	<string>PolyApp wants to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PolyApp wants to access your Photo Library</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(APP_DISPLAY_NAME)</string>
 </dict>
 </plist>
