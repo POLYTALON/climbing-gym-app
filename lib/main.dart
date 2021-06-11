@@ -15,17 +15,12 @@ void main() async {
   runApp(MaterialApp(
       title: 'Climbing App',
       theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
-      //home: MyApp(environment: EnvironmentValue.development)));
       home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final auth = locator<AuthService>();
-  //final Environment environment;
-
-  //MyApp({Key key, this.environment}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

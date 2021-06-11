@@ -1,12 +1,25 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
+# add the Firebase pod for Google Analytics
+pod 'Firebase/Analytics'
+# or pod ‘Firebase/AnalyticsWithoutAdIdSupport’
+# for Analytics without IDFA collection capability
+
+# add pods for any other desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
+pod 'Firebase/Auth'
+pod 'Firebase/Firestore'
+pod 'Firebase/Storage'
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 
 # add pods for desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+
 
 project 'Runner', {
   'Debug' => :debug,
