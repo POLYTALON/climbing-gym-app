@@ -8,8 +8,8 @@ import 'package:climbing_gym_app/widgets/routes/routeCard.dart';
 import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RoutesScreen extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class RoutesScreen extends StatefulWidget {
 }
 
 class _RoutesScreenState extends State<RoutesScreen> {
-  final SlidingUpPanelController _routesAddPanelController =
-      SlidingUpPanelController();
+  final PanelController _routesAddPanelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -134,10 +133,10 @@ class _RoutesScreenState extends State<RoutesScreen> {
   }
 
   void toggleSlidingPanel() {
-    if (_routesAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _routesAddPanelController.collapse();
+    if (_routesAddPanelController.isPanelOpen) {
+      _routesAddPanelController.close();
     } else {
-      _routesAddPanelController.anchor();
+      _routesAddPanelController.open();
     }
   }
 

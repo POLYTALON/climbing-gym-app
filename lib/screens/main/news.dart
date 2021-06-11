@@ -8,14 +8,13 @@ import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsCard.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 const polyDark = Color(0x121212);
 
 class NewsScreen extends StatelessWidget {
-  final SlidingUpPanelController _newsAddPanelController =
-      SlidingUpPanelController();
+  final PanelController _newsAddPanelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +102,10 @@ class NewsScreen extends StatelessWidget {
   }
 
   void _toggleAddPanel() {
-    if (_newsAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _newsAddPanelController.collapse();
+    if (_newsAddPanelController.isPanelOpen) {
+      _newsAddPanelController.close();
     } else {
-      _newsAddPanelController.anchor();
+      _newsAddPanelController.open();
     }
   }
 
