@@ -119,9 +119,11 @@ class _ProfileCardState extends State<ProfileCard> {
 
   String _getUserInitials(String displayName) {
     String initials = '';
-    displayName
-        .split(' ')
-        .forEach((substr) => initials += substr[0].toUpperCase());
+    displayName.split(' ').forEach((substr) {
+      if (substr.length > 0) {
+        initials += substr[0].toUpperCase();
+      }
+    });
     return initials;
   }
 
