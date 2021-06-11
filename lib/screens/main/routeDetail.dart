@@ -13,6 +13,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/*
+Status  (OPEN / TRYING / )
+Difficulty
+Rating (incl. Plus Button)
+Date
+Category
+Setter
+Holds
+*/
+
 class RouteDetailScreen extends StatefulWidget {
   final AppRoute route;
   RouteDetailScreen({
