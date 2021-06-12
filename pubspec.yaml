@@ -48,6 +48,7 @@ dependencies:
   percent_indicator: "^2.1.7+2"
   toggle_switch: ^1.0.0+1
   multi_select_flutter: ^4.0.0
+  animated_check: ^1.0.2
 
 dev_dependencies:
   flutter_test:

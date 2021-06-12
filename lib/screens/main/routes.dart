@@ -63,7 +63,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
             } else {
               return StreamProvider<List<AppRoute>>.value(
                   initialData: [],
-                  value: routesService.streamRoutes(snapshot.data.selectedGym),
+                  value: routesService.streamRoutes(
+                      snapshot.data.selectedGym, snapshot.data.userRoutes),
                   child:
                       Consumer<List<AppRoute>>(builder: (context, routes, _) {
                     return FutureBuilder<List<RouteColor>>(
@@ -387,8 +388,9 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                         Expanded(
                                           child: StreamBuilder<List<AppRoute>>(
                                               stream: locator<RoutesService>()
-                                                  .streamRoutes(snapshot
-                                                      .data.selectedGym),
+                                                  .streamRoutes(
+                                                      snapshot.data.selectedGym,
+                                                      snapshot.data.userRoutes),
                                               builder:
                                                   (context, routesSnapshot) {
                                                 if (snapshot.connectionState !=
