@@ -47,6 +47,8 @@ dependencies:
   fl_chart: ^0.36.1
   percent_indicator: "^2.1.7+2"
   flavorbanner: "0.0.2"
+  toggle_switch: ^1.0.0+1
+  animated_check: ^1.0.2
 
 dev_dependencies:
   flutter_test:
