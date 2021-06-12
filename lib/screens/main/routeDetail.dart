@@ -36,6 +36,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
 
   AlertDialog ratingDialog;
   double routeRating;
+  int routeRatingCount;
   int myRating;
   int isSelected;
   bool isRatingLoading = true;
@@ -76,7 +77,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
     });
     routesService.getRatingByRouteId(route.id).then((rating) {
       setState(() {
-        routeRating = rating;
+        routeRatingCount = rating[0];
+        routeRating = rating[1];
         isRatingLoading = false;
       });
     });
@@ -190,22 +192,12 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                         width: 30,
                                         child: CircularProgressIndicator())
                                     : Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          PolyRatingBar(
-                                              allowHalfRating: true,
-                                              onRated: (v) {},
-                                              starCount: 5,
-                                              rating: routeRating,
-                                              size: 30.0,
-                                              isReadOnly: true,
-                                              activeColor: Colors.orangeAccent,
-                                              inactiveColor:
-                                                  Constants.lightGray,
-                                              borderColor: Colors.black,
-                                              spacing: 0.0),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 8.0),
+                                                right: 8.0),
                                             child: GestureDetector(
                                                 child: myRating == null
                                                     ? Icon(
@@ -224,6 +216,30 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                                   openRatingDialog(context);
                                                 }),
                                           ),
+                                          PolyRatingBar(
+                                              allowHalfRating: true,
+                                              onRated: (v) {},
+                                              starCount: 5,
+                                              rating: routeRating,
+                                              size: 30.0,
+                                              isReadOnly: true,
+                                              activeColor: Colors.orangeAccent,
+                                              inactiveColor:
+                                                  Constants.lightGray,
+                                              borderColor: Colors.black,
+                                              spacing: 0.0),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8),
+                                              child: Text(
+                                                  "(" +
+                                                      routeRatingCount
+                                                          .toString() +
+                                                      ")",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Constants
+                                                          .lightGray))),
                                         ],
                                       )
                               ]),
