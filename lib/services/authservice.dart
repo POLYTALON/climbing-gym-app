@@ -176,8 +176,11 @@ class AuthService with ChangeNotifier {
     dynamic userRoutes = userDoc.data()['routes'];
     if (userRoutes == null) {
       userRoutes = Map<String, dynamic>();
+    }
+    if (userRoutes[route.gymId] == null) {
       userRoutes[route.gymId] = Map<String, dynamic>();
     }
+
     if (route.isDone || route.isTried) {
       userRoutes[route.gymId]
           [route.id] = {"difficulty": route.difficulty, "isDone": route.isDone};
