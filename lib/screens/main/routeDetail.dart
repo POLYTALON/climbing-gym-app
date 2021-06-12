@@ -195,27 +195,6 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: GestureDetector(
-                                                child: myRating == null
-                                                    ? Icon(
-                                                        Icons.add_circle,
-                                                        size: 30,
-                                                        color:
-                                                            Constants.lightGray,
-                                                      )
-                                                    : Icon(
-                                                        Icons.edit,
-                                                        size: 30,
-                                                        color:
-                                                            Constants.lightGray,
-                                                      ),
-                                                onTap: () {
-                                                  openRatingDialog(context);
-                                                }),
-                                          ),
                                           PolyRatingBar(
                                               allowHalfRating: true,
                                               onRated: (v) {},
@@ -240,6 +219,27 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                                       fontSize: 20,
                                                       color: Constants
                                                           .lightGray))),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: GestureDetector(
+                                                child: myRating == null
+                                                    ? Icon(
+                                                        Icons.add_circle,
+                                                        size: 30,
+                                                        color:
+                                                            Constants.lightGray,
+                                                      )
+                                                    : Icon(
+                                                        Icons.edit,
+                                                        size: 27,
+                                                        color:
+                                                            Constants.lightGray,
+                                                      ),
+                                                onTap: () {
+                                                  openRatingDialog(context);
+                                                }),
+                                          ),
                                         ],
                                       )
                               ]),
