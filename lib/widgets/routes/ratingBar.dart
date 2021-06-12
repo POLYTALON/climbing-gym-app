@@ -138,6 +138,9 @@ class _PolyRatingBarState extends State<PolyRatingBar> {
                   if (newRating < 0) {
                     newRating = 0.0;
                   }
+                  if (newRating < 1) {
+                    newRating = 1;
+                  }
                   setState(() {
                     currentRating = newRating;
                   });
@@ -156,6 +159,9 @@ class _PolyRatingBarState extends State<PolyRatingBar> {
                     }
                     if (newRating < 0) {
                       newRating = 0.0;
+                    }
+                    if (newRating < 1) {
+                      newRating = 1;
                     }
                     setState(() {
                       currentRating = newRating;
@@ -177,6 +183,9 @@ class _PolyRatingBarState extends State<PolyRatingBar> {
                     }
                     if (newRating < 0) {
                       newRating = 0.0;
+                    }
+                    if (newRating < 1) {
+                      newRating = 1;
                     }
                     setState(() {
                       currentRating = newRating;
@@ -205,6 +214,9 @@ class _PolyRatingBarState extends State<PolyRatingBar> {
                   if (newRating < 0) {
                     newRating = 0.0;
                   }
+                  if (newRating < 1) {
+                    newRating = 1;
+                  }
                   newRating = normalizeRating(newRating);
                   setState(() {
                     currentRating = newRating;
@@ -224,6 +236,9 @@ class _PolyRatingBarState extends State<PolyRatingBar> {
                   }
                   if (newRating < 0) {
                     newRating = 0.0;
+                  }
+                  if (newRating < 1) {
+                    newRating = 1;
                   }
                   setState(() {
                     currentRating = newRating;

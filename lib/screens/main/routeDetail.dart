@@ -35,8 +35,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
   final AppRoute route;
 
   AlertDialog ratingDialog;
-  double routeRating; //TODO: get users rating
-  int myRating = 3;
+  double routeRating;
+  int myRating;
   int isSelected;
   bool isRatingLoading = true;
   bool isDoneIconVisible = true;
@@ -55,6 +55,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
             parent: _animationController, curve: Curves.easeInOutCirc));
     getRouteStatus();
     getRouteRating();
+    getMyRouteRating();
     super.initState();
   }
 
@@ -78,6 +79,18 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
         routeRating = rating;
         isRatingLoading = false;
       });
+    });
+  }
+
+  void getMyRouteRating() async {
+    routesService
+        .getUserRatingByRouteId(authService.currentUser.uid, route.id)
+        .then((rating) {
+      if (rating != 0) {
+        setState(() {
+          myRating = rating;
+        });
+      }
     });
   }
 
@@ -194,11 +207,19 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
                                             child: GestureDetector(
-                                                child: Icon(
-                                                  Icons.add_circle,
-                                                  size: 30,
-                                                  color: Constants.lightGray,
-                                                ),
+                                                child: myRating == null
+                                                    ? Icon(
+                                                        Icons.add_circle,
+                                                        size: 30,
+                                                        color:
+                                                            Constants.lightGray,
+                                                      )
+                                                    : Icon(
+                                                        Icons.edit,
+                                                        size: 30,
+                                                        color:
+                                                            Constants.lightGray,
+                                                      ),
                                                 onTap: () {
                                                   openRatingDialog(context);
                                                 }),
@@ -304,7 +325,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
               child: PolyRatingBar(
                   allowHalfRating: false,
                   starCount: 5,
-                  rating: myRating.toDouble(),
+                  rating: myRating != null ? myRating.toDouble() : 3.0,
                   size: 40.0,
                   isReadOnly: false,
                   onRated: (rating) {

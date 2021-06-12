@@ -74,7 +74,20 @@ class RoutesService extends ChangeNotifier {
         ratingSum += rating.data()['rating'];
       });
     });
-    return ratingSum / ratingCount;
+    if (ratingSum > 0) {
+      return ratingSum / ratingCount;
+    }
+    return 0;
+  }
+
+  Future<int> getUserRatingByRouteId(String userId, String routeId) async {
+    dynamic userRating = await _firestore
+        .collection('routes')
+        .doc(routeId)
+        .collection('ratings')
+        .doc(userId)
+        .get();
+    return userRating.exists ? userRating['rating'] : 0;
   }
 
   Future<void> addRoute(
