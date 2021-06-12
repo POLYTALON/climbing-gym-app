@@ -401,7 +401,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, int> result = {};
     Map<String, dynamic> gymRoutes = user.userRoutes[user.selectedGym];
     if (gymRoutes != null) {
-      // print(gymRoutes);
       gymRoutes.forEach((routeKey, routeValue) {
         if (routeValue['isDone'] == true) {
           if (result[routeValue['difficulty']] != null) {

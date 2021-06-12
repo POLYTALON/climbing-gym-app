@@ -60,29 +60,21 @@ class RoutesService extends ChangeNotifier {
     return result;
   }
 
-  Stream<double> streamRatingByRouteId(String routeId) {
+  Future<double> getRatingByRouteId(String routeId) async {
     int ratingCount = 0;
     double ratingSum = 0;
-    return _firestore
+    await _firestore
         .collection('routes')
         .doc(routeId)
         .collection('ratings')
-        .snapshots()
-        .map((doc) {
-      ratingCount = 0;
-      ratingSum = 0;
+        .get()
+        .then((doc) {
       doc.docs.forEach((rating) {
-        print(rating.id);
-        print(rating.data()['rating']);
         ratingCount++;
         ratingSum += rating.data()['rating'];
       });
-      if (ratingCount == 0) {
-        return 0.0;
-      } else {
-        return ratingSum / ratingCount;
-      }
     });
+    return ratingSum / ratingCount;
   }
 
   Future<void> addRoute(

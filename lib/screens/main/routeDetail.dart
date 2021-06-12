@@ -12,6 +12,7 @@ import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:animated_check/animated_check.dart';
 
 class RouteDetailScreen extends StatefulWidget {
   final AppRoute route;
@@ -24,7 +25,8 @@ class RouteDetailScreen extends StatefulWidget {
   _RouteDetailScreenState createState() => new _RouteDetailScreenState(route);
 }
 
-class _RouteDetailScreenState extends State<RouteDetailScreen> {
+class _RouteDetailScreenState extends State<RouteDetailScreen>
+    with SingleTickerProviderStateMixin {
   _RouteDetailScreenState(this.route);
 
   final routeColorService = locator<RouteColorService>();
@@ -36,38 +38,44 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
   double routeRating; //TODO: get users rating
   int myRating = 3;
   int isSelected;
+  bool isRatingLoading = true;
+  bool isDoneIconVisible = true;
+
+  AnimationController _animationController;
+  Animation<double> _animation;
 
   @override
   void initState() {
+    _animationController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = new Tween<double>(begin: 0, end: 1).animate(
+        new CurvedAnimation(
+            parent: _animationController, curve: Curves.easeInOutCirc));
     if (route.isDone) {
-      print("done");
+      _animationController.forward();
       isSelected = 2;
     } else if (route.isTried) {
-      print("tried");
       isSelected = 1;
     } else {
       isSelected = 0;
     }
-
+    getRouteRating();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    print("disposing");
-    super.dispose();
-  }
-
-/*
-  Future<void> getRouteRating() async {
-    double newRating = await routesService.getRatingByRouteId(route.id);
+  void getRouteRating() async {
     setState(() {
-      routeRating = newRating;
+      isRatingLoading = true;
     });
-    print(routeRating);
-    return;
+    routesService.getRatingByRouteId(route.id).then((rating) {
+      setState(() {
+        routeRating = rating;
+        isRatingLoading = false;
+      });
+    });
   }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +104,15 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                   background: Stack(children: [
                     Container(
                       alignment: Alignment.center,
-                      child: Image.network(
-                          //'https://www.bda-bund.de/wp-content/uploads/2018/06/1371_Bild_2-1280x720.jpg'),
-                          this.route.imageUrl,
-                          fit: BoxFit.cover),
+                      child:
+                          Image.network(this.route.imageUrl, fit: BoxFit.cover),
                     ),
+                    Align(
+                        child: AnimatedCheck(
+                      progress: _animation,
+                      color: Constants.polyGreen,
+                      size: 200,
+                    )),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: Icon(Icons.arrow_drop_up_outlined,
@@ -133,9 +145,15 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                   ],
                                   activeFgColor: Colors.white,
                                   totalSwitches: 3,
+                                  animate: true,
+                                  radiusStyle: true,
                                   labels: ['Open', 'Tried', 'Done'],
                                   onToggle: (index) {
-                                    openRatingDialog(context);
+                                    if (index == 2) {
+                                      _animationController.forward();
+                                    } else {
+                                      _animationController.reset();
+                                    }
                                     route.isDone = index == 2;
                                     route.isTried = index == 1;
                                     authService.updateUserRouteStatus(route);
@@ -143,34 +161,46 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                 ),
                               ]),
                           Divider(color: Constants.lightGray, height: 50),
-                          StreamBuilder<double>(
-                              stream:
-                                  routesService.streamRatingByRouteId(route.id),
-                              builder: (context, ratingSnapshot) {
-                                if (ratingSnapshot.connectionState !=
-                                    ConnectionState.active) {
-                                  return SizedBox(height: 30);
-                                } else {
-                                  return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Rating",
-                                            style: Constants.defaultTextWhite),
-                                        PolyRatingBar(
-                                            allowHalfRating: true,
-                                            onRated: (v) {},
-                                            starCount: 5,
-                                            rating: ratingSnapshot.data,
-                                            size: 30.0,
-                                            isReadOnly: true,
-                                            activeColor: Colors.orangeAccent,
-                                            inactiveColor: Constants.lightGray,
-                                            borderColor: Colors.black,
-                                            spacing: 0.0)
-                                      ]);
-                                }
-                              }),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Rating",
+                                    style: Constants.defaultTextWhite),
+                                isRatingLoading
+                                    ? SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator())
+                                    : Row(
+                                        children: [
+                                          PolyRatingBar(
+                                              allowHalfRating: true,
+                                              onRated: (v) {},
+                                              starCount: 5,
+                                              rating: routeRating,
+                                              size: 30.0,
+                                              isReadOnly: true,
+                                              activeColor: Colors.orangeAccent,
+                                              inactiveColor:
+                                                  Constants.lightGray,
+                                              borderColor: Colors.black,
+                                              spacing: 0.0),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: GestureDetector(
+                                                child: Icon(
+                                                  Icons.add_circle,
+                                                  size: 30,
+                                                  color: Constants.lightGray,
+                                                ),
+                                                onTap: () {
+                                                  openRatingDialog(context);
+                                                }),
+                                          ),
+                                        ],
+                                      )
+                              ]),
                           Divider(color: Constants.lightGray, height: 50),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,7 +333,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
             onPressed: () async {
               await routesService.updateRouteRating(
                   authService.currentUser.uid, route, myRating);
-              //await getRouteRating();
+              getRouteRating();
               Navigator.pop(context);
             },
           )
