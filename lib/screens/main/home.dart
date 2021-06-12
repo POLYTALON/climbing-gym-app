@@ -159,13 +159,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           true,
                                                                       animationDuration:
                                                                           1000,
-                                                                      percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings, index) / amount[index])
+                                                                      percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index]) /
+                                                                              amount[
+                                                                                  index])
                                                                           .clamp(
                                                                               0.0,
                                                                               1.0)
                                                                           .toDouble(),
                                                                       center: Text(
-                                                                          _getAccomplishedRoutesAmount(userSnapshot.data, colorStrings, index).toString() +
+                                                                          _getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index]).toString() +
                                                                               '/' +
                                                                               amount[index]
                                                                                   .toString(),
@@ -386,40 +388,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return doneCounter;
   }
 
-  int _getAccomplishedRoutesAmount(
-      AppUser user, List<String> colorStrings, int index) {
+  int _getAccomplishedRoutesAmount(AppUser user, String color) {
     Map<String, int> amountPerColor =
         _getTotalAccomplishedRouteAmountPerColor(user);
-    if (amountPerColor.isNotEmpty &&
-        amountPerColor.containsKey(colorStrings[index]) &&
-        amountPerColor.entries.isNotEmpty &&
-        amountPerColor.entries
-                .firstWhere((entry) => entry.key == colorStrings[index]) !=
-            null) {
-      return amountPerColor.entries
-          .firstWhere((entry) => entry.key == colorStrings[index])
-          .value;
+    if (amountPerColor.isNotEmpty && amountPerColor[color] != null) {
+      return amountPerColor[color];
     }
     return 0;
   }
 
   Map<String, int> _getTotalAccomplishedRouteAmountPerColor(AppUser user) {
     Map<String, int> result = {};
-    MapEntry<String, dynamic> gymRoutes = user.userRoutes.entries.firstWhere(
-        (element) => element.key == user.selectedGym,
-        orElse: () => null);
+    Map<String, dynamic> gymRoutes = user.userRoutes[user.selectedGym];
     if (gymRoutes != null) {
-      gymRoutes.value.entries.forEach((entry) {
-        Map<String, dynamic> values = entry.value;
-        values.entries.forEach((entry) {
-          if (entry.key == 'difficulty') {
-            if (result.containsKey(entry.value)) {
-              result[entry.value] = result[entry.value] + 1;
-            } else {
-              result[entry.value] = 1;
-            }
+      // print(gymRoutes);
+      gymRoutes.forEach((routeKey, routeValue) {
+        if (routeValue['isDone'] == true) {
+          if (result[routeValue['difficulty']] != null) {
+            result[routeValue['difficulty']] += 1;
+          } else {
+            result[routeValue['difficulty']] = 1;
           }
-        });
+        }
       });
     }
     return result;
