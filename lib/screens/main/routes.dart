@@ -45,410 +45,438 @@ class _RoutesScreenState extends State<RoutesScreen> {
               !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
-            return StreamProvider<List<AppRoute>>.value(
-                initialData: [],
-                value: routesService.streamRoutes(snapshot.data.selectedGym),
-                child: Consumer<List<AppRoute>>(builder: (context, routes, _) {
-                  return FutureBuilder<List<RouteColor>>(
-                      future: routeColorService.getAvailableRouteColors(),
-                      initialData: [],
-                      builder: (context, routeColorSnapshot) {
-                        if (!routeColorSnapshot.hasData) {
-                          return Container(width: 0.0, height: 0.0);
-                        } else {
-                          return ChangeNotifierProvider<RoutesService>(
-                              create: (_) => RoutesService(),
-                              child: Stack(children: <Widget>[
-                                Scaffold(
-                                    key: _scaffoldKey,
-                                    // Add route button
-                                    floatingActionButton:
-                                        _getFloatingActionButton(snapshot.data),
-                                    backgroundColor: Constants.polyDark,
-                                    endDrawer: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(16.0),
-                                            bottomLeft: Radius.circular(16.0)),
-                                        child: Drawer(
-                                            elevation: 2.0,
-                                            child: Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    16.0, 8.0, 16.0, 8.0),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius
-                                                        .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    16.0),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    16.0)),
-                                                    color: Constants.polyGray),
-                                                child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: <Widget>[
-                                                          Container(),
-                                                          Text(
-                                                            "Filter",
-                                                            style: Constants
-                                                                .subHeaderTextWhite,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                          IconButton(
-                                                              icon: Icon(
-                                                                  Icons.close,
-                                                                  size: 32.0),
-                                                              color:
-                                                                  Colors.white,
-                                                              onPressed: () =>
-                                                                  closeDrawer()),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0)),
-                                                      // Sort
-                                                      Row(
+            if (snapshot.data.selectedGym == null ||
+                snapshot.data.selectedGym.isEmpty) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text('Please choose a gym first.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700))),
+                    Icon(Icons.place, color: Colors.white, size: 32.0)
+                  ]);
+            } else {
+              return StreamProvider<List<AppRoute>>.value(
+                  initialData: [],
+                  value: routesService.streamRoutes(snapshot.data.selectedGym),
+                  child:
+                      Consumer<List<AppRoute>>(builder: (context, routes, _) {
+                    return FutureBuilder<List<RouteColor>>(
+                        future: routeColorService.getAvailableRouteColors(),
+                        initialData: [],
+                        builder: (context, routeColorSnapshot) {
+                          if (!routeColorSnapshot.hasData) {
+                            return Container(width: 0.0, height: 0.0);
+                          } else {
+                            return ChangeNotifierProvider<RoutesService>(
+                                create: (_) => RoutesService(),
+                                child: Stack(children: <Widget>[
+                                  Scaffold(
+                                      key: _scaffoldKey,
+                                      // Add route button
+                                      floatingActionButton:
+                                          _getFloatingActionButton(
+                                              snapshot.data),
+                                      backgroundColor: Constants.polyDark,
+                                      endDrawer: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(16.0),
+                                              bottomLeft:
+                                                  Radius.circular(16.0)),
+                                          child: Drawer(
+                                              elevation: 2.0,
+                                              child: Container(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      16.0, 8.0, 16.0, 8.0),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  16.0),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  16.0)),
+                                                      color:
+                                                          Constants.polyGray),
+                                                  child: Column(
+                                                      children: <Widget>[
+                                                        Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
-                                                          children: [
-                                                            Text("Sort",
-                                                                style: Constants
-                                                                    .subHeaderTextWhite),
-                                                            // Dropdown Sorting
-                                                            DropdownButton<
-                                                                    String>(
-                                                                value:
-                                                                    _sortFilter,
-                                                                dropdownColor:
-                                                                    Constants
-                                                                        .polyDark,
-                                                                underline:
-                                                                    Container(
-                                                                        width:
-                                                                            0.0,
-                                                                        height:
-                                                                            0.0),
-                                                                style: Constants
-                                                                    .defaultTextWhite,
-                                                                items: <String>[
-                                                                  'No sorting',
-                                                                  'Date ascending',
-                                                                  'Date descending',
-                                                                  'Rating ascending',
-                                                                  'Rating descending'
-                                                                ].map((String
-                                                                    value) {
-                                                                  return DropdownMenuItem<
+                                                          children: <Widget>[
+                                                            Container(),
+                                                            Text(
+                                                              "Filter",
+                                                              style: Constants
+                                                                  .subHeaderTextWhite,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            IconButton(
+                                                                icon: Icon(
+                                                                    Icons.close,
+                                                                    size: 32.0),
+                                                                color: Colors
+                                                                    .white,
+                                                                onPressed: () =>
+                                                                    closeDrawer()),
+                                                          ],
+                                                        ),
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0)),
+                                                        // Sort
+                                                        Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text("Sort",
+                                                                  style: Constants
+                                                                      .subHeaderTextWhite),
+                                                              // Dropdown Sorting
+                                                              DropdownButton<
                                                                       String>(
-                                                                    value:
+                                                                  value:
+                                                                      _sortFilter,
+                                                                  dropdownColor:
+                                                                      Constants
+                                                                          .polyDark,
+                                                                  underline:
+                                                                      Container(
+                                                                          width:
+                                                                              0.0,
+                                                                          height:
+                                                                              0.0),
+                                                                  style: Constants
+                                                                      .defaultTextWhite,
+                                                                  items: <
+                                                                      String>[
+                                                                    'No sorting',
+                                                                    'Date ascending',
+                                                                    'Date descending',
+                                                                    'Rating ascending',
+                                                                    'Rating descending'
+                                                                  ].map((String
+                                                                      value) {
+                                                                    return DropdownMenuItem<
+                                                                        String>(
+                                                                      value:
+                                                                          value,
+                                                                      child:
+                                                                          new Text(
                                                                         value,
-                                                                    child:
-                                                                        new Text(
-                                                                      value,
+                                                                        style: Constants
+                                                                            .defaultTextWhite,
+                                                                      ),
+                                                                    );
+                                                                  }).toList(),
+                                                                  onChanged: (String
+                                                                      newValue) {
+                                                                    setState(
+                                                                        () {
+                                                                      _sortFilter =
+                                                                          newValue;
+                                                                    });
+                                                                  })
+                                                            ]),
+
+                                                        Divider(
+                                                          color: Colors.white24,
+                                                          thickness: 2,
+                                                          height: 20,
+                                                        ),
+                                                        // Category
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Category",
+                                                                      style: Constants
+                                                                          .subHeaderTextWhite),
+                                                                  Container(),
+
+                                                                  // Dropdown Categories
+                                                                  DropdownButton<
+                                                                          String>(
+                                                                      value:
+                                                                          _categoryFilter,
+                                                                      dropdownColor:
+                                                                          Constants
+                                                                              .polyDark,
+                                                                      underline: Container(
+                                                                          width:
+                                                                              0.0,
+                                                                          height:
+                                                                              0.0),
                                                                       style: Constants
                                                                           .defaultTextWhite,
-                                                                    ),
-                                                                  );
-                                                                }).toList(),
-                                                                onChanged: (String
-                                                                    newValue) {
-                                                                  setState(() {
-                                                                    _sortFilter =
-                                                                        newValue;
-                                                                  });
-                                                                })
-                                                          ]),
-
-                                                      Divider(
-                                                        color: Colors.white24,
-                                                        thickness: 2,
-                                                        height: 20,
-                                                      ),
-                                                      // Category
-                                                      Padding(
+                                                                      items: _getAvailableCategories(
+                                                                              routes)
+                                                                          .map((String
+                                                                              value) {
+                                                                        return DropdownMenuItem<
+                                                                            String>(
+                                                                          value:
+                                                                              value,
+                                                                          child:
+                                                                              new Text(
+                                                                            value,
+                                                                            style:
+                                                                                Constants.defaultTextWhite,
+                                                                          ),
+                                                                        );
+                                                                      }).toList(),
+                                                                      onChanged:
+                                                                          (String
+                                                                              newValue) {
+                                                                        setState(
+                                                                            () {
+                                                                          _categoryFilter =
+                                                                              newValue;
+                                                                        });
+                                                                      })
+                                                                ])),
+                                                        Divider(
+                                                          color: Colors.white24,
+                                                          thickness: 2,
+                                                          height: 20,
+                                                        ),
+                                                        // Difficulty
+                                                        Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
                                                           child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text("Category",
-                                                                    style: Constants
-                                                                        .subHeaderTextWhite),
-                                                                Container(),
-
-                                                                // Dropdown Categories
-                                                                DropdownButton<
-                                                                        String>(
-                                                                    value:
-                                                                        _categoryFilter,
-                                                                    dropdownColor:
-                                                                        Constants
-                                                                            .polyDark,
-                                                                    underline: Container(
-                                                                        width:
-                                                                            0.0,
-                                                                        height:
-                                                                            0.0),
-                                                                    style: Constants
-                                                                        .defaultTextWhite,
-                                                                    items: _getAvailableCategories(
-                                                                            routes)
-                                                                        .map((String
-                                                                            value) {
-                                                                      return DropdownMenuItem<
-                                                                          String>(
-                                                                        value:
-                                                                            value,
-                                                                        child:
-                                                                            new Text(
-                                                                          value,
-                                                                          style:
-                                                                              Constants.defaultTextWhite,
-                                                                        ),
-                                                                      );
-                                                                    }).toList(),
-                                                                    onChanged:
-                                                                        (String
-                                                                            newValue) {
-                                                                      setState(
-                                                                          () {
-                                                                        _categoryFilter =
-                                                                            newValue;
-                                                                      });
-                                                                    })
-                                                              ])),
-                                                      Divider(
-                                                        color: Colors.white24,
-                                                        thickness: 2,
-                                                        height: 20,
-                                                      ),
-                                                      // Difficulty
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text("Difficulty",
-                                                                style: Constants
-                                                                    .subHeaderTextWhite),
-                                                            ElevatedButton(
-                                                                child: Text(
-                                                                    'Colors'),
-                                                                onPressed:
-                                                                    () async {
-                                                                  await showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (_) {
-                                                                        return MultiSelectDialog(
-                                                                            backgroundColor: Constants
-                                                                                .polyGray,
-                                                                            itemsTextStyle: Constants
-                                                                                .defaultTextBlack700,
-                                                                            selectedItemsTextStyle: Constants
-                                                                                .defaultTextWhite900,
-                                                                            searchTextStyle: Constants
-                                                                                .defaultTextWhite700,
-                                                                            searchHintStyle: Constants
-                                                                                .defaultTextWhite,
-                                                                            closeSearchIcon:
-                                                                                Icon(
-                                                                              Icons.close,
-                                                                              color: Colors.white,
-                                                                            ),
-                                                                            searchIcon:
-                                                                                Icon(Icons.search, color: Colors.white),
-                                                                            cancelText: Text('Cancel', style: Constants.defaultTextWhite),
-                                                                            confirmText: Text('Confirm', style: Constants.defaultTextWhite),
-                                                                            title: Text('Route Colors', style: Constants.defaultTextWhite),
-                                                                            initialValue: _routeColorFilter,
-                                                                            items: routeColorSnapshot.data.map((e) => MultiSelectItem(e, e.color)).toList(),
-                                                                            colorator: (item) {
-                                                                              return Color((item as RouteColor).colorCode);
-                                                                            },
-                                                                            listType: MultiSelectListType.CHIP,
-                                                                            onConfirm: ((values) {
-                                                                              _routeColorFilter = values;
-                                                                            }));
-                                                                      });
-                                                                })
-                                                          ],
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text("Difficulty",
+                                                                  style: Constants
+                                                                      .subHeaderTextWhite),
+                                                              ElevatedButton(
+                                                                  child: Text(
+                                                                      'Colors'),
+                                                                  onPressed:
+                                                                      () async {
+                                                                    await showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (_) {
+                                                                          return MultiSelectDialog(
+                                                                              backgroundColor: Constants.polyGray,
+                                                                              itemsTextStyle: Constants.defaultTextBlack700,
+                                                                              selectedItemsTextStyle: Constants.defaultTextWhite900,
+                                                                              searchTextStyle: Constants.defaultTextWhite700,
+                                                                              searchHintStyle: Constants.defaultTextWhite,
+                                                                              closeSearchIcon: Icon(
+                                                                                Icons.close,
+                                                                                color: Colors.white,
+                                                                              ),
+                                                                              searchIcon: Icon(Icons.search, color: Colors.white),
+                                                                              cancelText: Text('Cancel', style: Constants.defaultTextWhite),
+                                                                              confirmText: Text('Confirm', style: Constants.defaultTextWhite),
+                                                                              title: Text('Route Colors', style: Constants.defaultTextWhite),
+                                                                              initialValue: _routeColorFilter,
+                                                                              items: routeColorSnapshot.data.map((e) => MultiSelectItem(e, e.color)).toList(),
+                                                                              colorator: (item) {
+                                                                                return Color((item as RouteColor).colorCode);
+                                                                              },
+                                                                              listType: MultiSelectListType.CHIP,
+                                                                              onConfirm: ((values) {
+                                                                                _routeColorFilter = values;
+                                                                              }));
+                                                                        });
+                                                                  })
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Divider(
-                                                        color: Colors.white24,
-                                                        thickness: 2,
-                                                        height: 20,
-                                                      ),
-                                                      // Toggle Switch
-                                                      Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: ToggleSwitch(
-                                                              initialLabelIndex:
-                                                                  0,
-                                                              totalSwitches: 3,
-                                                              labels: [
-                                                                'ALL',
-                                                                'TRYING',
-                                                                'DONE'
-                                                              ],
-                                                              activeBgColors: [
-                                                                [
-                                                                  Colors
-                                                                      .lightBlueAccent
+                                                        Divider(
+                                                          color: Colors.white24,
+                                                          thickness: 2,
+                                                          height: 20,
+                                                        ),
+                                                        // Toggle Switch
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets.all(
+                                                                    8.0),
+                                                            child: ToggleSwitch(
+                                                                initialLabelIndex:
+                                                                    0,
+                                                                totalSwitches:
+                                                                    3,
+                                                                labels: [
+                                                                  'ALL',
+                                                                  'TRYING',
+                                                                  'DONE'
                                                                 ],
-                                                                [
-                                                                  Colors
-                                                                      .orangeAccent
+                                                                activeBgColors: [
+                                                                  [
+                                                                    Colors
+                                                                        .lightBlueAccent
+                                                                  ],
+                                                                  [
+                                                                    Colors
+                                                                        .orangeAccent
+                                                                  ],
+                                                                  [
+                                                                    Constants
+                                                                        .polyGreen
+                                                                  ]
                                                                 ],
-                                                                [
-                                                                  Constants
-                                                                      .polyGreen
-                                                                ]
-                                                              ],
-                                                              inactiveBgColor:
-                                                                  Constants
-                                                                      .lightGray,
-                                                              activeFgColor:
-                                                                  Colors.white,
-                                                              inactiveFgColor:
-                                                                  Colors.white,
-                                                              fontSize: 12.0,
-                                                              radiusStyle: true,
-                                                              animate: true,
-                                                              curve:
-                                                                  Curves.ease,
-                                                              onToggle:
-                                                                  (index) {
-                                                                _routeStateFilterIndex =
-                                                                    index;
-                                                              }))
-                                                    ])))),
-
-                                    // Page content
-                                    body: Container(
-                                        child: Column(children: [
-                                      // filter button
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: IconButton(
-                                                  icon: Icon(
-                                                      Icons.filter_list_rounded,
-                                                      size: 32.0),
-                                                  color: Colors.white,
-                                                  onPressed: () =>
-                                                      openDrawer()),
-                                            )
-                                          ]),
-                                      // Grid view (with RouteCards)
-                                      Expanded(
-                                        child: StreamBuilder<List<AppRoute>>(
-                                            stream: locator<RoutesService>()
-                                                .streamRoutes(
-                                                    snapshot.data.selectedGym),
-                                            builder: (context, routesSnapshot) {
-                                              if (snapshot.connectionState !=
-                                                      ConnectionState.active ||
-                                                  !routesSnapshot.hasData) {
-                                                return Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              } else {
-                                                if (routesSnapshot.data.length <
-                                                    1) {
-                                                  return Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        FittedBox(
-                                                            fit:
-                                                                BoxFit.fitWidth,
-                                                            child: Text(
-                                                                'There are no routes for this gym yet.',
-                                                                style: TextStyle(
-                                                                    color: Colors
+                                                                inactiveBgColor:
+                                                                    Constants
+                                                                        .lightGray,
+                                                                activeFgColor:
+                                                                    Colors
                                                                         .white,
-                                                                    fontSize:
-                                                                        16.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700))),
-                                                        Icon(
-                                                            Icons
-                                                                .mood_bad_rounded,
-                                                            color: Colors.white,
-                                                            size: 32.0)
-                                                      ]);
+                                                                inactiveFgColor:
+                                                                    Colors
+                                                                        .white,
+                                                                fontSize: 12.0,
+                                                                radiusStyle:
+                                                                    true,
+                                                                animate: true,
+                                                                curve:
+                                                                    Curves.ease,
+                                                                onToggle:
+                                                                    (index) {
+                                                                  _routeStateFilterIndex =
+                                                                      index;
+                                                                }))
+                                                      ])))),
+
+                                      // Page content
+                                      body: Container(
+                                          child: Column(children: [
+                                        // filter button
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: IconButton(
+                                                    icon: Icon(
+                                                        Icons
+                                                            .filter_list_rounded,
+                                                        size: 32.0),
+                                                    color: Colors.white,
+                                                    onPressed: () =>
+                                                        openDrawer()),
+                                              )
+                                            ]),
+                                        // Grid view (with RouteCards)
+                                        Expanded(
+                                          child: StreamBuilder<List<AppRoute>>(
+                                              stream: locator<RoutesService>()
+                                                  .streamRoutes(snapshot
+                                                      .data.selectedGym),
+                                              builder:
+                                                  (context, routesSnapshot) {
+                                                if (snapshot.connectionState !=
+                                                        ConnectionState
+                                                            .active ||
+                                                    !routesSnapshot.hasData) {
+                                                  return Center(
+                                                      child:
+                                                          CircularProgressIndicator());
                                                 } else {
-                                                  List<AppRoute>
-                                                      filteredRoutes =
-                                                      _applyRouteFilter(
-                                                    routes,
-                                                  );
-                                                  return GridView.builder(
-                                                      gridDelegate:
-                                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 2,
-                                                        childAspectRatio:
-                                                            (itemWidth /
-                                                                itemHeight),
-                                                      ),
-                                                      itemCount:
-                                                          filteredRoutes.length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Container(
-                                                            child: RouteCard(
-                                                                route:
-                                                                    filteredRoutes[
-                                                                        index],
-                                                                appUser:
-                                                                    snapshot
-                                                                        .data));
-                                                      });
+                                                  if (routesSnapshot
+                                                          .data.length <
+                                                      1) {
+                                                    return Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          FittedBox(
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                              child: Text(
+                                                                  'There are no routes for this gym yet.',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          16.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700))),
+                                                          Icon(
+                                                              Icons
+                                                                  .mood_bad_rounded,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 32.0)
+                                                        ]);
+                                                  } else {
+                                                    List<AppRoute>
+                                                        filteredRoutes =
+                                                        _applyRouteFilter(
+                                                      routes,
+                                                    );
+                                                    return GridView.builder(
+                                                        gridDelegate:
+                                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 2,
+                                                          childAspectRatio:
+                                                              (itemWidth /
+                                                                  itemHeight),
+                                                        ),
+                                                        itemCount:
+                                                            filteredRoutes
+                                                                .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return Container(
+                                                              child: RouteCard(
+                                                                  route:
+                                                                      filteredRoutes[
+                                                                          index],
+                                                                  appUser:
+                                                                      snapshot
+                                                                          .data));
+                                                        });
+                                                  }
                                                 }
-                                              }
-                                            }),
-                                      )
-                                    ]))),
-                                if (_getPrivileges(snapshot.data))
-                                  RouteAddPanel(
-                                      appUser: snapshot.data,
-                                      panelController:
-                                          _routesAddPanelController),
-                                if (_getPrivileges(snapshot.data))
-                                  RouteEditPanel()
-                              ]));
-                        }
-                      });
-                }));
+                                              }),
+                                        )
+                                      ]))),
+                                  if (_getPrivileges(snapshot.data))
+                                    RouteAddPanel(
+                                        appUser: snapshot.data,
+                                        panelController:
+                                            _routesAddPanelController),
+                                  if (_getPrivileges(snapshot.data))
+                                    RouteEditPanel()
+                                ]));
+                          }
+                        });
+                  }));
+            }
           }
         });
   }

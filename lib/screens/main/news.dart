@@ -30,23 +30,18 @@ class NewsScreen extends StatelessWidget {
             if (userSnapshot.data.selectedGym == null ||
                 userSnapshot.data.selectedGym.isEmpty) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      height: 50,
-                      margin: EdgeInsets.all(16),
-                      decoration: new BoxDecoration(
-                        borderRadius: new BorderRadius.circular(16.0),
-                        color: Colors.green,
-                      ),
-                      child: Center(
-                          child: Text("Please choose your gym",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)))),
-                ],
-              );
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text('Please choose a gym first.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700))),
+                    Icon(Icons.place, color: Colors.white, size: 32.0)
+                  ]);
             } else {
               return StreamProvider<List<News>>.value(
                   initialData: [],
