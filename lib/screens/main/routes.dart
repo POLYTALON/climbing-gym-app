@@ -319,7 +319,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                     8.0),
                                                             child: ToggleSwitch(
                                                                 initialLabelIndex:
-                                                                    0,
+                                                                    _routeStateFilterIndex,
                                                                 totalSwitches:
                                                                     3,
                                                                 labels: [
@@ -434,8 +434,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                     List<AppRoute>
                                                         filteredRoutes =
                                                         _applyRouteFilter(
-                                                      routes,
-                                                    );
+                                                            routes,
+                                                            snapshot.data);
                                                     return GridView.builder(
                                                         gridDelegate:
                                                             SliverGridDelegateWithFixedCrossAxisCount(
@@ -546,17 +546,45 @@ class _RoutesScreenState extends State<RoutesScreen> {
   }
 
   List<AppRoute> _filterRoutesByState(List<AppRoute> routes, AppUser user) {
+    List<AppRoute> doneRoutes = [];
+    List<AppRoute> tryingRoutes = [];
+    Map<String, dynamic> gymRoutes = user.userRoutes.entries
+        .firstWhere((element) => element.key == user.selectedGym)
+        .value;
+    if (gymRoutes.entries.isNotEmpty && routes.isNotEmpty) {
+      gymRoutes.entries.forEach((entry) {
+        if (entry.value['isDone'] != null && entry.value['isDone']) {
+          doneRoutes
+              .addAll(routes.where((route) => route.id == entry.key).toList());
+        } else if (entry.value['isDone'] != null && !entry.value['isDone']) {
+          tryingRoutes
+              .addAll(routes.where((route) => route.id == entry.key).toList());
+        }
+      });
+    } else {
+      return [];
+    }
     switch (_routeStateFilterIndex) {
       case 1:
-        return [];
+        return tryingRoutes;
+      case 2:
+        return doneRoutes;
+      case 0:
+      default:
+        return routes.isNotEmpty ? routes : [];
     }
-    return routes;
   }
 
-  List<AppRoute> _applyRouteFilter(List<AppRoute> routes) {
+  List<AppRoute> _applyRouteFilter(List<AppRoute> routes, AppUser user) {
     List<AppRoute> result = routes;
-    result = _filterRoutesByCategory(result);
-    result = _filterRoutesByColor(result);
-    return result;
+    if (routes.isEmpty)
+      return [];
+    else {
+      result = routes;
+      result = _filterRoutesByCategory(result);
+      result = _filterRoutesByColor(result);
+      result = _filterRoutesByState(result, user);
+      return result;
+    }
   }
 }
