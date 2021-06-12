@@ -53,6 +53,12 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
     _animation = new Tween<double>(begin: 0, end: 1).animate(
         new CurvedAnimation(
             parent: _animationController, curve: Curves.easeInOutCirc));
+    getRouteStatus();
+    getRouteRating();
+    super.initState();
+  }
+
+  void getRouteStatus() {
     if (route.isDone) {
       _animationController.forward();
       isSelected = 2;
@@ -61,8 +67,6 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
     } else {
       isSelected = 0;
     }
-    getRouteRating();
-    super.initState();
   }
 
   void getRouteRating() async {
@@ -149,6 +153,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                   radiusStyle: true,
                                   labels: ['Open', 'Tried', 'Done'],
                                   onToggle: (index) {
+                                    isSelected = index;
                                     if (index == 2) {
                                       _animationController.forward();
                                     } else {
