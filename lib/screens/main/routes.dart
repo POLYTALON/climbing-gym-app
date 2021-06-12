@@ -22,6 +22,8 @@ class RoutesScreen extends StatefulWidget {
 
 class _RoutesScreenState extends State<RoutesScreen> {
   final PanelController _routesAddPanelController = PanelController();
+  final routesService = locator<RoutesService>();
+  final routeColorService = locator<RouteColorService>();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   String _sortFilter = 'No sorting';
   List<RouteColor> _routeColorFilter = [];
@@ -34,8 +36,6 @@ class _RoutesScreenState extends State<RoutesScreen> {
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
-    final routesService = locator<RoutesService>();
-    final routeColorService = locator<RouteColorService>();
 
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
@@ -435,7 +435,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                   } else {
                                                     List<AppRoute>
                                                         filteredRoutes =
-                                                        _applyRouteFilter(
+                                                        _applyRouteFilters(
                                                             routes,
                                                             snapshot.data);
                                                     return GridView.builder(
@@ -548,36 +548,37 @@ class _RoutesScreenState extends State<RoutesScreen> {
   }
 
   List<AppRoute> _filterRoutesByState(List<AppRoute> routes, AppUser user) {
-    List<AppRoute> doneRoutes = [];
-    List<AppRoute> tryingRoutes = [];
-    Map<String, dynamic> gymRoutes = user.userRoutes.entries
-        .firstWhere((element) => element.key == user.selectedGym)
-        .value;
-    if (gymRoutes.entries.isNotEmpty && routes.isNotEmpty) {
-      gymRoutes.entries.forEach((entry) {
-        if (entry.value['isDone'] != null && entry.value['isDone']) {
-          doneRoutes
-              .addAll(routes.where((route) => route.id == entry.key).toList());
-        } else if (entry.value['isDone'] != null && !entry.value['isDone']) {
-          tryingRoutes
-              .addAll(routes.where((route) => route.id == entry.key).toList());
-        }
-      });
-    } else {
-      return [];
-    }
     switch (_routeStateFilterIndex) {
       case 1:
-        return tryingRoutes;
+        return routes.where((route) => route.isTried).toList();
       case 2:
-        return doneRoutes;
+        return routes.where((route) => route.isDone).toList();
       case 0:
       default:
         return routes.isNotEmpty ? routes : [];
     }
   }
 
-  List<AppRoute> _applyRouteFilter(List<AppRoute> routes, AppUser user) {
+  List<AppRoute> _sortRoutes(List<AppRoute> routes) {
+    switch (_sortFilter) {
+      case 'Date ascending':
+        routes.sort((a, b) => a.date.compareTo(b.date));
+        break;
+
+      case 'Date descending':
+        routes.sort((a, b) => b.date.compareTo(a.date));
+        break;
+
+      case 'Rating ascending':
+        break;
+
+      case 'Rating descending':
+        break;
+    }
+    return routes;
+  }
+
+  List<AppRoute> _applyRouteFilters(List<AppRoute> routes, AppUser user) {
     List<AppRoute> result = routes;
     if (routes.isEmpty)
       return [];
@@ -586,6 +587,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
       result = _filterRoutesByCategory(result);
       result = _filterRoutesByColor(result);
       result = _filterRoutesByState(result, user);
+      result = _sortRoutes(result);
       return result;
     }
   }
