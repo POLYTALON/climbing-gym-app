@@ -60,7 +60,7 @@ class RoutesService extends ChangeNotifier {
     return result;
   }
 
-  Future<double> getRatingByRouteId(String routeId) async {
+  Future<List> getRatingByRouteId(String routeId) async {
     int ratingCount = 0;
     double ratingSum = 0;
     await _firestore
@@ -75,9 +75,9 @@ class RoutesService extends ChangeNotifier {
       });
     });
     if (ratingSum > 0) {
-      return ratingSum / ratingCount;
+      return [ratingCount, ratingSum / ratingCount];
     }
-    return 0;
+    return [0, 0.0];
   }
 
   Future<int> getUserRatingByRouteId(String userId, String routeId) async {
