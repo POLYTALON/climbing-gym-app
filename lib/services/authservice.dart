@@ -159,8 +159,7 @@ class AuthService with ChangeNotifier {
           Map<String, dynamic> data = snapshot.data();
 
           if (data.containsKey('routes')) {
-            userRoutes =
-                data.entries.firstWhere((entry) => entry.key == 'routes').value;
+            userRoutes = data['routes'];
           }
         });
       } on FirebaseException catch (e) {

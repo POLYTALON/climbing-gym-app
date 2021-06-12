@@ -33,7 +33,7 @@ const TextStyle defaultTextWhite =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16);
 
 const TextStyle smallTextWhite600 =
-    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14);
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12);
 
 const TextStyle defaultTextWhite700 =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16);
