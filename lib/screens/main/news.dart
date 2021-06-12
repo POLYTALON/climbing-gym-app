@@ -8,14 +8,13 @@ import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsCard.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 const polyDark = Color(0x121212);
 
 class NewsScreen extends StatelessWidget {
-  final SlidingUpPanelController _newsAddPanelController =
-      SlidingUpPanelController();
+  final PanelController _newsAddPanelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +30,18 @@ class NewsScreen extends StatelessWidget {
             if (userSnapshot.data.selectedGym == null ||
                 userSnapshot.data.selectedGym.isEmpty) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      height: 50,
-                      margin: EdgeInsets.all(16),
-                      decoration: new BoxDecoration(
-                        borderRadius: new BorderRadius.circular(16.0),
-                        color: Colors.green,
-                      ),
-                      child: Center(
-                          child: Text("Please choose your gym",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)))),
-                ],
-              );
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text('Please choose a gym first.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700))),
+                    Icon(Icons.place, color: Colors.white, size: 32.0)
+                  ]);
             } else {
               return StreamProvider<List<News>>.value(
                   initialData: [],
@@ -103,10 +97,10 @@ class NewsScreen extends StatelessWidget {
   }
 
   void _toggleAddPanel() {
-    if (_newsAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _newsAddPanelController.collapse();
+    if (_newsAddPanelController.isPanelOpen) {
+      _newsAddPanelController.close();
     } else {
-      _newsAddPanelController.anchor();
+      _newsAddPanelController.open();
     }
   }
 

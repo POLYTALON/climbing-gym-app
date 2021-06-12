@@ -8,8 +8,8 @@ import 'package:climbing_gym_app/widgets/routes/routeCard.dart';
 import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RoutesScreen extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class RoutesScreen extends StatefulWidget {
 }
 
 class _RoutesScreenState extends State<RoutesScreen> {
-  final SlidingUpPanelController _routesAddPanelController =
-      SlidingUpPanelController();
+  final PanelController _routesAddPanelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,108 +35,131 @@ class _RoutesScreenState extends State<RoutesScreen> {
               !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
-            return StreamProvider<List<AppRoute>>.value(
-                initialData: [],
-                value: routesService.streamRoutes(snapshot.data.selectedGym),
-                child: Consumer<List<AppRoute>>(builder: (context, routes, _) {
-                  return ChangeNotifierProvider<RoutesService>(
-                      create: (_) => RoutesService(),
-                      child: Stack(children: <Widget>[
-                        Scaffold(
-                            // Add route button
-                            floatingActionButton:
-                                _getFloatingActionButton(snapshot.data),
-                            backgroundColor: Constants.polyDark,
+            if (snapshot.data.selectedGym == null ||
+                snapshot.data.selectedGym.isEmpty) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text('Please choose a gym first.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700))),
+                    Icon(Icons.place, color: Colors.white, size: 32.0)
+                  ]);
+            } else {
+              return StreamProvider<List<AppRoute>>.value(
+                  initialData: [],
+                  value: routesService.streamRoutes(
+                      snapshot.data.selectedGym, snapshot.data.userRoutes),
+                  child:
+                      Consumer<List<AppRoute>>(builder: (context, routes, _) {
+                    return ChangeNotifierProvider<RoutesService>(
+                        create: (_) => RoutesService(),
+                        child: Stack(children: <Widget>[
+                          Scaffold(
+                              // Add route button
+                              floatingActionButton:
+                                  _getFloatingActionButton(snapshot.data),
+                              backgroundColor: Constants.polyDark,
 
-                            // Page content
-                            body: Container(
-                                child: Column(children: [
-                              // filter button
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.filter_list_rounded,
-                                              size: 32.0),
-                                          color: Colors.white,
-                                          onPressed: () => {}),
-                                    )
-                                  ]),
-                              // Grid view (with RouteCards)
-                              Expanded(
-                                child: StreamBuilder(
-                                    stream: locator<RoutesService>()
-                                        .streamRoutes(
-                                            snapshot.data.selectedGym),
-                                    builder: (context, routesSnapshot) {
-                                      if (snapshot.connectionState !=
-                                              ConnectionState.active ||
-                                          !routesSnapshot.hasData) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      } else {
-                                        if (routesSnapshot.data.length < 1) {
-                                          return Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                FittedBox(
-                                                    fit: BoxFit.fitWidth,
-                                                    child: Text(
-                                                        'There are no routes for this gym yet.',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 16.0,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700))),
-                                                Icon(Icons.mood_bad_rounded,
-                                                    color: Colors.white,
-                                                    size: 32.0)
-                                              ]);
+                              // Page content
+                              body: Container(
+                                  child: Column(children: [
+                                // filter button
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: IconButton(
+                                            icon: Icon(
+                                                Icons.filter_list_rounded,
+                                                size: 32.0),
+                                            color: Colors.white,
+                                            onPressed: () => {}),
+                                      )
+                                    ]),
+                                // Grid view (with RouteCards)
+                                Expanded(
+                                  child: StreamBuilder(
+                                      stream: locator<RoutesService>()
+                                          .streamRoutes(
+                                              snapshot.data.selectedGym,
+                                              snapshot.data.userRoutes),
+                                      builder: (context, routesSnapshot) {
+                                        if (snapshot.connectionState !=
+                                                ConnectionState.active ||
+                                            !routesSnapshot.hasData) {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
                                         } else {
-                                          return GridView.builder(
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                childAspectRatio:
-                                                    (itemWidth / itemHeight),
-                                              ),
-                                              itemCount: routes.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Container(
-                                                    child: RouteCard(
-                                                        route: routes[index],
-                                                        appUser:
-                                                            snapshot.data));
-                                              });
+                                          if (routesSnapshot.data.length < 1) {
+                                            return Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  FittedBox(
+                                                      fit: BoxFit.fitWidth,
+                                                      child: Text(
+                                                          'There are no routes for this gym yet.',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700))),
+                                                  Icon(Icons.mood_bad_rounded,
+                                                      color: Colors.white,
+                                                      size: 32.0)
+                                                ]);
+                                          } else {
+                                            return GridView.builder(
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio:
+                                                      (itemWidth / itemHeight),
+                                                ),
+                                                itemCount: routes.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Container(
+                                                      child: RouteCard(
+                                                          route: routes[index],
+                                                          appUser:
+                                                              snapshot.data));
+                                                });
+                                          }
                                         }
-                                      }
-                                    }),
-                              )
-                            ]))),
-                        if (_getPrivileges(snapshot.data))
-                          RouteAddPanel(
-                              appUser: snapshot.data,
-                              panelController: _routesAddPanelController),
-                        if (_getPrivileges(snapshot.data)) RouteEditPanel()
-                      ]));
-                }));
+                                      }),
+                                )
+                              ]))),
+                          if (_getPrivileges(snapshot.data))
+                            RouteAddPanel(
+                                appUser: snapshot.data,
+                                panelController: _routesAddPanelController),
+                          if (_getPrivileges(snapshot.data)) RouteEditPanel()
+                        ]));
+                  }));
+            }
           }
         });
   }
 
   void toggleSlidingPanel() {
-    if (_routesAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _routesAddPanelController.collapse();
+    if (_routesAddPanelController.isPanelOpen) {
+      _routesAddPanelController.close();
     } else {
-      _routesAddPanelController.anchor();
+      _routesAddPanelController.open();
     }
   }
 

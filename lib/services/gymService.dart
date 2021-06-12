@@ -84,4 +84,34 @@ class GymService extends ChangeNotifier with FileService {
       return false;
     }
   }
+
+  Future<String> getGymNameById(String gymId) async {
+    return _firestore
+            .collection('gyms')
+            .doc(gymId)
+            .get()
+            .then((gym) => gym.data()['name'] + ' ' + gym.data()['city']) ??
+        '';
+  }
+
+  Future<String> uploadFile(File file, String path) async {
+    String url;
+    file = await compressFile(file);
+    try {
+      TaskSnapshot snapshot = await _storage
+          .ref()
+          .child(path + '/' + basename(file.path))
+          .putFile(file);
+      url = await snapshot.ref.getDownloadURL();
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+    return url;
+  }
+
+  Future<File> compressFile(File file) async {
+    File compressedFile =
+        await FlutterNativeImage.compressImage(file.path, quality: 25);
+    return compressedFile;
+  }
 }
