@@ -2,26 +2,16 @@ import 'dart:async';
 
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
+import 'package:climbing_gym_app/widgets/routes/ratingBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-/*
-Status  (OPEN / TRYING / )
-Difficulty
-Rating (incl. Plus Button)
-Date
-Category
-Setter
-Holds
-*/
+import 'package:toggle_switch/toggle_switch.dart';
 
 class RouteDetailScreen extends StatefulWidget {
   final AppRoute route;
@@ -38,32 +28,44 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
   _RouteDetailScreenState(this.route);
 
   final routeColorService = locator<RouteColorService>();
-
+  final authService = locator<AuthService>();
+  final routesService = locator<RoutesService>();
   final AppRoute route;
 
-/*
+  AlertDialog ratingDialog;
+  double routeRating; //TODO: get users rating
+  int myRating = 3;
+  int isSelected;
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
-        constraints: BoxConstraints.expand(),
-        child: Scaffold(
-            appBar: PreferredSize(
-                preferredSize: Size.fromHeight(64.0),
-                child: AppBar(
-                  brightness: Brightness.dark,
-                  backgroundColor: Constants.polyDark,
-                  //automaticallyImplyLeading: false, // removes back-arrow
-                  actions: [
-                    IconButton(
-                      icon: Image.asset('assets/img/polytalon_logo_notext.png'),
-                      onPressed: () {},
-                    )
-                  ],
-                  title: Text("ROUTE",
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
-                )),
-            body: Container(child: Text(this.route.toString()))));
+  void initState() {
+    if (route.isDone) {
+      print("done");
+      isSelected = 2;
+    } else if (route.isTried) {
+      print("tried");
+      isSelected = 1;
+    } else {
+      isSelected = 0;
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("disposing");
+    super.dispose();
+  }
+
+/*
+  Future<void> getRouteRating() async {
+    double newRating = await routesService.getRatingByRouteId(route.id);
+    setState(() {
+      routeRating = newRating;
+    });
+    print(routeRating);
+    return;
   }
   */
 
@@ -118,21 +120,57 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Date", style: Constants.defaultTextWhite),
-                                Text(
-                                    DateFormat('dd.MM.yyyy')
-                                        .format(this.route.date),
-                                    style: Constants.defaultTextWhite)
+                                Text("Status",
+                                    style: Constants.defaultTextWhite),
+                                ToggleSwitch(
+                                  initialLabelIndex: isSelected,
+                                  inactiveBgColor: Constants.lightGray,
+                                  inactiveFgColor: Colors.white,
+                                  activeBgColors: [
+                                    [Colors.lightBlueAccent],
+                                    [Colors.orangeAccent],
+                                    [Constants.polyGreen]
+                                  ],
+                                  activeFgColor: Colors.white,
+                                  totalSwitches: 3,
+                                  labels: ['Open', 'Tried', 'Done'],
+                                  onToggle: (index) {
+                                    openRatingDialog(context);
+                                    route.isDone = index == 2;
+                                    route.isTried = index == 1;
+                                    authService.updateUserRouteStatus(route);
+                                  },
+                                ),
                               ]),
                           Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Setter",
-                                    style: Constants.defaultTextWhite),
-                                Text(this.route.builder,
-                                    style: Constants.defaultTextWhite)
-                              ]),
+                          StreamBuilder<double>(
+                              stream:
+                                  routesService.streamRatingByRouteId(route.id),
+                              builder: (context, ratingSnapshot) {
+                                if (ratingSnapshot.connectionState !=
+                                    ConnectionState.active) {
+                                  return SizedBox(height: 30);
+                                } else {
+                                  return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Rating",
+                                            style: Constants.defaultTextWhite),
+                                        PolyRatingBar(
+                                            allowHalfRating: true,
+                                            onRated: (v) {},
+                                            starCount: 5,
+                                            rating: ratingSnapshot.data,
+                                            size: 30.0,
+                                            isReadOnly: true,
+                                            activeColor: Colors.orangeAccent,
+                                            inactiveColor: Constants.lightGray,
+                                            borderColor: Colors.black,
+                                            spacing: 0.0)
+                                      ]);
+                                }
+                              }),
                           Divider(color: Constants.lightGray, height: 50),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,17 +204,20 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Rating",
+                                Text("Date", style: Constants.defaultTextWhite),
+                                Text(
+                                    DateFormat('dd.MM.yyyy')
+                                        .format(this.route.date),
+                                    style: Constants.defaultTextWhite)
+                              ]),
+                          Divider(color: Constants.lightGray, height: 50),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Setter",
                                     style: Constants.defaultTextWhite),
-                                Row(
-                                  children: [
-                                    Icon(Icons.star, color: Colors.yellow),
-                                    Icon(Icons.star, color: Colors.yellow),
-                                    Icon(Icons.star, color: Colors.yellow),
-                                    Icon(Icons.star_outline),
-                                    Icon(Icons.star_outline)
-                                  ],
-                                )
+                                Text(this.route.builder,
+                                    style: Constants.defaultTextWhite)
                               ]),
                           Divider(color: Constants.lightGray, height: 50),
                           Row(
@@ -197,70 +238,6 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                   style: Constants.defaultTextWhite)
                             ],
                           ),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Attempts",
-                                  style: Constants.defaultTextWhite),
-                              Text("18", style: Constants.defaultTextWhite)
-                            ],
-                          ),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Status", style: Constants.defaultTextWhite),
-                              Row(children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Text("done",
-                                      style: Constants.defaultTextWhite),
-                                ),
-                                Icon(Icons.check, color: Constants.polyGreen)
-                              ])
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Constants.lightGray),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(24.0)),
-                                      )),
-                                  onPressed: () => {},
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text("Route tried",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700)),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: TextButton(
-                                  style: Constants.polyGreenButton,
-                                  onPressed: () => {},
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text("Route done",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -272,5 +249,70 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
             return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
         });
+  }
+
+  void openRatingDialog(BuildContext context) {
+    ratingDialog = AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        title: Text(
+          "Rate this route",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(mainAxisSize: MainAxisSize.min, children: [
+          Center(
+              child: PolyRatingBar(
+                  allowHalfRating: false,
+                  starCount: 5,
+                  rating: myRating.toDouble(),
+                  size: 40.0,
+                  isReadOnly: false,
+                  onRated: (rating) {
+                    myRating = rating.toInt();
+                  },
+                  activeColor: Colors.orangeAccent,
+                  inactiveColor: Constants.lightGray,
+                  borderColor: Colors.black,
+                  spacing: 0.0))
+        ]),
+        actions: [
+          TextButton(
+            child: Text(
+              "Cancel",
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: Text(
+              "Submit",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+            onPressed: () async {
+              await routesService.updateRouteRating(
+                  authService.currentUser.uid, route, myRating);
+              //await getRouteRating();
+              Navigator.pop(context);
+            },
+          )
+        ]);
+
+    //show the dialog
+    showDialog(
+      context: context,
+      builder: (context) => ratingDialog,
+    );
   }
 }

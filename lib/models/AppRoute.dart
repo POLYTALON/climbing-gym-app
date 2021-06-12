@@ -11,10 +11,23 @@ class AppRoute extends Equatable {
   final String gymId;
   final String holds;
   final String imageUrl;
+  bool isTried;
+  bool isDone;
 
   @override
-  List<Object> get props =>
-      [id, name, type, builder, date, difficulty, gymId, holds, imageUrl];
+  List<Object> get props => [
+        id,
+        name,
+        type,
+        builder,
+        date,
+        difficulty,
+        gymId,
+        holds,
+        imageUrl,
+        isTried,
+        isDone
+      ];
 
   AppRoute(
       {this.id,
@@ -25,9 +38,12 @@ class AppRoute extends Equatable {
       this.difficulty,
       this.gymId,
       this.holds,
-      this.imageUrl});
+      this.imageUrl,
+      this.isTried,
+      this.isDone});
 
-  factory AppRoute.fromFirestore(DocumentSnapshot doc) {
+  factory AppRoute.fromFirestore(
+      DocumentSnapshot doc, bool isTried, bool isDone) {
     Map docData = doc.data();
     return AppRoute(
         id: doc.id ?? '',
@@ -41,6 +57,8 @@ class AppRoute extends Equatable {
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
         type: docData['type'] ?? '',
-        imageUrl: docData['imageUrl'] ?? '');
+        imageUrl: docData['imageUrl'] ?? '',
+        isTried: isTried,
+        isDone: isDone);
   }
 }

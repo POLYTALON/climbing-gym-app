@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:climbing_gym_app/models/AppRoute.dart';
-import 'package:climbing_gym_app/models/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,14 +21,26 @@ class RoutesService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Stream<List<AppRoute>> streamRoutes(String gymId) {
+  Stream<List<AppRoute>> streamRoutes(String gymId, dynamic userRoutes) {
     return _firestore
         .collection('routes')
         .orderBy('date', descending: true)
         .where('gymid', isEqualTo: gymId)
         .snapshots()
-        .map((list) =>
-            list.docs.map((doc) => AppRoute.fromFirestore(doc)).toList());
+        .map((list) => list.docs.map((doc) {
+              // user infos
+              bool isTried = false;
+              bool isDone = false;
+              if (userRoutes[gymId] != null &&
+                  userRoutes[gymId][doc.id] != null) {
+                if (userRoutes[gymId][doc.id]['isDone'] == true) {
+                  isDone = true;
+                } else {
+                  isTried = true;
+                }
+              }
+              return AppRoute.fromFirestore(doc, isTried, isDone);
+            }).toList());
   }
 
   Future<Map<String, int>> getRouteAmountPerColor(String gymId) async {
@@ -49,27 +60,29 @@ class RoutesService extends ChangeNotifier {
     return result;
   }
 
-  Future<Rating> getRatingByRouteId(String routeId) async {
-    List<Map<String, Timestamp>> commentsList = [{}];
-    List<int> ratingsList = [];
-    await _firestore
+  Stream<double> streamRatingByRouteId(String routeId) {
+    int ratingCount = 0;
+    double ratingSum = 0;
+    return _firestore
         .collection('routes')
         .doc(routeId)
         .collection('ratings')
-        .get()
-        .then((doc) => doc.docs.forEach((rating) {
-              if (rating.exists) {
-                rating.data().entries.forEach((entry) {
-                  commentsList.add(entry.value['date'] = entry.value['date']);
-                  print(commentsList);
-                });
-                ratingsList.add(rating.data()['rating']);
-              }
-            }))
-        .then((value) {
-      return Rating.fromFirestore(commentsList, ratingsList);
+        .snapshots()
+        .map((doc) {
+      ratingCount = 0;
+      ratingSum = 0;
+      doc.docs.forEach((rating) {
+        print(rating.id);
+        print(rating.data()['rating']);
+        ratingCount++;
+        ratingSum += rating.data()['rating'];
+      });
+      if (ratingCount == 0) {
+        return 0.0;
+      } else {
+        return ratingSum / ratingCount;
+      }
     });
-    return Rating();
   }
 
   Future<void> addRoute(
@@ -161,6 +174,35 @@ class RoutesService extends ChangeNotifier {
     } on FirebaseException catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<void> updateRouteRating(
+      String userid, AppRoute route, int rating) async {
+    try {
+      DocumentSnapshot userRating = await _firestore
+          .collection('routes')
+          .doc(route.id)
+          .collection('ratings')
+          .doc(userid)
+          .get();
+      if (userRating.exists) {
+        await _firestore
+            .collection('routes')
+            .doc(route.id)
+            .collection('ratings')
+            .doc(userid)
+            .update({'rating': rating});
+      } else {
+        await _firestore
+            .collection('routes')
+            .doc(route.id)
+            .collection('ratings')
+            .doc(userid)
+            .set({'rating': rating});
+      }
+    } on FirebaseException catch (e) {
+      print(e);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +30,8 @@ class AuthService with ChangeNotifier {
       }
     });
   }
+
+  User get currentUser => _auth.currentUser;
 
   bool get loggedIn => _loggedIn;
 
@@ -91,7 +94,7 @@ class AuthService with ChangeNotifier {
         bool isOperator = await _getIsOperator();
         String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
-        Map<String, dynamic> userRoutes = await _getUserRoutes();
+        Map<String, dynamic> userRoutes = await getUserRoutes();
         return AppUser.fromFirebase(
             _auth.currentUser, isOperator, userRoles, selectedGym, userRoutes);
       });
@@ -143,7 +146,7 @@ class AuthService with ChangeNotifier {
     return Map<String, UserRole>();
   }
 
-  Future<Map<String, dynamic>> _getUserRoutes() async {
+  Future<Map<String, dynamic>> getUserRoutes() async {
     if (_auth.currentUser != null) {
       Map<String, dynamic> userRoutes = {};
       try {
@@ -166,6 +169,24 @@ class AuthService with ChangeNotifier {
       return userRoutes;
     }
     return {};
+  }
+
+  Future<void> updateUserRouteStatus(AppRoute route) async {
+    DocumentSnapshot userDoc =
+        await _firestore.collection('users').doc(_auth.currentUser.uid).get();
+    dynamic userRoutes = userDoc['routes'];
+    if (route.isDone || route.isTried) {
+      userRoutes[route.gymId]
+          [route.id] = {"difficulty": route.difficulty, "isDone": route.isDone};
+    } else {
+      userRoutes[route.gymId][route.id] = null;
+      userRoutes[route.gymId]
+          .removeWhere((String key, dynamic value) => key == route.id);
+    }
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .update({"routes": userRoutes});
   }
 
   Future<void> selectGym(String gymid) async {

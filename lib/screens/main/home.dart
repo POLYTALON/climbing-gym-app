@@ -39,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           } else {
             return StreamProvider<List<AppRoute>>.value(
                 initialData: [],
-                value:
-                    routesService.streamRoutes(userSnapshot.data.selectedGym),
+                value: routesService.streamRoutes(userSnapshot.data.selectedGym,
+                    userSnapshot.data.userRoutes),
                 child: Consumer<List<AppRoute>>(builder: (context, routes, _) {
                   return ChangeNotifierProvider<RoutesService>(
                       create: (_) => RoutesService(),
