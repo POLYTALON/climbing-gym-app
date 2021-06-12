@@ -106,88 +106,100 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                           Constants.polyGray),
                                                   child: Column(
                                                       children: <Widget>[
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: <Widget>[
-                                                            Container(),
-                                                            Text(
-                                                              "Filter",
-                                                              style: Constants
-                                                                  .subHeaderTextWhite,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                            ),
-                                                            IconButton(
-                                                                icon: Icon(
-                                                                    Icons.close,
-                                                                    size: 32.0),
-                                                                color: Colors
-                                                                    .white,
-                                                                onPressed: () =>
-                                                                    closeDrawer()),
-                                                          ],
-                                                        ),
                                                         Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                    .all(8.0)),
-                                                        // Sort
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text("Sort",
+                                                                    .all(8.0),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: <
+                                                                  Widget>[
+                                                                Container(),
+                                                                Text(
+                                                                  "Filter",
                                                                   style: Constants
-                                                                      .subHeaderTextWhite),
-                                                              // Dropdown Sorting
-                                                              DropdownButton<
-                                                                      String>(
-                                                                  value:
-                                                                      _sortFilter,
-                                                                  dropdownColor:
-                                                                      Constants
-                                                                          .polyDark,
-                                                                  underline:
-                                                                      Container(
-                                                                          width:
-                                                                              0.0,
-                                                                          height:
-                                                                              0.0),
-                                                                  style: Constants
-                                                                      .defaultTextWhite,
-                                                                  items: <
-                                                                      String>[
-                                                                    'Date ascending',
-                                                                    'Date descending',
-                                                                    'Rating ascending',
-                                                                    'Rating descending'
-                                                                  ].map((String
-                                                                      value) {
-                                                                    return DropdownMenuItem<
-                                                                        String>(
-                                                                      value:
-                                                                          value,
-                                                                      child:
-                                                                          new Text(
-                                                                        value,
+                                                                      .subHeaderTextWhite,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                                IconButton(
+                                                                    icon: Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        size:
+                                                                            32.0),
+                                                                    color: Colors
+                                                                        .white,
+                                                                    onPressed: () =>
+                                                                        closeDrawer()),
+                                                              ],
+                                                            )),
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child:
+                                                                // Sort
+                                                                Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                  Text("Sort",
+                                                                      style: Constants
+                                                                          .subHeaderTextWhite),
+                                                                  // Dropdown Sorting
+                                                                  StatefulBuilder(builder: (BuildContext
+                                                                          context,
+                                                                      StateSetter
+                                                                          setState) {
+                                                                    return DropdownButton<
+                                                                            String>(
+                                                                        value:
+                                                                            _sortFilter,
+                                                                        dropdownColor:
+                                                                            Constants
+                                                                                .polyDark,
+                                                                        underline: Container(
+                                                                            width:
+                                                                                0.0,
+                                                                            height:
+                                                                                0.0),
                                                                         style: Constants
                                                                             .defaultTextWhite,
-                                                                      ),
-                                                                    );
-                                                                  }).toList(),
-                                                                  onChanged: (String
-                                                                      newValue) {
-                                                                    setState(
-                                                                        () {
-                                                                      _sortFilter =
-                                                                          newValue;
-                                                                    });
+                                                                        items: <
+                                                                            String>[
+                                                                          'Date ascending',
+                                                                          'Date descending',
+                                                                          'Rating ascending',
+                                                                          'Rating descending'
+                                                                        ].map((String
+                                                                            value) {
+                                                                          return DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                new Text(
+                                                                              value,
+                                                                              style: Constants.defaultTextWhite,
+                                                                            ),
+                                                                          );
+                                                                        }).toList(),
+                                                                        onChanged:
+                                                                            (String
+                                                                                newValue) {
+                                                                          setState(
+                                                                              () {
+                                                                            _sortFilter =
+                                                                                newValue;
+                                                                          });
+                                                                        });
                                                                   })
-                                                            ]),
+                                                                ])),
 
                                                         Divider(
                                                           color: Colors.white24,
@@ -211,45 +223,47 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                   Container(),
 
                                                                   // Dropdown Categories
-                                                                  DropdownButton<
-                                                                          String>(
-                                                                      value:
-                                                                          _categoryFilter,
-                                                                      dropdownColor:
-                                                                          Constants
-                                                                              .polyDark,
-                                                                      underline: Container(
-                                                                          width:
-                                                                              0.0,
-                                                                          height:
-                                                                              0.0),
-                                                                      style: Constants
-                                                                          .defaultTextWhite,
-                                                                      items: _getAvailableCategories(
-                                                                              routes)
-                                                                          .map((String
-                                                                              value) {
-                                                                        return DropdownMenuItem<
+                                                                  StatefulBuilder(builder: (BuildContext
+                                                                          context,
+                                                                      StateSetter
+                                                                          setState) {
+                                                                    return DropdownButton<
                                                                             String>(
-                                                                          value:
+                                                                        value:
+                                                                            _categoryFilter,
+                                                                        dropdownColor:
+                                                                            Constants
+                                                                                .polyDark,
+                                                                        underline: Container(
+                                                                            width:
+                                                                                0.0,
+                                                                            height:
+                                                                                0.0),
+                                                                        style: Constants
+                                                                            .defaultTextWhite,
+                                                                        items: _getAvailableCategories(routes).map((String
+                                                                            value) {
+                                                                          return DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                value,
+                                                                            child:
+                                                                                new Text(
                                                                               value,
-                                                                          child:
-                                                                              new Text(
-                                                                            value,
-                                                                            style:
-                                                                                Constants.defaultTextWhite,
-                                                                          ),
-                                                                        );
-                                                                      }).toList(),
-                                                                      onChanged:
-                                                                          (String
-                                                                              newValue) {
-                                                                        setState(
-                                                                            () {
-                                                                          _categoryFilter =
-                                                                              newValue;
+                                                                              style: Constants.defaultTextWhite,
+                                                                            ),
+                                                                          );
+                                                                        }).toList(),
+                                                                        onChanged:
+                                                                            (String
+                                                                                newValue) {
+                                                                          setState(
+                                                                              () {
+                                                                            _categoryFilter =
+                                                                                newValue;
+                                                                          });
                                                                         });
-                                                                      })
+                                                                  })
                                                                 ])),
                                                         Divider(
                                                           color: Colors.white24,
@@ -323,9 +337,9 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                 totalSwitches:
                                                                     3,
                                                                 labels: [
-                                                                  'ALL',
-                                                                  'TRYING',
-                                                                  'DONE'
+                                                                  'Open',
+                                                                  'Tried',
+                                                                  'Done'
                                                                 ],
                                                                 activeBgColors: [
                                                                   [
@@ -360,7 +374,64 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                     (index) {
                                                                   _routeStateFilterIndex =
                                                                       index;
-                                                                }))
+                                                                })),
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 32.0),
+                                                            child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: <
+                                                                    Widget>[
+                                                                  RawMaterialButton(
+                                                                    onPressed: () =>
+                                                                        setState(
+                                                                            () {}),
+                                                                    elevation:
+                                                                        2.0,
+                                                                    fillColor:
+                                                                        Constants
+                                                                            .polyGreen,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .check,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size:
+                                                                          24.0,
+                                                                    ),
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            15.0),
+                                                                    shape:
+                                                                        CircleBorder(),
+                                                                  ),
+                                                                  RawMaterialButton(
+                                                                    onPressed: () =>
+                                                                        _resetFilters(),
+                                                                    elevation:
+                                                                        2.0,
+                                                                    fillColor:
+                                                                        Constants
+                                                                            .polyRed,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .undo,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size:
+                                                                          24.0,
+                                                                    ),
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            15.0),
+                                                                    shape:
+                                                                        CircleBorder(),
+                                                                  )
+                                                                ]))
                                                       ])))),
 
                                       // Page content
@@ -513,8 +584,6 @@ class _RoutesScreenState extends State<RoutesScreen> {
 
   void closeDrawer() {
     Navigator.pop(context);
-
-    setState(() {});
   }
 
   List<String> _getAvailableCategories(List<AppRoute> routes) {
@@ -569,9 +638,11 @@ class _RoutesScreenState extends State<RoutesScreen> {
         break;
 
       case 'Rating ascending':
+        routes.sort((a, b) => a.rating.compareTo(b.rating));
         break;
 
       case 'Rating descending':
+        routes.sort((a, b) => b.rating.compareTo(a.rating));
         break;
     }
     return routes;
@@ -589,5 +660,14 @@ class _RoutesScreenState extends State<RoutesScreen> {
       result = _sortRoutes(result);
       return result;
     }
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _sortFilter = 'Date descending';
+      _routeColorFilter = [];
+      _categoryFilter = 'All';
+      _routeStateFilterIndex = 0;
+    });
   }
 }
