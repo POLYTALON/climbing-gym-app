@@ -25,7 +25,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-  String _sortFilter = 'No sorting';
+  String _sortFilter = 'Date descending';
   List<RouteColor> _routeColorFilter = [];
   String _categoryFilter = 'All';
   int _routeStateFilterIndex = 0;
@@ -161,7 +161,6 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                       .defaultTextWhite,
                                                                   items: <
                                                                       String>[
-                                                                    'No sorting',
                                                                     'Date ascending',
                                                                     'Date descending',
                                                                     'Rating ascending',
