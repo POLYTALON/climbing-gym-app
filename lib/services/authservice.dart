@@ -174,7 +174,11 @@ class AuthService with ChangeNotifier {
   Future<void> updateUserRouteStatus(AppRoute route) async {
     DocumentSnapshot userDoc =
         await _firestore.collection('users').doc(_auth.currentUser.uid).get();
-    dynamic userRoutes = userDoc['routes'];
+    dynamic userRoutes = userDoc.data()['routes'];
+    if (userRoutes == null) {
+      userRoutes = Map<String, dynamic>();
+      userRoutes[route.gymId] = Map<String, dynamic>();
+    }
     if (route.isDone || route.isTried) {
       userRoutes[route.gymId]
           [route.id] = {"difficulty": route.difficulty, "isDone": route.isDone};
