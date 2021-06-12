@@ -192,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 backgroundColor: Constants.polyGray,
                                                                                 animation: true,
                                                                                 animationDuration: 1000,
-                                                                                percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index]) / amount[index]).clamp(0.0, 1.0).toDouble(),
-                                                                                center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index]).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite),
+                                                                                percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes) / amount[index]).clamp(0.0, 1.0).toDouble(),
+                                                                                center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite),
                                                                                 progressColor: _getRouteColor(colorStrings[index], routeColorSnapshot.data)),
                                                                             Text(colorStrings[index],
                                                                                 style: Constants.smallTextWhite600),
@@ -370,13 +370,37 @@ class _HomeScreenState extends State<HomeScreen> {
     return doneCounter;
   }
 
-  int _getAccomplishedRoutesAmount(AppUser user, String color) {
+  int _getAccomplishedRoutesAmount(
+      AppUser user, String color, List<AppRoute> gymRoutes) {
     Map<String, int> amountPerColor =
-        _getTotalAccomplishedRouteAmountPerColor(user);
+        _getTotalAccomplishedCurrentRouteAmountPerColor(user, gymRoutes);
     if (amountPerColor.isNotEmpty && amountPerColor[color] != null) {
       return amountPerColor[color];
     }
     return 0;
+  }
+
+  Map<String, int> _getTotalAccomplishedCurrentRouteAmountPerColor(
+      AppUser user, List<AppRoute> currentGymRoutes) {
+    Map<String, int> result = {};
+    Map<String, dynamic> userGymRoutes = user.userRoutes[user.selectedGym];
+    if (userGymRoutes != null) {
+      userGymRoutes.forEach((routeKey, routeValue) {
+        // check if route is currently actvie
+        AppRoute currentRoute = currentGymRoutes
+            .firstWhere((route) => route.id == routeKey, orElse: () => null);
+        if (currentRoute != null) {
+          if (routeValue['isDone'] == true) {
+            if (result[routeValue['difficulty']] != null) {
+              result[routeValue['difficulty']] += 1;
+            } else {
+              result[routeValue['difficulty']] = 1;
+            }
+          }
+        }
+      });
+    }
+    return result;
   }
 
   Map<String, int> _getTotalAccomplishedRouteAmountPerColor(AppUser user) {
