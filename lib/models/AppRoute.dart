@@ -13,6 +13,8 @@ class AppRoute extends Equatable {
   final String imageUrl;
   bool isTried;
   bool isDone;
+  int ratingCount;
+  double rating;
 
   @override
   List<Object> get props => [
@@ -26,7 +28,9 @@ class AppRoute extends Equatable {
         holds,
         imageUrl,
         isTried,
-        isDone
+        isDone,
+        ratingCount,
+        rating,
       ];
 
   AppRoute(
@@ -40,10 +44,12 @@ class AppRoute extends Equatable {
       this.holds,
       this.imageUrl,
       this.isTried,
-      this.isDone});
+      this.isDone,
+      this.ratingCount,
+      this.rating});
 
-  factory AppRoute.fromFirestore(
-      DocumentSnapshot doc, bool isTried, bool isDone) {
+  factory AppRoute.fromFirestore(DocumentSnapshot doc, bool isTried,
+      bool isDone, int ratingCount, double rating) {
     Map docData = doc.data();
     return AppRoute(
         id: doc.id ?? '',
@@ -59,6 +65,8 @@ class AppRoute extends Equatable {
         type: docData['type'] ?? '',
         imageUrl: docData['imageUrl'] ?? '',
         isTried: isTried,
-        isDone: isDone);
+        isDone: isDone,
+        ratingCount: ratingCount,
+        rating: rating);
   }
 }

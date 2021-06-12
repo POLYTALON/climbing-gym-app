@@ -27,20 +27,24 @@ class RoutesService extends ChangeNotifier {
         .orderBy('date', descending: true)
         .where('gymid', isEqualTo: gymId)
         .snapshots()
-        .map((list) => list.docs.map((doc) {
-              // user infos
-              bool isTried = false;
-              bool isDone = false;
-              if (userRoutes[gymId] != null &&
-                  userRoutes[gymId][doc.id] != null) {
-                if (userRoutes[gymId][doc.id]['isDone'] == true) {
-                  isDone = true;
-                } else {
-                  isTried = true;
-                }
-              }
-              return AppRoute.fromFirestore(doc, isTried, isDone);
-            }).toList());
+        .asyncMap((list) async {
+      var future = list.docs.map((doc) async {
+        // user infos
+        bool isTried = false;
+        bool isDone = false;
+        if (userRoutes[gymId] != null && userRoutes[gymId][doc.id] != null) {
+          if (userRoutes[gymId][doc.id]['isDone'] == true) {
+            isDone = true;
+          } else {
+            isTried = true;
+          }
+        }
+        List rating = await getRatingByRouteId(doc.id);
+        return AppRoute.fromFirestore(
+            doc, isTried, isDone, rating[0], rating[1]);
+      }).toList();
+      return await Future.wait(future);
+    });
   }
 
   Future<Map<String, int>> getRouteAmountPerColor(String gymId) async {
