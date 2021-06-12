@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 ),
                                                                 LinearPercentIndicator(
                                                                     lineHeight:
-                                                                        24.0,
+                                                                        32.0,
                                                                     percent: _getAccomplishedRoutesRatioInCurrentGym(
                                                                         userSnapshot
                                                                             .data,
