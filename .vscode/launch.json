@@ -14,8 +14,10 @@
       ],
     },
     {
+      //Command Line "flutter run -t lib/main_dev.dart --flavor development"
       "name": "Development-Debug",
       "request": "launch",
+      "program": "lib/main_dev.dart",
       "type": "dart",
       "args": [
         "--flavor",
@@ -23,8 +25,10 @@
       ]
     },
     {
+      //Command Line "flutter run -t lib/main.dart --flavor productive"
       "name": "Productive-Debug",
       "request": "launch",
+      "program": "lib/main.dart",
       "type": "dart",
       "args": [
         "--flavor",
@@ -32,19 +36,25 @@
       ]
     },
     {
+      //Command Line "flutter run --release -t lib/main.dart --flavor productive"
       "name": "iOS-ReleaseMode-Productive",
       "request": "launch",
+      "program": "lib/main.dart",
       "type": "dart",
       "args": [
+        "--release",
         "--flavor",
         "release-productive"
       ]
     },
     {
+      //Command Line "flutter run --release -t lib/main_dev.dart --flavor development"
       "name": "iOS-ReleaseMode-Development",
       "request": "launch",
+      "program": "lib/main_dev.dart",
       "type": "dart",
       "args": [
+        "--release",
         "--flavor",
         "release-development"
       ]

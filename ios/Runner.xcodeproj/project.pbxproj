@@ -13,6 +13,8 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		A503517B2674A04100845650 /* Debug-development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A503517A2674A04100845650 /* Debug-development.xcconfig */; };
+		A50351812674A45600845650 /* Release-development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A50351802674A45600845650 /* Release-development.xcconfig */; };
 		FF5189BD99FFFEE9821E6B0C /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162D9CC2DE243A7BF10EDAE4 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		97C146FB1CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A503517A2674A04100845650 /* Debug-development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Debug-development.xcconfig"; path = "Flutter/Debug-development.xcconfig"; sourceTree = "<group>"; };
+		A50351802674A45600845650 /* Release-development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Release-development.xcconfig"; path = "Flutter/Release-development.xcconfig"; sourceTree = "<group>"; };
 		A59C134A218B86B7A3DFA3A2 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		A5BDF562267371AC0042F764 /* Development */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Development; sourceTree = "<group>"; };
 		A5BDF563267371AC0042F764 /* Production */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Production; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
+				A503517A2674A04100845650 /* Debug-development.xcconfig */,
+				A50351802674A45600845650 /* Release-development.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -212,8 +218,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				A503517B2674A04100845650 /* Debug-development.xcconfig in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				A50351812674A45600845650 /* Release-development.xcconfig in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -648,7 +656,7 @@
 		};
 		A5BDF55E26734DD10042F764 /* Debug-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = A503517A2674A04100845650 /* Debug-development.xcconfig */;
 			buildSettings = {
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -726,7 +734,7 @@
 		};
 		A5BE77D92673898900384592 /* Release-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = A50351802674A45600845650 /* Release-development.xcconfig */;
 			buildSettings = {
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -801,7 +809,7 @@
 		};
 		A5BE77DB2673899200384592 /* Profile-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = A50351802674A45600845650 /* Release-development.xcconfig */;
 			buildSettings = {
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -822,87 +830,6 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Profile-development";
-		};
-		A5BE77DC267398B100384592 /* Debug-Runner-development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Debug-Runner-development";
-		};
-		A5BE77DD267398B100384592 /* Debug-Runner-development */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
-			buildSettings = {
-				APP_DISPLAY_NAME = "DEV-PolyApp";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = UWG7XVKYJ9;
-				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = "Runner/Info-Debug.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.polytalon.polyappdev;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = "Debug-Runner-development";
 		};
 		A5BE77DE2673B96500384592 /* Debug-productive */ = {
 			isa = XCBuildConfiguration;
@@ -1146,7 +1073,6 @@
 				97C147031CF9000F007C117D /* Debug */,
 				A5BE77DE2673B96500384592 /* Debug-productive */,
 				A5BDF55D26734DD10042F764 /* Debug-development */,
-				A5BE77DC267398B100384592 /* Debug-Runner-development */,
 				97C147041CF9000F007C117D /* Release */,
 				A5BE77E02673B97800384592 /* Release-productive */,
 				A5BE77D82673898900384592 /* Release-development */,
@@ -1163,7 +1089,6 @@
 				97C147061CF9000F007C117D /* Debug */,
 				A5BE77DF2673B96500384592 /* Debug-productive */,
 				A5BDF55E26734DD10042F764 /* Debug-development */,
-				A5BE77DD267398B100384592 /* Debug-Runner-development */,
 				97C147071CF9000F007C117D /* Release */,
 				A5BE77E12673B97800384592 /* Release-productive */,
 				A5BE77D92673898900384592 /* Release-development */,
