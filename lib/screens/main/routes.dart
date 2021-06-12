@@ -23,8 +23,10 @@ class RoutesScreen extends StatefulWidget {
 class _RoutesScreenState extends State<RoutesScreen> {
   final PanelController _routesAddPanelController = PanelController();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-  String _selectedSortFilter = 'No sorting';
-  List<dynamic> _selectedRouteColorFilter = [];
+  String _sortFilter = 'No sorting';
+  List<RouteColor> _routeColorFilter = [];
+  String _categoryFilter = 'All';
+  int _routeStateFilterIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +126,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                             DropdownButton<
                                                                     String>(
                                                                 value:
-                                                                    _selectedSortFilter,
+                                                                    _sortFilter,
                                                                 dropdownColor:
                                                                     Constants
                                                                         .polyDark,
@@ -159,7 +161,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                 onChanged: (String
                                                                     newValue) {
                                                                   setState(() {
-                                                                    _selectedSortFilter =
+                                                                    _sortFilter =
                                                                         newValue;
                                                                   });
                                                                 })
@@ -172,20 +174,60 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                       ),
                                                       // Category
                                                       Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text("Category",
-                                                                  style: Constants
-                                                                      .subHeaderTextWhite),
-                                                              Container(),
-                                                            ]),
-                                                      ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text("Category",
+                                                                    style: Constants
+                                                                        .subHeaderTextWhite),
+                                                                Container(),
+
+                                                                // Dropdown Categories
+                                                                DropdownButton<
+                                                                        String>(
+                                                                    value:
+                                                                        _categoryFilter,
+                                                                    dropdownColor:
+                                                                        Constants
+                                                                            .polyDark,
+                                                                    underline: Container(
+                                                                        width:
+                                                                            0.0,
+                                                                        height:
+                                                                            0.0),
+                                                                    style: Constants
+                                                                        .defaultTextWhite,
+                                                                    items: _getAvailableCategories(
+                                                                            routes)
+                                                                        .map((String
+                                                                            value) {
+                                                                      return DropdownMenuItem<
+                                                                          String>(
+                                                                        value:
+                                                                            value,
+                                                                        child:
+                                                                            new Text(
+                                                                          value,
+                                                                          style:
+                                                                              Constants.defaultTextWhite,
+                                                                        ),
+                                                                      );
+                                                                    }).toList(),
+                                                                    onChanged:
+                                                                        (String
+                                                                            newValue) {
+                                                                      setState(
+                                                                          () {
+                                                                        _categoryFilter =
+                                                                            newValue;
+                                                                      });
+                                                                    })
+                                                              ])),
                                                       Divider(
                                                         color: Colors.white24,
                                                         thickness: 2,
@@ -235,14 +277,14 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                             cancelText: Text('Cancel', style: Constants.defaultTextWhite),
                                                                             confirmText: Text('Confirm', style: Constants.defaultTextWhite),
                                                                             title: Text('Route Colors', style: Constants.defaultTextWhite),
-                                                                            initialValue: _selectedRouteColorFilter,
+                                                                            initialValue: _routeColorFilter,
                                                                             items: routeColorSnapshot.data.map((e) => MultiSelectItem(e, e.color)).toList(),
                                                                             colorator: (item) {
                                                                               return Color((item as RouteColor).colorCode);
                                                                             },
                                                                             listType: MultiSelectListType.CHIP,
                                                                             onConfirm: ((values) {
-                                                                              _selectedRouteColorFilter = values;
+                                                                              _routeColorFilter = values;
                                                                             }));
                                                                       });
                                                                 })
@@ -295,7 +337,10 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                               curve:
                                                                   Curves.ease,
                                                               onToggle:
-                                                                  (index) {}))
+                                                                  (index) {
+                                                                _routeStateFilterIndex =
+                                                                    index;
+                                                              }))
                                                     ])))),
 
                                     // Page content
@@ -319,7 +364,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                           ]),
                                       // Grid view (with RouteCards)
                                       Expanded(
-                                        child: StreamBuilder(
+                                        child: StreamBuilder<List<AppRoute>>(
                                             stream: locator<RoutesService>()
                                                 .streamRoutes(
                                                     snapshot.data.selectedGym),
@@ -361,6 +406,11 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                             size: 32.0)
                                                       ]);
                                                 } else {
+                                                  List<AppRoute>
+                                                      filteredRoutes =
+                                                      _applyRouteFilter(
+                                                    routes,
+                                                  );
                                                   return GridView.builder(
                                                       gridDelegate:
                                                           SliverGridDelegateWithFixedCrossAxisCount(
@@ -369,14 +419,16 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                             (itemWidth /
                                                                 itemHeight),
                                                       ),
-                                                      itemCount: routes.length,
+                                                      itemCount:
+                                                          filteredRoutes.length,
                                                       itemBuilder:
                                                           (BuildContext context,
                                                               int index) {
                                                         return Container(
                                                             child: RouteCard(
-                                                                route: routes[
-                                                                    index],
+                                                                route:
+                                                                    filteredRoutes[
+                                                                        index],
                                                                 appUser:
                                                                     snapshot
                                                                         .data));
@@ -432,5 +484,51 @@ class _RoutesScreenState extends State<RoutesScreen> {
 
   void closeDrawer() {
     Navigator.pop(context);
+
+    setState(() {});
+  }
+
+  List<String> _getAvailableCategories(List<AppRoute> routes) {
+    List<String> result = [];
+    if (routes.isNotEmpty) result.add('All');
+    result.addAll(routes.map((route) => route.type).toSet().toList());
+    return result;
+  }
+
+  List<AppRoute> _filterRoutesByColor(List<AppRoute> routes) {
+    List<AppRoute> result = [];
+    if (_routeColorFilter.isNotEmpty) {
+      routes.forEach((route) {
+        _routeColorFilter.forEach((color) {
+          if (route.difficulty == color.color) {
+            result.add(route);
+          }
+        });
+      });
+      return result;
+    }
+    return routes;
+  }
+
+  List<AppRoute> _filterRoutesByCategory(List<AppRoute> routes) {
+    if (_categoryFilter == 'All') {
+      return routes;
+    }
+    return routes.where((route) => route.type == _categoryFilter).toList();
+  }
+
+  List<AppRoute> _filterRoutesByState(List<AppRoute> routes, AppUser user) {
+    switch (_routeStateFilterIndex) {
+      case 1:
+        return [];
+    }
+    return routes;
+  }
+
+  List<AppRoute> _applyRouteFilter(List<AppRoute> routes) {
+    List<AppRoute> result = routes;
+    result = _filterRoutesByCategory(result);
+    result = _filterRoutesByColor(result);
+    return result;
   }
 }
