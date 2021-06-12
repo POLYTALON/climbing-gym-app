@@ -5,15 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "climbing_gym_app",
-      "request": "launch",
-      "type": "dart",
-      "args": [
-        "--web-port",
-        "46700"
-      ],
-    },
-    {
       //Command Line "flutter run -t lib/main_dev.dart --flavor development"
       "name": "Development-Debug",
       "request": "launch",
@@ -58,6 +49,30 @@
         "--flavor",
         "release-development"
       ]
+    },
+    {
+      "name": "Web-productive",
+      "preLaunchTask": "CopyProd",
+      "postDebugTask": "delete",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "type": "dart",
+      "args": [
+        "--web-port",
+        "46700"
+      ],
+    },
+    {
+      "name": "Web-development",
+      "preLaunchTask": "CopyDev",
+      "postDebugTask": "delete",
+      "request": "launch",
+      "program": "lib/main_dev.dart",
+      "type": "dart",
+      "args": [
+        "--web-port",
+        "46700"
+      ],
     }
   ]
 }
