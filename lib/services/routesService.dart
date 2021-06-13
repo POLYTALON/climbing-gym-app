@@ -178,6 +178,22 @@ class RoutesService extends ChangeNotifier {
       print(e);
     }
     try {
+      var userRating = await _firestore
+          .collection('routes')
+          .doc(id)
+          .collection('ratings')
+          .limit(1)
+          .get();
+      if (userRating.docs.isNotEmpty) {
+        await _firestore
+            .collection('routes')
+            .doc(id)
+            .collection('ratings')
+            .get()
+            .then((doc) => doc.docs.forEach((userId) {
+                  userId.reference.delete();
+                }));
+      }
       await _firestore.collection('routes').doc(id).delete();
       return true;
     } on FirebaseException catch (e) {
