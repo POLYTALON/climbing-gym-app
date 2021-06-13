@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "164298122076",
+    "project_id": "polyapp-d3d40",
+    "storage_bucket": "polyapp-d3d40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164298122076:android:73fe8aa2a4c8eea028d799",
+        "android_client_info": {
+          "package_name": "de.polytalon.polyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164298122076-da346u2k8t86vc2ke8m97ulve2n6r8kq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.polytalon.polyapp",
+            "certificate_hash": "72db2b2ffff330ede37c7be1a2d708e7279f9b52"
+          }
+        },
+        {
+          "client_id": "164298122076-uf02lhtcssu99ujmre6e491s6e4uh8a7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTZ0tctpTBGK9b1l0T9uEzO-qFy1sNz1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164298122076-uf02lhtcssu99ujmre6e491s6e4uh8a7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "164298122076-g7rc2v0a026h5q4i338pqdi2t57rkr70.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.polytalon.polyapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
