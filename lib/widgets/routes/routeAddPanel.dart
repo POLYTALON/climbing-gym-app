@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
@@ -32,6 +33,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
 
   _RouteAddPanelState(this.appUser, this._panelController);
 
+  final authService = locator<AuthService>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
   final controllerRouteName = TextEditingController(text: "");
@@ -47,6 +49,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+
+    controllerRouteSetter.text = authService.currentUser.displayName;
 
     return SlidingUpPanel(
         minHeight: 0.0,
