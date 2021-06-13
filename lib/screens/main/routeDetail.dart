@@ -114,6 +114,13 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
             return Scaffold(
                 body: CustomScrollView(slivers: [
               SliverAppBar(
+                leading: RawMaterialButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    elevation: 2.0,
+                    fillColor: Color(0x88000000),
+                    child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                    padding: EdgeInsets.all(8.0),
+                    shape: CircleBorder()),
                 backgroundColor: Constants.polyDark,
                 //pinned: true,
                 expandedHeight: MediaQuery.of(context).size.height *
