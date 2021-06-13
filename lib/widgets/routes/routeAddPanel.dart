@@ -259,30 +259,27 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                             child: Column(
                                                                 children: <
                                                                     Widget>[
-                                                              RawMaterialButton(
-                                                                  child: Icon(
-                                                                      Icons
-                                                                          .circle,
-                                                                      color: Color(routeColorSnapshot
-                                                                          .data[
-                                                                              index]
-                                                                          .colorCode),
-                                                                      size: 24),
-                                                                  onPressed: () =>
-                                                                      _setSelectedRouteColorIndex(
-                                                                          index),
-                                                                  shape: (selectedColorIndex ==
-                                                                          index)
-                                                                      ? CircleBorder(
-                                                                          side: BorderSide(
-                                                                              width:
-                                                                                  3.0,
-                                                                              color: Constants
-                                                                                  .polyGray))
-                                                                      : CircleBorder(
-                                                                          side: BorderSide(
-                                                                              width: 0.0,
-                                                                              color: Colors.transparent))),
+                                                              FittedBox(
+                                                                  fit: BoxFit
+                                                                      .fitHeight,
+                                                                  child: RawMaterialButton(
+                                                                      child: Icon(
+                                                                          Icons
+                                                                              .circle,
+                                                                          color: Color(routeColorSnapshot
+                                                                              .data[
+                                                                                  index]
+                                                                              .colorCode),
+                                                                          size:
+                                                                              24),
+                                                                      onPressed: () =>
+                                                                          _setSelectedRouteColorIndex(
+                                                                              index),
+                                                                      shape: (selectedColorIndex ==
+                                                                              index)
+                                                                          ? CircleBorder(
+                                                                              side: BorderSide(width: 3.0, color: Constants.polyGray))
+                                                                          : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
                                                               Text(
                                                                   routeColorSnapshot
                                                                       .data[

@@ -18,14 +18,16 @@ class StartScreen extends StatelessWidget {
             Spacer(flex: 2),
             // Polytalon Logo
             Image.asset('assets/img/polytalon_logo.png'),
-
+            Spacer(flex: 1),
             // Headline
-            Text("\nCLIMBING -APP",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 34)),
+            FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text("CLIMBING-APP",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 34))),
 
             // Spacer
             Spacer(flex: 2),
