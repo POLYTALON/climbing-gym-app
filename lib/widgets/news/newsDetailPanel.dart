@@ -104,7 +104,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                             ]),
                         Visibility(
                             visible: newsProvider.currentNews.link != "",
-                            child: TextButton(
+                            child: ElevatedButton(
                                 onPressed: () => {
                                       if (newsProvider.currentNews.link != null)
                                         {launch(newsProvider.currentNews.link)},

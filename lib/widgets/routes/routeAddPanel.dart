@@ -408,7 +408,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     child: Container(
                                       margin: const EdgeInsets.only(
                                           left: 10, right: 10),
-                                      child: TextButton(
+                                      child: ElevatedButton(
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
@@ -437,7 +437,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     child: Container(
                                       margin: const EdgeInsets.only(
                                           left: 10, right: 10),
-                                      child: TextButton(
+                                      child: ElevatedButton(
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(

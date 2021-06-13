@@ -353,7 +353,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                   spacing: 0.0))
         ]),
         actions: [
-          TextButton(
+          ElevatedButton(
             child: Text(
               "Cancel",
               style: TextStyle(
@@ -364,7 +364,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
               Navigator.pop(context);
             },
           ),
-          TextButton(
+          ElevatedButton(
             child: Text(
               "Submit",
               style: TextStyle(

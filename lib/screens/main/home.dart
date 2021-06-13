@@ -274,7 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         .only(
                                                                     top: 16.0,
                                                                     bottom: 16),
-                                                            child: TextButton(
+                                                            child:
+                                                                ElevatedButton(
                                                               style:
                                                                   ButtonStyle(
                                                                       backgroundColor:

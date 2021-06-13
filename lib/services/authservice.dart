@@ -91,7 +91,7 @@ class AuthService with ChangeNotifier {
           .doc(_auth.currentUser?.uid ?? '')
           .snapshots()
           .asyncMap((userDoc) async {
-        bool isOperator = await _getIsOperator();
+        bool isOperator = await getIsOperator();
         String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
         Map<String, dynamic> userRoutes = await getUserRoutes();
@@ -102,7 +102,7 @@ class AuthService with ChangeNotifier {
     return Stream.empty();
   }
 
-  Future<bool> _getIsOperator() async {
+  Future<bool> getIsOperator() async {
     if (_auth.currentUser != null) {
       try {
         CollectionReference docRef = _firestore

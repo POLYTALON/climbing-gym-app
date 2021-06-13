@@ -31,7 +31,7 @@ class StartScreen extends StatelessWidget {
             Spacer(flex: 2),
 
             // Buttons
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Constants.polyGreen),
@@ -49,7 +49,7 @@ class StartScreen extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -70,7 +70,7 @@ class StartScreen extends StatelessWidget {
             // Spacer
             Spacer(flex: 2),
 
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.grey.shade800),

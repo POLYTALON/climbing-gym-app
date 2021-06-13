@@ -407,7 +407,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                     child: Container(
                                       margin: const EdgeInsets.only(
                                           left: 10, right: 10),
-                                      child: TextButton(
+                                      child: ElevatedButton(
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
@@ -436,7 +436,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                     child: Container(
                                       margin: const EdgeInsets.only(
                                           left: 10, right: 10),
-                                      child: TextButton(
+                                      child: ElevatedButton(
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
@@ -465,7 +465,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
                           // Delete Button
                           Container(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.only(bottom: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -473,7 +473,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   child: Container(
                                     margin: const EdgeInsets.only(
                                         left: 100, right: 100),
-                                    child: TextButton(
+                                    child: ElevatedButton(
                                       style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(
@@ -488,10 +488,25 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                       onPressed: () => onPressDelete(context),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text("Delete Route",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child:
+                                                  Icon(Icons.delete, size: 20),
+                                            ),
+                                            Text("Delete Route",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w700)),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

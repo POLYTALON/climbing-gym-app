@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Spacer(flex: 1),
 
                     // Button Login
-                    TextButton(
+                    ElevatedButton(
                       style: Constants.polyGreenButton,
                       onPressed: isLoggedIn ? null : () => doUserLogin(),
                       child: Text("SignIn",
@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Spacer(),
 
                     // Button Login with Google
-                    TextButton(
+                    ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.blue),
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    TextButton(
+                    ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white),
