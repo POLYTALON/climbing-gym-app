@@ -109,16 +109,19 @@ class _RouteCardState extends State<RouteCard> {
                                   ])),
                             ),
                             if (_getIsPrivileged())
-                              Row(
+                              Expanded(
+                                  child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    color: Colors.white,
-                                    onPressed: onPressEdit,
-                                  ),
+                                  FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        color: Colors.white,
+                                        onPressed: onPressEdit,
+                                      )),
                                 ],
-                              )
+                              ))
                           ],
                         )),
                   ],
