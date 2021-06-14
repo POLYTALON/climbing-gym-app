@@ -68,7 +68,7 @@ class _GymCardState extends State<GymCard> {
                     children: <Widget>[
                       // Image
                       Expanded(
-                          flex: 5,
+                          flex: 4,
                           child: Stack(children: <Widget>[
                             Center(child: CircularProgressIndicator()),
                             Container(
@@ -103,7 +103,7 @@ class _GymCardState extends State<GymCard> {
                           ])),
                       // Title
                       Expanded(
-                          flex: 7,
+                          flex: 6,
                           child: Column(
                             children: [
                               FittedBox(

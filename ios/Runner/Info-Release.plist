@@ -26,6 +26,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.164298122076-g7rc2v0a026h5q4i338pqdi2t57rkr70</string>
+				<string>com.googleusercontent.apps.555985618712-q6kdemrj5dvp8br3s0196mg41e6a84nm</string>
 			</array>
 		</dict>
 	</array>
@@ -61,5 +62,7 @@
 	<string>PolyApp wants to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PolyApp wants to access your Photo Library</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(APP_DISPLAY_NAME)</string>
 </dict>
 </plist>

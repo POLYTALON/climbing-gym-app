@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
+import 'package:climbing_gym_app/screens/main/routeDetail.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,9 @@ class _RouteCardState extends State<RouteCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onPressRoute,
+      child: Container(
         padding: const EdgeInsets.all(8),
         child: Card(
           clipBehavior: Clip.antiAlias,
@@ -106,26 +109,38 @@ class _RouteCardState extends State<RouteCard> {
                                   ])),
                             ),
                             if (_getIsPrivileged())
-                              Row(
+                              Expanded(
+                                  child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    color: Colors.white,
-                                    onPressed: onPressEdit,
-                                  ),
+                                  FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        color: Colors.white,
+                                        onPressed: onPressEdit,
+                                      )),
                                 ],
-                              )
+                              ))
                           ],
                         )),
                   ],
                 );
               }),
-        ));
+        ),
+      ),
+    );
   }
 
   void onPressEdit() {
     locator<RoutesService>().showEdit(this.route);
+  }
+
+  void onPressRoute() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RouteDetailScreen(route: this.route)));
   }
 
   bool _getIsPrivileged() {

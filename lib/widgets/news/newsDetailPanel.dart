@@ -17,13 +17,12 @@ class NewsDetailPanel extends StatefulWidget {
 
 class _NewsDetailPanelState extends State<NewsDetailPanel> {
   _NewsDetailPanelState();
+  final newsProvider = locator<NewsService>();
 
   final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = locator<NewsService>();
-
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
@@ -39,84 +38,104 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
     return Container(
       constraints: BoxConstraints.expand(),
       child: SlidingUpPanel(
-          margin: EdgeInsets.only(left: 16, right: 16),
-          minHeight: 0.0,
-          borderRadius: radius,
-          controller: _panelController,
-          panelBuilder: (ScrollController sc) {
-            return Container(
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shadows: [
-                  BoxShadow(
-                      blurRadius: 8.0,
-                      spreadRadius: 16.0,
-                      color: const Color(0x11000000))
-                ],
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0))),
-              ),
+        margin: EdgeInsets.only(left: 16, right: 16),
+        minHeight: 0.0,
+        borderRadius: radius,
+        controller: _panelController,
+        panelBuilder: (ScrollController sc) {
+          return Container(
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shadows: [
+                BoxShadow(
+                    blurRadius: 8.0,
+                    spreadRadius: 16.0,
+                    color: const Color(0x11000000))
+              ],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0))),
+            ),
 
-              // SlidingUpPanel content
-              child: SingleChildScrollView(
-                controller: sc,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 8, left: 16.0, right: 16.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                newsProvider.currentNewsDetails.title ?? "",
-                                style: Constants.headerText,
-                              ),
+            // SlidingUpPanel content
+            child: SingleChildScrollView(
+              controller: sc,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8, bottom: 8, left: 16.0, right: 16.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              newsProvider.currentNewsDetails.title ?? "",
+                              style: Constants.headerText,
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  this._panelController.close();
-                                },
-                                icon: const Icon(Icons.close)),
-                          ],
-                        ),
-                        newsProvider.currentNews.imageUrls != null
-                            ? Container(
-                                padding: const EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 16.0,
-                                ),
-                                constraints: BoxConstraints(
-                                    minHeight: 100, maxHeight: 250),
-                                child: Image.network(
-                                    newsProvider.currentNews.imageUrls[0]))
-                            : Container(),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(newsProvider.currentNews.content ?? "",
-                                  style: Constants.defaultText)
-                            ]),
-                        Visibility(
-                            visible: newsProvider.currentNews.link != "",
-                            child: TextButton(
-                                onPressed: () => {
-                                      if (newsProvider.currentNews.link != null)
-                                        {launch(newsProvider.currentNews.link)},
-                                    },
-                                style: Constants.polyGreenButton,
-                                child: Text("Open Link",
-                                    style: Constants.defaultTextWhite)))
-                      ]),
-                ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                this._panelController.close();
+                              },
+                              icon: const Icon(Icons.close)),
+                        ],
+                      ),
+                      newsProvider.currentNews.imageUrls != null
+                          ? Container(
+                              padding: const EdgeInsets.only(
+                                top: 8,
+                                bottom: 16.0,
+                              ),
+                              constraints: BoxConstraints(
+                                  minHeight: 100, maxHeight: 250),
+                              child: Image.network(
+                                  newsProvider.currentNews.imageUrls[0]))
+                          : Container(),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: newsProvider.currentNews.link != ""
+                                  ? const EdgeInsets.only(bottom: 48)
+                                  : null,
+                              child: Text(
+                                  newsProvider.currentNews.content ?? "",
+                                  style: Constants.defaultText),
+                            )
+                          ]),
+                    ]),
               ),
-            );
-          }),
+            ),
+          );
+        },
+        footer: Visibility(
+            visible: newsProvider.currentNews.link != "",
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => {
+                        if (newsProvider.currentNews.link != null)
+                          {launch(newsProvider.currentNews.link)},
+                      },
+                      style: Constants.polyGreenButton,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16, top: 8, bottom: 8),
+                        child: Text("Open Link",
+                            style: Constants.defaultTextWhite),
+                      ),
+                    ),
+                  ]),
+            )),
+      ),
     );
   }
 }

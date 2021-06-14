@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "555985618712",
+    "project_id": "polyapp-dev",
+    "storage_bucket": "polyapp-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555985618712:android:576213e6ef49cc4b6c806d",
+        "android_client_info": {
+          "package_name": "de.polytalon.polyappdev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555985618712-dd8fs66sdr9en9g2dpm9ll4mmt3mdhr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.polytalon.polyappdev",
+            "certificate_hash": "da50f710cd74eab54cc50cf49a5efc9cf8c00279"
+          }
+        },
+        {
+          "client_id": "555985618712-r0qnisi0ghv7edbkiapc0ol8j7a6l7kk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.polytalon.polyappdev",
+            "certificate_hash": "22431f82264f9d206341cef86782745d2fae68b7"
+          }
+        },
+        {
+          "client_id": "555985618712-tse34cckg5edrf2emn7fob77k54u5l21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.polytalon.polyappdev",
+            "certificate_hash": "72db2b2ffff330ede37c7be1a2d708e7279f9b52"
+          }
+        },
+        {
+          "client_id": "555985618712-d4idvrdcfqinhk5u8pcgseu7dmsh645f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKVj0xUWfvT5-7RbOBKM6N_QElovB210U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555985618712-d4idvrdcfqinhk5u8pcgseu7dmsh645f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "555985618712-72k88r4g8opdlt1r3bcptioq6dhnv3en.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.polytalon.polyapp-dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

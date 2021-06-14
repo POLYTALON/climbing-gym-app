@@ -1,0 +1,31 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CopyDev",
+            "type": "shell",
+            "command": "./web/copyIndex/copyIndexHtml.sh development",
+            "windows": {
+                "command": ".\\web\\copyIndex\\copyIndexHtml.cmd development"
+            },
+        },
+        {
+            "label": "CopyProd",
+            "type": "shell",
+            "command": "./web/copyIndex/copyIndexHtml.sh productive",
+            "windows": {
+                "command": ".\\web\\copyIndex\\copyIndexHtml.cmd productive"
+            },
+        },
+        {
+            "label": "delete",
+            "type": "shell",
+            "command": "./web/copyIndex/delete.sh",
+            "windows": {
+                "command": ".\\web\\copyIndex\\delete.cmd"
+            },
+        }
+    ]
+}

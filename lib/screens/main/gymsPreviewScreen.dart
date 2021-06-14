@@ -1,9 +1,9 @@
-import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:climbing_gym_app/widgets/gyms/gymPreviewCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,16 +65,14 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                                   fontSize: 24)),
                         ),
                       ]),
-
-                      // GridView (with GymCards)
+                      // GridView (with GymPreviewCards)
                       Expanded(
                         child: GridView.count(
                             crossAxisCount: 2,
                             childAspectRatio: (itemWidth / itemHeight),
                             children: List.generate(gyms.length, (index) {
                               return Container(
-                                  child: GymCard(
-                                      gym: gyms[index], appUser: AppUser()));
+                                  child: GymPreviewCard(gym: gyms[index]));
                             })),
                       )
                     ]))),
