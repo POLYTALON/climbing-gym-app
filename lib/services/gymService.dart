@@ -121,10 +121,4 @@ class GymService extends ChangeNotifier {
         await FlutterNativeImage.compressImage(file.path, quality: 5);
     return compressedFile;
   }
-
-  Future<bool> addOwner(String id) async {
-    try {} on FirebaseException catch (e) {
-      print(e);
-    }
-  }
 }

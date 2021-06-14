@@ -260,8 +260,10 @@ class AuthService with ChangeNotifier {
                         .set({'gymuser': true});
                     return true;
                   }
+                  return false;
                 }
               }));
+      return false;
     } on FirebaseException catch (e) {
       print(e);
       return false;

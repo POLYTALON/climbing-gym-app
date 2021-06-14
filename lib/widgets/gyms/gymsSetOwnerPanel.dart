@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
+import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsSetOwnerPanel extends StatefulWidget {
@@ -26,7 +27,7 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final gymService = locator<GymService>();
+    //final gymService = locator<GymService>();
 
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
@@ -170,7 +171,17 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
     }
   }
 
-  void setGymOwner() {
-    print("SET GYM OWNER");
+  void setGymOwner() async {
+    final authService = locator<AuthService>();
+    print(gymService.currentGym);
+    final id = gymService.currentGym.id;
+    final userEmail = controllerEmail.text.trim();
+    print(userEmail + "id " + id);
+    bool isSet = await authService.setGymOwner(userEmail, id);
+    if (isSet == true) {
+      _panelController.close();
+    } else {
+      print("error");
+    }
   }
 }
