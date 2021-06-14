@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:climbing_gym_app/services/fileService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:path/path.dart';
@@ -6,7 +7,7 @@ import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class GymService extends ChangeNotifier {
+class GymService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -110,7 +111,7 @@ class GymService extends ChangeNotifier {
 
   Future<File> compressFile(File file) async {
     File compressedFile =
-        await FlutterNativeImage.compressImage(file.path, quality: 5);
+        await FlutterNativeImage.compressImage(file.path, quality: 25);
     return compressedFile;
   }
 }
