@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/routes/imageEditorScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -554,9 +555,21 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                 ListTile(
                     leading: Icon(Icons.camera_alt_rounded),
                     title: Text('Camera'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _getImage(ImageSource.camera);
+                    onTap: () async {
+                      File image = await _getImage(ImageSource.camera);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ImageEditorScreen(image: image)),
+                      ).then((newImage) {
+                        if (newImage != null) {
+                          setState(() {
+                            _image = newImage;
+                          });
+                          Navigator.of(context).pop();
+                        }
+                      });
                     }),
                 ListTile(
                     leading: Icon(Icons.photo_album),
@@ -571,13 +584,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
 
   Future _getImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+    return File(pickedFile.path);
   }
 
   void editRoute() async {
