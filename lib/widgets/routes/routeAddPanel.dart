@@ -83,35 +83,115 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                         children: <Widget>[
                           // Take photo button
                           Container(
-                            padding: EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16.0),
-                                    topRight: Radius.circular(16.0))),
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(12.0),
-                                  elevation: 2,
-                                  primary: Constants.polyGray,
-                                ),
-                                onPressed: () async =>
-                                    _showImageSourceActionSheet(context),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Icon(Icons.camera_alt_rounded,
-                                        size: 48.0, color: Colors.white),
-                                    Text(
-                                      'Change photo',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                )),
-                          ),
+                              padding: EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16.0),
+                                      topRight: Radius.circular(16.0))),
+                              child: _image == null
+                                  ? ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.all(12.0),
+                                        elevation: 2,
+                                        primary: Constants.polyGray,
+                                      ),
+                                      onPressed: () async =>
+                                          _showImageSourceActionSheet(context),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          Icon(Icons.camera_alt_rounded,
+                                              size: 48.0, color: Colors.white),
+                                          Text(
+                                            'Change photo',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ))
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.all(12.0),
+                                                elevation: 2,
+                                                minimumSize:
+                                                    Size(double.infinity, 64),
+                                                maximumSize:
+                                                    Size(double.infinity, 64),
+                                                primary: Constants.polyGray,
+                                              ),
+                                              onPressed: () async =>
+                                                  _showImageSourceActionSheet(
+                                                      context),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: <Widget>[
+                                                  Image.file(
+                                                    _image,
+                                                  ),
+                                                  Text(
+                                                    'Change',
+                                                    style: Constants
+                                                        .defaultTextWhite,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  minimumSize:
+                                                      Size(double.infinity, 64),
+                                                  maximumSize:
+                                                      Size(double.infinity, 64),
+                                                  padding: EdgeInsets.all(12.0),
+                                                  elevation: 2,
+                                                  primary: Constants.polyGray,
+                                                ),
+                                                onPressed: () async => {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ImageEditorScreen(
+                                                                image: _image)),
+                                                  ).then((newImage) {
+                                                    if (newImage != null) {
+                                                      setState(() {
+                                                        _image = newImage;
+                                                      });
+                                                    }
+                                                  })
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Icon(Icons
+                                                        .location_searching),
+                                                    Text('Mark holds',
+                                                        style: Constants
+                                                            .defaultTextWhite),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ])),
                           // Container for route name
                           Container(
                               padding: EdgeInsets.only(
@@ -508,21 +588,9 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                 ListTile(
                     leading: Icon(Icons.camera_alt_rounded),
                     title: Text('Camera'),
-                    onTap: () async {
-                      File image = await _getImage(ImageSource.camera);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ImageEditorScreen(image: image)),
-                      ).then((newImage) {
-                        if (newImage != null) {
-                          setState(() {
-                            _image = newImage;
-                          });
-                          Navigator.of(context).pop();
-                        }
-                      });
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getImage(ImageSource.camera);
                     }),
                 ListTile(
                     leading: Icon(Icons.photo_album),
@@ -537,7 +605,13 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
 
   Future _getImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
-    return File(pickedFile.path);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 
   void addRoute(String gymId) async {
@@ -551,8 +625,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     if (_validateAndSave()) {
       if (_image != null) {
         // add Route
-        await routesService.addRoute(routeName, gymId, difficulty.color, type,
-            holds, builder, _image, DateTime.now());
+        routesService.addRoute(routeName, gymId, difficulty.color, type, holds,
+            builder, _image, DateTime.now());
         _panelController.close();
       } else {
         setState(() {
