@@ -629,7 +629,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                 ListTile(
                     leading: Icon(Icons.camera_alt_rounded),
                     title: Text('Camera'),
-                    onTap: () async {
+                    onTap: () {
                       Navigator.pop(context);
                       _getImage(ImageSource.camera);
                     }),
@@ -688,7 +688,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     });
   }
 
-   void loadImage() {
+  void loadImage() {
     setState(() {
       isImageLoading = true;
     });
