@@ -120,8 +120,6 @@ class _NavigationState extends State<NavigationContainer> {
               _homeCounter == 0 &&
               _newsCounter == 0) {
             _gymsCounter++;
-            print("gyms:");
-            print(_gymsCounter);
           } else {
             secret(4);
           }
@@ -134,8 +132,6 @@ class _NavigationState extends State<NavigationContainer> {
               _homeCounter < 6 &&
               _newsCounter == 0) {
             _homeCounter++;
-            print("home:");
-            print(_homeCounter);
           } else {
             secret(4);
           }
@@ -148,8 +144,6 @@ class _NavigationState extends State<NavigationContainer> {
               _newsCounter != 7 &&
               _newsCounter < 7) {
             _newsCounter++;
-            print("news:");
-            print(_newsCounter);
           } else {
             secret(4);
           }
@@ -160,7 +154,6 @@ class _NavigationState extends State<NavigationContainer> {
           _newsCounter = 0;
           _homeCounter = 0;
           _gymsCounter = 0;
-          print("reset all");
         }
         break;
     }
