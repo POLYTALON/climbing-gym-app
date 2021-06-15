@@ -161,7 +161,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                   elevation: 2,
                                                   primary: Constants.polyGray,
                                                 ),
-                                                onPressed: () async => {
+                                                onPressed: () => {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
