@@ -9,7 +9,7 @@ mixin FileService {
 
   Future<String> uploadFile(File file, String path) async {
     String url;
-    file = await compressFile(file);
+    // file = await compressFile(file);
     try {
       TaskSnapshot snapshot = await _storage
           .ref()
@@ -24,7 +24,7 @@ mixin FileService {
 
   Future<File> compressFile(File file) async {
     File compressedFile =
-        await FlutterNativeImage.compressImage(file.path, quality: 5);
+        await FlutterNativeImage.compressImage(file.path, quality: 25);
     return compressedFile;
   }
 }

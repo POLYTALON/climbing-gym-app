@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -69,9 +68,10 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
 
   Widget _buildImage() {
     ImageEditor editor = ImageEditor(image: image);
-    double imageRatio = image.height / image.width;
-    print(imageRatio);
+
     if (this.isImageloaded) {
+      double imageRatio = image.height / image.width;
+      print(imageRatio);
       return Stack(
         children: [
           Container(
@@ -80,10 +80,6 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
             width: MediaQuery.of(context).size.width, //.width.toDouble(),
             child: GestureDetector(
               onPanDown: (detailData) {
-                editor.update(detailData.localPosition);
-                _myCanvasKey.currentContext.findRenderObject().markNeedsPaint();
-              },
-              onPanUpdate: (detailData) {
                 editor.update(detailData.localPosition);
                 _myCanvasKey.currentContext.findRenderObject().markNeedsPaint();
               },
@@ -110,6 +106,19 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
                       child: Text("CANCEL", style: Constants.defaultTextWhite),
                     ),
                   ),
+                  RawMaterialButton(
+                    child: Icon(Icons.delete, size: 20),
+                    elevation: 2.0,
+                    fillColor: Colors.grey,
+                    padding: EdgeInsets.all(8.0),
+                    shape: CircleBorder(),
+                    onPressed: () {
+                      editor.clear();
+                      _myCanvasKey.currentContext
+                          .findRenderObject()
+                          .markNeedsPaint();
+                    },
+                  ),
                   TextButton(
                     style: Constants.polyGreenButton,
                     onPressed: () async {
@@ -130,7 +139,8 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
         ],
       );
     } else {
-      return Center(child: Text('loading'));
+      return Center(
+          child: CircularProgressIndicator(color: Constants.polyGreen));
     }
   }
 
@@ -154,10 +164,15 @@ class ImageEditor extends CustomPainter {
   final Paint painter = new Paint()
     ..color = Colors.red[500]
     ..style = PaintingStyle.fill
-    ..isAntiAlias = true;
+    ..isAntiAlias = true
+    ..strokeWidth = 10;
 
   void update(Offset offset) {
     points.add(offset);
+  }
+
+  void clear() {
+    points.clear();
   }
 
   Future<File> getPng() async {
@@ -206,18 +221,19 @@ class ImageEditor extends CustomPainter {
         alignment: Alignment.topCenter,
         flipHorizontally: false,
         filterQuality: FilterQuality.high);
-    print("SIZE W: " + size.width.toString());
-    print("SIZE H: " + size.height.toString());
     for (Offset offset in points) {
-      print("Y: " + offset.dy.toString());
-      if (offset.dy <= size.height && offset.dx <= size.width) {
-        canvas.drawCircle(offset, 5, painter);
-      }
+      final Paint paint = new Paint()
+        ..isAntiAlias = true
+        ..strokeWidth = 2.0
+        ..color = Constants.polyGreen //[500]
+        ..style = PaintingStyle.stroke;
+      canvas.drawArc(new Rect.fromLTWH(offset.dx - 15, offset.dy - 15, 30, 30),
+          10.0, 20.0, false, paint);
     }
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }
