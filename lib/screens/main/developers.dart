@@ -48,7 +48,7 @@ class DevelopersScreen extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(
-                  left: 18.0, right: 18.0, top: 18.0, bottom: 10.0),
+                  left: 18.0, right: 18.0, top: 18.0, bottom: 15.0),
               child: Text("Congratulations you found the Easter Egg!",
                   textAlign: TextAlign.left,
                   style: TextStyle(
@@ -70,7 +70,19 @@ class DevelopersScreen extends StatelessWidget {
             ),
             Padding(
               padding:
-                  const EdgeInsets.only(left: 18.0, right: 18.0, top: 15.0),
+                  const EdgeInsets.only(left: 18.0, right: 18.0, top: 30.0),
+              child: Center(
+                child: Text("😎",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 90,
+                      fontWeight: FontWeight.w900,
+                    )),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 18.0, right: 18.0, top: 50.0),
               child: Center(
                 child: Text(
                     "This app was developed by:\n\nAndreas Ly\n"
@@ -91,6 +103,18 @@ class DevelopersScreen extends StatelessWidget {
                     )),
               ),
             ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 18.0, right: 18.0, top: 50.0),
+              child: Center(
+                child: Text("👾",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w900,
+                    )),
+              ),
+            )
           ]),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
