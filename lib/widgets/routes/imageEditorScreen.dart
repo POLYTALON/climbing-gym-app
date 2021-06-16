@@ -139,8 +139,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
         ],
       );
     } else {
-      return Center(
-          child: CircularProgressIndicator(color: Constants.polyGreen));
+      return Center(child: CircularProgressIndicator());
     }
   }
 

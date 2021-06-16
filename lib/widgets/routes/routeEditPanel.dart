@@ -100,8 +100,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                         padding: EdgeInsets.all(12.0),
                                         elevation: 2,
                                         primary: Constants.polyGray,
-                                        minimumSize: Size(double.infinity, 64),
-                                        maximumSize: Size(double.infinity, 64),
+                                        fixedSize: Size(double.infinity, 64),
                                       ),
                                       onPressed: () {},
                                       child: CircularProgressIndicator(
@@ -116,9 +115,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                               style: ElevatedButton.styleFrom(
                                                 padding: EdgeInsets.all(12.0),
                                                 elevation: 2,
-                                                minimumSize:
-                                                    Size(double.infinity, 64),
-                                                maximumSize:
+                                                fixedSize:
                                                     Size(double.infinity, 64),
                                                 primary: Constants.polyGray,
                                               ),
@@ -148,9 +145,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                   left: 8.0),
                                               child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  minimumSize:
-                                                      Size(double.infinity, 64),
-                                                  maximumSize:
+                                                  fixedSize:
                                                       Size(double.infinity, 64),
                                                   padding: EdgeInsets.all(12.0),
                                                   elevation: 2,

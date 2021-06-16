@@ -121,9 +121,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                               style: ElevatedButton.styleFrom(
                                                 padding: EdgeInsets.all(12.0),
                                                 elevation: 2,
-                                                minimumSize:
-                                                    Size(double.infinity, 64),
-                                                maximumSize:
+                                                fixedSize:
                                                     Size(double.infinity, 64),
                                                 primary: Constants.polyGray,
                                               ),
@@ -153,10 +151,9 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                   left: 8.0),
                                               child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  minimumSize:
+                                                  fixedSize:
                                                       Size(double.infinity, 64),
-                                                  maximumSize:
-                                                      Size(double.infinity, 64),
+
                                                   padding: EdgeInsets.all(12.0),
                                                   elevation: 2,
                                                   primary: Constants.polyGray,
