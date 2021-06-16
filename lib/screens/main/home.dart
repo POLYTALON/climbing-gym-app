@@ -74,7 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     builder: (context, routeColorSnapshot) {
                                       if (!routeColorSnapshot.hasData) {
                                         return Center(
-                                            child: CircularProgressIndicator());
+                                            child: CircularProgressIndicator(
+                                                color: Constants.polyGreen));
                                       }
                                       return FutureBuilder<Map<String, int>>(
                                           future: _getRouteAmountPerColor(

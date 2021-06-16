@@ -100,7 +100,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                         padding: EdgeInsets.all(12.0),
                                         elevation: 2,
                                         primary: Constants.polyGray,
-                                        fixedSize: Size(double.infinity, 64),
+                                        minimumSize: Size(double.infinity, 64),
                                       ),
                                       onPressed: () {},
                                       child: CircularProgressIndicator(

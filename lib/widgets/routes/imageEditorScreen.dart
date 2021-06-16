@@ -72,71 +72,94 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
     if (this.isImageloaded) {
       double imageRatio = image.height / image.width;
       print(imageRatio);
-      return Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.width *
-                imageRatio, //image.height.toDouble(),
-            width: MediaQuery.of(context).size.width, //.width.toDouble(),
-            child: GestureDetector(
-              onPanDown: (detailData) {
-                editor.update(detailData.localPosition);
-                _myCanvasKey.currentContext.findRenderObject().markNeedsPaint();
-              },
-              child: CustomPaint(
-                key: _myCanvasKey,
-                painter: editor,
+      return Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.width *
+                  imageRatio, //image.height.toDouble(),
+              width: MediaQuery.of(context).size.width, //.width.toDouble(),
+              child: GestureDetector(
+                onPanDown: (detailData) {
+                  editor.update(detailData.localPosition);
+                  _myCanvasKey.currentContext
+                      .findRenderObject()
+                      .markNeedsPaint();
+                },
+                child: CustomPaint(
+                  key: _myCanvasKey,
+                  painter: editor,
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    style: Constants.polyGrayButton,
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Text("CANCEL", style: Constants.defaultTextWhite),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      style: Constants.polyGrayButton,
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child:
+                            Text("CANCEL", style: Constants.defaultTextWhite),
+                      ),
                     ),
-                  ),
-                  RawMaterialButton(
-                    child: Icon(Icons.delete, size: 20),
-                    elevation: 2.0,
-                    fillColor: Colors.grey,
-                    padding: EdgeInsets.all(8.0),
-                    shape: CircleBorder(),
-                    onPressed: () {
-                      editor.clear();
-                      _myCanvasKey.currentContext
-                          .findRenderObject()
-                          .markNeedsPaint();
-                    },
-                  ),
-                  TextButton(
-                    style: Constants.polyGreenButton,
-                    onPressed: () async {
-                      print("SAVED");
-                      var editedFile = await editor.getPng();
-                      Navigator.of(context).pop(editedFile);
-                      //editor.getPng();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Text("SAVE", style: Constants.defaultTextWhite),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Constants.lightGray,
+                          child: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.white),
+                            onPressed: () {
+                              editor.clear();
+                              _myCanvasKey.currentContext
+                                  .findRenderObject()
+                                  .markNeedsPaint();
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: CircleAvatar(
+                            backgroundColor: Constants.lightGray,
+                            child: IconButton(
+                              icon: Icon(Icons.undo, color: Colors.white),
+                              onPressed: () {
+                                editor.undo();
+                                _myCanvasKey.currentContext
+                                    .findRenderObject()
+                                    .markNeedsPaint();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    TextButton(
+                      style: Constants.polyGreenButton,
+                      onPressed: () async {
+                        print("SAVED");
+                        var editedFile = await editor.getPng();
+                        Navigator.of(context).pop(editedFile);
+                        //editor.getPng();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Text("SAVE", style: Constants.defaultTextWhite),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     } else {
       return Center(child: CircularProgressIndicator());
@@ -172,6 +195,10 @@ class ImageEditor extends CustomPainter {
 
   void clear() {
     points.clear();
+  }
+
+  void undo() {
+    points.removeLast();
   }
 
   Future<File> getPng() async {
