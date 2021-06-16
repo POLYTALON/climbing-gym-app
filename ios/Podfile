@@ -9,7 +9,14 @@ pod 'Firebase/Analytics'
 # add pods for any other desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
 pod 'Firebase/Auth'
-pod 'Firebase/Firestore'
+
+# We use a Precompiled Version of the Cloud Firestore Pod to reduce the iOS build time.
+# For more Information see:
+# https://github.com/FirebaseExtended/flutterfire/issues/349#issuecomment-643054499
+# and
+# https://github.com/FirebaseExtended/flutterfire/issues/2751
+#pod 'Firebase/Firestore'
+pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '7.11.0'
 pod 'Firebase/Storage'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
