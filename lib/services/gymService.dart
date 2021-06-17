@@ -14,11 +14,13 @@ class GymService extends ChangeNotifier {
 
   bool showEditPanel = false;
   bool showSetOwnerPanel = false;
+  bool showEditBuilderPanel = false;
 
   void showEdit(Gym gym) {
     currentGym = gym;
-    showSetOwnerPanel = false;
     showEditPanel = true;
+    showSetOwnerPanel = false;
+    showEditBuilderPanel = false;
     notifyListeners();
   }
 
@@ -26,7 +28,15 @@ class GymService extends ChangeNotifier {
     currentGym = gym;
     showEditPanel = false;
     showSetOwnerPanel = true;
+    showEditBuilderPanel = false;
     notifyListeners();
+  }
+
+  void showEditBuilder(Gym gym) {
+    currentGym = gym;
+    showEditPanel = false;
+    showSetOwnerPanel = false;
+    showEditBuilderPanel = true;
   }
 
   Stream<List<Gym>> streamGyms() {
