@@ -174,6 +174,31 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setBuilder(userEmail, id);
     if (isSet == true) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Set Builder',
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    userEmail + ' has been set as a builder.',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  child: Text("Close")),
+            ],
+          );
+        },
+      );
       _panelController.close();
     } else {
       print("error");

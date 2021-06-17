@@ -174,6 +174,31 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setGymOwner(userEmail, id);
     if (isSet == true) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Set Gym Owner',
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    userEmail + ' has been set as the gym user.',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  child: Text("Close")),
+            ],
+          );
+        },
+      );
       _panelController.close();
     } else {
       print("error");
