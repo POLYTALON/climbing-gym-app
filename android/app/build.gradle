@@ -28,6 +28,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 30
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }

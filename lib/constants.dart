@@ -50,3 +50,9 @@ ButtonStyle polyGreenButton = ButtonStyle(
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
       new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
     ));
+
+ButtonStyle polyGrayButton = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(lightGray),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
+    ));
