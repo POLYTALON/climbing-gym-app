@@ -9,5 +9,7 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release-development.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile-development.xcconfig"
 
 FLUTTER_TARGET=lib/main_dev.dart
