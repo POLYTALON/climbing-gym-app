@@ -76,7 +76,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                           children: [
                             //Gym Owner
                             Text(
-                              'Who is a builder?',
+                              'Set Builder',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
@@ -129,7 +129,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "CREATE SETTER",
+                                  "CREATE BUILDER",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700),

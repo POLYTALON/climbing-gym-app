@@ -38,6 +38,7 @@ class GymService extends ChangeNotifier with FileService {
     showEditPanel = false;
     showSetOwnerPanel = false;
     showEditBuilderPanel = true;
+    notifyListeners();
   }
 
   Stream<List<Gym>> streamGyms() {

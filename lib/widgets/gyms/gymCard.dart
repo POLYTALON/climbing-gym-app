@@ -80,26 +80,30 @@ class _GymCardState extends State<GymCard> {
                                   fit: BoxFit.fill),
                             ),
                             if (_getIsPrivileged())
-                              Container(
-                                  color: Colors.grey[400],
-                                  child: Column(
-                                    //mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        color: Colors.white,
-                                        onPressed: onPressEdit,
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                            Icons.account_circle_outlined),
-                                        color: Colors.white,
-                                        onPressed: onPressAccountButton,
-                                      )
-                                    ],
-                                  )),
+                              FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Container(
+                                    color: Colors.grey[400],
+                                    child: Column(
+                                      //mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: Colors.white,
+                                          onPressed: onPressEdit,
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.account_circle_outlined),
+                                          color: Colors.white,
+                                          onPressed: () =>
+                                              onPressAccountButton(),
+                                        )
+                                      ],
+                                    )),
+                              ),
                           ])),
                       // Title
                       Expanded(
