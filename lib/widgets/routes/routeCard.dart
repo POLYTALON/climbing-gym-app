@@ -64,10 +64,13 @@ class _RouteCardState extends State<RouteCard> {
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
-                            child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: route.imageUrl,
-                                fit: BoxFit.fill),
+                            child: Hero(
+                              tag: route.id,
+                              child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: route.imageUrl,
+                                  fit: BoxFit.fill),
+                            ),
                           ),
                         ])),
                     // Title

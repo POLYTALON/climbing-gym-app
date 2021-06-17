@@ -130,8 +130,10 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                   background: Stack(children: [
                     Container(
                       alignment: Alignment.center,
-                      child:
-                          Image.network(this.route.imageUrl, fit: BoxFit.cover),
+                      child: Hero(
+                          tag: this.route.id,
+                          child: Image.network(this.route.imageUrl,
+                              fit: BoxFit.cover)),
                     ),
                     Align(
                         child: AnimatedCheck(
