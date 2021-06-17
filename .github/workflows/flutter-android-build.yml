@@ -27,5 +27,5 @@ jobs:
         if: github.base_ref == 'refs/heads/main'
       # Compile and test the production apk on merges that are not on main
       - run: flutter build apk --flavor development -t lib/main_dev.dart
-        if: ! github.base_ref == 'refs/heads/main'
+        if: github.base_ref != 'refs/heads/main'
       - run: flutter build appbundle
