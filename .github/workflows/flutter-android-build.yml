@@ -19,6 +19,7 @@ jobs:
         with:
           flutter-version: "2.0.5"
       - run: flutter pub get
+      # Flutter test breaks, as we currently do not test ❤️
       # - run: flutter test
       - run: flutter build apk
       - run: flutter build appbundle
