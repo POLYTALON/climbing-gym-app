@@ -1,4 +1,5 @@
 name: Firebase Deploy
+
 on:
   push:
     branches:
@@ -18,10 +19,18 @@ jobs:
         with:
           flutter-version: "2.0.5"
       - run: flutter pub get
+
+      # Copy the productive index.html when pushing to main
+      - run: ./web/copyIndex/copyIndexHtml.sh productive
+        if: github.ref == 'refs/heads/main'
+      # Copy the development index.html when pushing to main
+      - run: ./web/copyIndex/copyIndexHtml.sh development
+        if: ! github.ref == 'refs/heads/main'
+
       - run: flutter build web
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ github.ref != 'refs/heads/main' && secrets.FIREBASE_TOKEN_DEV || secrets.FIREBASE_TOKEN }}
