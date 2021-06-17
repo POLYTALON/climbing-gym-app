@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditBuilderPanel extends StatefulWidget {
@@ -114,7 +111,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            //Set Gym Owner Button
+                            //Set Builder Button
                             TextButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
@@ -125,11 +122,11 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                                         borderRadius:
                                             BorderRadius.circular(24.0)),
                                   )),
-                              onPressed: () => setGymOwner(),
+                              onPressed: () => setBuilder(),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "CREATE BUILDER",
+                                  "SET BUILDER",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700),
@@ -171,7 +168,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
     }
   }
 
-  void setGymOwner() async {
+  void setBuilder() async {
     final id = gymService.currentGym.id;
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();

@@ -279,6 +279,8 @@ class AuthService with ChangeNotifier {
                     _firestore
                         .collection('users')
                         .doc(user.id)
+                        .collection('privileges')
+                        .doc(gymid)
                         .set({'builder': true});
                   }
                 }
