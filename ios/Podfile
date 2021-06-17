@@ -1,14 +1,20 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '9.0'
+#platform :ios, '10.0'
 
 # add the Firebase pod for Google Analytics
 pod 'Firebase/Analytics'
-# or pod ‘Firebase/AnalyticsWithoutAdIdSupport’
+# or pod ‘Firebase/AnalyticsWithoutAdIdSupport
 # for Analytics without IDFA collection capability
 
 # add pods for any other desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
 pod 'Firebase/Auth'
+
+# We use a Precompiled Version of the Cloud Firestore Pod to reduce the iOS build time.
+# For more Information see:
+# https://github.com/FirebaseExtended/flutterfire/issues/349#issuecomment-643054499
+# and
+# https://github.com/FirebaseExtended/flutterfire/issues/2751
 pod 'Firebase/Firestore'
 pod 'Firebase/Storage'
 
@@ -52,6 +58,7 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.0.0'
   use_frameworks!
   use_modular_headers!
 

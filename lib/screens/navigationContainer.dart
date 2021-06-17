@@ -2,6 +2,7 @@ import 'package:climbing_gym_app/screens/main/gyms.dart';
 import 'package:climbing_gym_app/screens/main/home.dart';
 import 'package:climbing_gym_app/screens/main/news.dart';
 import 'package:climbing_gym_app/screens/main/routes.dart';
+import 'package:climbing_gym_app/screens/main/developers.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -19,6 +20,9 @@ class _NavigationState extends State<NavigationContainer> {
   int _navBarIndex = 0;
   String _title;
   List<Widget> _children;
+  int _newsCounter = 0;
+  int _homeCounter = 0;
+  int _gymsCounter = 0;
 
   @override
   initState() {
@@ -78,7 +82,11 @@ class _NavigationState extends State<NavigationContainer> {
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.grey[500],
             type: BottomNavigationBarType.fixed,
-            onTap: onTabTapped,
+            //onTap: onTabTapped,
+            onTap: (index) {
+              onTabTapped(index);
+              secret(index);
+            },
             currentIndex: _navBarIndex,
             items: [
               new BottomNavigationBarItem(
@@ -101,6 +109,64 @@ class _NavigationState extends State<NavigationContainer> {
             ],
           ),
         ));
+  }
+
+  void secret(int input) {
+    switch (input) {
+      case 0:
+        {
+          if (_gymsCounter != 4 &&
+              _gymsCounter < 4 &&
+              _homeCounter == 0 &&
+              _newsCounter == 0) {
+            _gymsCounter++;
+          } else {
+            secret(4);
+          }
+        }
+        break;
+      case 1:
+        {
+          if (_gymsCounter == 4 &&
+              _homeCounter != 6 &&
+              _homeCounter < 6 &&
+              _newsCounter == 0) {
+            _homeCounter++;
+          } else {
+            secret(4);
+          }
+        }
+        break;
+      case 2:
+        {
+          if (_gymsCounter == 4 &&
+              _homeCounter == 6 &&
+              _newsCounter != 7 &&
+              _newsCounter < 7) {
+            _newsCounter++;
+          } else {
+            secret(4);
+          }
+        }
+        break;
+      default:
+        {
+          _newsCounter = 0;
+          _homeCounter = 0;
+          _gymsCounter = 0;
+        }
+        break;
+    }
+
+    if (_gymsCounter == 4 && _homeCounter == 6 && _newsCounter == 7) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DevelopersScreen()),
+      );
+      _newsCounter = 0;
+      _homeCounter = 0;
+      _gymsCounter = 0;
+    }
   }
 
   void onTabTapped(int index) {
