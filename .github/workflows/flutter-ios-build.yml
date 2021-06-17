@@ -21,5 +21,11 @@ jobs:
       - run: flutter pub get
       # Flutter test breaks, as we currently do not test ❤️
       # - run: flutter test
-      - run: flutter build apk
+
+      # Compile and test the production apk on merges to main
+      - run: flutter build apk --flavor productive -t lib/main.dart
+        if: github.base_ref == 'refs/heads/main'
+      # Compile and test the production apk on merges that are not on main
+      - run: flutter build apk --flavor development -t lib/main_dev.dart
+        if: ! github.base_ref == 'refs/heads/main'
       - run: flutter build ios --release --no-codesign
