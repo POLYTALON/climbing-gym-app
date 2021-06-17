@@ -3,11 +3,13 @@ name: Flutter iOS build
 on:
   pull_request:
     branches:
+      - development
       - main
 
 jobs:
   build:
     runs-on: macos-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
