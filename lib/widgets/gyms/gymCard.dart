@@ -155,6 +155,10 @@ class _GymCardState extends State<GymCard> {
   }
 
   void onPressAccountButton() {
-    locator<GymService>().showSetOwner(this.gym);
+    if (appUser.isOperator) {
+      locator<GymService>().showSetOwner(this.gym);
+    } else {
+      locator<GymService>().showEdit(this.gym);
+    }
   }
 }

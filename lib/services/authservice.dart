@@ -258,12 +258,32 @@ class AuthService with ChangeNotifier {
                         .collection('privileges')
                         .doc(gymid)
                         .set({'gymuser': true});
-                    return true;
                   }
-                  return false;
                 }
               }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
       return false;
+    }
+  }
+
+  Future<bool> setBuilder(String email, String gymid) async {
+    try {
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                if (user.exists) {
+                  if (user.data()['email'] == email) {
+                    _firestore
+                        .collection('users')
+                        .doc(user.id)
+                        .set({'builder': true});
+                  }
+                }
+              }));
+      return true;
     } on FirebaseException catch (e) {
       print(e);
       return false;

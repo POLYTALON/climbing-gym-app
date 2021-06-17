@@ -21,17 +21,17 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
   final PanelController _panelController = PanelController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  _GymsSetOwnerPanel();
+
   final controllerEmail = TextEditingController(text: "");
 
   final gymService = locator<GymService>();
 
+  BorderRadiusGeometry radius = BorderRadius.only(
+      topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+
   @override
   Widget build(BuildContext context) {
-    //final gymService = locator<GymService>();
-
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
     gymService.addListener(() {
       if (gymService.showSetOwnerPanel == true) {
         _panelController.open();
@@ -172,11 +172,9 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
   }
 
   void setGymOwner() async {
-    final authService = locator<AuthService>();
-    print(gymService.currentGym);
     final id = gymService.currentGym.id;
+    final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
-    print(userEmail + "id " + id);
     bool isSet = await authService.setGymOwner(userEmail, id);
     if (isSet == true) {
       _panelController.close();

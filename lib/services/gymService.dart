@@ -23,6 +23,7 @@ class GymService extends ChangeNotifier {
   }
 
   void showSetOwner(Gym gym) {
+    currentGym = gym;
     showEditPanel = false;
     showSetOwnerPanel = true;
     notifyListeners();
