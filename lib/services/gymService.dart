@@ -10,13 +10,15 @@ class GymService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Gym currentGym;
 
-  bool showEditPanel = false;
+  final ValueNotifier<Gym> currentGym = ValueNotifier(Gym());
+  final ValueNotifier<bool> showEditPanel = ValueNotifier(false);
+
+
 
   void showEdit(Gym gym) {
-    currentGym = gym;
-    showEditPanel = true;
+    currentGym.value = gym;
+    showEditPanel.value = true;
     notifyListeners();
   }
 

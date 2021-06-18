@@ -1,5 +1,6 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
+import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -9,7 +10,7 @@ import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymsEditPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class GymsScreen extends StatefulWidget {
   _GymsScreenState createState() => _GymsScreenState();
 }
 
-class _GymsScreenState extends State<GymsScreen> {
+class _GymsScreenState extends State<GymsScreen>{
   final PanelController _gymsAddPanelController = PanelController();
 
   @override
@@ -37,9 +38,7 @@ class _GymsScreenState extends State<GymsScreen> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return ChangeNotifierProvider<GymService>(
-                create: (_) => GymService(),
-                child: Stack(children: <Widget>[
+            return Stack(children: <Widget>[
                   Scaffold(
                       // Add gym button
                       floatingActionButton:
@@ -91,7 +90,7 @@ class _GymsScreenState extends State<GymsScreen> {
                   if (snapshot.data.isOperator ||
                       _getIsAnyGymUser(snapshot.data.roles))
                     GymsEditPanel()
-                ]));
+                ]);
           }
         });
   }
