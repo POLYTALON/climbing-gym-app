@@ -22,23 +22,6 @@ jobs:
           channel: "dev"
           flutter-version: "2.3.0-0.1.pre"
       - run: flutter pub get
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-
-      - run: npm install -g firebase-tools
-
-      # Set the correct firebase project depending on the current branch
-      # Set the productive firebase backend
-      - run: firebase use --token $FIREBASE_TOKEN --project polyapp-d3d40
-        if: github.ref == 'refs/heads/main'
-        env:
-          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
-      # Set the development firebase backend
-      - run: firebase use --token $FIREBASE_TOKEN --project polyapp-dev
-        if: github.ref != 'refs/heads/main'
-        env:
-          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
 
       # Copy the productive index.html when pushing to main
       - run: ./web/copyIndex/copyIndexHtml.sh productive
@@ -49,6 +32,18 @@ jobs:
 
       - run: flutter build web
 
-      - run: firebase deploy --token $FIREBASE_TOKEN
+      - name: Deploy to Production Firebase
+        if: github.ref == 'refs/heads/main'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project polyapp-d3d40 --token $FIREBASE_TOKEN
         env:
-          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+
+      - name: Deploy to Development Firebase
+        if: github.ref != 'refs/heads/main'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project polyapp-dev --token $FIREBASE_TOKEN
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
