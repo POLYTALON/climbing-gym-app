@@ -270,6 +270,7 @@ class AuthService with ChangeNotifier {
 
   Future<bool> setBuilder(String email, String gymid) async {
     try {
+      selectGym(gymid);
       await _firestore
           .collection('users')
           .get()
