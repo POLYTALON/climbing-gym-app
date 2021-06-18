@@ -36,4 +36,4 @@ jobs:
         with:
           args: deploy
         env:
-          FIREBASE_TOKEN: ${{ github.ref != 'refs/heads/main' && secrets.FIREBASE_TOKEN_DEV || secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: secrets.FIREBASE_TOKEN
