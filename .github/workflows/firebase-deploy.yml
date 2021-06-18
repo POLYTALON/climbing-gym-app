@@ -23,17 +23,25 @@ jobs:
           flutter-version: "2.3.0-0.1.pre"
       - run: flutter pub get
 
+      - uses: w9jds/firebase-action@master
+
+      # Set the correct firebase project depending on the current branch
+      # Set the productive firebase backend
+      - run: firebase use polyapp-d3d40
+        if: github.ref == 'refs/heads/main'
+      # Set the development firebase backend
+      - run: firebase use polyapp-dev
+        if: github.ref != 'refs/heads/main'
+
       # Copy the productive index.html when pushing to main
       - run: ./web/copyIndex/copyIndexHtml.sh productive
         if: github.ref == 'refs/heads/main'
-      # Copy the development index.html when pushing to main
+      # Copy the development index.html when not pushing to main
       - run: ./web/copyIndex/copyIndexHtml.sh development
         if: github.ref != 'refs/heads/main'
 
       - run: flutter build web
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy
+
+      - run: firebase deploy
         env:
           FIREBASE_TOKEN: secrets.FIREBASE_TOKEN
