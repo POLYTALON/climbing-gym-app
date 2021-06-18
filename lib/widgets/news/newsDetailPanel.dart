@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:core';
 
 class NewsDetailPanel extends StatefulWidget {
   NewsDetailPanel({
@@ -121,9 +122,12 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => {
-                        if (newsProvider.currentNews.link != null)
-                          {launch(newsProvider.currentNews.link)},
+                      onPressed: () {
+                        if (newsProvider.currentNews.link != null) {
+                          String uri =
+                              Uri.decodeFull(newsProvider.currentNews.link);
+                          launch(uri);
+                        }
                       },
                       style: Constants.polyGreenButton,
                       child: Padding(
