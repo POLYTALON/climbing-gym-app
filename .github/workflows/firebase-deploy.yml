@@ -26,7 +26,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
       # Copy the development index.html when pushing to main
       - run: ./web/copyIndex/copyIndexHtml.sh development
-        if: ! github.ref == 'refs/heads/main'
+        if: github.ref != 'refs/heads/main'
 
       - run: flutter build web
       - name: Deploy to Firebase
