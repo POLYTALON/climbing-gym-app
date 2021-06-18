@@ -18,20 +18,22 @@ class StartScreen extends StatelessWidget {
             Spacer(flex: 2),
             // Polytalon Logo
             Image.asset('assets/img/polytalon_logo.png'),
-
+            Spacer(flex: 1),
             // Headline
-            Text("\nCLIMBING -APP",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 34)),
+            FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text("CLIMBING-APP",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 34))),
 
             // Spacer
             Spacer(flex: 2),
 
             // Buttons
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Constants.polyGreen),
@@ -49,7 +51,7 @@ class StartScreen extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w900)),
             ),
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -70,7 +72,7 @@ class StartScreen extends StatelessWidget {
             // Spacer
             Spacer(flex: 2),
 
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.grey.shade800),

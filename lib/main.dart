@@ -21,7 +21,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   final auth = locator<AuthService>();
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

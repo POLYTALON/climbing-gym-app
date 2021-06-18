@@ -33,14 +33,26 @@ const TextStyle defaultTextWhite =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16);
 
 const TextStyle smallTextWhite600 =
-    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14);
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12);
 
 const TextStyle defaultTextWhite700 =
     TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16);
 
+const TextStyle defaultTextWhite900 =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16);
+
+const TextStyle defaultTextBlack700 =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16);
+
 // custom button styles
 ButtonStyle polyGreenButton = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(polyGreen),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
+    ));
+
+ButtonStyle polyGrayButton = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(lightGray),
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
       new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
     ));

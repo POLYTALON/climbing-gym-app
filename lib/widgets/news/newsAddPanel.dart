@@ -242,7 +242,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyGreen),
@@ -269,7 +269,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyRed),

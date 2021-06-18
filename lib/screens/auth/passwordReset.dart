@@ -76,7 +76,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
             Spacer(flex: 1),
 
             // Button Login
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Constants.polyGreen),

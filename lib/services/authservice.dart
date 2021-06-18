@@ -1,3 +1,4 @@
+import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +30,8 @@ class AuthService with ChangeNotifier {
       }
     });
   }
+
+  User get currentUser => _auth.currentUser;
 
   bool get loggedIn => _loggedIn;
 
@@ -88,10 +91,10 @@ class AuthService with ChangeNotifier {
           .doc(_auth.currentUser?.uid ?? '')
           .snapshots()
           .asyncMap((userDoc) async {
-        bool isOperator = await _getIsOperator();
+        bool isOperator = await getIsOperator();
         String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
-        Map<String, dynamic> userRoutes = await _getUserRoutes();
+        Map<String, dynamic> userRoutes = await getUserRoutes();
         return AppUser.fromFirebase(
             _auth.currentUser, isOperator, userRoles, selectedGym, userRoutes);
       });
@@ -99,7 +102,7 @@ class AuthService with ChangeNotifier {
     return Stream.empty();
   }
 
-  Future<bool> _getIsOperator() async {
+  Future<bool> getIsOperator() async {
     if (_auth.currentUser != null) {
       try {
         CollectionReference docRef = _firestore
@@ -143,7 +146,7 @@ class AuthService with ChangeNotifier {
     return Map<String, UserRole>();
   }
 
-  Future<Map<String, dynamic>> _getUserRoutes() async {
+  Future<Map<String, dynamic>> getUserRoutes() async {
     if (_auth.currentUser != null) {
       Map<String, dynamic> userRoutes = {};
       try {
@@ -156,8 +159,7 @@ class AuthService with ChangeNotifier {
           Map<String, dynamic> data = snapshot.data();
 
           if (data.containsKey('routes')) {
-            userRoutes =
-                data.entries.firstWhere((entry) => entry.key == 'routes').value;
+            userRoutes = data['routes'];
           }
         });
       } on FirebaseException catch (e) {
@@ -166,6 +168,31 @@ class AuthService with ChangeNotifier {
       return userRoutes;
     }
     return {};
+  }
+
+  Future<void> updateUserRouteStatus(AppRoute route) async {
+    DocumentSnapshot userDoc =
+        await _firestore.collection('users').doc(_auth.currentUser.uid).get();
+    dynamic userRoutes = userDoc.data()['routes'];
+    if (userRoutes == null) {
+      userRoutes = Map<String, dynamic>();
+    }
+    if (userRoutes[route.gymId] == null) {
+      userRoutes[route.gymId] = Map<String, dynamic>();
+    }
+
+    if (route.isDone || route.isTried) {
+      userRoutes[route.gymId]
+          [route.id] = {"difficulty": route.difficulty, "isDone": route.isDone};
+    } else {
+      userRoutes[route.gymId][route.id] = null;
+      userRoutes[route.gymId]
+          .removeWhere((String key, dynamic value) => key == route.id);
+    }
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .update({"routes": userRoutes});
   }
 
   Future<void> selectGym(String gymid) async {

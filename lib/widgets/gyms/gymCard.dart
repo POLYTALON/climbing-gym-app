@@ -68,7 +68,7 @@ class _GymCardState extends State<GymCard> {
                     children: <Widget>[
                       // Image
                       Expanded(
-                          flex: 5,
+                          flex: 4,
                           child: Stack(children: <Widget>[
                             Center(child: CircularProgressIndicator()),
                             Container(
@@ -82,7 +82,7 @@ class _GymCardState extends State<GymCard> {
                           ])),
                       // Title
                       Expanded(
-                          flex: 7,
+                          flex: 6,
                           child: Column(
                             children: [
                               FittedBox(
@@ -113,16 +113,19 @@ class _GymCardState extends State<GymCard> {
                                     ),
                                   )),
                               if (_getIsPrivileged())
-                                Row(
+                                Expanded(
+                                    child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.white,
-                                      onPressed: onPressEdit,
-                                    ),
+                                    FittedBox(
+                                        fit: BoxFit.fitHeight,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: Colors.white,
+                                          onPressed: onPressEdit,
+                                        )),
                                   ],
-                                )
+                                ))
                             ],
                           )),
                     ],

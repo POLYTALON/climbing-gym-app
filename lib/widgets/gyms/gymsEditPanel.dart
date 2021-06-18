@@ -34,7 +34,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
   final picker = ImagePicker();
 
   final gymService = locator<GymService>();
-
+  final authService = locator<AuthService>();
   BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
@@ -56,6 +56,9 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
         minHeight: 0.0,
         borderRadius: radius,
         controller: _panelController,
+        onPanelClosed: (() {
+          setState(() {});
+        }),
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -218,7 +221,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyGreen),
@@ -245,7 +248,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyRed),
@@ -271,41 +274,66 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
                     ),
 
                     // Delete Button
-                    if (_getIsOperator())
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    left: 100, right: 100),
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Constants.polyRed),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(24.0)),
-                                      )),
-                                  onPressed: () => onPressDelete(context),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text("Delete Gym",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700)),
+                    FutureBuilder<bool>(
+                        future: authService.getIsOperator(),
+                        builder: (context, operatorSnapshot) {
+                          if (!operatorSnapshot.hasData ||
+                              operatorSnapshot.data == false) {
+                            return Container();
+                          } else {
+                            return Container(
+                              padding: EdgeInsets.only(bottom: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 100, right: 100),
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Constants.polyRed),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          24.0)),
+                                            )),
+                                        onPressed: () => onPressDelete(context),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Icon(Icons.delete,
+                                                    size: 20),
+                                              ),
+                                              Text("Delete Gym",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      )
+                            );
+                          }
+                        })
                   ],
                 ))));
   }
@@ -445,14 +473,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
       form.save();
       return true;
     }
-    return false;
-  }
-
-  bool _getIsOperator() {
-    locator<AuthService>().streamAppUser().first.then((appUser) {
-      if (appUser == null) return false;
-      return appUser.isOperator;
-    });
     return false;
   }
 }

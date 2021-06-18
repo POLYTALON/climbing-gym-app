@@ -207,7 +207,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                   const EdgeInsets.only(left: 10, right: 10),
                               child:
                                   // Accept button
-                                  TextButton(
+                                  ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyGreen),
@@ -234,7 +234,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyRed),

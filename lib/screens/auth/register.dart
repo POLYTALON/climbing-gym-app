@@ -162,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Spacer(flex: 1),
 
             // Button Register
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Constants.polyGreen),
@@ -190,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
