@@ -22,8 +22,11 @@ jobs:
           channel: "dev"
           flutter-version: "2.3.0-0.1.pre"
       - run: flutter pub get
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
-      - uses: w9jds/firebase-action@master
+      - run: npm install -g firebase-tools
 
       # Set the correct firebase project depending on the current branch
       # Set the productive firebase backend
