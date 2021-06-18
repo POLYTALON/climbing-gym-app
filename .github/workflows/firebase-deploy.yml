@@ -5,6 +5,7 @@ on:
     branches:
       - development
       - main
+      - VoigtSebastian/143
 
 jobs:
   build:
