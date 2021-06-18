@@ -33,12 +33,12 @@ jobs:
       - run: firebase use --token $FIREBASE_TOKEN polyapp-d3d40
         if: github.ref == 'refs/heads/main'
         env:
-          FIREBASE_TOKEN: secrets.FIREBASE_TOKEN
+          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
       # Set the development firebase backend
       - run: firebase use --token $FIREBASE_TOKEN polyapp-dev
         if: github.ref != 'refs/heads/main'
         env:
-          FIREBASE_TOKEN: secrets.FIREBASE_TOKEN
+          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
 
       # Copy the productive index.html when pushing to main
       - run: ./web/copyIndex/copyIndexHtml.sh productive
@@ -51,4 +51,4 @@ jobs:
 
       - run: firebase deploy --token $FIREBASE_TOKEN
         env:
-          FIREBASE_TOKEN: secrets.FIREBASE_TOKEN
+          FIREBASE_TOKEN: secrets.FIREBASE_CI_TOKEN
