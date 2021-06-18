@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
@@ -8,18 +9,20 @@ import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsEditPanel extends StatefulWidget {
+class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin{
   GymsEditPanel({Key key}) : super(key: key);
 
   @override
   _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
-class _GymsEditPanelState extends State<GymsEditPanel> {
+class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
   final PanelController _panelController = PanelController();
+
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -37,17 +40,17 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    gymService.addListener(() {
-      if (gymService.showEditPanel == true) {
-        controllerGymName.text = gymService.currentGym.name;
-        controllerLocation.text = gymService.currentGym.city;
+    final Gym gym = watchX((GymService x) => x.currentGym);
+    final bool showEdit =  watchX((GymService x) => x.showEditPanel);
+      if (showEdit == true) {
+        controllerGymName.text = gym.name;
+        controllerLocation.text = gym.city;
         _panelController.open();
       } else {
         controllerGymName.text = "";
         controllerLocation.text = "";
         _panelController.close();
-      }
-    });
+      };
 
     return SlidingUpPanel(
         minHeight: 0.0,
@@ -374,7 +377,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   void editGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
-    final id = gymService.currentGym.id;
+    final id = getX((GymService x) => x.currentGym.value.id);
 
     if (_validateAndSave()) {
       // edit Gym
@@ -388,7 +391,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     final authService = locator<AuthService>();
     final newsService = locator<NewsService>();
     final routeService = locator<RoutesService>();
-    final id = gymService.currentGym.id;
+    final id = getX((GymService x) => x.currentGym.value.id);
 
     showDialog(
       context: context,
