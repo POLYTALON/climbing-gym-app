@@ -1,7 +1,6 @@
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
-import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:climbing_gym_app/widgets/gyms/gymPreviewCard.dart';
 import 'package:flutter/cupertino.dart';

@@ -22,7 +22,7 @@ class RouteColorService extends ChangeNotifier {
           await _firestore.collection('routecolors').doc('colors').get();
       String hexColor = snapshot.data()[color];
       return Color(int.parse(hexColor));
-    } on Exception catch (e) {
+    } on Exception {
       return Colors.black;
     }
   }

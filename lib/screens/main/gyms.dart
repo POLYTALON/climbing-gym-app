@@ -1,6 +1,5 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
-import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -12,12 +11,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsScreen extends StatefulWidget{
+class GymsScreen extends StatefulWidget {
   @override
   _GymsScreenState createState() => _GymsScreenState();
 }
 
-class _GymsScreenState extends State<GymsScreen>{
+class _GymsScreenState extends State<GymsScreen> {
   final PanelController _gymsAddPanelController = PanelController();
 
   @override
@@ -38,58 +37,56 @@ class _GymsScreenState extends State<GymsScreen>{
             );
           } else {
             return Stack(children: <Widget>[
-                  Scaffold(
-                      // Add gym button
-                      floatingActionButton:
-                          _getFloatingActionButton(snapshot.data.isOperator),
-                      backgroundColor: Constants.polyDark,
+              Scaffold(
+                  // Add gym button
+                  floatingActionButton:
+                      _getFloatingActionButton(snapshot.data.isOperator),
+                  backgroundColor: Constants.polyDark,
 
-                      // Page content
-                      body: Container(
-                          child: Column(children: [
-                        // Text
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text("Choose Your Gym",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 24)),
-                        ),
+                  // Page content
+                  body: Container(
+                      child: Column(children: [
+                    // Text
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Choose Your Gym",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24)),
+                    ),
 
-                        // GridView (with GymCards)
-                        Expanded(
-                          child: StreamBuilder(
-                              stream: locator<GymService>().streamGyms(),
-                              builder: (context, gymsSnapshot) {
-                                if (snapshot.connectionState !=
-                                        ConnectionState.active ||
-                                    !gymsSnapshot.hasData) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return GridView.count(
-                                      crossAxisCount: 2,
-                                      childAspectRatio:
-                                          (itemWidth / itemHeight),
-                                      children: List.generate(
-                                          gymsSnapshot.data.length, (index) {
-                                        return Container(
-                                            child: GymCard(
-                                                gym: gymsSnapshot.data[index],
-                                                appUser: snapshot.data));
-                                      }));
-                                }
-                              }),
-                        )
-                      ]))),
-                  if (snapshot.data.isOperator)
-                    GymsAddPanel(panelController: _gymsAddPanelController),
-                  if (snapshot.data.isOperator ||
-                      _getIsAnyGymUser(snapshot.data.roles))
-                    GymsEditPanel()
-                ]);
+                    // GridView (with GymCards)
+                    Expanded(
+                      child: StreamBuilder(
+                          stream: locator<GymService>().streamGyms(),
+                          builder: (context, gymsSnapshot) {
+                            if (snapshot.connectionState !=
+                                    ConnectionState.active ||
+                                !gymsSnapshot.hasData) {
+                              return Center(child: CircularProgressIndicator());
+                            } else {
+                              return GridView.count(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: (itemWidth / itemHeight),
+                                  children: List.generate(
+                                      gymsSnapshot.data.length, (index) {
+                                    return Container(
+                                        child: GymCard(
+                                            gym: gymsSnapshot.data[index],
+                                            appUser: snapshot.data));
+                                  }));
+                            }
+                          }),
+                    )
+                  ]))),
+              if (snapshot.data.isOperator)
+                GymsAddPanel(panelController: _gymsAddPanelController),
+              if (snapshot.data.isOperator ||
+                  _getIsAnyGymUser(snapshot.data.roles))
+                GymsEditPanel()
+            ]);
           }
         });
   }

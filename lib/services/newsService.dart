@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/services/fileService.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';

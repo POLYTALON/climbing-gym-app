@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
-class Gym extends Equatable{
+class Gym extends Equatable {
   final String id;
   final String name;
   final String imageUrl;

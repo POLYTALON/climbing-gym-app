@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
