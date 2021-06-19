@@ -1,7 +1,7 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
-import 'package:climbing_gym_app/screens/main/routeDetail.dart';
+import 'package:climbing_gym_app/widgets/routes/routeDetail.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';

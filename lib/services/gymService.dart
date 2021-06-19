@@ -12,10 +12,24 @@ class GymService extends ChangeNotifier with FileService {
 
   final ValueNotifier<Gym> currentGym = ValueNotifier(Gym());
   final PanelController panelControl = PanelController();
+  final PanelController showSetOwnerPanel = PanelController();
+  final PanelController showEditBuilderPanel = PanelController();
 
   void showEdit(Gym gym) {
     currentGym.value = gym;
     panelControl.open();
+    notifyListeners();
+  }
+
+  void showSetOwner(Gym gym) {
+    currentGym.value = gym;
+    showSetOwnerPanel.open();
+    notifyListeners();
+  }
+
+  void showEditBuilder(Gym gym) {
+    currentGym.value = gym;
+    showEditBuilderPanel.open();
     notifyListeners();
   }
 
