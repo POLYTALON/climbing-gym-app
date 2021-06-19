@@ -1,10 +1,11 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NewsDetailPanel extends StatefulWidget {
   NewsDetailPanel({
@@ -37,10 +38,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
 
     return Container(
       constraints: BoxConstraints.expand(),
-      child: SlidingUpPanel(
-        margin: EdgeInsets.only(left: 16, right: 16),
-        minHeight: 0.0,
-        borderRadius: radius,
+      child: PolySlidingUpPanel(
         controller: _panelController,
         panelBuilder: (ScrollController sc) {
           return Container(
