@@ -364,7 +364,12 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
   void createNews(NewsService db, AppUser user) async {
     final newsTitle = controllerNewsTitle.text.trim();
     final newsContent = controllerNewsContent.text.trim();
-    final newsLink = controllerNewsLink.text.trim();
+    String newsLink = "";
+    String newsURL = controllerNewsLink.text.trim();
+    if (!newsURL.startsWith("http://") || !newsURL.startsWith("https://")) {
+      newsLink = "https://" + newsURL;
+    }
+    newsLink = Uri.encodeFull(newsLink);
     final gymid = this.gymid ?? "";
     if (_validateAndSave()) {
       if (_image != null) {

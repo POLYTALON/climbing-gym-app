@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'dart:core';
 
 class NewsDetailPanel extends StatefulWidget {
   NewsDetailPanel({
@@ -24,9 +25,6 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
 
   @override
   Widget build(BuildContext context) {
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
     newsProvider.addListener(() {
       setState(() {}); //TODO: Work around!!!!!
       if (newsProvider.showPanel == true) {
@@ -97,42 +95,55 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              margin: newsProvider.currentNews.link != ""
-                                  ? const EdgeInsets.only(bottom: 48)
-                                  : null,
                               child: Text(
                                   newsProvider.currentNews.content ?? "",
                                   style: Constants.defaultText),
                             )
                           ]),
+                      Visibility(
+                        visible: newsProvider.currentNews.link != "",
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (newsProvider.currentNews.link != null) {
+                                      String uri = Uri.decodeFull(
+                                          newsProvider.currentNews.link);
+                                      launch(uri);
+                                    }
+                                  },
+                                  style: Constants.polyGreenButton,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0,
+                                        right: 16,
+                                        top: 8,
+                                        bottom: 8),
+                                    child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: Icon(Icons.open_in_browser),
+                                          ),
+                                          Text("Open Link",
+                                              style: Constants.defaultTextWhite)
+                                        ]),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
                     ]),
               ),
             ),
           );
         },
-        footer: Visibility(
-            visible: newsProvider.currentNews.link != "",
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => {
-                        if (newsProvider.currentNews.link != null)
-                          {launch(newsProvider.currentNews.link)},
-                      },
-                      style: Constants.polyGreenButton,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16, top: 8, bottom: 8),
-                        child: Text("Open Link",
-                            style: Constants.defaultTextWhite),
-                      ),
-                    ),
-                  ]),
-            )),
       ),
     );
   }
