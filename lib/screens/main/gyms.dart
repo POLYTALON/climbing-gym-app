@@ -10,10 +10,9 @@ import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymsEditPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsScreen extends StatefulWidget {
+class GymsScreen extends StatefulWidget{
   @override
   _GymsScreenState createState() => _GymsScreenState();
 }

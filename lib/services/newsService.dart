@@ -6,19 +6,20 @@ import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NewsService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  News currentNews = News();
-  bool showPanel = true;
+  final ValueNotifier<News> currentNews = ValueNotifier(News());
+  final PanelController panelControl = PanelController();
 
-  News get currentNewsDetails => currentNews;
+  News get currentNewsDetails => currentNews.value;
 
   void showNews(News news) {
-    currentNews = news;
-    showPanel = true;
+    currentNews.value = news;
+    panelControl.open();
     notifyListeners();
   }
 

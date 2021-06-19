@@ -3,10 +3,11 @@ import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NewsDetailPanel extends StatefulWidget {
+class NewsDetailPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   NewsDetailPanel({
     Key key,
   }) : super(key: key);
@@ -15,25 +16,16 @@ class NewsDetailPanel extends StatefulWidget {
   _NewsDetailPanelState createState() => _NewsDetailPanelState();
 }
 
-class _NewsDetailPanelState extends State<NewsDetailPanel> {
+class _NewsDetailPanelState extends State<NewsDetailPanel>
+    with GetItStateMixin {
   _NewsDetailPanelState();
   final newsProvider = locator<NewsService>();
-
-  final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
-    newsProvider.addListener(() {
-      setState(() {}); //TODO: Work around!!!!!
-      if (newsProvider.showPanel == true) {
-        _panelController.open();
-      } else {
-        _panelController.close();
-      }
-    });
+    final newsWatch = watchX((NewsService x) => x.currentNews);
 
     return Container(
       constraints: BoxConstraints.expand(),
@@ -41,7 +33,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
         margin: EdgeInsets.only(left: 16, right: 16),
         minHeight: 0.0,
         borderRadius: radius,
-        controller: _panelController,
+        controller: newsProvider.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
             decoration: ShapeDecoration(
@@ -79,12 +71,12 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                           ),
                           IconButton(
                               onPressed: () {
-                                this._panelController.close();
+                                this.newsProvider.panelControl.close();
                               },
                               icon: const Icon(Icons.close)),
                         ],
                       ),
-                      newsProvider.currentNews.imageUrls != null
+                      newsWatch.imageUrls != null
                           ? Container(
                               padding: const EdgeInsets.only(
                                 top: 8,
@@ -92,18 +84,16 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                               ),
                               constraints: BoxConstraints(
                                   minHeight: 100, maxHeight: 250),
-                              child: Image.network(
-                                  newsProvider.currentNews.imageUrls[0]))
+                              child: Image.network(newsWatch.imageUrls[0]))
                           : Container(),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              margin: newsProvider.currentNews.link != ""
+                              margin: newsWatch.link != ""
                                   ? const EdgeInsets.only(bottom: 48)
                                   : null,
-                              child: Text(
-                                  newsProvider.currentNews.content ?? "",
+                              child: Text(newsWatch.content ?? "",
                                   style: Constants.defaultText),
                             )
                           ]),
@@ -113,7 +103,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
           );
         },
         footer: Visibility(
-            visible: newsProvider.currentNews.link != "",
+            visible: newsWatch.link != "",
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -122,8 +112,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                   children: [
                     ElevatedButton(
                       onPressed: () => {
-                        if (newsProvider.currentNews.link != null)
-                          {launch(newsProvider.currentNews.link)},
+                        if (newsWatch.link != null) {launch(newsWatch.link)},
                       },
                       style: Constants.polyGreenButton,
                       child: Padding(

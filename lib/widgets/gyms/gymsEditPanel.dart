@@ -13,16 +13,15 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin{
+class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   GymsEditPanel({Key key}) : super(key: key);
 
   @override
   _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
-class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
+class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
   final PanelController _panelController = PanelController();
-
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -40,22 +39,16 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    final Gym gym = watchX((GymService x) => x.currentGym);
-    final bool showEdit =  watchX((GymService x) => x.showEditPanel);
-      if (showEdit == true) {
-        controllerGymName.text = gym.name;
-        controllerLocation.text = gym.city;
-        _panelController.open();
-      } else {
-        controllerGymName.text = "";
-        controllerLocation.text = "";
-        _panelController.close();
-      };
+    watchX((GymService x) {
+      controllerGymName.text = x.currentGym.value.name;
+      controllerLocation.text = x.currentGym.value.city;
+      return x.currentGym;
+    });
 
     return SlidingUpPanel(
         minHeight: 0.0,
         borderRadius: radius,
-        controller: _panelController,
+        controller: gymService.panelControl,
         onPanelClosed: (() {
           setState(() {});
         }),

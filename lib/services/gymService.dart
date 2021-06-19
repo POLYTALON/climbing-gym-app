@@ -6,20 +6,18 @@ import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-
   final ValueNotifier<Gym> currentGym = ValueNotifier(Gym());
-  final ValueNotifier<bool> showEditPanel = ValueNotifier(false);
-
-
+  final PanelController panelControl = PanelController();
 
   void showEdit(Gym gym) {
     currentGym.value = gym;
-    showEditPanel.value = true;
+    panelControl.open();
     notifyListeners();
   }
 

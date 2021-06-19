@@ -44,7 +44,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = locator<NewsService>();
+    final newsServ = locator<NewsService>();
 
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
@@ -252,7 +252,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => createNews(db, AppUser()),
+                                onPressed: () =>
+                                    createNews(newsServ, AppUser()),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Publish",
