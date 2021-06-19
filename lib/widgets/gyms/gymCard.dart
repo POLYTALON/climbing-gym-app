@@ -79,6 +79,31 @@ class _GymCardState extends State<GymCard> {
                                   image: gym.imageUrl,
                                   fit: BoxFit.fill),
                             ),
+                            if (_getIsPrivileged())
+                              FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Container(
+                                    color: Colors.grey[400],
+                                    child: Column(
+                                      //mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: Colors.white,
+                                          onPressed: onPressEdit,
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.account_circle_outlined),
+                                          color: Colors.white,
+                                          onPressed: () =>
+                                              onPressAccountButton(),
+                                        )
+                                      ],
+                                    )),
+                              ),
                           ])),
                       // Title
                       Expanded(
@@ -112,20 +137,6 @@ class _GymCardState extends State<GymCard> {
                                               fontSize: 20)),
                                     ),
                                   )),
-                              if (_getIsPrivileged())
-                                Expanded(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    FittedBox(
-                                        fit: BoxFit.fitHeight,
-                                        child: IconButton(
-                                          icon: const Icon(Icons.edit),
-                                          color: Colors.white,
-                                          onPressed: onPressEdit,
-                                        )),
-                                  ],
-                                ))
                             ],
                           )),
                     ],
@@ -145,5 +156,13 @@ class _GymCardState extends State<GymCard> {
     if (appUser == null) return false;
     return appUser.isOperator ||
         (appUser.roles[gym.id] != null && appUser.roles[gym.id].gymuser);
+  }
+
+  void onPressAccountButton() {
+    if (appUser.isOperator) {
+      locator<GymService>().showSetOwner(this.gym);
+    } else if (appUser.roles.containsKey(this.gym.id)) {
+      locator<GymService>().showEditBuilder(this.gym);
+    }
   }
 }
