@@ -38,7 +38,6 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
     bool isPageSwiping = watchX((PageViewService s) => s.isSwipingAllowed);
-    print("swiping :" + isPageSwiping.toString());
     return Scaffold(
         // AppBar
         backgroundColor: Constants.polyDark,
