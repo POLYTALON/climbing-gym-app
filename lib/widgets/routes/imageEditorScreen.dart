@@ -9,7 +9,6 @@ import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -27,9 +26,6 @@ class ImageEditorScreen extends StatefulWidget {
 class _ImageEditorScreenState extends State<ImageEditorScreen> {
   _ImageEditorScreenState(this.imageFile);
 
-  final PanelController _panelController = PanelController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
   final controllerRouteName = TextEditingController(text: "");

@@ -21,8 +21,6 @@ class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
-  final PanelController _panelController = PanelController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsEditPanelState();
@@ -251,7 +249,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.close(),
+                                onPressed: () =>
+                                    gymService.panelControl.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Cancel",
@@ -332,10 +331,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
   }
 
   void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
+    if (gymService.panelControl.isPanelOpen) {
+      gymService.panelControl.close();
     } else {
-      _panelController.open();
+      gymService.panelControl.open();
     }
   }
 
@@ -403,7 +402,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
     if (_validateAndSave()) {
       // edit Gym
       await gymService.editGym(id, gymName, gymLocation, _image);
-      _panelController.close();
+      gymService.panelControl.close();
     }
   }
 
@@ -450,7 +449,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                       isUserPrivilegesDeleted &&
                       isNewsForGymDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
-                    _panelController.close();
+                    gymService.panelControl.close();
                   }
                 },
                 child: Text("Yes")),

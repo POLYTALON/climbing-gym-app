@@ -19,7 +19,7 @@ class NewsDetailPanel extends StatefulWidget with GetItStatefulWidgetMixin {
 class _NewsDetailPanelState extends State<NewsDetailPanel>
     with GetItStateMixin {
   _NewsDetailPanelState();
-  final newsProvider = locator<NewsService>();
+  final newsService = locator<NewsService>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
         margin: EdgeInsets.only(left: 16, right: 16),
         minHeight: 0.0,
         borderRadius: radius,
-        controller: newsProvider.panelControl,
+        controller: newsService.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
             decoration: ShapeDecoration(
@@ -65,13 +65,13 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
                         children: [
                           Flexible(
                             child: Text(
-                              newsProvider.currentNewsDetails.title ?? "",
+                              newsService.currentNewsDetails.title ?? "",
                               style: Constants.headerText,
                             ),
                           ),
                           IconButton(
                               onPressed: () {
-                                this.newsProvider.panelControl.close();
+                                this.newsService.panelControl.close();
                               },
                               icon: const Icon(Icons.close)),
                         ],

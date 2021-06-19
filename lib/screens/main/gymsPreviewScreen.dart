@@ -27,7 +27,7 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
         initialData: [],
         value: GymService().streamGyms(),
         child: Consumer<List<Gym>>(builder: (context, gyms, _) {
-          Stack(children: <Widget>[
+          return Stack(children: <Widget>[
             Scaffold(
                 backgroundColor: Constants.polyDark,
                 // Page content

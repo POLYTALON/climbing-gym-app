@@ -7,13 +7,14 @@ import 'package:climbing_gym_app/widgets/routes/imageEditorScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class RouteEditPanel extends StatefulWidget {
+class RouteEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   RouteEditPanel({
     Key key,
   }) : super(key: key);
@@ -22,9 +23,7 @@ class RouteEditPanel extends StatefulWidget {
   _RouteEditPanelState createState() => _RouteEditPanelState();
 }
 
-class _RouteEditPanelState extends State<RouteEditPanel> {
-  final PanelController _panelController = PanelController();
-
+class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -41,28 +40,18 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
-    routesService.addListener(() {
-      if (routesService.showEditPanel == true) {
-        loadImage();
-        controllerRouteName.text = routesService.currentRoute.name;
-        controllerRouteSetter.text = routesService.currentRoute.builder;
-        controllerRouteType.text = routesService.currentRoute.type;
-        controllerRouteHolds.text = routesService.currentRoute.holds;
-        _panelController.open();
-      } else {
-        controllerRouteName.text = "";
-        controllerRouteSetter.text = "";
-        controllerRouteType.text = "";
-        controllerRouteHolds.text = "";
-        _panelController.close();
-      }
+    watchX((RoutesService x) {
+      controllerRouteName.text = x.currentRoute.value.name;
+      controllerRouteSetter.text = x.currentRoute.value.builder;
+      controllerRouteType.text = x.currentRoute.value.type;
+      controllerRouteHolds.text = x.currentRoute.value.holds;
+      return x.currentRoute;
     });
 
     return SlidingUpPanel(
         minHeight: 0.0,
         borderRadius: radius,
-        controller: _panelController,
+        controller: routesService.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(
@@ -516,7 +505,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                           24.0)),
                                             )),
                                         onPressed: () =>
-                                            _panelController.close(),
+                                            routesService.panelControl.close(),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text("Cancel",
@@ -587,10 +576,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
+    if (routesService.panelControl.isPanelOpen) {
+      routesService.panelControl.close();
     } else {
-      _panelController.open();
+      routesService.panelControl.open();
     }
   }
 
@@ -655,8 +644,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     final builder = controllerRouteSetter.text.trim();
     final routeColors = await routeColorService.getAvailableRouteColors();
     final difficulty = routeColors[this.selectedColorIndex].color;
-    final id = routesService.currentRoute.id;
-    final gymId = routesService.currentRoute.gymId;
+    final id = getX((RoutesService x) => x.currentRoute.value.id);
+    final gymId = getX((RoutesService x) => x.currentRoute.value.gymId);
     final holds = controllerRouteHolds.text.trim();
     final type = controllerRouteType.text.trim();
 
@@ -664,7 +653,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
       // edit Route
       routesService.editRoute(id, routeName, gymId, difficulty, type, holds,
           builder, DateTime.now(), _image);
-      _panelController.close();
+      routesService.panelControl.close();
     }
   }
 
@@ -687,10 +676,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     setState(() {
       isImageLoading = true;
     });
-    http.get(Uri.parse(routesService.currentRoute.imageUrl)).then((response) {
+    http
+        .get(Uri.parse(routesService.currentRoute.value.imageUrl))
+        .then((response) {
       getApplicationDocumentsDirectory().then((documentDirectory) {
-        final file =
-            File(join(documentDirectory.path, routesService.currentRoute.id));
+        final file = File(
+            join(documentDirectory.path, routesService.currentRoute.value.id));
 
         file.writeAsBytesSync(response.bodyBytes);
         setState(() {
@@ -702,7 +693,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   void onPressDelete(BuildContext context) {
-    final id = routesService.currentRoute.id;
+    final id = getX((RoutesService x) => x.currentRoute.value.id);
     if (this.mounted) {
       showDialog(
         context: context,
@@ -728,7 +719,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                   onPressed: () async {
                     routesService.deleteRoute(id);
                     Navigator.of(context).pop();
-                    _panelController.close();
+                    routesService.panelControl.close();
                   },
                   child: Text("Yes")),
             ],
