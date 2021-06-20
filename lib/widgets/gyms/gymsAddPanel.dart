@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -31,14 +32,11 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   String _errorMessage = "";
   File _image;
   final picker = ImagePicker();
-  BorderRadiusGeometry radius = BorderRadius.only(
-      topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanel(
-        minHeight: 0.0,
+    return PolySlidingUpPanel(
         controller: _panelController,
-        borderRadius: radius,
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -316,7 +314,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);

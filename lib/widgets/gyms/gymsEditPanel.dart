@@ -3,8 +3,10 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
+import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -32,8 +34,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   final gymService = locator<GymService>();
   final authService = locator<AuthService>();
-  BorderRadiusGeometry radius = BorderRadius.only(
-      topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+  final pageviewService = locator<PageViewService>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +50,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
       }
     });
 
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        borderRadius: radius,
+    return PolySlidingUpPanel(
         controller: _panelController,
-        onPanelClosed: (() {
-          setState(() {});
-        }),
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -389,7 +385,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);

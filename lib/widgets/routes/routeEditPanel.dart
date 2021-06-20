@@ -4,6 +4,7 @@ import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/widgets/routes/imageEditorScreen.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -59,9 +60,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
       }
     });
 
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        borderRadius: radius,
+    return PolySlidingUpPanel(
         controller: _panelController,
         panelBuilder: (ScrollController sc) {
           return Container(
@@ -640,7 +639,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);

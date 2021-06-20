@@ -327,21 +327,25 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                           height: 20,
                                                         ),
                                                         // Toggle Switch
-                                                        Padding(
-                                                            padding:
-                                                                const EdgeInsets.all(
-                                                                    8.0),
+                                                        FittedBox(
+                                                            fit:
+                                                                BoxFit.fitWidth,
                                                             child: ToggleSwitch(
                                                                 initialLabelIndex:
                                                                     _routeStateFilterIndex,
                                                                 totalSwitches:
-                                                                    3,
+                                                                    4,
                                                                 labels: [
+                                                                  'All',
                                                                   'Open',
                                                                   'Tried',
                                                                   'Done'
                                                                 ],
                                                                 activeBgColors: [
+                                                                  [
+                                                                    Colors
+                                                                        .black26
+                                                                  ],
                                                                   [
                                                                     Colors
                                                                         .lightBlueAccent
@@ -617,13 +621,19 @@ class _RoutesScreenState extends State<RoutesScreen> {
 
   List<AppRoute> _filterRoutesByState(List<AppRoute> routes, AppUser user) {
     switch (_routeStateFilterIndex) {
-      case 1:
-        return routes.where((route) => route.isTried).toList();
-      case 2:
-        return routes.where((route) => route.isDone).toList();
       case 0:
+        return routes.isEmpty ? [] : routes;
+      case 1:
+        return routes
+            .where((route) => !route.isDone)
+            .where((route) => !route.isTried)
+            .toList();
+      case 2:
+        return routes.where((route) => route.isTried).toList();
+      case 3:
+        return routes.where((route) => route.isDone).toList();
       default:
-        return routes.isNotEmpty ? routes : [];
+        return [];
     }
   }
 

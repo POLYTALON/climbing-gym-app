@@ -4,6 +4,7 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/validators/content_validator.dart';
 import 'package:climbing_gym_app/validators/title_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -46,12 +47,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
   Widget build(BuildContext context) {
     final db = locator<NewsService>();
 
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        borderRadius: radius,
+    return PolySlidingUpPanel(
         controller: _panelController,
         panelBuilder: (ScrollController sc) {
           return Container(
@@ -355,7 +351,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
