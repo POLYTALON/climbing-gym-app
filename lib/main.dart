@@ -14,7 +14,10 @@ void main() async {
   // run app
   runApp(MaterialApp(
       title: 'Climbing App',
-      theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
+      theme: ThemeData(
+          fontFamily: 'NunitoSans',
+          accentColor: polyGreen,
+          brightness: Brightness.dark),
       home: MyApp()));
 }
 
@@ -27,6 +30,8 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
     return WillPopScope(
         onWillPop: () => Future.value(false),
         child: auth.loggedIn ? NavigationContainer() : StartScreen());
