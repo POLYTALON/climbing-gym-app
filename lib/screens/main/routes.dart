@@ -284,8 +284,9 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                     context,
                                                                 builder: (_) {
                                                                   return MultiSelectDialog(
-                                                                      backgroundColor: Constants
-                                                                          .polyGray,
+                                                                      backgroundColor:
+                                                                          Constants
+                                                                              .polyGray,
                                                                       itemsTextStyle:
                                                                           Constants
                                                                               .defaultTextBlack700,
@@ -305,11 +306,10 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                         color: Colors
                                                                             .white,
                                                                       ),
-                                                                      searchIcon: Icon(
-                                                                          Icons
-                                                                              .search,
-                                                                          color: Colors
-                                                                              .white),
+                                                                      searchIcon:
+                                                                          Icon(Icons.search,
+                                                                              color: Colors
+                                                                                  .white),
                                                                       cancelText: Text(
                                                                           'Cancel',
                                                                           style: Constants
@@ -324,10 +324,11 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                               .defaultTextWhite),
                                                                       initialValue:
                                                                           _routeColorFilter,
-                                                                      items: routeColorSnapshot
-                                                                          .data
-                                                                          .map(
-                                                                              (e) => MultiSelectItem(e, e.color))
+                                                                      items: _getRouteColorsByGymId(
+                                                                              snapshot.data.selectedGym,
+                                                                              routes,
+                                                                              routeColorSnapshot.data)
+                                                                          .map((e) => MultiSelectItem(e, e.color))
                                                                           .toList(),
                                                                       colorator: (item) {
                                                                         return Color((item
@@ -568,6 +569,16 @@ class _RoutesScreenState extends State<RoutesScreen> {
     List<String> result = [];
     if (routes.isNotEmpty) result.add('All');
     result.addAll(routes.map((route) => route.type).toSet().toList());
+    return result;
+  }
+
+  List<RouteColor> _getRouteColorsByGymId(
+      String gymId, List<AppRoute> routes, List<RouteColor> colors) {
+    List<RouteColor> result = [];
+
+    routes.forEach((route) => result
+        .add(colors.firstWhere((color) => color.color == route.difficulty)));
+
     return result;
   }
 
