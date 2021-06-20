@@ -28,6 +28,17 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
     return Container(
       constraints: BoxConstraints.expand(),
       child: PolySlidingUpPanel(
+        header: Container(
+          width: MediaQuery.of(context).size.width,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+            IconButton(
+                onPressed: () {
+                  this.newsService.panelControl.close();
+                },
+                icon: const Icon(Icons.close)),
+          ]),
+        ),
         controller: newsService.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
@@ -64,11 +75,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
                               style: Constants.headerText,
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                this.newsService.panelControl.close();
-                              },
-                              icon: const Icon(Icons.close)),
+                          Container(height: 32, width: 32)
                         ],
                       ),
                       newsWatch.imageUrls != null
