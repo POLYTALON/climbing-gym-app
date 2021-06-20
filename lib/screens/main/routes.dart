@@ -308,7 +308,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                                               confirmText: Text('Confirm', style: Constants.defaultTextWhite),
                                                                               title: Text('Route Colors', style: Constants.defaultTextWhite),
                                                                               initialValue: _routeColorFilter,
-                                                                              items: routeColorSnapshot.data.map((e) => MultiSelectItem(e, e.color)).toList(),
+                                                                              items: _getRouteColorsByGymId(snapshot.data.selectedGym, routes, routeColorSnapshot.data).map((e) => MultiSelectItem(e, e.color)).toList(),
                                                                               colorator: (item) {
                                                                                 return Color((item as RouteColor).colorCode);
                                                                               },
@@ -594,6 +594,16 @@ class _RoutesScreenState extends State<RoutesScreen> {
     List<String> result = [];
     if (routes.isNotEmpty) result.add('All');
     result.addAll(routes.map((route) => route.type).toSet().toList());
+    return result;
+  }
+
+  List<RouteColor> _getRouteColorsByGymId(
+      String gymId, List<AppRoute> routes, List<RouteColor> colors) {
+    List<RouteColor> result = [];
+
+    routes.forEach((route) => colors.forEach((color) {
+          if (route.difficulty == color.color) result.add(color);
+        }));
     return result;
   }
 
