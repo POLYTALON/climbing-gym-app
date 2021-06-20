@@ -2,6 +2,7 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -31,10 +32,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
 
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        snapPoint: 0.50,
-        borderRadius: radius,
+    return PolySlidingUpPanel(
         controller: gymService.showEditBuilderPanel,
         panel: Container(
             decoration: ShapeDecoration(
@@ -105,47 +103,60 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             //Set Builder Button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Constants.polyGreen),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => setBuilder(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "SET BUILDER",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyGreen),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => setBuilder(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Set Builder",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            //Cancel Button
                             // Cancel button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.red[400]),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () =>
-                                  gymService.showEditBuilderPanel.close(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Cancel",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () =>
+                                      gymService.showEditBuilderPanel.close(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Cancel",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
