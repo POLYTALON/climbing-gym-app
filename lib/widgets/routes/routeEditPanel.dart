@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/models/AppRoute.dart';
+import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
@@ -307,6 +309,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                 return Container(
                                                     width: 0.0, height: 0.0);
                                               }
+                                              this.selectedColorIndex =
+                                                  _initSelectedRouteColorIndex(
+                                                      routeColorSnapshot.data,
+                                                      routesService
+                                                          .currentRoute);
                                               return Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
@@ -680,6 +687,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     setState(() {
       selectedColorIndex = index;
     });
+  }
+
+  int _initSelectedRouteColorIndex(
+      List<RouteColor> availableColors, AppRoute route) {
+    return availableColors
+        .indexWhere((color) => color.color == route.difficulty);
   }
 
   void loadImage() {
