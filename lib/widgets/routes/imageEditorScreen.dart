@@ -155,10 +155,8 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
                     TextButton(
                       style: Constants.polyGreenButton,
                       onPressed: () async {
-                        print("SAVED");
                         var editedFile = await editor.getPng();
                         Navigator.of(context).pop(editedFile);
-                        //editor.getPng();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),

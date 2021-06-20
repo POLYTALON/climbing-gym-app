@@ -36,31 +36,24 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   int selectedColorIndex = 0;
   final picker = ImagePicker();
   bool isImageLoading = true;
-  String routeDifficulty;
-
   @override
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
     watchX((RoutesService x) {
-      print("watch triggered");
       if (x.currentRoute.value.gymId != null) {
-        print("existing route");
-        this.routeDifficulty = x.currentRoute.value.difficulty;
         controllerRouteName.text = x.currentRoute.value.name;
         controllerRouteSetter.text = x.currentRoute.value.builder;
         controllerRouteType.text = x.currentRoute.value.type;
         controllerRouteHolds.text = x.currentRoute.value.holds;
-      } else {
-        print("empty route");
       }
       return x.currentRoute;
     });
+
     return SlidingUpPanel(
         minHeight: 0.0,
         onPanelClosed: () {
-          print("PANEL CLOSED");
           routesService.currentRoute.value = AppRoute();
           controllerRouteName.clear();
           controllerRouteSetter.clear();
@@ -120,16 +113,19 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            /*
-                                            Image.network(
-                                              getX(
-                                                                (RoutesService x) => x
-                                                                    .currentRoute
-                                                                    .value
-                                                                    .imageUrl)
-
-                                            ),
-                                            */
+                                            _image != null
+                                                ? Image.file(_image)
+                                                : getX((RoutesService x) => x
+                                                            .currentRoute
+                                                            .value
+                                                            .imageUrl) !=
+                                                        null
+                                                    ? Image.network(getX(
+                                                        (RoutesService x) => x
+                                                            .currentRoute
+                                                            .value
+                                                            .imageUrl))
+                                                    : Container(),
                                             Text(
                                               'Change',
                                               style: Constants.defaultTextWhite,
@@ -330,14 +326,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                           routeColorSnapshot
                                                               .data
                                                               .length, (index) {
-                                                        if (routeColorSnapshot
-                                                                .data[index]
-                                                                .color ==
-                                                            this.routeDifficulty) {
-                                                          selectedColorIndex =
-                                                              index;
-                                                        }
-
                                                         return Center(
                                                             child: Column(
                                                                 children: <
@@ -685,11 +673,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   }
 
   void _setSelectedRouteColorIndex(String color, int index) {
-    print("setting state");
-    this.routeDifficulty = color;
-    //setState(() {
-    selectedColorIndex = index;
-    //});
+    setState(() {
+      selectedColorIndex = index;
+    });
   }
 
   void onPressDelete(BuildContext context) {

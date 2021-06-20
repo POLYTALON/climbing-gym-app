@@ -69,7 +69,9 @@ class _RoutesScreenState extends State<RoutesScreen> {
                         future: routeColorService.getAvailableRouteColors(),
                         initialData: [],
                         builder: (context, routeColorSnapshot) {
-                          if (!routeColorSnapshot.hasData) {
+                          if (routeColorSnapshot.connectionState !=
+                                  ConnectionState.done ||
+                              !routeColorSnapshot.hasData) {
                             return Container(width: 0.0, height: 0.0);
                           } else {
                             return Stack(children: <Widget>[
