@@ -16,8 +16,6 @@ class NewsService extends ChangeNotifier with FileService {
   News get currentNewsDetails => currentNews.value;
 
   void showNews(News news) {
-    print("updating news");
-    print(news.title);
     currentNews.value = news;
     panelControl.open();
     notifyListeners();
