@@ -14,10 +14,30 @@ class GymService extends ChangeNotifier with FileService {
   Gym currentGym;
 
   bool showEditPanel = false;
+  bool showSetOwnerPanel = false;
+  bool showEditBuilderPanel = false;
 
   void showEdit(Gym gym) {
     currentGym = gym;
     showEditPanel = true;
+    showSetOwnerPanel = false;
+    showEditBuilderPanel = false;
+    notifyListeners();
+  }
+
+  void showSetOwner(Gym gym) {
+    currentGym = gym;
+    showEditPanel = false;
+    showSetOwnerPanel = true;
+    showEditBuilderPanel = false;
+    notifyListeners();
+  }
+
+  void showEditBuilder(Gym gym) {
+    currentGym = gym;
+    showEditPanel = false;
+    showSetOwnerPanel = false;
+    showEditBuilderPanel = true;
     notifyListeners();
   }
 

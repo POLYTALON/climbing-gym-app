@@ -6,6 +6,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/widgets/routes/ratingBar.dart';
+import 'package:climbing_gym_app/widgets/routes/ratingDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -34,7 +35,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
   final routesService = locator<RoutesService>();
   final AppRoute route;
 
-  AlertDialog ratingDialog;
+  RatingDialog ratingDialog;
   double routeRating;
   int routeRatingCount;
   int myRating;
@@ -333,62 +334,16 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
   }
 
   void openRatingDialog(BuildContext context) {
-    ratingDialog = AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        title: Text(
-          "Rate this route",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Column(mainAxisSize: MainAxisSize.min, children: [
-          Center(
-              child: PolyRatingBar(
-                  allowHalfRating: false,
-                  starCount: 5,
-                  rating: myRating != null ? myRating.toDouble() : 3.0,
-                  size: 40.0,
-                  isReadOnly: false,
-                  onRated: (rating) {
-                    myRating = rating.toInt();
-                  },
-                  activeColor: Colors.orangeAccent,
-                  inactiveColor: Constants.lightGray,
-                  borderColor: Colors.black,
-                  spacing: 0.0))
-        ]),
-        actions: [
-          ElevatedButton(
-            child: Text(
-              "Cancel",
-              style: TextStyle(
-                fontSize: 17,
-              ),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          ElevatedButton(
-            child: Text(
-              "Submit",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-            onPressed: () async {
-              await routesService.updateRouteRating(
-                  authService.currentUser.uid, route, myRating);
-              getRouteRating();
-              Navigator.pop(context);
-            },
-          )
-        ]);
+    ratingDialog = RatingDialog(
+      myRating: myRating,
+      onSubmit: (userRating) async {
+        myRating = userRating;
+        await routesService.updateRouteRating(
+            authService.currentUser.uid, route, userRating);
+        getRouteRating();
+        Navigator.pop(context);
+      },
+    );
 
     //show the dialog
     showDialog(

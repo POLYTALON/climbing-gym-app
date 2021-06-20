@@ -26,7 +26,10 @@ class AuthService with ChangeNotifier {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (!documentSnapshot.exists) {
-        _firestore.collection('users').doc(uid).set({'routes': {}});
+        _firestore
+            .collection('users')
+            .doc(uid)
+            .set({'routes': {}, 'email': _auth.currentUser.email});
       }
     });
   }
@@ -239,5 +242,54 @@ class AuthService with ChangeNotifier {
           "${time.day.toString().padLeft(2, '0')}.${time.month.toString().padLeft(2, '0')}.${time.year.toString()}";
     }
     return convertedDateTime;
+  }
+
+  Future<bool> setGymOwner(String email, String gymid) async {
+    try {
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                if (user.exists) {
+                  if (user.data()['email'] == email) {
+                    _firestore
+                        .collection('users')
+                        .doc(user.id)
+                        .collection('privileges')
+                        .doc(gymid)
+                        .set({'gymuser': true});
+                  }
+                }
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> setBuilder(String email, String gymid) async {
+    try {
+      await selectGym(gymid);
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                if (user.exists) {
+                  if (user.data()['email'] == email) {
+                    _firestore
+                        .collection('users')
+                        .doc(user.id)
+                        .collection('privileges')
+                        .doc(gymid)
+                        .set({'builder': true});
+                  }
+                }
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
   }
 }
