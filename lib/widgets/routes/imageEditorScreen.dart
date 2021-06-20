@@ -11,20 +11,23 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class ImageEditorScreen extends StatefulWidget {
-  ImageEditorScreen({
-    Key key,
-    final File image,
-  })  : this.image = image,
+  ImageEditorScreen({Key key, final String imageUrl, final File imageFile})
+      : this.imageUrl = imageUrl,
+        this.imageFile = imageFile,
         super(key: key);
-  File image;
+  String imageUrl;
+  File imageFile;
   @override
-  _ImageEditorScreenState createState() => _ImageEditorScreenState(this.image);
+  _ImageEditorScreenState createState() =>
+      _ImageEditorScreenState(this.imageUrl, this.imageFile);
 }
 
 class _ImageEditorScreenState extends State<ImageEditorScreen> {
-  _ImageEditorScreenState(this.imageFile);
+  _ImageEditorScreenState(this._imageUrl, this.imageFile);
 
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -32,6 +35,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  String _imageUrl;
   File imageFile;
   int selectedColorIndex = 0;
   final picker = ImagePicker();
@@ -46,14 +50,25 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
   }
 
   Future<Null> init() async {
-    Uint8List bytes = imageFile.readAsBytesSync();
-
-    image = await loadImage(bytes);
+    image = await loadImage();
   }
 
-  Future<ui.Image> loadImage(List<int> img) async {
+  Future<ui.Image> loadImage() async {
+    // load image
+    File file;
+    if (imageFile != null) {
+      file = imageFile;
+    } else {
+      var response = await http.get(Uri.parse(_imageUrl));
+      var documentDirectory = await getApplicationDocumentsDirectory();
+      file = File(
+          join(documentDirectory.path, routesService.currentRoute.value.id));
+
+      file.writeAsBytesSync(response.bodyBytes);
+    }
+    Uint8List bytes = file.readAsBytesSync();
     final Completer<ui.Image> completer = Completer();
-    ui.decodeImageFromList(img, (ui.Image img) {
+    ui.decodeImageFromList(bytes, (ui.Image img) {
       setState(() {
         isImageloaded = true;
       });
@@ -62,7 +77,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
     return completer.future;
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     ImageEditor editor = ImageEditor(image: image);
 
     if (this.isImageloaded) {
@@ -164,7 +179,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildImage();
+    return _buildImage(context);
   }
 }
 

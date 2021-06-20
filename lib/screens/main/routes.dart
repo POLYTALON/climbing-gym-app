@@ -521,10 +521,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                     )
                                   ]))),
                               if (_getPrivileges(snapshot.data))
-                                RouteAddPanel(
-                                    appUser: snapshot.data,
-                                    panelController:
-                                        routesService.panelControl),
+                                RouteAddPanel(appUser: snapshot.data),
                               if (_getPrivileges(snapshot.data))
                                 RouteEditPanel()
                             ]);
@@ -536,20 +533,12 @@ class _RoutesScreenState extends State<RoutesScreen> {
         });
   }
 
-  void toggleSlidingPanel() {
-    if (routesService.panelControl.isPanelOpen) {
-      routesService.panelControl.close();
-    } else {
-      routesService.panelControl.open();
-    }
-  }
-
   Widget _getFloatingActionButton(AppUser user) {
     if (_getPrivileges(user)) {
       return FloatingActionButton(
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
-        onPressed: () => toggleSlidingPanel(),
+        onPressed: () => routesService.addRoutePanelController.open(),
       );
     }
     return Container(width: 0.0, height: 0.0);

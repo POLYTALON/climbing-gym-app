@@ -154,14 +154,6 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (gymService.showEditBuilderPanel.isPanelOpen) {
-      gymService.showEditBuilderPanel.close();
-    } else {
-      gymService.showEditBuilderPanel.open();
-    }
-  }
-
   void setBuilder() async {
     final id = gymService.currentGym.value.id;
     final authService = locator<AuthService>();

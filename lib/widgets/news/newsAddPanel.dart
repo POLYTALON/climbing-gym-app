@@ -302,14 +302,6 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
         });
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
     if (Platform.isIOS) {

@@ -329,14 +329,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (gymService.panelControl.isPanelOpen) {
-      gymService.panelControl.close();
-    } else {
-      gymService.panelControl.open();
-    }
-  }
-
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
     if (Platform.isIOS) {

@@ -74,12 +74,4 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
           ]);
         }));
   }
-
-  void toggleSlidingPanel() {
-    if (_gymsAddPanelController.isPanelOpen) {
-      _gymsAddPanelController.close();
-    } else {
-      _gymsAddPanelController.open();
-    }
-  }
 }

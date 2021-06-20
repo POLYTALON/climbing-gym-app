@@ -151,14 +151,6 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (gymService.showSetOwnerPanel.isPanelOpen) {
-      gymService.showSetOwnerPanel.close();
-    } else {
-      gymService.showSetOwnerPanel.open();
-    }
-  }
-
   void setGymOwner() async {
     final id = gymService.currentGym.value.id;
     final authService = locator<AuthService>();

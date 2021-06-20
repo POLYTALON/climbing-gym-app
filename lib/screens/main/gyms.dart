@@ -95,20 +95,12 @@ class _GymsScreenState extends State<GymsScreen> {
         });
   }
 
-  void toggleSlidingPanel() {
-    if (_gymsAddPanelController.isPanelOpen) {
-      _gymsAddPanelController.close();
-    } else {
-      _gymsAddPanelController.open();
-    }
-  }
-
   Widget _getFloatingActionButton(bool value) {
     if (value) {
       return FloatingActionButton(
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
-        onPressed: () => toggleSlidingPanel(),
+        onPressed: () => _gymsAddPanelController.open(),
       );
     }
     return Container(width: 0.0, height: 0.0);

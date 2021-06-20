@@ -15,24 +15,21 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RouteAddPanel extends StatefulWidget {
   final AppUser appUser;
-  final PanelController _panelController;
-  RouteAddPanel(
-      {Key key, AppUser appUser, @required PanelController panelController})
-      : this.appUser = appUser,
-        this._panelController = panelController,
+  RouteAddPanel({
+    Key key,
+    AppUser appUser,
+  })  : this.appUser = appUser,
         super(key: key);
 
   @override
-  _RouteAddPanelState createState() =>
-      _RouteAddPanelState(appUser, _panelController);
+  _RouteAddPanelState createState() => _RouteAddPanelState(appUser);
 }
 
 class _RouteAddPanelState extends State<RouteAddPanel> {
   final AppUser appUser;
-  final PanelController _panelController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _RouteAddPanelState(this.appUser, this._panelController);
+  _RouteAddPanelState(this.appUser);
 
   final authService = locator<AuthService>();
   final routesService = locator<RoutesService>();
@@ -56,7 +53,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     return SlidingUpPanel(
         minHeight: 0.0,
         borderRadius: radius,
-        controller: _panelController,
+        controller: routesService.addRoutePanelController,
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(
@@ -163,7 +160,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             ImageEditorScreen(
-                                                                image: _image)),
+                                                                imageFile:
+                                                                    _image)),
                                                   ).then((newImage) {
                                                     if (newImage != null) {
                                                       setState(() {
@@ -528,7 +526,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                           24.0)),
                                             )),
                                         onPressed: () =>
-                                            _panelController.close(),
+                                            routesService.addRoutePanelController.close(),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text("Cancel",
@@ -546,13 +544,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
         });
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
 
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
@@ -623,7 +614,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
         // add Route
         routesService.addRoute(routeName, gymId, difficulty.color, type, holds,
             builder, _image, DateTime.now());
-        _panelController.close();
+        routesService.addRoutePanelController.close();
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';

@@ -262,14 +262,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
     if (Platform.isIOS) {

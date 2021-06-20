@@ -12,11 +12,17 @@ class RoutesService extends ChangeNotifier with FileService {
   FirebaseStorage _storage = FirebaseStorage.instance;
 
   final ValueNotifier<AppRoute> currentRoute = ValueNotifier(AppRoute());
-  final PanelController panelControl = PanelController();
+  final PanelController addRoutePanelController = PanelController();
+  final PanelController editRoutePanelController = PanelController();
 
   void showEdit(AppRoute route) {
     currentRoute.value = route;
-    panelControl.open();
+    editRoutePanelController.open();
+    notifyListeners();
+  }
+
+  void showCreate() {
+    addRoutePanelController.open();
     notifyListeners();
   }
 
