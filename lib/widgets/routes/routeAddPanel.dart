@@ -15,22 +15,24 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RouteAddPanel extends StatefulWidget {
   final AppUser appUser;
-  RouteAddPanel({
-    Key key,
-    AppUser appUser,
-  })  : this.appUser = appUser,
+  final PanelController panelController;
+  RouteAddPanel(
+      {Key key, AppUser appUser, @required PanelController panelController})
+      : this.appUser = appUser,
+        this.panelController = panelController,
         super(key: key);
 
   @override
-  _RouteAddPanelState createState() => _RouteAddPanelState(appUser);
+  _RouteAddPanelState createState() =>
+      _RouteAddPanelState(appUser, panelController);
 }
 
 class _RouteAddPanelState extends State<RouteAddPanel> {
   final AppUser appUser;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final PanelController _panelController;
 
-  _RouteAddPanelState(this.appUser);
-
+  _RouteAddPanelState(this.appUser, this._panelController);
   final authService = locator<AuthService>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -53,7 +55,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     return SlidingUpPanel(
         minHeight: 0.0,
         borderRadius: radius,
-        controller: routesService.addRoutePanelController,
+        controller: _panelController,
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(
@@ -526,7 +528,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                           24.0)),
                                             )),
                                         onPressed: () =>
-                                            routesService.addRoutePanelController.close(),
+                                            _panelController.close(),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text("Cancel",
@@ -543,7 +545,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                       ))));
         });
   }
-
 
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
@@ -614,7 +615,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
         // add Route
         routesService.addRoute(routeName, gymId, difficulty.color, type, holds,
             builder, _image, DateTime.now());
-        routesService.addRoutePanelController.close();
+        _panelController.close();
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';

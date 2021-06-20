@@ -11,6 +11,7 @@ import 'package:climbing_gym_app/widgets/routes/routeEditPanel.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -28,6 +29,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
   String _categoryFilter = 'All';
   int _routeStateFilterIndex = 0;
 
+  PanelController addPanelController = PanelController();
   @override
   Widget build(BuildContext context) {
     final auth = locator<AuthService>();
@@ -523,7 +525,9 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                     )
                                   ]))),
                               if (_getPrivileges(snapshot.data))
-                                RouteAddPanel(appUser: snapshot.data),
+                                RouteAddPanel(
+                                    appUser: snapshot.data,
+                                    panelController: addPanelController),
                               if (_getPrivileges(snapshot.data))
                                 RouteEditPanel()
                             ]);
@@ -540,7 +544,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
       return FloatingActionButton(
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
-        onPressed: () => routesService.addRoutePanelController.open(),
+        onPressed: () => addPanelController.open(),
       );
     }
     return Container(width: 0.0, height: 0.0);
