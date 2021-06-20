@@ -82,7 +82,6 @@ class _NavigationState extends State<NavigationContainer> {
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.grey[500],
             type: BottomNavigationBarType.fixed,
-            //onTap: onTabTapped,
             onTap: (index) {
               onTabTapped(index);
               secret(index);
