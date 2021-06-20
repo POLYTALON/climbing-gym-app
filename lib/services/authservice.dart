@@ -108,11 +108,12 @@ class AuthService with ChangeNotifier {
   Future<bool> getIsOperator() async {
     if (_auth.currentUser != null) {
       try {
-        CollectionReference docRef = _firestore
+        CollectionReference<Map<String, dynamic>> docRef = _firestore
             .collection('users')
             .doc(_auth.currentUser.uid)
             .collection('private');
-        DocumentSnapshot snapshot = await docRef.doc('operator').get();
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await docRef.doc('operator').get();
         if (snapshot.exists) {
           return snapshot.data()['operator'];
         }
@@ -174,7 +175,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> updateUserRouteStatus(AppRoute route) async {
-    DocumentSnapshot userDoc =
+    DocumentSnapshot<Map<String, dynamic>> userDoc =
         await _firestore.collection('users').doc(_auth.currentUser.uid).get();
     dynamic userRoutes = userDoc.data()['routes'];
     if (userRoutes == null) {

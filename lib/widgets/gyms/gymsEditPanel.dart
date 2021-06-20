@@ -3,14 +3,15 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
+import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   GymsEditPanel({Key key}) : super(key: key);
@@ -31,8 +32,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
 
   final gymService = locator<GymService>();
   final authService = locator<AuthService>();
-  BorderRadiusGeometry radius = BorderRadius.only(
-      topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
+  final pageviewService = locator<PageViewService>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
       return x.currentGym;
     });
 
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        borderRadius: radius,
+    return PolySlidingUpPanel(
         controller: gymService.panelControl,
-        onPanelClosed: (() {
-          setState(() {});
-        }),
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,

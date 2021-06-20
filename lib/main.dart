@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
     return WillPopScope(
         onWillPop: () => Future.value(false),
         child: auth.loggedIn ? NavigationContainer() : StartScreen());

@@ -5,15 +5,12 @@ import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/widgets/routes/imageEditorScreen.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RouteEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   RouteEditPanel({
@@ -38,9 +35,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   bool isImageLoading = true;
   @override
   Widget build(BuildContext context) {
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
     watchX((RoutesService x) {
       if (x.currentRoute.value.gymId != null) {
         controllerRouteName.text = x.currentRoute.value.name;
@@ -51,8 +45,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
       return x.currentRoute;
     });
 
-    return SlidingUpPanel(
-        minHeight: 0.0,
+    return PolySlidingUpPanel(
+        controller: routesService.editRoutePanelController,
         onPanelClosed: () {
           routesService.currentRoute.value = AppRoute();
           controllerRouteName.clear();
@@ -61,8 +55,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
           controllerRouteType.clear();
           _image = null;
         },
-        borderRadius: radius,
-        controller: routesService.editRoutePanelController,
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(

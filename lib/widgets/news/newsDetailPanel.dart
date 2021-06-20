@@ -1,10 +1,10 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:core';
 
@@ -24,16 +24,11 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
 
   @override
   Widget build(BuildContext context) {
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
     final newsWatch = watchX((NewsService x) => x.currentNews);
 
     return Container(
       constraints: BoxConstraints.expand(),
-      child: SlidingUpPanel(
-        margin: EdgeInsets.only(left: 16, right: 16),
-        minHeight: 0.0,
-        borderRadius: radius,
+      child: PolySlidingUpPanel(
         controller: newsService.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
