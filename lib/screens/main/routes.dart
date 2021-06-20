@@ -43,7 +43,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color: Constants.polyGreen));
           } else {
             if (snapshot.data.selectedGym == null ||
                 snapshot.data.selectedGym.isEmpty) {
@@ -473,7 +473,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
                                                     !routesSnapshot.hasData) {
                                                   return Center(
                                                       child:
-                                                          CircularProgressIndicator());
+                                                          CircularProgressIndicator(color: Constants.polyGreen));
                                                 } else {
                                                   if (routesSnapshot
                                                           .data.length <

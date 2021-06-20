@@ -36,7 +36,7 @@ class _GymsScreenState extends State<GymsScreen> {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Constants.polyGreen),
             );
           } else {
             return ChangeNotifierProvider<GymService>(
@@ -71,7 +71,8 @@ class _GymsScreenState extends State<GymsScreen> {
                                         ConnectionState.active ||
                                     !gymsSnapshot.hasData) {
                                   return Center(
-                                      child: CircularProgressIndicator());
+                                      child: CircularProgressIndicator(
+                                          color: Constants.polyGreen));
                                 } else {
                                   return GridView.count(
                                       crossAxisCount: 2,

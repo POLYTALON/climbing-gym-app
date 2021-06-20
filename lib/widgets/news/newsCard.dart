@@ -90,7 +90,9 @@ class _NewsCardState extends State<NewsCard> {
                     child: ClipRRect(
                       child: Stack(
                         children: <Widget>[
-                          Center(child: CircularProgressIndicator()),
+                          Center(
+                              child: CircularProgressIndicator(
+                                  color: Constants.polyGreen)),
                           Center(
                             child: FadeInImage.memoryNetwork(
                               placeholder: kTransparentImage,

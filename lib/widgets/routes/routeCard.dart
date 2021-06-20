@@ -60,7 +60,9 @@ class _RouteCardState extends State<RouteCard> {
                     Expanded(
                         flex: 5,
                         child: Stack(children: <Widget>[
-                          Center(child: CircularProgressIndicator()),
+                          Center(
+                              child: CircularProgressIndicator(
+                                  color: Constants.polyGreen)),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
