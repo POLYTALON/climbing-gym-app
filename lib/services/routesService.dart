@@ -5,18 +5,18 @@ import 'package:climbing_gym_app/services/fileService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RoutesService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  AppRoute currentRoute;
-
-  bool showEditPanel = false;
+  final ValueNotifier<AppRoute> currentRoute = ValueNotifier(AppRoute());
+  final PanelController editRoutePanelController = PanelController();
 
   void showEdit(AppRoute route) {
-    currentRoute = route;
-    showEditPanel = true;
+    currentRoute.value = route;
+    editRoutePanelController.open();
     notifyListeners();
   }
 

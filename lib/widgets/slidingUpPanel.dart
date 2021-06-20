@@ -11,32 +11,54 @@ class PolySlidingUpPanel extends StatefulWidget {
       {Key key,
       final FlutterSlidingUpPanel.PanelController controller,
       final Widget panel,
-      final Widget Function(ScrollController) panelBuilder})
+      final Widget Function(ScrollController) panelBuilder,
+      final Function onPanelClosed})
       : controller = controller,
         panel = panel,
         panelBuilder = panelBuilder,
+        onPanelClosed = onPanelClosed,
         super(key: key);
   final FlutterSlidingUpPanel.PanelController controller;
   final Widget panel;
   final Widget Function(ScrollController) panelBuilder;
+  final Function onPanelClosed;
 
   @override
   _SlidingUpPanelState createState() =>
-      _SlidingUpPanelState(controller, panel, panelBuilder);
+      _SlidingUpPanelState(controller, panel, panelBuilder, onPanelClosed);
 }
 
 class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
   final routesService = locator<RoutesService>();
 
-  _SlidingUpPanelState(this.controller, this.panel, this.panelBuilder);
-  final FlutterSlidingUpPanel.PanelController controller;
-  final Widget panel;
-  final Widget Function(ScrollController) panelBuilder;
+  _SlidingUpPanelState(
+      this.controller, this.panel, this.panelBuilder, this.onPanelClosed);
+  FlutterSlidingUpPanel.PanelController controller;
+  Widget panel;
+  Widget Function(ScrollController) panelBuilder;
+  Function onPanelClosed;
 
   final BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
   final pageviewService = locator<PageViewService>();
+
+  @override
+  void didUpdateWidget(PolySlidingUpPanel oldWidget) {
+    if (controller != widget.controller ||
+        panel != widget.panel ||
+        panelBuilder != widget.panelBuilder ||
+        onPanelClosed != widget.onPanelClosed) {
+      setState(() {
+        controller = widget.controller;
+        panel = widget.panel;
+        panelBuilder = widget.panelBuilder;
+        onPanelClosed = widget.onPanelClosed;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FlutterSlidingUpPanel.SlidingUpPanel(
@@ -48,6 +70,9 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       onPanelClosed: (() {
         pageviewService.setSwipingAllowed(true);
         setState(() {});
+        if (onPanelClosed.runtimeType == Function) {
+          onPanelClosed();
+        }
       }),
       onPanelOpened: (() {
         pageviewService.setSwipingAllowed(false);
