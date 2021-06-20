@@ -622,8 +622,13 @@ class _RoutesScreenState extends State<RoutesScreen> {
       case 2:
         return routes.where((route) => route.isDone).toList();
       case 0:
+        return routes
+            .where((route) => !route.isDone)
+            .where((route) => !route.isTried)
+            .toList();
+
       default:
-        return routes.isNotEmpty ? routes : [];
+        return [];
     }
   }
 
