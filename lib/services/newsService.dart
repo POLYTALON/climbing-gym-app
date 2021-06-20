@@ -42,7 +42,7 @@ class NewsService extends ChangeNotifier with FileService {
 
       String creator;
       if (gymid.isNotEmpty) {
-        DocumentSnapshot gymDoc =
+        DocumentSnapshot<Map<String, dynamic>> gymDoc =
             await _firestore.collection('gyms').doc(gymid).get();
         creator = gymDoc.data()['name'];
       } else {

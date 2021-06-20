@@ -7,7 +7,7 @@ class RouteColorService extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<RouteColor>> getAvailableRouteColors() async {
-    DocumentSnapshot snapshot =
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection('routecolors').doc('colors').get();
     return snapshot
         .data()
@@ -18,7 +18,7 @@ class RouteColorService extends ChangeNotifier {
 
   Future<Color> getColorFromString(String color) async {
     try {
-      DocumentSnapshot snapshot =
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
           await _firestore.collection('routecolors').doc('colors').get();
       String hexColor = snapshot.data()[color];
       return Color(int.parse(hexColor));
