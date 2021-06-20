@@ -1,19 +1,22 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/main/gyms.dart';
 import 'package:climbing_gym_app/screens/main/home.dart';
 import 'package:climbing_gym_app/screens/main/news.dart';
 import 'package:climbing_gym_app/screens/main/routes.dart';
 import 'package:climbing_gym_app/screens/main/developers.dart';
+import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 
-class NavigationContainer extends StatefulWidget {
+class NavigationContainer extends StatefulWidget with GetItStatefulWidgetMixin {
   @override
   State<StatefulWidget> createState() {
     return _NavigationState();
   }
 }
 
-class _NavigationState extends State<NavigationContainer> {
+class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
   PageController _pageController = new PageController(
     initialPage: 0,
   );
@@ -23,6 +26,7 @@ class _NavigationState extends State<NavigationContainer> {
   int _newsCounter = 0;
   int _homeCounter = 0;
   int _gymsCounter = 0;
+  final routesService = locator<PageViewService>();
 
   @override
   initState() {
@@ -33,6 +37,7 @@ class _NavigationState extends State<NavigationContainer> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPageSwiping = watchX((PageViewService s) => s.isSwipingAllowed);
     return Scaffold(
         // AppBar
         backgroundColor: Constants.polyDark,
@@ -61,6 +66,9 @@ class _NavigationState extends State<NavigationContainer> {
                 ))),
         body: PageView(
             //Swipe through screens
+            physics: isPageSwiping
+                ? ScrollPhysics()
+                : new NeverScrollableScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
               onTabTapped(index);
