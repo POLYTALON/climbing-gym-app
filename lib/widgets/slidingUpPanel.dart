@@ -11,27 +11,32 @@ class PolySlidingUpPanel extends StatefulWidget {
       {Key key,
       final FlutterSlidingUpPanel.PanelController controller,
       final Widget panel,
-      final Widget Function(ScrollController) panelBuilder})
+      final Widget Function(ScrollController) panelBuilder,
+      final Function onPanelClosed})
       : controller = controller,
         panel = panel,
         panelBuilder = panelBuilder,
+        onPanelClosed = onPanelClosed,
         super(key: key);
   final FlutterSlidingUpPanel.PanelController controller;
   final Widget panel;
   final Widget Function(ScrollController) panelBuilder;
+  final Function onPanelClosed;
 
   @override
   _SlidingUpPanelState createState() =>
-      _SlidingUpPanelState(controller, panel, panelBuilder);
+      _SlidingUpPanelState(controller, panel, panelBuilder, onPanelClosed);
 }
 
 class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
   final routesService = locator<RoutesService>();
 
-  _SlidingUpPanelState(this.controller, this.panel, this.panelBuilder);
+  _SlidingUpPanelState(
+      this.controller, this.panel, this.panelBuilder, this.onPanelClosed);
   final FlutterSlidingUpPanel.PanelController controller;
   final Widget panel;
   final Widget Function(ScrollController) panelBuilder;
+  final Function onPanelClosed;
 
   final BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
@@ -48,6 +53,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       onPanelClosed: (() {
         pageviewService.setSwipingAllowed(true);
         setState(() {});
+        onPanelClosed();
       }),
       onPanelOpened: (() {
         pageviewService.setSwipingAllowed(false);
