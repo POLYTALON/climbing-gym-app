@@ -16,7 +16,6 @@ class GymsSetOwnerPanel extends StatefulWidget {
 }
 
 class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
-  final PanelController _panelController = PanelController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsSetOwnerPanel();
@@ -30,17 +29,8 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    gymService.addListener(() {
-      if (gymService.showSetOwnerPanel == true) {
-        _panelController.open();
-      } else {
-        controllerEmail.text = "";
-        _panelController.close();
-      }
-    });
-
     return PolySlidingUpPanel(
-        controller: _panelController,
+        controller: gymService.showSetOwnerPanel,
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -154,7 +144,8 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                                             borderRadius:
                                                 BorderRadius.circular(24.0)),
                                       )),
-                                  onPressed: () => _panelController.close(),
+                                  onPressed: () =>
+                                      gymService.showSetOwnerPanel.close(),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text("Cancel",
@@ -171,16 +162,8 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void setGymOwner() async {
-    final id = gymService.currentGym.id;
+    final id = gymService.currentGym.value.id;
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setGymOwner(userEmail, id);
@@ -210,7 +193,7 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
           );
         },
       );
-      _panelController.close();
+      gymService.showSetOwnerPanel.close();
     } else {
       print("error");
     }

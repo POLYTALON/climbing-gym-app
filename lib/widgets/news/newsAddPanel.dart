@@ -45,7 +45,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final db = locator<NewsService>();
+    final newsServ = locator<NewsService>();
 
     return PolySlidingUpPanel(
         controller: _panelController,
@@ -248,7 +248,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => createNews(db, AppUser()),
+                                onPressed: () =>
+                                    createNews(newsServ, AppUser()),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Publish",
@@ -295,14 +296,6 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
             ),
           );
         });
-  }
-
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
   }
 
   void _showImageSourceActionSheet(BuildContext context) {

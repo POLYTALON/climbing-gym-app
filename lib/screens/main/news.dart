@@ -8,12 +8,13 @@ import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsCard.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 const polyDark = Color(0x121212);
 
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatelessWidget with GetItMixin {
   final PanelController _newsAddPanelController = PanelController();
 
   @override
@@ -48,48 +49,45 @@ class NewsScreen extends StatelessWidget {
                   value:
                       NewsService().streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
-                    return ChangeNotifierProvider<NewsService>(
-                      create: (_) => NewsService(),
-                      child: Stack(children: <Widget>[
-                        Scaffold(
-                            floatingActionButton:
-                                _getIsPrivileged(userSnapshot.data)
-                                    ? FloatingActionButton(
-                                        child: const Icon(Icons.add),
-                                        backgroundColor: Constants.polyGreen,
-                                        onPressed: () => _toggleAddPanel(),
-                                      )
-                                    : null,
-                            body: Container(
-                                color: Constants.polyDark,
-                                child: ListView.builder(
-                                    padding: const EdgeInsets.all(32),
-                                    itemCount: news.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 10.0),
-                                          child: NewsCard(
-                                              news: news[index],
-                                              isDeletable: userSnapshot
-                                                      .data.isOperator
-                                                  ? true
-                                                  : userSnapshot.data
-                                                              .selectedGym ==
-                                                          news[index].gymid &&
-                                                      _getIsPrivileged(
-                                                          userSnapshot.data)));
-                                    }))),
-                        if (_getIsPrivileged(userSnapshot.data))
-                          NewsAddPanel(
-                              panelController: _newsAddPanelController,
-                              gymid: userSnapshot.data.isOperator
-                                  ? ""
-                                  : userSnapshot.data.selectedGym),
-                        NewsDetailPanel()
-                      ]),
-                    );
+                    return Stack(children: <Widget>[
+                      Scaffold(
+                          floatingActionButton:
+                              _getIsPrivileged(userSnapshot.data)
+                                  ? FloatingActionButton(
+                                      child: const Icon(Icons.add),
+                                      backgroundColor: Constants.polyGreen,
+                                      onPressed: () => _toggleAddPanel(),
+                                    )
+                                  : null,
+                          body: Container(
+                              color: Constants.polyDark,
+                              child: ListView.builder(
+                                  padding: const EdgeInsets.all(32),
+                                  itemCount: news.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: NewsCard(
+                                            news: news[index],
+                                            isDeletable: userSnapshot
+                                                    .data.isOperator
+                                                ? true
+                                                : userSnapshot
+                                                            .data.selectedGym ==
+                                                        news[index].gymid &&
+                                                    _getIsPrivileged(
+                                                        userSnapshot.data)));
+                                  }))),
+                      if (_getIsPrivileged(userSnapshot.data))
+                        NewsAddPanel(
+                            panelController: _newsAddPanelController,
+                            gymid: userSnapshot.data.isOperator
+                                ? ""
+                                : userSnapshot.data.selectedGym),
+                      NewsDetailPanel()
+                    ]);
                   }));
             }
           }

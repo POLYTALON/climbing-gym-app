@@ -1,43 +1,35 @@
 import 'dart:io';
 import 'package:climbing_gym_app/services/fileService.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:path/path.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Gym currentGym;
-
-  bool showEditPanel = false;
-  bool showSetOwnerPanel = false;
-  bool showEditBuilderPanel = false;
+  final ValueNotifier<Gym> currentGym = ValueNotifier(Gym());
+  final PanelController panelControl = PanelController();
+  final PanelController showSetOwnerPanel = PanelController();
+  final PanelController showEditBuilderPanel = PanelController();
 
   void showEdit(Gym gym) {
-    currentGym = gym;
-    showEditPanel = true;
-    showSetOwnerPanel = false;
-    showEditBuilderPanel = false;
+    currentGym.value = gym;
+    panelControl.open();
     notifyListeners();
   }
 
   void showSetOwner(Gym gym) {
-    currentGym = gym;
-    showEditPanel = false;
-    showSetOwnerPanel = true;
-    showEditBuilderPanel = false;
+    currentGym.value = gym;
+    showSetOwnerPanel.open();
     notifyListeners();
   }
 
   void showEditBuilder(Gym gym) {
-    currentGym = gym;
-    showEditPanel = false;
-    showSetOwnerPanel = false;
-    showEditBuilderPanel = true;
+    currentGym.value = gym;
+    showEditBuilderPanel.open();
     notifyListeners();
   }
 

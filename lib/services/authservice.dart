@@ -42,7 +42,7 @@ class AuthService with ChangeNotifier {
       String displayName, String userEmail, String userPassword) async {
     UserCredential newUser = await _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
-    newUser.user.updateProfile(displayName: displayName);
+    newUser.user.updateDisplayName(displayName);
     return newUser;
   }
 

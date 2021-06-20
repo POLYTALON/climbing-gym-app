@@ -127,7 +127,7 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void onPressDelete(BuildContext context) {
-    final db = locator<NewsService>();
+    final newsServ = locator<NewsService>();
 
     showDialog(
       context: context,
@@ -152,7 +152,7 @@ class _NewsCardState extends State<NewsCard> {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
-                  bool isDeleted = await db.deleteNews(this.news.id);
+                  bool isDeleted = await newsServ.deleteNews(this.news.id);
                   if (isDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
                   }

@@ -10,19 +10,17 @@ import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsEditPanel extends StatefulWidget {
+class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   GymsEditPanel({Key key}) : super(key: key);
 
   @override
   _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
-class _GymsEditPanelState extends State<GymsEditPanel> {
-  final PanelController _panelController = PanelController();
-
+class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsEditPanelState();
@@ -38,20 +36,14 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
 
   @override
   Widget build(BuildContext context) {
-    gymService.addListener(() {
-      if (gymService.showEditPanel == true) {
-        controllerGymName.text = gymService.currentGym.name;
-        controllerLocation.text = gymService.currentGym.city;
-        _panelController.open();
-      } else {
-        controllerGymName.text = "";
-        controllerLocation.text = "";
-        _panelController.close();
-      }
+    watchX((GymService x) {
+      controllerGymName.text = x.currentGym.value.name;
+      controllerLocation.text = x.currentGym.value.city;
+      return x.currentGym;
     });
 
     return PolySlidingUpPanel(
-        controller: _panelController,
+        controller: gymService.panelControl,
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -251,7 +243,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.close(),
+                                onPressed: () =>
+                                    gymService.panelControl.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Cancel",
@@ -331,14 +324,6 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void _showImageSourceActionSheet(BuildContext context) {
     // iOS
     if (Platform.isIOS) {
@@ -398,12 +383,12 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   void editGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
-    final id = gymService.currentGym.id;
+    final id = getX((GymService x) => x.currentGym.value.id);
 
     if (_validateAndSave()) {
       // edit Gym
       await gymService.editGym(id, gymName, gymLocation, _image);
-      _panelController.close();
+      gymService.panelControl.close();
     }
   }
 
@@ -412,7 +397,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     final authService = locator<AuthService>();
     final newsService = locator<NewsService>();
     final routeService = locator<RoutesService>();
-    final id = gymService.currentGym.id;
+    final id = getX((GymService x) => x.currentGym.value.id);
 
     showDialog(
       context: context,
@@ -450,7 +435,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                       isUserPrivilegesDeleted &&
                       isNewsForGymDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
-                    _panelController.close();
+                    gymService.panelControl.close();
                   }
                 },
                 child: Text("Yes")),
