@@ -4,7 +4,7 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - cloud_firestore (1.0.7):
+  - cloud_firestore (2.2.2):
     - Firebase/Firestore (= 8.0.0)
     - firebase_core
     - Flutter
@@ -233,7 +233,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  cloud_firestore: 677849586720293046982ccfa20013a6266d7928
+  cloud_firestore: 83d6cd19d24798c523265494ab81db32009fcb7b
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
   firebase_auth: 6532658f5a4f76be32cd5e7518753ebedd4544d2
@@ -255,7 +255,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
+  image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
