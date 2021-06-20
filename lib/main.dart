@@ -14,10 +14,7 @@ void main() async {
   // run app
   runApp(MaterialApp(
       title: 'Climbing App',
-      theme: ThemeData(
-          fontFamily: 'NunitoSans',
-          accentColor: polyGreen,
-          brightness: Brightness.dark),
+      theme: ThemeData(fontFamily: 'NunitoSans', accentColor: polyGreen),
       home: MyApp()));
 }
 
