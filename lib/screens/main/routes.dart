@@ -601,9 +601,8 @@ class _RoutesScreenState extends State<RoutesScreen> {
       String gymId, List<AppRoute> routes, List<RouteColor> colors) {
     List<RouteColor> result = [];
 
-    routes.forEach((route) => colors.forEach((color) {
-          if (route.difficulty == color.color) result.add(color);
-        }));
+    routes.forEach((route) => result.add(colors.firstWhere((color) => color.color == route.difficulty)));
+
     return result;
   }
 
