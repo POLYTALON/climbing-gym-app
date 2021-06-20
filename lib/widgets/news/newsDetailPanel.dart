@@ -26,6 +26,8 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
   Widget build(BuildContext context) {
     final newsWatch = watchX((NewsService x) => x.currentNews);
 
+    print("rebuilding");
+    print(newsWatch.title);
     return Container(
       constraints: BoxConstraints.expand(),
       child: PolySlidingUpPanel(
@@ -61,7 +63,7 @@ class _NewsDetailPanelState extends State<NewsDetailPanel>
                         children: [
                           Flexible(
                             child: Text(
-                              newsService.currentNewsDetails.title ?? "",
+                              newsWatch.title ?? "",
                               style: Constants.headerText,
                             ),
                           ),
