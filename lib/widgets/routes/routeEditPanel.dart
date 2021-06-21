@@ -174,6 +174,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                         (newImage) {
                                                       if (newImage != null) {
                                                         setState(() {
+                                                          imageCache.clear();
                                                           _image = newImage;
                                                         });
                                                       }
