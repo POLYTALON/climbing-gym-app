@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
@@ -27,7 +26,7 @@ class RouteEditPanel extends StatefulWidget {
 
 class _RouteEditPanelState extends State<RouteEditPanel> {
   final PanelController _panelController = PanelController();
-
+  int lastSelectedColorIndex = -1;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -45,6 +44,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
     routesService.addListener(() {
+      setState(() {
+        this.lastSelectedColorIndex = -1;
+      });
       if (routesService.showEditPanel == true) {
         loadImage();
         controllerRouteName.text = routesService.currentRoute.name;
@@ -89,8 +91,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                           return Container(width: 0.0, height: 0.0);
                         } else {
                           int selectedRouteColorIndex =
-                              _initSelectedRouteColorIndex(
-                                  routeColorSnapshot.data);
+                              lastSelectedColorIndex == -1
+                                  ? _initSelectedRouteColorIndex(
+                                      routeColorSnapshot.data)
+                                  : lastSelectedColorIndex;
                           return SingleChildScrollView(
                               controller: sc,
                               child: Column(
@@ -370,6 +374,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                                       onPressed: () => setState(() {
                                                                             selectedRouteColorIndex =
                                                                                 index;
+                                                                            setState(() {
+                                                                              this.lastSelectedColorIndex = index;
+                                                                            });
                                                                           }),
                                                                       shape: (selectedRouteColorIndex == index) ? CircleBorder(side: BorderSide(width: 3.0, color: Constants.polyGray)) : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
                                                               Text(
@@ -638,14 +645,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                         }
                       })));
         });
-  }
-
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
   }
 
   void _showImageSourceActionSheet(BuildContext context) {
