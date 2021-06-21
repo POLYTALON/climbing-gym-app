@@ -104,7 +104,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               topRight: Radius.circular(16.0))),
                                       child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             Expanded(
                                               child: ElevatedButton(
