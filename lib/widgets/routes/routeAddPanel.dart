@@ -16,25 +16,24 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class RouteAddPanel extends StatefulWidget {
   final AppUser appUser;
-  final PanelController _panelController;
+  final PanelController panelController;
   RouteAddPanel(
       {Key key, AppUser appUser, @required PanelController panelController})
       : this.appUser = appUser,
-        this._panelController = panelController,
+        this.panelController = panelController,
         super(key: key);
 
   @override
   _RouteAddPanelState createState() =>
-      _RouteAddPanelState(appUser, _panelController);
+      _RouteAddPanelState(appUser, panelController);
 }
 
 class _RouteAddPanelState extends State<RouteAddPanel> {
   final AppUser appUser;
-  final PanelController _panelController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final PanelController _panelController;
 
   _RouteAddPanelState(this.appUser, this._panelController);
-
   final authService = locator<AuthService>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -162,7 +161,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             ImageEditorScreen(
-                                                                image: _image)),
+                                                                imageFile:
+                                                                    _image)),
                                                   ).then((newImage) {
                                                     if (newImage != null) {
                                                       setState(() {
@@ -543,14 +543,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                         ],
                       ))));
         });
-  }
-
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
   }
 
   void _showImageSourceActionSheet(BuildContext context) {

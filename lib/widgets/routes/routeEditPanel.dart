@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
@@ -9,13 +10,10 @@ import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
-class RouteEditPanel extends StatefulWidget {
+class RouteEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   RouteEditPanel({
     Key key,
   }) : super(key: key);
@@ -24,9 +22,7 @@ class RouteEditPanel extends StatefulWidget {
   _RouteEditPanelState createState() => _RouteEditPanelState();
 }
 
-class _RouteEditPanelState extends State<RouteEditPanel> {
-  final PanelController _panelController = PanelController();
-  int lastSelectedColorIndex = -1;
+class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
@@ -34,37 +30,35 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  int lastSelectedColorIndex = -1;
   File _image;
   final picker = ImagePicker();
   bool isImageLoading = true;
-
   @override
   Widget build(BuildContext context) {
-    BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
-
-    routesService.addListener(() {
+    watchX((RoutesService x) {
       setState(() {
         this.lastSelectedColorIndex = -1;
       });
-      if (routesService.showEditPanel == true) {
-        loadImage();
-        controllerRouteName.text = routesService.currentRoute.name;
-        controllerRouteSetter.text = routesService.currentRoute.builder;
-        controllerRouteType.text = routesService.currentRoute.type;
-        controllerRouteHolds.text = routesService.currentRoute.holds;
-        _panelController.open();
-      } else {
-        controllerRouteName.text = "";
-        controllerRouteSetter.text = "";
-        controllerRouteType.text = "";
-        controllerRouteHolds.text = "";
-        _panelController.close();
+      if (x.currentRoute.value.gymId != null) {
+        controllerRouteName.text = x.currentRoute.value.name;
+        controllerRouteSetter.text = x.currentRoute.value.builder;
+        controllerRouteType.text = x.currentRoute.value.type;
+        controllerRouteHolds.text = x.currentRoute.value.holds;
       }
+      return x.currentRoute;
     });
 
     return PolySlidingUpPanel(
-        controller: _panelController,
+        controller: routesService.editRoutePanelController,
+        onPanelClosed: () {
+          routesService.currentRoute.value = AppRoute();
+          controllerRouteName.clear();
+          controllerRouteSetter.clear();
+          controllerRouteHolds.clear();
+          controllerRouteType.clear();
+          _image = null;
+        },
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(
@@ -95,6 +89,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                   ? _initSelectedRouteColorIndex(
                                       routeColorSnapshot.data)
                                   : lastSelectedColorIndex;
+
                           return SingleChildScrollView(
                               controller: sc,
                               child: Column(
@@ -107,109 +102,99 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(16.0),
                                               topRight: Radius.circular(16.0))),
-                                      child: isImageLoading
-                                          ? ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                padding: EdgeInsets.all(12.0),
-                                                elevation: 2,
-                                                primary: Constants.polyGray,
-                                                minimumSize:
-                                                    Size(double.infinity, 64),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  padding: EdgeInsets.all(12.0),
+                                                  elevation: 2,
+                                                  fixedSize:
+                                                      Size(double.infinity, 64),
+                                                  primary: Constants.polyGray,
+                                                ),
+                                                onPressed: () async =>
+                                                    _showImageSourceActionSheet(
+                                                        context),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: <Widget>[
+                                                    _image != null
+                                                        ? new Image.file(_image)
+                                                        : getX((RoutesService x) => x
+                                                                    .currentRoute
+                                                                    .value
+                                                                    .imageUrl) !=
+                                                                null
+                                                            ? Image.network(getX(
+                                                                (RoutesService x) => x
+                                                                    .currentRoute
+                                                                    .value
+                                                                    .imageUrl))
+                                                            : Container(),
+                                                    Text(
+                                                      'Change',
+                                                      style: Constants
+                                                          .defaultTextWhite,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              onPressed: () {},
-                                              child: CircularProgressIndicator(
-                                                  color: Constants.polyGreen),
-                                            )
-                                          : Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                  Expanded(
-                                                    child: ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        padding: EdgeInsets.all(
-                                                            12.0),
-                                                        elevation: 2,
-                                                        fixedSize: Size(
-                                                            double.infinity,
-                                                            64),
-                                                        primary:
-                                                            Constants.polyGray,
-                                                      ),
-                                                      onPressed: () async =>
-                                                          _showImageSourceActionSheet(
-                                                              context),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                        children: <Widget>[
-                                                          Image.file(
-                                                            _image,
-                                                          ),
-                                                          Text(
-                                                            'Change',
-                                                            style: Constants
-                                                                .defaultTextWhite,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0),
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    fixedSize: Size(
+                                                        double.infinity, 64),
+                                                    padding:
+                                                        EdgeInsets.all(12.0),
+                                                    elevation: 2,
+                                                    primary: Constants.polyGray,
                                                   ),
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 8.0),
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          fixedSize: Size(
-                                                              double.infinity,
-                                                              64),
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  12.0),
-                                                          elevation: 2,
-                                                          primary: Constants
-                                                              .polyGray,
-                                                        ),
-                                                        onPressed: () async => {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ImageEditorScreen(
-                                                                        image:
-                                                                            _image)),
-                                                          ).then((newImage) {
-                                                            if (newImage !=
-                                                                null) {
-                                                              setState(() {
-                                                                _image =
-                                                                    newImage;
-                                                              });
-                                                            }
-                                                          })
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            Icon(Icons
-                                                                .location_searching),
-                                                            Text('Mark holds',
-                                                                style: Constants
-                                                                    .defaultTextWhite),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ])),
+                                                  onPressed: () async => {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ImageEditorScreen(
+                                                                    imageFile:
+                                                                        _image,
+                                                                    imageUrl: getX((RoutesService x) => x
+                                                                        .currentRoute
+                                                                        .value
+                                                                        .imageUrl)))).then(
+                                                        (newImage) {
+                                                      if (newImage != null) {
+                                                        setState(() {
+                                                          _image = newImage;
+                                                        });
+                                                      }
+                                                    })
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Icon(Icons
+                                                          .location_searching),
+                                                      Text('Mark holds',
+                                                          style: Constants
+                                                              .defaultTextWhite),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ])),
                                   // Container for route name
                                   Container(
                                       padding: EdgeInsets.only(
@@ -565,8 +550,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                                   .circular(
                                                                       24.0)),
                                                     )),
-                                                onPressed: () =>
-                                                    _panelController.close(),
+                                                onPressed: () => routesService
+                                                    .editRoutePanelController
+                                                    .close(),
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
@@ -708,8 +694,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     final builder = controllerRouteSetter.text.trim();
     final routeColors = await routeColorService.getAvailableRouteColors();
     final difficulty = routeColors[selectedColorIndex].color;
-    final id = routesService.currentRoute.id;
-    final gymId = routesService.currentRoute.gymId;
+    final id = getX((RoutesService x) => x.currentRoute.value.id);
+    final gymId = getX((RoutesService x) => x.currentRoute.value.gymId);
     final holds = controllerRouteHolds.text.trim();
     final type = controllerRouteType.text.trim();
 
@@ -717,8 +703,15 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
       // edit Route
       routesService.editRoute(id, routeName, gymId, difficulty, type, holds,
           builder, DateTime.now(), _image);
-      _panelController.close();
+      routesService.editRoutePanelController.close();
     }
+  }
+
+  int _initSelectedRouteColorIndex(List<RouteColor> availableColors) {
+    return routesService.currentRoute.value != null
+        ? availableColors.indexWhere((color) =>
+            color.color == routesService.currentRoute.value.difficulty)
+        : 0;
   }
 
   bool _validateAndSave() {
@@ -730,33 +723,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     return false;
   }
 
-  int _initSelectedRouteColorIndex(List<RouteColor> availableColors) {
-    return routesService.currentRoute != null
-        ? availableColors.indexWhere(
-            (color) => color.color == routesService.currentRoute.difficulty)
-        : 0;
-  }
-
-  void loadImage() {
-    setState(() {
-      isImageLoading = true;
-    });
-    http.get(Uri.parse(routesService.currentRoute.imageUrl)).then((response) {
-      getApplicationDocumentsDirectory().then((documentDirectory) {
-        final file =
-            File(join(documentDirectory.path, routesService.currentRoute.id));
-
-        file.writeAsBytesSync(response.bodyBytes);
-        setState(() {
-          isImageLoading = false;
-          _image = file;
-        });
-      });
-    });
-  }
-
   void onPressDelete(BuildContext context) {
-    final id = routesService.currentRoute.id;
+    final id = getX((RoutesService x) => x.currentRoute.value.id);
     if (this.mounted) {
       showDialog(
         context: context,
@@ -782,7 +750,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                   onPressed: () async {
                     routesService.deleteRoute(id);
                     Navigator.of(context).pop();
-                    _panelController.close();
+                    routesService.editRoutePanelController.close();
                   },
                   child: Text("Yes")),
             ],

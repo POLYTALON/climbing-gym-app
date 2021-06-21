@@ -4,11 +4,11 @@ import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dart:core';
 
-class NewsDetailPanel extends StatefulWidget {
+class NewsDetailPanel extends StatefulWidget with GetItStatefulWidgetMixin {
   NewsDetailPanel({
     Key key,
   }) : super(key: key);
@@ -17,27 +17,29 @@ class NewsDetailPanel extends StatefulWidget {
   _NewsDetailPanelState createState() => _NewsDetailPanelState();
 }
 
-class _NewsDetailPanelState extends State<NewsDetailPanel> {
+class _NewsDetailPanelState extends State<NewsDetailPanel>
+    with GetItStateMixin {
   _NewsDetailPanelState();
-  final newsProvider = locator<NewsService>();
-
-  final PanelController _panelController = PanelController();
+  final newsService = locator<NewsService>();
 
   @override
   Widget build(BuildContext context) {
-    newsProvider.addListener(() {
-      setState(() {}); //TODO: Work around!!!!!
-      if (newsProvider.showPanel == true) {
-        _panelController.open();
-      } else {
-        _panelController.close();
-      }
-    });
-
+    final newsWatch = watchX((NewsService x) => x.currentNews);
     return Container(
       constraints: BoxConstraints.expand(),
       child: PolySlidingUpPanel(
-        controller: _panelController,
+        header: Container(
+          width: MediaQuery.of(context).size.width,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+            IconButton(
+                onPressed: () {
+                  this.newsService.panelControl.close();
+                },
+                icon: const Icon(Icons.close)),
+          ]),
+        ),
+        controller: newsService.panelControl,
         panelBuilder: (ScrollController sc) {
           return Container(
             decoration: ShapeDecoration(
@@ -69,18 +71,14 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                         children: [
                           Flexible(
                             child: Text(
-                              newsProvider.currentNewsDetails.title ?? "",
+                              newsWatch.title ?? "",
                               style: Constants.headerText,
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                this._panelController.close();
-                              },
-                              icon: const Icon(Icons.close)),
+                          Container(height: 32, width: 32)
                         ],
                       ),
-                      newsProvider.currentNews.imageUrls != null
+                      newsWatch.imageUrls != null
                           ? Container(
                               padding: const EdgeInsets.only(
                                 top: 8,
@@ -88,20 +86,18 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                               ),
                               constraints: BoxConstraints(
                                   minHeight: 100, maxHeight: 250),
-                              child: Image.network(
-                                  newsProvider.currentNews.imageUrls[0]))
+                              child: Image.network(newsWatch.imageUrls[0]))
                           : Container(),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text(
-                                  newsProvider.currentNews.content ?? "",
+                              child: Text(newsWatch.content ?? "",
                                   style: Constants.defaultText),
                             )
                           ]),
                       Visibility(
-                        visible: newsProvider.currentNews.link != "",
+                        visible: newsWatch.link != "",
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -110,9 +106,9 @@ class _NewsDetailPanelState extends State<NewsDetailPanel> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    if (newsProvider.currentNews.link != null) {
-                                      String uri = Uri.decodeFull(
-                                          newsProvider.currentNews.link);
+                                    if (newsWatch.link != null) {
+                                      String uri =
+                                          Uri.decodeFull(newsWatch.link);
                                       launch(uri);
                                     }
                                   },

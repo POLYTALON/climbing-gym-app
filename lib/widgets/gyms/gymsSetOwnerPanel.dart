@@ -2,6 +2,7 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -15,7 +16,6 @@ class GymsSetOwnerPanel extends StatefulWidget {
 }
 
 class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
-  final PanelController _panelController = PanelController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsSetOwnerPanel();
@@ -29,20 +29,8 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    gymService.addListener(() {
-      if (gymService.showSetOwnerPanel == true) {
-        _panelController.open();
-      } else {
-        controllerEmail.text = "";
-        _panelController.close();
-      }
-    });
-
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        snapPoint: 0.50,
-        borderRadius: radius,
-        controller: _panelController,
+    return PolySlidingUpPanel(
+        controller: gymService.showSetOwnerPanel,
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -112,46 +100,60 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             //Set Gym Owner Button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Constants.polyGreen),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => setGymOwner(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "SET GYM OWNER",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyGreen),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => setGymOwner(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Set Gym Owner",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            //Cancel Button
                             // Cancel button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.red[400]),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => _panelController.close(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Cancel",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () =>
+                                      gymService.showSetOwnerPanel.close(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Cancel",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -160,16 +162,8 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void setGymOwner() async {
-    final id = gymService.currentGym.id;
+    final id = gymService.currentGym.value.id;
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setGymOwner(userEmail, id);
@@ -199,7 +193,7 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
           );
         },
       );
-      _panelController.close();
+      gymService.showSetOwnerPanel.close();
     } else {
       print("error");
     }

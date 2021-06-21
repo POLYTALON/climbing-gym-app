@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active ||
               !userSnapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Container();
           } else {
             if (userSnapshot.data.selectedGym == null ||
                 userSnapshot.data.selectedGym.isEmpty) {
@@ -62,22 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       Consumer<List<AppRoute>>(builder: (context, routes, _) {
                     return ChangeNotifierProvider<RoutesService>(
                         create: (_) => RoutesService(),
-                        child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Container(
-                                margin: const EdgeInsets.only(
-                                    left: 16.0, right: 16.0, top: 32),
-                                color: Constants.polyDark,
-                                child: FutureBuilder<List<RouteColor>>(
-                                    future: routeColorService
-                                        .getAvailableRouteColors(),
-                                    builder: (context, routeColorSnapshot) {
-                                      if (!routeColorSnapshot.hasData) {
-                                        return Center(
-                                            child: CircularProgressIndicator(
-                                                color: Constants.polyGreen));
-                                      }
-                                      return FutureBuilder<Map<String, int>>(
+                        child: FutureBuilder<List<RouteColor>>(
+                            future: routeColorService.getAvailableRouteColors(),
+                            builder: (context, routeColorSnapshot) {
+                              if (!routeColorSnapshot.hasData) {
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                        color: Constants.polyGreen));
+                              }
+                              return SingleChildScrollView(
+                                  controller: scrollController,
+                                  child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 16.0, right: 16.0, top: 32),
+                                      color: Constants.polyDark,
+                                      child: FutureBuilder<Map<String, int>>(
                                           future: _getRouteAmountPerColor(
                                               userSnapshot.data.selectedGym),
                                           builder: (context,
@@ -318,8 +317,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ],
                                               );
                                             }
-                                          });
-                                    }))));
+                                          })));
+                            }));
                   }));
             }
           }

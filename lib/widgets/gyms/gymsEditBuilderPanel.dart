@@ -2,20 +2,23 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class GymsEditBuilderPanel extends StatefulWidget {
+class GymsEditBuilderPanel extends StatefulWidget
+    with GetItStatefulWidgetMixin {
   GymsEditBuilderPanel({Key key}) : super(key: key);
 
   @override
   _GymsEditBuilderPanel createState() => _GymsEditBuilderPanel();
 }
 
-class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
-  final PanelController _panelController = PanelController();
+class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
+    with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsEditBuilderPanel();
@@ -29,20 +32,8 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
 
   @override
   Widget build(BuildContext context) {
-    gymService.addListener(() {
-      if (gymService.showEditBuilderPanel == true) {
-        _panelController.open();
-      } else {
-        controllerEmail.text = "";
-        _panelController.close();
-      }
-    });
-
-    return SlidingUpPanel(
-        minHeight: 0.0,
-        snapPoint: 0.50,
-        borderRadius: radius,
-        controller: _panelController,
+    return PolySlidingUpPanel(
+        controller: gymService.showEditBuilderPanel,
         panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
@@ -112,46 +103,60 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             //Set Builder Button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Constants.polyGreen),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => setBuilder(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "SET BUILDER",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyGreen),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => setBuilder(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Set Builder",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            //Cancel Button
                             // Cancel button
-                            TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.red[400]),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0)),
-                                  )),
-                              onPressed: () => _panelController.close(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Cancel",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () =>
+                                      gymService.showEditBuilderPanel.close(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Cancel",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -160,16 +165,8 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
                 ))));
   }
 
-  void toggleSlidingPanel() {
-    if (_panelController.isPanelOpen) {
-      _panelController.close();
-    } else {
-      _panelController.open();
-    }
-  }
-
   void setBuilder() async {
-    final id = gymService.currentGym.id;
+    final id = gymService.currentGym.value.id;
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setBuilder(userEmail, id);
@@ -199,7 +196,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel> {
           );
         },
       );
-      _panelController.close();
+      gymService.showEditBuilderPanel.close();
     } else {
       print("error");
     }

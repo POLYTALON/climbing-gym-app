@@ -200,7 +200,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                     ? SizedBox(
                                         height: 30,
                                         width: 30,
-                                        child: CircularProgressIndicator())
+                                        child: CircularProgressIndicator(
+                                            color: Constants.polyGreen))
                                     : Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -265,7 +266,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                             this.route.difficulty),
                                     builder: (context, routeColorSnapshot) {
                                       if (!routeColorSnapshot.hasData) {
-                                        return CircularProgressIndicator();
+                                        return CircularProgressIndicator(
+                                            color: Constants.polyGreen);
                                       }
                                       return Row(
                                         children: [
@@ -328,7 +330,10 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
               ),
             ]));
           } else {
-            return Scaffold(body: Center(child: CircularProgressIndicator()));
+            return Scaffold(
+                body: Center(
+                    child:
+                        CircularProgressIndicator(color: Constants.polyGreen)));
           }
         });
   }
