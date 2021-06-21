@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 
 class AppRoute extends Equatable {
   final String id;
-  final String name;
   final String type;
   final String builder;
   final DateTime date;
@@ -19,7 +18,6 @@ class AppRoute extends Equatable {
   @override
   List<Object> get props => [
         id,
-        name,
         type,
         builder,
         date,
@@ -35,7 +33,6 @@ class AppRoute extends Equatable {
 
   AppRoute(
       {this.id,
-      this.name,
       this.type,
       this.builder,
       this.date,
@@ -53,7 +50,6 @@ class AppRoute extends Equatable {
     Map docData = doc.data();
     return AppRoute(
         id: doc.id ?? '',
-        name: docData['name'] ?? '',
         builder: docData['builder'] ?? '',
         date: docData['date'] != null
             ? new DateTime.fromMillisecondsSinceEpoch(

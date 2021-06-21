@@ -26,7 +26,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
-  final controllerRouteName = TextEditingController(text: "");
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
@@ -41,7 +40,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
         this.lastSelectedColorIndex = -1;
       });
       if (x.currentRoute.value.gymId != null) {
-        controllerRouteName.text = x.currentRoute.value.name;
         controllerRouteSetter.text = x.currentRoute.value.builder;
         controllerRouteType.text = x.currentRoute.value.type;
         controllerRouteHolds.text = x.currentRoute.value.holds;
@@ -53,7 +51,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
         controller: routesService.editRoutePanelController,
         onPanelClosed: () {
           routesService.currentRoute.value = AppRoute();
-          controllerRouteName.clear();
           controllerRouteSetter.clear();
           controllerRouteHolds.clear();
           controllerRouteType.clear();
@@ -196,61 +193,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               ),
                                             )
                                           ])),
-                                  // Container for route name
-                                  Container(
-                                      padding: EdgeInsets.only(
-                                          top: 16.0, left: 16.0, right: 16.0),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            // Name of route
-                                            Text(
-                                              'Route Name',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w300,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            Divider(
-                                              color: Constants.polyGray,
-                                              thickness: 2,
-                                              height: 20,
-                                            ),
-                                            TextFormField(
-                                                controller: controllerRouteName,
-                                                validator:
-                                                    NameFieldValidator.validate,
-                                                autocorrect: false,
-                                                textCapitalization:
-                                                    TextCapitalization.words,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                                // The name keyboard is optimized for names and phone numbers
-                                                // Therefore we should use the default keyboard
-                                                keyboardType:
-                                                    TextInputType.text,
-                                                // The route should consist of only one line
-                                                maxLines: 1,
-                                                decoration: InputDecoration(
-                                                    hintText: 'Name',
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            left: 16.0),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(24.0),
-                                                        borderSide: BorderSide(
-                                                            width: 0,
-                                                            style: BorderStyle
-                                                                .none)),
-                                                    fillColor: Colors.white,
-                                                    filled: true))
-                                          ])),
-
                                   // Setter (Builder)
                                   Container(
                                       padding: EdgeInsets.only(
@@ -691,7 +633,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   }
 
   void editRoute(int selectedColorIndex) async {
-    final routeName = controllerRouteName.text.trim();
     final builder = controllerRouteSetter.text.trim();
     final routeColors = await routeColorService.getAvailableRouteColors();
     final difficulty = routeColors[selectedColorIndex].color;
@@ -702,8 +643,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
 
     if (_validateAndSave()) {
       // edit Route
-      routesService.editRoute(id, routeName, gymId, difficulty, type, holds,
-          builder, DateTime.now(), _image);
+      routesService.editRoute(
+          id, gymId, difficulty, type, holds, builder, DateTime.now(), _image);
       routesService.editRoutePanelController.close();
     }
   }

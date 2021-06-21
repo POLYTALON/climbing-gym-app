@@ -37,7 +37,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   final authService = locator<AuthService>();
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
-  final controllerRouteName = TextEditingController(text: "");
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
@@ -187,54 +186,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                             ),
                                           )
                                         ])),
-                          // Container for route name
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Name of route
-                                    Text(
-                                      'Route Name',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                        controller: controllerRouteName,
-                                        validator: NameFieldValidator.validate,
-                                        autocorrect: false,
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800),
-                                        // The name keyboard is optimized for names and phone numbers
-                                        // Therefore we should use the default keyboard
-                                        keyboardType: TextInputType.text,
-                                        // The route name should consist of only one line
-                                        decoration: InputDecoration(
-                                            hintText: 'Name',
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    left: 16.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24.0),
-                                                borderSide: BorderSide(
-                                                    width: 0,
-                                                    style: BorderStyle.none)),
-                                            fillColor: Colors.white,
-                                            filled: true))
-                                  ])),
-
                           // Setter (Builder)
                           Container(
                               padding: EdgeInsets.only(
@@ -602,7 +553,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   }
 
   void addRoute(String gymId) async {
-    final routeName = controllerRouteName.text.trim();
     final builder = controllerRouteSetter.text.trim();
     final routeColors = await routeColorService.getAvailableRouteColors();
     final difficulty = routeColors[this.selectedColorIndex];
@@ -612,8 +562,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     if (_validateAndSave()) {
       if (_image != null) {
         // add Route
-        routesService.addRoute(routeName, gymId, difficulty.color, type, holds,
-            builder, _image, DateTime.now());
+        routesService.addRoute(gymId, difficulty.color, type, holds, builder,
+            _image, DateTime.now());
         _panelController.close();
       } else {
         setState(() {

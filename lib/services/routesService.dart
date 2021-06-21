@@ -93,15 +93,8 @@ class RoutesService extends ChangeNotifier with FileService {
     return userRating.exists ? userRating['rating'] : 0;
   }
 
-  Future<void> addRoute(
-      String name,
-      String gymid,
-      String difficulty,
-      String type,
-      String holds,
-      String builder,
-      File image,
-      DateTime date) async {
+  Future<void> addRoute(String gymid, String difficulty, String type,
+      String holds, String builder, File image, DateTime date) async {
     DocumentReference docRef;
     try {
       docRef = _firestore.collection('routes').doc();
@@ -111,7 +104,6 @@ class RoutesService extends ChangeNotifier with FileService {
     String imageUrl = await uploadFile(image, docRef.path);
     try {
       await docRef.set({
-        'name': name,
         'gymid': gymid,
         'difficulty': difficulty,
         'type': type,
@@ -125,22 +117,14 @@ class RoutesService extends ChangeNotifier with FileService {
     }
   }
 
-  Future<void> editRoute(
-      String id,
-      String name,
-      String gymid,
-      String difficulty,
-      String type,
-      String holds,
-      String builder,
-      DateTime date,
+  Future<void> editRoute(String id, String gymid, String difficulty,
+      String type, String holds, String builder, DateTime date,
       [File image]) async {
     String imageUrl;
     if (image != null) {
       imageUrl = await uploadFile(image, 'routes' + '/' + id);
       try {
         await _firestore.collection('routes').doc(id).update({
-          'name': name,
           'gymid': gymid,
           'difficulty': difficulty,
           'type': type,
@@ -155,7 +139,6 @@ class RoutesService extends ChangeNotifier with FileService {
     } else {
       try {
         await _firestore.collection('routes').doc(id).update({
-          'name': name,
           'gymid': gymid,
           'difficulty': difficulty,
           'type': type,
