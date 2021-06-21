@@ -36,7 +36,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
   File _image;
-  int selectedColorIndex = 0;
   final picker = ImagePicker();
   bool isImageLoading = true;
 
@@ -83,237 +82,263 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
               // SlidingUpPanel content
               child: Form(
                   key: _formKey,
-                  child: SingleChildScrollView(
-                      controller: sc,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          // Take photo button
-                          Container(
-                              padding: EdgeInsets.all(16.0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16.0),
-                                      topRight: Radius.circular(16.0))),
-                              child: isImageLoading
-                                  ? ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(12.0),
-                                        elevation: 2,
-                                        primary: Constants.polyGray,
-                                        minimumSize: Size(double.infinity, 64),
-                                      ),
-                                      onPressed: () {},
-                                      child: CircularProgressIndicator(
-                                          color: Constants.polyGreen),
-                                    )
-                                  : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                          Expanded(
-                                            child: ElevatedButton(
+                  child: FutureBuilder(
+                      future: routeColorService.getAvailableRouteColors(),
+                      builder: (context, routeColorSnapshot) {
+                        if (!routeColorSnapshot.hasData) {
+                          return Container(width: 0.0, height: 0.0);
+                        } else {
+                          int selectedRouteColorIndex =
+                              _initSelectedRouteColorIndex(
+                                  routeColorSnapshot.data);
+                          return SingleChildScrollView(
+                              controller: sc,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  // Take photo button
+                                  Container(
+                                      padding: EdgeInsets.all(16.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(16.0),
+                                              topRight: Radius.circular(16.0))),
+                                      child: isImageLoading
+                                          ? ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 padding: EdgeInsets.all(12.0),
                                                 elevation: 2,
-                                                fixedSize:
-                                                    Size(double.infinity, 64),
                                                 primary: Constants.polyGray,
+                                                minimumSize:
+                                                    Size(double.infinity, 64),
                                               ),
-                                              onPressed: () async =>
-                                                  _showImageSourceActionSheet(
-                                                      context),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    _image,
+                                              onPressed: () {},
+                                              child: CircularProgressIndicator(
+                                                  color: Constants.polyGreen),
+                                            )
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                  Expanded(
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        padding: EdgeInsets.all(
+                                                            12.0),
+                                                        elevation: 2,
+                                                        fixedSize: Size(
+                                                            double.infinity,
+                                                            64),
+                                                        primary:
+                                                            Constants.polyGray,
+                                                      ),
+                                                      onPressed: () async =>
+                                                          _showImageSourceActionSheet(
+                                                              context),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: <Widget>[
+                                                          Image.file(
+                                                            _image,
+                                                          ),
+                                                          Text(
+                                                            'Change',
+                                                            style: Constants
+                                                                .defaultTextWhite,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    'Change',
-                                                    style: Constants
-                                                        .defaultTextWhite,
-                                                  ),
-                                                ],
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0),
+                                                      child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          fixedSize: Size(
+                                                              double.infinity,
+                                                              64),
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  12.0),
+                                                          elevation: 2,
+                                                          primary: Constants
+                                                              .polyGray,
+                                                        ),
+                                                        onPressed: () async => {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ImageEditorScreen(
+                                                                        image:
+                                                                            _image)),
+                                                          ).then((newImage) {
+                                                            if (newImage !=
+                                                                null) {
+                                                              setState(() {
+                                                                _image =
+                                                                    newImage;
+                                                              });
+                                                            }
+                                                          })
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          children: [
+                                                            Icon(Icons
+                                                                .location_searching),
+                                                            Text('Mark holds',
+                                                                style: Constants
+                                                                    .defaultTextWhite),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ])),
+                                  // Container for route name
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Name of route
+                                            Text(
+                                              'Route Name',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0),
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  fixedSize:
-                                                      Size(double.infinity, 64),
-                                                  padding: EdgeInsets.all(12.0),
-                                                  elevation: 2,
-                                                  primary: Constants.polyGray,
-                                                ),
-                                                onPressed: () async => {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ImageEditorScreen(
-                                                                image: _image)),
-                                                  ).then((newImage) {
-                                                    if (newImage != null) {
-                                                      setState(() {
-                                                        _image = newImage;
-                                                      });
-                                                    }
-                                                  })
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    Icon(Icons
-                                                        .location_searching),
-                                                    Text('Mark holds',
-                                                        style: Constants
-                                                            .defaultTextWhite),
-                                                  ],
-                                                ),
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            TextFormField(
+                                                controller: controllerRouteName,
+                                                validator:
+                                                    NameFieldValidator.validate,
+                                                autocorrect: false,
+                                                textCapitalization:
+                                                    TextCapitalization.words,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                                // The name keyboard is optimized for names and phone numbers
+                                                // Therefore we should use the default keyboard
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                // The route should consist of only one line
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Name',
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 16.0),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24.0),
+                                                        borderSide: BorderSide(
+                                                            width: 0,
+                                                            style: BorderStyle
+                                                                .none)),
+                                                    fillColor: Colors.white,
+                                                    filled: true))
+                                          ])),
+
+                                  // Setter (Builder)
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Setter',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
                                               ),
                                             ),
-                                          )
-                                        ])),
-                          // Container for route name
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Name of route
-                                    Text(
-                                      'Route Name',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                        controller: controllerRouteName,
-                                        validator: NameFieldValidator.validate,
-                                        autocorrect: false,
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800),
-                                        // The name keyboard is optimized for names and phone numbers
-                                        // Therefore we should use the default keyboard
-                                        keyboardType: TextInputType.text,
-                                        // The route should consist of only one line
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            hintText: 'Name',
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    left: 16.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24.0),
-                                                borderSide: BorderSide(
-                                                    width: 0,
-                                                    style: BorderStyle.none)),
-                                            fillColor: Colors.white,
-                                            filled: true))
-                                  ])),
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            TextFormField(
+                                                controller:
+                                                    controllerRouteSetter,
+                                                validator:
+                                                    NameFieldValidator.validate,
+                                                autocorrect: false,
+                                                textCapitalization:
+                                                    TextCapitalization.words,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                                // The name keyboard is optimized for names (and phone numbers)
+                                                keyboardType:
+                                                    TextInputType.name,
+                                                // The setter should consist of only one line
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Name',
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 16.0),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24.0),
+                                                        borderSide: BorderSide(
+                                                            width: 0,
+                                                            style: BorderStyle
+                                                                .none)),
+                                                    fillColor: Colors.white,
+                                                    filled: true)),
+                                          ])),
 
-                          // Setter (Builder)
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Setter',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                        controller: controllerRouteSetter,
-                                        validator: NameFieldValidator.validate,
-                                        autocorrect: false,
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800),
-                                        // The name keyboard is optimized for names (and phone numbers)
-                                        keyboardType: TextInputType.name,
-                                        // The setter should consist of only one line
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            hintText: 'Name',
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    left: 16.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24.0),
-                                                borderSide: BorderSide(
-                                                    width: 0,
-                                                    style: BorderStyle.none)),
-                                            fillColor: Colors.white,
-                                            filled: true)),
-                                  ])),
-
-                          // Difficulty (Color)
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Difficulty',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                        child: FutureBuilder(
-                                            future: routeColorService
-                                                .getAvailableRouteColors(),
-                                            builder:
-                                                (context, routeColorSnapshot) {
-                                              if (!routeColorSnapshot.hasData) {
-                                                return Container(
-                                                    width: 0.0, height: 0.0);
-                                              }
-                                              this.selectedColorIndex =
-                                                  _initSelectedRouteColorIndex(
-                                                      routeColorSnapshot.data,
-                                                      routesService
-                                                          .currentRoute);
+                                  // Difficulty (Color)
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Difficulty',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            SizedBox(child: StatefulBuilder(
+                                                builder: (BuildContext context,
+                                                    StateSetter setState) {
                                               return Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
@@ -341,23 +366,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                                   fit: BoxFit
                                                                       .fitHeight,
                                                                   child: RawMaterialButton(
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .circle,
-                                                                          color: Color(routeColorSnapshot
-                                                                              .data[
-                                                                                  index]
-                                                                              .colorCode),
-                                                                          size:
-                                                                              24),
-                                                                      onPressed: () =>
-                                                                          _setSelectedRouteColorIndex(
-                                                                              index),
-                                                                      shape: (selectedColorIndex ==
-                                                                              index)
-                                                                          ? CircleBorder(
-                                                                              side: BorderSide(width: 3.0, color: Constants.polyGray))
-                                                                          : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
+                                                                      child: Icon(Icons.circle, color: Color(routeColorSnapshot.data[index].colorCode), size: 24),
+                                                                      onPressed: () => setState(() {
+                                                                            selectedRouteColorIndex =
+                                                                                index;
+                                                                          }),
+                                                                      shape: (selectedRouteColorIndex == index) ? CircleBorder(side: BorderSide(width: 3.0, color: Constants.polyGray)) : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
                                                               Text(
                                                                   routeColorSnapshot
                                                                       .data[
@@ -373,222 +387,256 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
                                                             ]));
                                                       })));
                                             }))
-                                  ])),
-                          // Type
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Route Type',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                        controller: controllerRouteType,
-                                        validator: NameFieldValidator.validate,
-                                        autocorrect: false,
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800),
-                                        // The name keyboard is optimized for names and phone numbers
-                                        // Therefore we should use the default keyboard
-                                        keyboardType: TextInputType.text,
-                                        // The route should consist of only one line
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            hintText: 'e.g. Competition',
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    left: 16.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24.0),
-                                                borderSide: BorderSide(
-                                                    width: 0,
-                                                    style: BorderStyle.none)),
-                                            fillColor: Colors.white,
-                                            filled: true)),
-                                  ])),
-                          // Holds
-                          Container(
-                              padding: EdgeInsets.only(
-                                  top: 16.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Holds',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Constants.polyGray,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                        controller: controllerRouteHolds,
-                                        validator: NameFieldValidator.validate,
-                                        autocorrect: false,
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800),
-                                        // The name keyboard is optimized for names and phone numbers
-                                        // Therefore we should use the default keyboard
-                                        keyboardType: TextInputType.text,
-                                        // The holds should consist of only one line
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            hintText: 'Name',
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    left: 16.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24.0),
-                                                borderSide: BorderSide(
-                                                    width: 0,
-                                                    style: BorderStyle.none)),
-                                            fillColor: Colors.white,
-                                            filled: true)),
-                                  ])),
-                          // Buttons
-                          Container(
-                              padding: EdgeInsets.all(16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  // Accept button
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Constants.polyGreen),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          24.0)),
-                                            )),
-                                        onPressed: () => editRoute(),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text("Update Route",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  // Cancel button
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Constants.polyRed),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          24.0)),
-                                            )),
-                                        onPressed: () =>
-                                            _panelController.close(),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text("Cancel",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )),
-
-                          // Delete Button
-                          Container(
-                            padding: EdgeInsets.only(bottom: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 100, right: 100),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Constants.polyRed),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        24.0)),
-                                          )),
-                                      onPressed: () => onPressDelete(context),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          ])),
+                                  // Type
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8.0),
-                                              child:
-                                                  Icon(Icons.delete, size: 20),
+                                            Text(
+                                              'Route Type',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                            Text("Delete Route",
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            TextFormField(
+                                                controller: controllerRouteType,
+                                                validator:
+                                                    NameFieldValidator.validate,
+                                                autocorrect: false,
+                                                textCapitalization:
+                                                    TextCapitalization.words,
                                                 style: TextStyle(
-                                                    color: Colors.white,
                                                     fontWeight:
-                                                        FontWeight.w700)),
-                                          ],
+                                                        FontWeight.w800),
+                                                // The name keyboard is optimized for names and phone numbers
+                                                // Therefore we should use the default keyboard
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                // The route should consist of only one line
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        'e.g. Competition',
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 16.0),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24.0),
+                                                        borderSide: BorderSide(
+                                                            width: 0,
+                                                            style: BorderStyle
+                                                                .none)),
+                                                    fillColor: Colors.white,
+                                                    filled: true)),
+                                          ])),
+                                  // Holds
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Holds',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            TextFormField(
+                                                controller:
+                                                    controllerRouteHolds,
+                                                validator:
+                                                    NameFieldValidator.validate,
+                                                autocorrect: false,
+                                                textCapitalization:
+                                                    TextCapitalization.words,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                                // The name keyboard is optimized for names and phone numbers
+                                                // Therefore we should use the default keyboard
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                // The holds should consist of only one line
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Name',
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 16.0),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24.0),
+                                                        borderSide: BorderSide(
+                                                            width: 0,
+                                                            style: BorderStyle
+                                                                .none)),
+                                                    fillColor: Colors.white,
+                                                    filled: true)),
+                                          ])),
+                                  // Buttons
+                                  Container(
+                                      padding: EdgeInsets.all(16),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          // Accept button
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Constants
+                                                                .polyGreen),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      24.0)),
+                                                    )),
+                                                onPressed: () => editRoute(
+                                                    selectedRouteColorIndex),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text("Update Route",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w700)),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          // Cancel button
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Constants
+                                                                .polyRed),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      24.0)),
+                                                    )),
+                                                onPressed: () =>
+                                                    _panelController.close(),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text("Cancel",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w700)),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+
+                                  // Delete Button
+                                  Container(
+                                    padding: EdgeInsets.only(bottom: 16),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 100, right: 100),
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Constants.polyRed),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    24.0)),
+                                                  )),
+                                              onPressed: () =>
+                                                  onPressDelete(context),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 8.0),
+                                                      child: Icon(Icons.delete,
+                                                          size: 20),
+                                                    ),
+                                                    Text("Delete Route",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ))));
+                                  )
+                                ],
+                              ));
+                        }
+                      })));
         });
   }
 
@@ -656,11 +704,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     });
   }
 
-  void editRoute() async {
+  void editRoute(int selectedColorIndex) async {
     final routeName = controllerRouteName.text.trim();
     final builder = controllerRouteSetter.text.trim();
     final routeColors = await routeColorService.getAvailableRouteColors();
-    final difficulty = routeColors[this.selectedColorIndex].color;
+    final difficulty = routeColors[selectedColorIndex].color;
     final id = routesService.currentRoute.id;
     final gymId = routesService.currentRoute.gymId;
     final holds = controllerRouteHolds.text.trim();
@@ -683,16 +731,11 @@ class _RouteEditPanelState extends State<RouteEditPanel> {
     return false;
   }
 
-  void _setSelectedRouteColorIndex(int index) {
-    setState(() {
-      selectedColorIndex = index;
-    });
-  }
-
-  int _initSelectedRouteColorIndex(
-      List<RouteColor> availableColors, AppRoute route) {
-    return availableColors
-        .indexWhere((color) => color.color == route.difficulty);
+  int _initSelectedRouteColorIndex(List<RouteColor> availableColors) {
+    return routesService.currentRoute != null
+        ? availableColors.indexWhere(
+            (color) => color.color == routesService.currentRoute.difficulty)
+        : 0;
   }
 
   void loadImage() {
