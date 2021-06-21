@@ -106,7 +106,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               MainAxisAlignment.spaceAround,
                                           children: <Widget>[
                                             _image != null
-                                                ? Image.file(_image)
+                                                ? new Image.file(_image)
                                                 : getX((RoutesService x) => x
                                                             .currentRoute
                                                             .value
@@ -153,6 +153,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 (newImage) {
                                               if (newImage != null) {
                                                 setState(() {
+                                                  imageCache.clear();
                                                   _image = newImage;
                                                 });
                                               }
