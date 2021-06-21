@@ -73,10 +73,12 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
             onTabTapped(index);
           },
           children: <Widget>[
-            _children[0],
-            _children[1],
-            _children[2],
-            _children[3],
+            IndexedStack(index: _navBarIndex, children: <Widget>[
+              _children[0],
+              _children[1],
+              _children[2],
+              _children[3],
+            ])
           ]),
 
       // BottomNavigationBar
@@ -172,7 +174,6 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
   }
 
   void onTabTapped(int index) {
-    _pageController.jumpToPage(index);
     setState(() {
       _navBarIndex = index;
       switch (index) {
