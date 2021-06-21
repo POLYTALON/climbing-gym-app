@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
+import 'package:climbing_gym_app/widgets/routes/ratingBar.dart';
 import 'package:climbing_gym_app/widgets/routes/routeDetail.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
@@ -41,7 +42,6 @@ class _RouteCardState extends State<RouteCard> {
     return GestureDetector(
       onTap: onPressRoute,
       child: Container(
-        padding: const EdgeInsets.all(8),
         child: Card(
           clipBehavior: Clip.antiAlias,
           color: Constants.polyGray,
@@ -58,7 +58,7 @@ class _RouteCardState extends State<RouteCard> {
                   children: <Widget>[
                     // Image
                     Expanded(
-                        flex: 5,
+                        flex: 7,
                         child: Stack(children: <Widget>[
                           Center(
                               child: CircularProgressIndicator(
@@ -71,64 +71,177 @@ class _RouteCardState extends State<RouteCard> {
                               child: FadeInImage.memoryNetwork(
                                   placeholder: kTransparentImage,
                                   image: route.imageUrl,
-                                  fit: BoxFit.fill),
+                                  fit: BoxFit.cover),
                             ),
                           ),
+                          if (_getIsPrivileged())
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: FittedBox(
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[400],
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(8)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                          icon:
+                                              const Icon(Icons.edit, size: 20),
+                                          color: Colors.white,
+                                          onPressed: onPressEdit,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ),
                         ])),
                     // Title
                     Expanded(
-                        flex: 7,
-                        child: Column(
-                          children: [
-                            FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(route.name,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 20)),
-                              ),
-                            ),
-                            FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      8.0, 0.0, 8.0, 0.0),
-                                  child: Row(children: [
-                                    Text('Level: ',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 20)),
-                                    Icon(Icons.circle,
-                                        color: Color(routeColorSnapshot.data
-                                            .firstWhere((routeColor) =>
-                                                routeColor.color ==
-                                                route.difficulty)
-                                            .colorCode),
-                                        size: 24)
-                                  ])),
-                            ),
-                            if (_getIsPrivileged())
-                              Expanded(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  FittedBox(
-                                      fit: BoxFit.fitHeight,
-                                      child: IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        color: Colors.white,
-                                        onPressed: onPressEdit,
-                                      )),
-                                ],
-                              ))
-                          ],
-                        )),
+                        flex: 5,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 4,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Center(
+                                              child: Text(route.type,
+                                                  style: Constants
+                                                      .defaultTextWhite),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Align(
+                                          alignment: Alignment.topRight,
+                                          child: PolyRatingBar(
+                                              allowHalfRating: true,
+                                              onRated: (v) {},
+                                              starCount: 5,
+                                              rating: route.rating,
+                                              size: 17.0,
+                                              isReadOnly: true,
+                                              activeColor: Colors.orangeAccent,
+                                              inactiveColor:
+                                                  Constants.lightGray,
+                                              borderColor: Colors.black,
+                                              spacing: 0.0),
+                                        ),
+                                      ),
+                                    ]),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      FutureBuilder<Color>(
+                                          future: routeColorService
+                                              .getColorFromString(
+                                                  this.route.difficulty),
+                                          builder:
+                                              (context, routeColorSnapshot) {
+                                            if (!routeColorSnapshot.hasData) {
+                                              return Container();
+                                            }
+                                            return Expanded(
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                          Icons.circle_outlined,
+                                                          color:
+                                                              routeColorSnapshot
+                                                                  .data),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 4.0),
+                                                        child: Text(
+                                                            route.difficulty,
+                                                            style: Constants
+                                                                .defaultTextWhite),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: route.isDone
+                                            ? Row(
+                                                children: [
+                                                  Icon(Icons.check_circle,
+                                                      color: Colors.white),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 2.0),
+                                                    child: Text("Done",
+                                                        style: Constants
+                                                            .defaultTextWhite),
+                                                  ),
+                                                ],
+                                              )
+                                            : route.isTried
+                                                ? Row(
+                                                    children: [
+                                                      Icon(Icons.pending,
+                                                          color: Colors.white),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text("Tried",
+                                                            style: Constants
+                                                                .defaultTextWhite),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    children: [
+                                                      Icon(
+                                                          Icons.circle_outlined,
+                                                          color: Colors.white),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text("Open",
+                                                            style: Constants
+                                                                .defaultTextWhite),
+                                                      ),
+                                                    ],
+                                                  ),
+                                      )
+                                    ]),
+                              ]),
+                        ))
                   ],
                 );
               }),

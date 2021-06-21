@@ -508,13 +508,16 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                     _applyRouteFilters(
                                                         routes, snapshot.data);
                                                 return GridView.builder(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     gridDelegate:
                                                         SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 2,
-                                                      childAspectRatio:
-                                                          (itemWidth /
-                                                              itemHeight),
-                                                    ),
+                                                            crossAxisCount: 2,
+                                                            childAspectRatio:
+                                                                (itemWidth /
+                                                                    itemHeight),
+                                                            crossAxisSpacing: 8,
+                                                            mainAxisSpacing: 8),
                                                     itemCount:
                                                         filteredRoutes.length,
                                                     itemBuilder:
