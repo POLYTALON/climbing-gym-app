@@ -121,9 +121,15 @@ class RoutesService extends ChangeNotifier with FileService {
       String type, String holds, String builder, DateTime date,
       [File image]) async {
     String imageUrl;
+    String oldImageUrl;
     if (image != null) {
       imageUrl = await uploadFile(image, 'routes' + '/' + id);
       try {
+        await _firestore
+            .collection('routes')
+            .doc(id)
+            .get()
+            .then((route) => oldImageUrl = route.data()['imageUrl']);
         await _firestore.collection('routes').doc(id).update({
           'gymid': gymid,
           'difficulty': difficulty,
@@ -133,6 +139,7 @@ class RoutesService extends ChangeNotifier with FileService {
           'date': date,
           'builder': builder,
         });
+        await deleteFile(oldImageUrl);
       } on FirebaseException catch (e) {
         print(e);
       }

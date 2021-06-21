@@ -60,12 +60,19 @@ class GymService extends ChangeNotifier with FileService {
       [File image]) async {
     if (image != null) {
       String imageUrl;
+      String oldImageUrl;
       imageUrl = await uploadFile(image, 'gyms' + '/' + id);
       try {
         await _firestore
             .collection('gyms')
             .doc(id)
+            .get()
+            .then((gym) => oldImageUrl = gym.data()['imageUrl']);
+        await _firestore
+            .collection('gyms')
+            .doc(id)
             .update({'name': name, 'city': city, 'imageUrl': imageUrl});
+        await deleteFile(oldImageUrl);
       } on FirebaseException catch (e) {
         print(e);
       }
