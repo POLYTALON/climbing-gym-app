@@ -359,7 +359,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
     final newsContent = controllerNewsContent.text.trim();
     String newsLink = "";
     String newsURL = controllerNewsLink.text.trim();
-    if (!newsURL.startsWith("http://") || !newsURL.startsWith("https://")) {
+    if (newsURL != "" &&
+        (!newsURL.startsWith("http://") || !newsURL.startsWith("https://"))) {
       newsLink = "https://" + newsURL;
     }
     newsLink = Uri.encodeFull(newsLink);
