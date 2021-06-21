@@ -14,8 +14,17 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 const polyDark = Color(0x121212);
 
-class NewsScreen extends StatelessWidget with GetItMixin {
+class NewsScreen extends StatefulWidget with GetItStatefulWidgetMixin {
+  @override
+  _NewsScreenState createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen>
+    with GetItStateMixin, AutomaticKeepAliveClientMixin<NewsScreen> {
   final PanelController _newsAddPanelController = PanelController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

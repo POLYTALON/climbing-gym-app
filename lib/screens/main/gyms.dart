@@ -18,8 +18,12 @@ class GymsScreen extends StatefulWidget {
   _GymsScreenState createState() => _GymsScreenState();
 }
 
-class _GymsScreenState extends State<GymsScreen> {
+class _GymsScreenState extends State<GymsScreen>
+    with AutomaticKeepAliveClientMixin<GymsScreen> {
   final PanelController _gymsAddPanelController = PanelController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

@@ -20,7 +20,8 @@ class RoutesScreen extends StatefulWidget {
   _RoutesScreenState createState() => _RoutesScreenState();
 }
 
-class _RoutesScreenState extends State<RoutesScreen> {
+class _RoutesScreenState extends State<RoutesScreen>
+    with AutomaticKeepAliveClientMixin<RoutesScreen> {
   final routesService = locator<RoutesService>();
   final routeColorService = locator<RouteColorService>();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
@@ -30,6 +31,10 @@ class _RoutesScreenState extends State<RoutesScreen> {
   int _routeStateFilterIndex = 0;
 
   PanelController addPanelController = PanelController();
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     final auth = locator<AuthService>();

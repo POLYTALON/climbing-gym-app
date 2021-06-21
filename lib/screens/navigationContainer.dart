@@ -70,7 +70,7 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
               : new NeverScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (index) {
-            onTabTapped(index);
+            changeTitle(index);
           },
           children: <Widget>[
             _children[0],
@@ -171,8 +171,13 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
     }
   }
 
-  void onTabTapped(int index) {
-    _pageController.jumpToPage(index);
+  void onTabTapped(int index) async {
+    await _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+    changeTitle(index);
+  }
+
+  void changeTitle(int index) {
     setState(() {
       _navBarIndex = index;
       switch (index) {
