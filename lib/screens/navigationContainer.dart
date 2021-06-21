@@ -70,15 +70,13 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
               : new NeverScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (index) {
-            onTabTapped(index);
+            changeTitle(index);
           },
           children: <Widget>[
-            IndexedStack(index: _navBarIndex, children: <Widget>[
-              _children[0],
-              _children[1],
-              _children[2],
-              _children[3],
-            ])
+            _children[0],
+            _children[1],
+            _children[2],
+            _children[3],
           ]),
 
       // BottomNavigationBar
@@ -173,7 +171,13 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
     }
   }
 
-  void onTabTapped(int index) {
+  void onTabTapped(int index) async {
+    await _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+    changeTitle(index);
+  }
+
+  void changeTitle(int index) {
     setState(() {
       _navBarIndex = index;
       switch (index) {
