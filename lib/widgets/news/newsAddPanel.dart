@@ -360,10 +360,14 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
     String newsLink = "";
     String newsURL = controllerNewsLink.text.trim();
     if (newsURL != "" &&
-        (!newsURL.startsWith("http://") || !newsURL.startsWith("https://"))) {
+        !newsURL.startsWith("http://") &&
+        !newsURL.startsWith("https://")) {
       newsLink = "https://" + newsURL;
+    } else if (newsURL != "") {
+      newsLink = newsURL;
     }
     newsLink = Uri.encodeFull(newsLink);
+
     final gymid = this.gymid ?? "";
     if (_validateAndSave()) {
       if (_image != null) {
