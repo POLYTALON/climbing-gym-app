@@ -50,7 +50,11 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0));
 
-    controllerRouteSetter.text = authService.currentUser.displayName;
+    if (controllerRouteSetter.text != "") {
+      controllerRouteSetter.text = controllerRouteSetter.text.trim();
+    } else {
+      controllerRouteSetter.text = authService.currentUser.displayName;
+    }
 
     return PolySlidingUpPanel(
         controller: _panelController,
