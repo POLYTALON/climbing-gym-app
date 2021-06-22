@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
@@ -58,8 +59,9 @@ class _ProfileCardState extends State<ProfileCard> {
                                     minRadius: 16.0,
                                     maxRadius: 32.0,
                                     //backgroundImage: NetworkImage(appUser.imageUrl),
-                                    child: Text(
+                                    child: AutoSizeText(
                                         _getUserInitials(appUser.displayName),
+                                        maxLines: 1,
                                         style: Constants.subHeaderTextWhite)))),
                         Expanded(
                             flex: 7,
@@ -69,21 +71,24 @@ class _ProfileCardState extends State<ProfileCard> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(
+                                      AutoSizeText(
                                         appUser.displayName ?? '',
+                                        maxLines: 1,
                                         style: Constants.headerTextWhite,
                                         textAlign: TextAlign.left,
                                       ),
-                                      Text(
+                                      AutoSizeText(
                                         appUser.email ?? '',
+                                        maxLines: 1,
                                         style: Constants.smallTextWhite600,
                                         textAlign: TextAlign.left,
                                       ),
-                                      Text(
+                                      AutoSizeText(
                                         'Registered since: ' +
                                                 authService
                                                     .getRegistrationDateFormatted() ??
                                             '',
+                                        maxLines: 1,
                                         style: Constants.smallTextWhite600,
                                         textAlign: TextAlign.left,
                                       ),
@@ -97,8 +102,9 @@ class _ProfileCardState extends State<ProfileCard> {
                       Row(children: <Widget>[
                         Expanded(
                             flex: 3,
-                            child: Text(
+                            child: AutoSizeText(
                               'Gym:',
+                              maxLines: 1,
                               style: Constants.headerTextWhite,
                               textAlign: TextAlign.left,
                             )),
@@ -107,14 +113,52 @@ class _ProfileCardState extends State<ProfileCard> {
                             child: FutureBuilder<String>(
                                 future: _getGymNameById(appUser.selectedGym),
                                 builder: (context, gymSnapshot) {
-                                  return Text(
+                                  return AutoSizeText(
                                     gymSnapshot.data ?? '',
+                                    maxLines: 1,
                                     style: Constants.headerTextWhite,
                                     textAlign: TextAlign.right,
                                   );
                                 })),
-                      ])
+                      ]),
+                      if (_getPrivileges(appUser))
+                        Divider(
+                          color: Colors.white24,
+                          thickness: 2,
+                          height: 20,
+                        ),
+                      if (_getPrivileges(appUser))
+                        Row(children: <Widget>[
+                          Expanded(
+                              flex: 3,
+                              child: AutoSizeText(
+                                'Permission:',
+                                maxLines: 1,
+                                style: Constants.headerTextWhite,
+                                textAlign: TextAlign.left,
+                              )),
+                          Expanded(
+                              flex: 7,
+                              child: AutoSizeText(
+                                _getUserRoleForCurrentGym(appUser) ?? '',
+                                maxLines: 1,
+                                style: Constants.headerTextWhite,
+                                textAlign: TextAlign.right,
+                              ))
+                        ])
                     ]))));
+  }
+
+  bool _getPrivileges(AppUser user) {
+    if (user == null ||
+        user.roles == null ||
+        user.roles[user.selectedGym] == null) return false;
+    if (user.isOperator) return true;
+    if (user.roles[user.selectedGym].gymuser != null &&
+        user.roles[user.selectedGym].gymuser) return true;
+    if (user.roles[user.selectedGym].builder != null &&
+        user.roles[user.selectedGym].builder) return true;
+    return false;
   }
 
   String _getUserInitials(String displayName) {
@@ -129,5 +173,15 @@ class _ProfileCardState extends State<ProfileCard> {
 
   Future<String> _getGymNameById(String gymId) async {
     return gymService.getGymNameById(gymId);
+  }
+
+  String _getUserRoleForCurrentGym(AppUser user) {
+    if (user == null ||
+        user.roles == null ||
+        user.roles[user.selectedGym] == null) return '';
+    if (user.isOperator) return 'Operator';
+    if (user.roles[user.selectedGym].gymuser) return 'Gym Owner';
+    if (user.roles[user.selectedGym].builder) return 'Builder';
+    return '';
   }
 }
