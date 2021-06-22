@@ -162,11 +162,7 @@ class RoutesService extends ChangeNotifier with FileService {
   Future<bool> deleteRoute(String id) async {
     try {
       dynamic route = await _firestore.collection('routes').doc(id).get();
-      await _storage.refFromURL(route.data()['imageUrl']).delete();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    try {
+      String imageUrl = route.data()['imageUrl'];
       var userRating = await _firestore
           .collection('routes')
           .doc(id)
@@ -184,6 +180,7 @@ class RoutesService extends ChangeNotifier with FileService {
                 }));
       }
       await _firestore.collection('routes').doc(id).delete();
+      await _storage.refFromURL(imageUrl).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);
