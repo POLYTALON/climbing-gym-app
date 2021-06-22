@@ -52,7 +52,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       validator: EmailFieldValidator.validate,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 16.0),
-                          hintText: 'max.mustermann@polytalon.de',
+                          hintText: 'max.mustermann@polytalon.com',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(24.0),
                               borderSide: BorderSide(

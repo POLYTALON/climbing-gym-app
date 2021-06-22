@@ -60,12 +60,19 @@ class GymService extends ChangeNotifier with FileService {
       [File image]) async {
     if (image != null) {
       String imageUrl;
+      String oldImageUrl;
       imageUrl = await uploadFile(image, 'gyms' + '/' + id);
       try {
         await _firestore
             .collection('gyms')
             .doc(id)
+            .get()
+            .then((gym) => oldImageUrl = gym.data()['imageUrl']);
+        await _firestore
+            .collection('gyms')
+            .doc(id)
             .update({'name': name, 'city': city, 'imageUrl': imageUrl});
+        await deleteFile(oldImageUrl);
       } on FirebaseException catch (e) {
         print(e);
       }
@@ -84,12 +91,9 @@ class GymService extends ChangeNotifier with FileService {
   Future<bool> deleteGym(String id) async {
     try {
       dynamic gym = await _firestore.collection('gyms').doc(id).get();
-      await _storage.refFromURL(gym.data()['imageUrl']).delete();
-    } on FirebaseException catch (e) {
-      print(e);
-    }
-    try {
+      String imageUrl = gym.data()['imageUrl'];
       await _firestore.collection('gyms').doc(id).delete();
+      await _storage.refFromURL(imageUrl).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);
