@@ -19,4 +19,14 @@ mixin FileService {
     }
     return url;
   }
+
+  Future<bool> deleteFile(String url) async {
+    try {
+      await _storage.refFromURL(url).delete();
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+    return true;
+  }
 }

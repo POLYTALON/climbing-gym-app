@@ -67,10 +67,11 @@ class NewsService extends ChangeNotifier with FileService {
   Future<bool> deleteNews(String id) async {
     try {
       dynamic news = await _firestore.collection('news').doc(id).get();
-      await news.data()['imageUrls'].forEach((imageUrl) async {
+      final List<dynamic> imageUrls = news.data()['imageUrls'];
+      await _firestore.collection('news').doc(id).delete();
+      imageUrls.forEach((imageUrl) async {
         await _storage.refFromURL(imageUrl).delete();
       });
-      await _firestore.collection('news').doc(id).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);
