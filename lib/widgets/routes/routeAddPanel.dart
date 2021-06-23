@@ -63,6 +63,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
           controllerRouteHolds.clear();
           controllerRouteType.clear();
           selectedColorIndex = 0;
+          _image = null;
         },
         panelBuilder: (ScrollController sc) {
           return Container(
