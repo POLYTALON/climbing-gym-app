@@ -58,6 +58,12 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
 
     return PolySlidingUpPanel(
         controller: _panelController,
+        onPanelClosed: () async {
+          controllerRouteSetter.clear();
+          controllerRouteHolds.clear();
+          controllerRouteType.clear();
+          selectedColorIndex = 0;
+        },
         panelBuilder: (ScrollController sc) {
           return Container(
               decoration: ShapeDecoration(
