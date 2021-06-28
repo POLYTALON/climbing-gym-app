@@ -116,7 +116,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                 body: CustomScrollView(slivers: [
               SliverAppBar(
                 leading: RawMaterialButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Navigator.of(context).pop(routeRating),
                     elevation: 2.0,
                     fillColor: Color(0x88000000),
                     child: Icon(Icons.arrow_back_rounded, size: 32.0),
