@@ -256,9 +256,14 @@ class _RouteCardState extends State<RouteCard> {
 
   void onPressRoute() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RouteDetailScreen(route: this.route)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => RouteDetailScreen(route: this.route)))
+        .then((newRating) {
+      setState(() {
+        route.rating = newRating;
+      });
+    });
   }
 
   bool _getIsPrivileged() {
