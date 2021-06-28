@@ -117,8 +117,6 @@ class AuthService with ChangeNotifier {
       nonce: nonce,
     );
 
-    print(appleCredential);
-
     // Create an `OAuthCredential` from the credential returned by Apple.
     final oauthCredential = OAuthProvider("apple.com").credential(
       idToken: appleCredential.identityToken,
@@ -127,7 +125,15 @@ class AuthService with ChangeNotifier {
 
     // Sign in the user with Firebase. If the nonce we generated earlier does
     // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+    UserCredential firebaseUserCredential =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    // Set the displayname on first apple sign in
+    if (firebaseUserCredential.user.displayName == null) {
+      firebaseUserCredential.user.updateDisplayName(
+          appleCredential.givenName + " " + appleCredential.familyName);
+    }
+    return firebaseUserCredential;
   }
 
   Future<void> sendVerifyMail(UserCredential usercred) async {

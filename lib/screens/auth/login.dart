@@ -310,7 +310,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final auth = locator<AuthService>();
       final usercred = await auth.signInWithApple();
       await auth.userSetup(usercred.user.uid.toString());
-
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));
     } on FirebaseAuthException catch (e) {
