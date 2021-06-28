@@ -554,6 +554,7 @@ class _RoutesScreenState extends State<RoutesScreen>
   Widget _getFloatingActionButton(AppUser user) {
     if (_getPrivileges(user)) {
       return FloatingActionButton(
+        heroTag: "routes",
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
         onPressed: () => addPanelController.open(),
