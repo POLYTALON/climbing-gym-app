@@ -54,6 +54,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A503517A2674A04100845650 /* Debug-development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Debug-development.xcconfig"; path = "Flutter/Debug-development.xcconfig"; sourceTree = "<group>"; };
 		A50351802674A45600845650 /* Release-development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Release-development.xcconfig"; path = "Flutter/Release-development.xcconfig"; sourceTree = "<group>"; };
+		A59A21A8268A13D2004BACDE /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		A59C134A218B86B7A3DFA3A2 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		A5BDF562267371AC0042F764 /* Development */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Development; sourceTree = "<group>"; };
 		A5BDF563267371AC0042F764 /* Production */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Production; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				A59A21A8268A13D2004BACDE /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -423,6 +425,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -556,6 +559,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -581,6 +585,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -661,6 +666,7 @@
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -739,6 +745,7 @@
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -814,6 +821,7 @@
 				APP_DISPLAY_NAME = "DEV-PolyApp";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -894,6 +902,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -972,6 +981,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
@@ -1047,6 +1057,7 @@
 				APP_DISPLAY_NAME = PolyApp;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = UWG7XVKYJ9;
 				ENABLE_BITCODE = NO;
