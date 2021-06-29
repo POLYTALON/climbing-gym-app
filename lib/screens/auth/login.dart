@@ -181,6 +181,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Spacer
                     Spacer(),
 
+                    Platform.isIOS
+                        ? SignInWithAppleButton(
+                            style: SignInWithAppleButtonStyle.white,
+                            height: 35,
+                            borderRadius: BorderRadius.circular(24.0),
+                            onPressed: () async {
+                              doAppleLogin();
+                            },
+                          )
+                        : Container(
+                            width: 0.0,
+                            height: 0.0,
+                          ),
+
                     // Button Login with Google
                     ElevatedButton(
                       style: ButtonStyle(
@@ -192,25 +206,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(24.0)),
                           )),
                       onPressed: () => doGoogleLogin(),
-                      child: Text("SignIn with Google",
+                      child: Text("Sign in with Google",
                           style: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w900)),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15)),
                     ),
-
-                    // Button Login with Apple
-                    Platform.isIOS
-                        ? SignInWithAppleButton(
-                            style: SignInWithAppleButtonStyle.white,
-                            borderRadius: BorderRadius.circular(24.0),
-                            onPressed: () async {
-                              doAppleLogin();
-                            },
-                          )
-                        : Container(
-                            width: 0.0,
-                            height: 0.0,
-                          ),
 
                     // Spacer
                     Spacer(flex: 2),
