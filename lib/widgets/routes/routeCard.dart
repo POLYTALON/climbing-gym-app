@@ -244,9 +244,11 @@ class _RouteCardState extends State<RouteCard> {
             MaterialPageRoute(
                 builder: (context) => RouteDetailScreen(route: this.route)))
         .then((newRating) {
-      setState(() {
-        route.rating = newRating;
-      });
+      if (newRating != null) {
+        setState(() {
+          route.rating = newRating;
+        });
+      }
     });
   }
 
