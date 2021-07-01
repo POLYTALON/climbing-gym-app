@@ -104,6 +104,7 @@ class _GymsScreenState extends State<GymsScreen>
   Widget _getFloatingActionButton(bool value) {
     if (value) {
       return FloatingActionButton(
+        heroTag: "gyms",
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
         onPressed: () => _gymsAddPanelController.open(),

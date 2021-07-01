@@ -63,6 +63,7 @@ class _NewsScreenState extends State<NewsScreen>
                           floatingActionButton:
                               _getIsPrivileged(userSnapshot.data)
                                   ? FloatingActionButton(
+                                      heroTag: "news",
                                       child: const Icon(Icons.add),
                                       backgroundColor: Constants.polyGreen,
                                       onPressed: () => _toggleAddPanel(),
