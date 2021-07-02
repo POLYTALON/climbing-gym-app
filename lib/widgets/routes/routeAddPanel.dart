@@ -566,6 +566,11 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
         routesService.addRoute(gymId, difficulty.color, type, holds, builder,
             _image, DateTime.now());
         _panelController.close();
+        controllerRouteSetter.clear();
+        controllerRouteHolds.clear();
+        controllerRouteType.clear();
+        selectedColorIndex = 0;
+        _image = null;
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';
