@@ -51,9 +51,6 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> unregister(String userEmail, String userPassword) async {
-    //AuthCredential credential =
-    //    EmailAuthProvider.credential(email: userEmail, password: userPassword);
-    //await _auth.currentUser.reauthenticateWithCredential(credential);
     await userReauthenticate(userEmail, userPassword);
     try {
       await _auth.currentUser.delete();
@@ -371,9 +368,6 @@ class AuthService with ChangeNotifier {
   Future<bool> deleteUserAccountInDB(
       String userId, String userEmail, String userPassword) async {
     try {
-      //AuthCredential credential = EmailAuthProvider.credential(
-      //    email: _auth.currentUser.email, password: userPassword);
-      //await _auth.currentUser.reauthenticateWithCredential(credential);
       await userReauthenticate(userEmail, userPassword);
       bool isProviderPrivDeleted;
       bool isGymPrivDeleted;
