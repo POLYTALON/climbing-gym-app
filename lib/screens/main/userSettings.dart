@@ -6,18 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-final controllerEmail = TextEditingController(text: "");
-final controllerPassword = TextEditingController(text: "");
-bool _hidePassword = true;
-String _errorMessage = "";
-final authService = locator<AuthService>();
-
-void _toggleHidePassword() {
-  _hidePassword = !_hidePassword;
+class UserSettingsScreen extends StatefulWidget {
+  @override
+  _UserSettingsScreenState createState() => _UserSettingsScreenState();
 }
 
-class UserSettingsScreen extends StatelessWidget {
+class _UserSettingsScreenState extends State<UserSettingsScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controllerEmail = TextEditingController(text: "");
+  final controllerPassword = TextEditingController(text: "");
+  bool _hidePassword = true;
+  String _errorMessage = "";
+  final authService = locator<AuthService>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,53 +200,74 @@ class UserSettingsScreen extends StatelessWidget {
     final userEmail = authService.currentUser.email;
     final userPassword = controllerPassword.text.trim();
 
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(
-            'Delete User Account',
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Would you realy like to delete your User Account?',
-                ),
-              ],
+    if (this._validateAndSave()) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Delete User Account',
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () =>
-                    Navigator.of(context, rootNavigator: true).pop(),
-                child: Text("No")),
-            TextButton(
-                onPressed: () async {
-                  try {
-                    bool isUserInDbDeleted = true;
-                    await authService.deleteUserAccountInDB(id);
-                    if (isUserInDbDeleted) {
-                      await authService.unregister(userEmail, userPassword);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StartScreen()));
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'Would you realy like to delete your User Account?',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  child: Text("No")),
+              TextButton(
+                  onPressed: () async {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    try {
+                      bool isUserInDbDeleted = true;
+                      await authService.deleteUserAccountInDB(
+                          id, userEmail, userPassword);
+                      if (isUserInDbDeleted) {
+                        await authService.unregister(userEmail, userPassword);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StartScreen()));
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      String message;
+                      if (e.code == 'wrong-password') {
+                        message = 'Wrong password provided for that user.';
+                      } else {
+                        message = 'Something went wrong :(';
+                      }
+                      setState(() {
+                        this._errorMessage = message;
+                      });
                     }
-                  } on FirebaseAuthException catch (e) {
-                    String message;
-                    if (e.code == 'wrong-password') {
-                      message = 'Wrong password provided for that user.';
-                    } else {
-                      message = 'Something went wrong :(';
-                    }
-                    //setState
-                  }
-                },
-                child: Text("Yes")),
-          ],
-        );
-      },
-    );
+                  },
+                  child: Text("Yes")),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  bool _validateAndSave() {
+    final FormState form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
   }
 }

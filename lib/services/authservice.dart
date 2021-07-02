@@ -51,10 +51,10 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> unregister(String userEmail, String userPassword) async {
-    AuthCredential credential =
-        EmailAuthProvider.credential(email: userEmail, password: userPassword);
-    await _auth.currentUser.reauthenticateWithCredential(credential);
-
+    //AuthCredential credential =
+    //    EmailAuthProvider.credential(email: userEmail, password: userPassword);
+    //await _auth.currentUser.reauthenticateWithCredential(credential);
+    await userReauthenticate(userEmail, userPassword);
     try {
       await _auth.currentUser.delete();
     } on FirebaseAuthException catch (e) {
@@ -361,15 +361,31 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<bool> deleteUserAccountInDB(String userId) async {
-    bool isProviderPrivDeleted;
-    bool isGymPrivDeleted;
-    isProviderPrivDeleted = await deleteProvidePrivilege(userId);
-    isGymPrivDeleted = await deleteUsersAllGymPrivileges(userId);
-    if (isProviderPrivDeleted && isGymPrivDeleted) {
-      await _firestore.collection('users').doc(userId).delete();
-      return true;
-    } else {
+  Future<UserCredential> userReauthenticate(
+      String userEmail, String userPassword) async {
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: userEmail, password: userPassword);
+    return await _auth.currentUser.reauthenticateWithCredential(credential);
+  }
+
+  Future<bool> deleteUserAccountInDB(
+      String userId, String userEmail, String userPassword) async {
+    try {
+      //AuthCredential credential = EmailAuthProvider.credential(
+      //    email: _auth.currentUser.email, password: userPassword);
+      //await _auth.currentUser.reauthenticateWithCredential(credential);
+      await userReauthenticate(userEmail, userPassword);
+      bool isProviderPrivDeleted;
+      bool isGymPrivDeleted;
+      isProviderPrivDeleted = await deleteProvidePrivilege(userId);
+      isGymPrivDeleted = await deleteUsersAllGymPrivileges(userId);
+      if (isProviderPrivDeleted && isGymPrivDeleted) {
+        await _firestore.collection('users').doc(userId).delete();
+        return true;
+      } else {
+        return false;
+      }
+    } on FirebaseException catch (e) {
       return false;
     }
   }
