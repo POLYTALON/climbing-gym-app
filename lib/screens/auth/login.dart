@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:climbing_gym_app/screens/auth/passwordReset.dart';
 import 'package:climbing_gym_app/screens/auth/register.dart';
 import 'package:climbing_gym_app/screens/start.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../main.dart';
 
@@ -178,6 +181,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Spacer
                     Spacer(),
 
+                    Platform.isIOS
+                        ? SignInWithAppleButton(
+                            style: SignInWithAppleButtonStyle.white,
+                            height: 35,
+                            borderRadius: BorderRadius.circular(24.0),
+                            onPressed: () async {
+                              doAppleLogin();
+                            },
+                          )
+                        : Container(
+                            width: 0.0,
+                            height: 0.0,
+                          ),
+
                     // Button Login with Google
                     ElevatedButton(
                       style: ButtonStyle(
@@ -189,10 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(24.0)),
                           )),
                       onPressed: () => doGoogleLogin(),
-                      child: Text("SignIn with Google",
+                      child: Text("Sign in with Google",
                           style: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w900)),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15)),
                     ),
 
                     // Spacer
@@ -271,6 +289,28 @@ class _LoginScreenState extends State<LoginScreen> {
       final usercred = await auth.signInWithGoogle();
       await auth.userSetup(usercred.user.uid.toString());
 
+      await Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => MyApp()));
+    } on FirebaseAuthException catch (e) {
+      String message;
+      if (e.code == 'user-not-found') {
+        message = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided for that user.';
+      } else {
+        message = 'Something went wrong :(';
+      }
+      setState(() {
+        _errorMessage = message;
+      });
+    }
+  }
+
+  void doAppleLogin() async {
+    try {
+      final auth = locator<AuthService>();
+      final usercred = await auth.signInWithApple();
+      await auth.userSetup(usercred.user.uid.toString());
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));
     } on FirebaseAuthException catch (e) {
