@@ -174,10 +174,10 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   String _getUserRoleForCurrentGym(AppUser user) {
+    if (user.isOperator) return 'Operator';
     if (user == null ||
         user.roles == null ||
         user.roles[user.selectedGym] == null) return '';
-    if (user.isOperator) return 'Operator';
     if (user.roles[user.selectedGym].gymuser) return 'Gym Owner';
     if (user.roles[user.selectedGym].builder) return 'Builder';
     return '';
