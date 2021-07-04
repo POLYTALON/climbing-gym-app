@@ -27,15 +27,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.1.3
   firebase_core: ^1.1.0
-  flutter_svg: ^0.21.0+1
-  google_sign_in: ^4.5.9
+  flutter_svg: ^0.22.0
+  google_sign_in: ^5.0.4
   provider: ^5.0.0
   touchable_opacity: ^1.2.0
-  cloud_firestore: "1.0.7"
+  cloud_firestore: "2.2.2"
   firebase_storage: ^8.0.6
   equatable: ^2.0.0
-  flutter_sliding_up_panel: ^1.2.1
-  image_picker: ^0.7.4
+  sliding_up_panel: ^2.0.0+1
+  image_picker: ^0.8.0+3
   transparent_image: ^2.0.0
   image_picker_web_redux: any
   universal_html: ^2.0.8
@@ -44,6 +44,18 @@ dependencies:
   flutter_native_image: ^0.0.5
   url_launcher: ^6.0.3
   get_it: ^7.1.3
+  fl_chart: ^0.36.1
+  percent_indicator: "^3.0.1"
+  flavorbanner: "0.0.2"
+  toggle_switch: ^1.0.0+1
+  multi_select_flutter: ^4.0.0
+  animated_check: ^1.0.2
+  path_provider: ^2.0.2
+  image: ^3.0.2
+  get_it_mixin: ^3.1.2
+  auto_size_text: ^2.1.0
+  sign_in_with_apple: ^3.0.0
+  crypto: ^3.0.1
 
 dev_dependencies:
   flutter_test:

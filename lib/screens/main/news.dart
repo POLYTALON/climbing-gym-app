@@ -1,25 +1,34 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/widgets/news/newsAddPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsDetailPanel.dart';
 import 'package:climbing_gym_app/widgets/news/newsCard.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 const polyDark = Color(0x121212);
 
-class NewsScreen extends StatelessWidget {
-  final SlidingUpPanelController _newsAddPanelController =
-      SlidingUpPanelController();
+class NewsScreen extends StatefulWidget with GetItStatefulWidgetMixin {
+  @override
+  _NewsScreenState createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen>
+    with GetItStateMixin, AutomaticKeepAliveClientMixin<NewsScreen> {
+  final PanelController _newsAddPanelController = PanelController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
 
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
@@ -31,71 +40,64 @@ class NewsScreen extends StatelessWidget {
             if (userSnapshot.data.selectedGym == null ||
                 userSnapshot.data.selectedGym.isEmpty) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      height: 50,
-                      margin: EdgeInsets.all(16),
-                      decoration: new BoxDecoration(
-                        borderRadius: new BorderRadius.circular(16.0),
-                        color: Colors.green,
-                      ),
-                      child: Center(
-                          child: Text("Please choose your gym",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)))),
-                ],
-              );
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text('Please choose a gym first.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700))),
+                    Icon(Icons.place, color: Colors.white, size: 32.0)
+                  ]);
             } else {
               return StreamProvider<List<News>>.value(
                   initialData: [],
-                  value: DatabaseService()
-                      .streamNews(userSnapshot.data.selectedGym),
+                  value:
+                      NewsService().streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
-                    return ChangeNotifierProvider<NewsDetails>(
-                      create: (_) => NewsDetails(),
-                      child: Stack(children: <Widget>[
-                        Scaffold(
-                            floatingActionButton:
-                                _getIsPrivileged(userSnapshot.data)
-                                    ? FloatingActionButton(
-                                        child: const Icon(Icons.add),
-                                        backgroundColor: Constants.polyGreen,
-                                        onPressed: () => _toggleAddPanel(),
-                                      )
-                                    : null,
-                            body: Container(
-                                color: Constants.polyDark,
-                                child: ListView.builder(
-                                    padding: const EdgeInsets.all(32),
-                                    itemCount: news.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 10.0),
-                                          child: NewsCard(
-                                              news: news[index],
-                                              isDeletable: userSnapshot
-                                                      .data.isOperator
-                                                  ? true
-                                                  : userSnapshot.data
-                                                              .selectedGym ==
-                                                          news[index].gymid &&
-                                                      _getIsPrivileged(
-                                                          userSnapshot.data)));
-                                    }))),
-                        if (_getIsPrivileged(userSnapshot.data))
-                          NewsAddPanel(
-                              panelController: _newsAddPanelController,
-                              gymid: userSnapshot.data.isOperator
-                                  ? ""
-                                  : userSnapshot.data.selectedGym),
-                        NewsDetailPanel()
-                      ]),
-                    );
+                    return Stack(children: <Widget>[
+                      Scaffold(
+                          floatingActionButton:
+                              _getIsPrivileged(userSnapshot.data)
+                                  ? FloatingActionButton(
+                                      heroTag: "news",
+                                      child: const Icon(Icons.add),
+                                      backgroundColor: Constants.polyGreen,
+                                      onPressed: () => _toggleAddPanel(),
+                                    )
+                                  : null,
+                          body: Container(
+                              color: Constants.polyDark,
+                              child: ListView.builder(
+                                  padding: const EdgeInsets.all(32),
+                                  itemCount: news.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: NewsCard(
+                                            news: news[index],
+                                            isDeletable: userSnapshot
+                                                    .data.isOperator
+                                                ? true
+                                                : userSnapshot
+                                                            .data.selectedGym ==
+                                                        news[index].gymid &&
+                                                    _getIsPrivileged(
+                                                        userSnapshot.data)));
+                                  }))),
+                      if (_getIsPrivileged(userSnapshot.data))
+                        NewsAddPanel(
+                            panelController: _newsAddPanelController,
+                            gymid: userSnapshot.data.isOperator
+                                ? ""
+                                : userSnapshot.data.selectedGym),
+                      NewsDetailPanel()
+                    ]);
                   }));
             }
           }
@@ -103,10 +105,10 @@ class NewsScreen extends StatelessWidget {
   }
 
   void _toggleAddPanel() {
-    if (_newsAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _newsAddPanelController.collapse();
+    if (_newsAddPanelController.isPanelOpen) {
+      _newsAddPanelController.close();
     } else {
-      _newsAddPanelController.anchor();
+      _newsAddPanelController.open();
     }
   }
 

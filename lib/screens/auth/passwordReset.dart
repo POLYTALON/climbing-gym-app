@@ -1,10 +1,10 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   @override
@@ -43,23 +43,22 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
-                    controller: controllerEmail,
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.words,
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: EmailFieldValidator.validate,
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 16.0),
-                        hintText: 'max.mustermann@polytalon.de',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24.0),
-                            borderSide:
-                                BorderSide(width: 0, style: BorderStyle.none)),
-                        fillColor: Colors.white,
-                        filled: true),
-                    autofillHints: [AutofillHints.email],
-                  ),
+                      controller: controllerEmail,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.words,
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                      // it's a text field to type in an email address, duh!
+                      keyboardType: TextInputType.emailAddress,
+                      validator: EmailFieldValidator.validate,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 16.0),
+                          hintText: 'max.mustermann@polytalon.com',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                              borderSide: BorderSide(
+                                  width: 0, style: BorderStyle.none)),
+                          fillColor: Colors.white,
+                          filled: true)),
                 ],
               ),
             ),
@@ -77,7 +76,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
             Spacer(flex: 1),
 
             // Button Login
-            TextButton(
+            ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Constants.polyGreen),
@@ -119,7 +118,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
     final email = controllerEmail.text.trim();
     if (_validateAndSave()) {
       try {
-        final auth = Provider.of<AuthService>(context, listen: false);
+        final auth = locator<AuthService>();
         await auth.resetPassword(email);
         controllerEmail.clear();
         setState(() {

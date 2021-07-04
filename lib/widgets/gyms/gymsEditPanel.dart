@@ -1,26 +1,29 @@
 import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
+import 'package:climbing_gym_app/services/pageviewService.dart';
+import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
 
-class GymsEditPanel extends StatefulWidget {
-  GymsEditPanel({
-    Key key,
-  }) : super(key: key);
+class GymsEditPanel extends StatefulWidget with GetItStatefulWidgetMixin {
+  GymsEditPanel({Key key}) : super(key: key);
 
   @override
   _GymsEditPanelState createState() => _GymsEditPanelState();
 }
 
-class _GymsEditPanelState extends State<GymsEditPanel> {
-  final SlidingUpPanelController _panelController = SlidingUpPanelController();
-
+class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  _GymsEditPanelState();
 
   final controllerGymName = TextEditingController(text: "");
   final controllerLocation = TextEditingController(text: "");
@@ -28,29 +31,20 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   final picker = ImagePicker();
 
   final gymService = locator<GymService>();
+  final authService = locator<AuthService>();
+  final pageviewService = locator<PageViewService>();
 
   @override
   Widget build(BuildContext context) {
-    //final gymProvider = Provider.of<GymEdit>(context, listen: true);
-    final gymService = locator<GymService>();
-
-    gymService.addListener(() {
-      if (gymService.showEditPanel == true) {
-        controllerGymName.text = gymService.currentGym.name;
-        controllerLocation.text = gymService.currentGym.city;
-        _panelController.anchor();
-      } else {
-        controllerGymName.text = "";
-        controllerLocation.text = "";
-        _panelController.collapse();
-      }
+    watchX((GymService x) {
+      controllerGymName.text = x.currentGym.value.name;
+      controllerLocation.text = x.currentGym.value.city;
+      return x.currentGym;
     });
 
-    return SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 0.9,
-        panelController: _panelController,
-        child: Container(
+    return PolySlidingUpPanel(
+        controller: gymService.panelControl,
+        panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
               shadows: [
@@ -137,7 +131,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The name should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -178,7 +176,11 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The location should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Location',
                                       contentPadding:
@@ -204,7 +206,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyGreen),
@@ -231,7 +233,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyRed),
@@ -241,7 +243,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.collapse(),
+                                onPressed: () =>
+                                    gymService.panelControl.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Cancel",
@@ -254,17 +257,71 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+
+                    // Delete Button
+                    FutureBuilder<bool>(
+                        future: authService.getIsOperator(),
+                        builder: (context, operatorSnapshot) {
+                          if (!operatorSnapshot.hasData ||
+                              operatorSnapshot.data == false) {
+                            return Container();
+                          } else {
+                            return Container(
+                              padding: EdgeInsets.only(bottom: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 100, right: 100),
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Constants.polyRed),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          24.0)),
+                                            )),
+                                        onPressed: () => onPressDelete(context),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Icon(Icons.delete,
+                                                    size: 20),
+                                              ),
+                                              Text("Delete Gym",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        })
                   ],
                 ))));
-  }
-
-  void toggleSlidingPanel() {
-    if (_panelController.status == SlidingUpPanelStatus.expanded) {
-      _panelController.collapse();
-    } else {
-      _panelController.anchor();
-    }
   }
 
   void _showImageSourceActionSheet(BuildContext context) {
@@ -313,7 +370,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -326,13 +383,66 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
   void editGym() async {
     final gymName = controllerGymName.text.trim();
     final gymLocation = controllerLocation.text.trim();
-    final id = gymService.currentGym.id;
+    final id = getX((GymService x) => x.currentGym.value.id);
 
     if (_validateAndSave()) {
       // edit Gym
       await gymService.editGym(id, gymName, gymLocation, _image);
-      _panelController.collapse();
+      gymService.panelControl.close();
     }
+  }
+
+  void onPressDelete(BuildContext context) {
+    final gymService = locator<GymService>();
+    final authService = locator<AuthService>();
+    final newsService = locator<NewsService>();
+    final routeService = locator<RoutesService>();
+    final id = getX((GymService x) => x.currentGym.value.id);
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Delete Gym',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Would you like to delete this gym?',
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("No")),
+            TextButton(
+                onPressed: () async {
+                  bool isRoutesForGymDelted =
+                      await routeService.cleanUpRoutesForGym(id);
+                  bool isNewsForGymDeleted =
+                      await newsService.cleanUpNewsForGym(id);
+                  bool isGymDeleted = await gymService.deleteGym(id);
+                  bool isUserPrivilegesDeleted =
+                      await authService.deleteUsersGymPrivileges(id);
+
+                  if (isRoutesForGymDelted &&
+                      isGymDeleted &&
+                      isUserPrivilegesDeleted &&
+                      isNewsForGymDeleted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    gymService.panelControl.close();
+                  }
+                },
+                child: Text("Yes")),
+          ],
+        );
+      },
+    );
   }
 
   bool _validateAndSave() {
@@ -344,3 +454,5 @@ class _GymsEditPanelState extends State<GymsEditPanel> {
     return false;
   }
 }
+
+class SlidingUpPanelController {}

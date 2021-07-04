@@ -3,28 +3,31 @@ import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
-import 'package:climbing_gym_app/view_models/gymEdit.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:climbing_gym_app/widgets/gyms/gymsAddPanel.dart';
+import 'package:climbing_gym_app/widgets/gyms/gymsEditBuilderPanel.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymsEditPanel.dart';
+import 'package:climbing_gym_app/widgets/gyms/gymsSetOwnerPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
-import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsScreen extends StatefulWidget {
   @override
   _GymsScreenState createState() => _GymsScreenState();
 }
 
-class _GymsScreenState extends State<GymsScreen> {
-  final SlidingUpPanelController _gymsAddPanelController =
-      SlidingUpPanelController();
+class _GymsScreenState extends State<GymsScreen>
+    with AutomaticKeepAliveClientMixin<GymsScreen> {
+  final PanelController _gymsAddPanelController = PanelController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
@@ -36,82 +39,75 @@ class _GymsScreenState extends State<GymsScreen> {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Constants.polyGreen),
             );
           } else {
-            return ChangeNotifierProvider<GymEdit>(
-                create: (_) => GymEdit(),
-                child: Stack(children: <Widget>[
-                  Scaffold(
-                      // Add gym button
-                      floatingActionButton:
-                          _getFloatingActionButton(snapshot.data.isOperator),
-                      backgroundColor: Constants.polyDark,
+            return Stack(children: <Widget>[
+              Scaffold(
+                  // Add gym button
+                  floatingActionButton:
+                      _getFloatingActionButton(snapshot.data.isOperator),
+                  backgroundColor: Constants.polyDark,
 
-                      // Page content
-                      body: Container(
-                          child: Column(children: [
-                        // Text
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text("Choose Your Gym",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 24)),
-                        ),
+                  // Page content
+                  body: Container(
+                      child: Column(children: [
+                    // Text
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Choose Your Gym",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24)),
+                    ),
 
-                        // GridView (with GymCards)
-                        Expanded(
-                          child: StreamBuilder(
-                              stream: locator<GymService>().streamGyms(),
-                              builder: (context, gymsSnapshot) {
-                                if (snapshot.connectionState !=
-                                        ConnectionState.active ||
-                                    !gymsSnapshot.hasData) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return GridView.count(
-                                      crossAxisCount: 2,
-                                      childAspectRatio:
-                                          (itemWidth / itemHeight),
-                                      children: List.generate(
-                                          gymsSnapshot.data.length, (index) {
-                                        return Container(
-                                            child: GymCard(
-                                                gym: gymsSnapshot.data[index],
-                                                appUser: snapshot.data));
-                                      }));
-                                }
-                              }),
-                        )
-                      ]))),
-                  if (snapshot.data.isOperator)
-                    GymsAddPanel(panelController: _gymsAddPanelController),
-                  if (snapshot.data.isOperator ||
-                      _getIsAnyGymUser(snapshot.data.roles))
-                    GymsEditPanel()
-                ]));
+                    // GridView (with GymCards)
+                    Expanded(
+                      child: StreamBuilder(
+                          stream: locator<GymService>().streamGyms(),
+                          builder: (context, gymsSnapshot) {
+                            if (snapshot.connectionState !=
+                                    ConnectionState.active ||
+                                !gymsSnapshot.hasData) {
+                              return Center(
+                                  child: CircularProgressIndicator(
+                                      color: Constants.polyGreen));
+                            } else {
+                              return GridView.count(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: (itemWidth / itemHeight),
+                                  children: List.generate(
+                                      gymsSnapshot.data.length, (index) {
+                                    return Container(
+                                        child: GymCard(
+                                            gym: gymsSnapshot.data[index],
+                                            appUser: snapshot.data));
+                                  }));
+                            }
+                          }),
+                    )
+                  ]))),
+              if (_getIsAnyGymUser(snapshot.data.roles)) GymsEditBuilderPanel(),
+              if (snapshot.data.isOperator)
+                GymsAddPanel(panelController: _gymsAddPanelController),
+              if (snapshot.data.isOperator) GymsSetOwnerPanel(),
+              if (snapshot.data.isOperator ||
+                  _getIsAnyGymUser(snapshot.data.roles))
+                GymsEditPanel()
+            ]);
           }
         });
-  }
-
-  void toggleSlidingPanel() {
-    if (_gymsAddPanelController.status == SlidingUpPanelStatus.expanded) {
-      _gymsAddPanelController.collapse();
-    } else {
-      _gymsAddPanelController.anchor();
-    }
   }
 
   Widget _getFloatingActionButton(bool value) {
     if (value) {
       return FloatingActionButton(
+        heroTag: "gyms",
         child: const Icon(Icons.add),
         backgroundColor: Constants.polyGreen,
-        onPressed: () => toggleSlidingPanel(),
+        onPressed: () => _gymsAddPanelController.open(),
       );
     }
     return Container(width: 0.0, height: 0.0);

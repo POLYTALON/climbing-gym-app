@@ -1,10 +1,8 @@
-import 'package:climbing_gym_app/models/RouteColor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class AppRoute extends Equatable {
   final String id;
-  final String name;
   final String type;
   final String builder;
   final DateTime date;
@@ -12,27 +10,46 @@ class AppRoute extends Equatable {
   final String gymId;
   final String holds;
   final String imageUrl;
+  bool isTried;
+  bool isDone;
+  int ratingCount;
+  double rating;
 
   @override
-  List<Object> get props =>
-      [id, name, type, builder, date, difficulty, gymId, holds, imageUrl];
+  List<Object> get props => [
+        id,
+        type,
+        builder,
+        date,
+        difficulty,
+        gymId,
+        holds,
+        imageUrl,
+        isTried,
+        isDone,
+        ratingCount,
+        rating,
+      ];
 
   AppRoute(
       {this.id,
-      this.name,
       this.type,
       this.builder,
       this.date,
       this.difficulty,
       this.gymId,
       this.holds,
-      this.imageUrl});
+      this.imageUrl,
+      this.isTried,
+      this.isDone,
+      this.ratingCount,
+      this.rating});
 
-  factory AppRoute.fromFirestore(DocumentSnapshot doc) {
+  factory AppRoute.fromFirestore(DocumentSnapshot doc, bool isTried,
+      bool isDone, int ratingCount, double rating) {
     Map docData = doc.data();
     return AppRoute(
         id: doc.id ?? '',
-        name: docData['name'] ?? '',
         builder: docData['builder'] ?? '',
         date: docData['date'] != null
             ? new DateTime.fromMillisecondsSinceEpoch(
@@ -42,6 +59,10 @@ class AppRoute extends Equatable {
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
         type: docData['type'] ?? '',
-        imageUrl: docData['imageUrl'] ?? '');
+        imageUrl: docData['imageUrl'] ?? '',
+        isTried: isTried,
+        isDone: isDone,
+        ratingCount: ratingCount,
+        rating: rating);
   }
 }

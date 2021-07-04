@@ -1,25 +1,24 @@
 import 'dart:io';
-import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:path/path.dart';
-import 'package:climbing_gym_app/models/Gym.dart';
+import 'package:climbing_gym_app/services/fileService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class DatabaseService {
+class NewsService extends ChangeNotifier with FileService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<void> userSetup(String uid) async {
-    _firestore
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (!documentSnapshot.exists) {
-        _firestore.collection('users').doc(uid).set({'routes': {}});
-      }
-    });
+  final ValueNotifier<News> currentNews = ValueNotifier(News());
+  final PanelController panelControl = PanelController();
+
+  News get currentNewsDetails => currentNews.value;
+
+  void showNews(News news) {
+    currentNews.value = news;
+    panelControl.open();
+    notifyListeners();
   }
 
   Stream<List<News>> streamNews(String gymid) {
@@ -32,13 +31,6 @@ class DatabaseService {
             (list) => list.docs.map((doc) => News.fromFirestore(doc)).toList());
   }
 
-  Stream<List<Gym>> streamGyms() {
-    return _firestore
-        .collection('gyms')
-        .snapshots()
-        .map((list) => list.docs.map((doc) => Gym.fromFirestore(doc)).toList());
-  }
-
   Future<void> addNews(String title, String content, String link, File image,
       String gymid) async {
     try {
@@ -49,7 +41,7 @@ class DatabaseService {
 
       String creator;
       if (gymid.isNotEmpty) {
-        DocumentSnapshot gymDoc =
+        DocumentSnapshot<Map<String, dynamic>> gymDoc =
             await _firestore.collection('gyms').doc(gymid).get();
         creator = gymDoc.data()['name'];
       } else {
@@ -75,10 +67,11 @@ class DatabaseService {
   Future<bool> deleteNews(String id) async {
     try {
       dynamic news = await _firestore.collection('news').doc(id).get();
-      await news.data()['imageUrls'].forEach((imageUrl) async {
+      final List<dynamic> imageUrls = news.data()['imageUrls'];
+      await _firestore.collection('news').doc(id).delete();
+      imageUrls.forEach((imageUrl) async {
         await _storage.refFromURL(imageUrl).delete();
       });
-      await _firestore.collection('news').doc(id).delete();
       return true;
     } on FirebaseException catch (e) {
       print(e);
@@ -86,24 +79,19 @@ class DatabaseService {
     }
   }
 
-  Future<String> uploadFile(File file, String path) async {
-    String url;
-    file = await compressFile(file);
+  Future<bool> cleanUpNewsForGym(String gymid) async {
     try {
-      TaskSnapshot snapshot = await _storage
-          .ref()
-          .child(path + '/' + basename(file.path))
-          .putFile(file);
-      url = await snapshot.ref.getDownloadURL();
+      await _firestore
+          .collection('news')
+          .where('gymid', isEqualTo: gymid)
+          .get()
+          .then((doc) => doc.docs.forEach((news) {
+                deleteNews(news.id);
+              }));
+      return true;
     } on FirebaseException catch (e) {
       print(e);
+      return false;
     }
-    return url;
-  }
-
-  Future<File> compressFile(File file) async {
-    File compressedFile =
-        await FlutterNativeImage.compressImage(file.path, quality: 5);
-    return compressedFile;
   }
 }

@@ -2,27 +2,28 @@ import 'dart:io';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
+import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsAddPanel extends StatefulWidget {
   GymsAddPanel({
     Key key,
-    @required SlidingUpPanelController panelController,
+    @required PanelController panelController,
   })  : _panelController = panelController,
         super(key: key);
 
-  final SlidingUpPanelController _panelController;
+  final PanelController _panelController;
 
   @override
   _GymsAddPanelState createState() => _GymsAddPanelState(_panelController);
 }
 
 class _GymsAddPanelState extends State<GymsAddPanel> {
-  final SlidingUpPanelController _panelController;
+  final PanelController _panelController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _GymsAddPanelState(this._panelController);
@@ -34,11 +35,9 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanelWidget(
-        controlHeight: 1.0,
-        anchor: 0.75,
-        panelController: _panelController,
-        child: Container(
+    return PolySlidingUpPanel(
+        controller: _panelController,
+        panel: Container(
             decoration: ShapeDecoration(
               color: Constants.lightGray,
               shadows: [
@@ -123,7 +122,11 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The title should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding:
@@ -164,7 +167,11 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.name,
+                                  // The name keyboard is optimized for names and phone numbers
+                                  // Therefore we should use the default keyboard
+                                  keyboardType: TextInputType.text,
+                                  // The location should consist of only one line
+                                  maxLines: 1,
                                   decoration: InputDecoration(
                                       hintText: 'Location',
                                       contentPadding:
@@ -198,7 +205,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                   const EdgeInsets.only(left: 10, right: 10),
                               child:
                                   // Accept button
-                                  TextButton(
+                                  ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyGreen),
@@ -225,7 +232,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                             child: Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Constants.polyRed),
@@ -235,7 +242,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                                           borderRadius:
                                               BorderRadius.circular(24.0)),
                                     )),
-                                onPressed: () => _panelController.collapse(),
+                                onPressed: () => _panelController.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("Cancel",
@@ -251,14 +258,6 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                     )
                   ],
                 ))));
-  }
-
-  void toggleSlidingPanel() {
-    if (_panelController.status == SlidingUpPanelStatus.expanded) {
-      _panelController.collapse();
-    } else {
-      _panelController.anchor();
-    }
   }
 
   void _showImageSourceActionSheet(BuildContext context) {
@@ -307,7 +306,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await picker.getImage(source: source, imageQuality: 25);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -326,7 +325,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
       if (_image != null) {
         // create Gym
         await gymService.addGym(gymName, gymLocation, _image);
-        _panelController.collapse();
+        _panelController.close();
       } else {
         setState(() {
           _errorMessage = 'Please add a picture.';

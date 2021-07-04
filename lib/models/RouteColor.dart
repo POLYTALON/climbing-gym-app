@@ -4,7 +4,7 @@ class RouteColor extends Equatable {
   final String color;
   final int colorCode;
 
-  RouteColor({this.color, this.colorCode});
+  RouteColor({this.color = 'default', this.colorCode = 0x00000000});
 
   @override
   List<Object> get props => [color, colorCode];

@@ -1,9 +1,8 @@
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/News.dart';
-import 'package:climbing_gym_app/services/databaseService.dart';
-import 'package:climbing_gym_app/view_models/newsDetails.dart';
+import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -19,9 +18,20 @@ class NewsCard extends StatefulWidget {
 }
 
 class _NewsCardState extends State<NewsCard> {
-  final News news;
-  final bool isDeletable;
+  News news;
+  bool isDeletable;
   _NewsCardState(this.news, this.isDeletable);
+
+  @override
+  void didUpdateWidget(NewsCard oldWidget) {
+    if (news != widget.news || isDeletable != widget.isDeletable) {
+      setState(() {
+        news = widget.news;
+        isDeletable = widget.isDeletable;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +90,9 @@ class _NewsCardState extends State<NewsCard> {
                     child: ClipRRect(
                       child: Stack(
                         children: <Widget>[
-                          Center(child: CircularProgressIndicator()),
+                          Center(
+                              child: CircularProgressIndicator(
+                                  color: Constants.polyGreen)),
                           Center(
                             child: FadeInImage.memoryNetwork(
                               placeholder: kTransparentImage,
@@ -110,12 +122,12 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void onPressNews() {
-    final newsDetails = Provider.of<NewsDetails>(context, listen: false);
+    final newsDetails = locator<NewsService>();
     newsDetails.showNews(this.news);
   }
 
   void onPressDelete(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    final newsServ = locator<NewsService>();
 
     showDialog(
       context: context,
@@ -140,7 +152,7 @@ class _NewsCardState extends State<NewsCard> {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
-                  bool isDeleted = await db.deleteNews(this.news.id);
+                  bool isDeleted = await newsServ.deleteNews(this.news.id);
                   if (isDeleted) {
                     Navigator.of(context, rootNavigator: true).pop();
                   }

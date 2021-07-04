@@ -1,9 +1,14 @@
+import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
+import 'dart:math';
 
 class AuthService with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
@@ -18,13 +23,30 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> userSetup(String uid) async {
+    _firestore
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (!documentSnapshot.exists) {
+        _firestore
+            .collection('users')
+            .doc(uid)
+            .set({'routes': {}, 'email': _auth.currentUser.email});
+      }
+    });
+  }
+
+  User get currentUser => _auth.currentUser;
+
   bool get loggedIn => _loggedIn;
 
   Future<UserCredential> register(
       String displayName, String userEmail, String userPassword) async {
     UserCredential newUser = await _auth.createUserWithEmailAndPassword(
         email: userEmail, password: userPassword);
-    newUser.user.updateProfile(displayName: displayName);
+    newUser.user.updateDisplayName(displayName);
     return newUser;
   }
 
@@ -61,6 +83,59 @@ class AuthService with ChangeNotifier {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  /// Generates a cryptographically secure random nonce, to be included in a
+  /// credential request.
+  String generateNonce([int length = 32]) {
+    final charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  Future<UserCredential> signInWithApple() async {
+    // To prevent replay attacks with the credential returned from Apple, we
+    // include a nonce in the credential request. When signing in with
+    // Firebase, the nonce in the id token returned by Apple, is expected to
+    // match the sha256 hash of `rawNonce`.
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: nonce,
+    );
+
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    UserCredential firebaseUserCredential =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    // Set the displayname on first apple sign in
+    if (firebaseUserCredential.user.displayName == null) {
+      firebaseUserCredential.user.updateDisplayName(
+          appleCredential.givenName + " " + appleCredential.familyName);
+    }
+    return firebaseUserCredential;
+  }
+
   Future<void> sendVerifyMail(UserCredential usercred) async {
     return await usercred.user.sendEmailVerification();
   }
@@ -76,24 +151,26 @@ class AuthService with ChangeNotifier {
           .doc(_auth.currentUser?.uid ?? '')
           .snapshots()
           .asyncMap((userDoc) async {
-        bool isOperator = await _getIsOperator();
+        bool isOperator = await getIsOperator();
         String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
+        Map<String, dynamic> userRoutes = await getUserRoutes();
         return AppUser.fromFirebase(
-            _auth.currentUser, isOperator, userRoles, selectedGym);
+            _auth.currentUser, isOperator, userRoles, selectedGym, userRoutes);
       });
     }
     return Stream.empty();
   }
 
-  Future<bool> _getIsOperator() async {
+  Future<bool> getIsOperator() async {
     if (_auth.currentUser != null) {
       try {
-        CollectionReference docRef = _firestore
+        CollectionReference<Map<String, dynamic>> docRef = _firestore
             .collection('users')
             .doc(_auth.currentUser.uid)
             .collection('private');
-        DocumentSnapshot snapshot = await docRef.doc('operator').get();
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await docRef.doc('operator').get();
         if (snapshot.exists) {
           return snapshot.data()['operator'];
         }
@@ -130,10 +207,147 @@ class AuthService with ChangeNotifier {
     return Map<String, UserRole>();
   }
 
+  Future<Map<String, dynamic>> getUserRoutes() async {
+    if (_auth.currentUser != null) {
+      Map<String, dynamic> userRoutes = {};
+      try {
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .snapshots()
+            .first
+            .then((snapshot) {
+          Map<String, dynamic> data = snapshot.data();
+
+          if (data.containsKey('routes')) {
+            userRoutes = data['routes'];
+          }
+        });
+      } on FirebaseException catch (e) {
+        print(e);
+      }
+      return userRoutes;
+    }
+    return {};
+  }
+
+  Future<void> updateUserRouteStatus(AppRoute route) async {
+    DocumentSnapshot<Map<String, dynamic>> userDoc =
+        await _firestore.collection('users').doc(_auth.currentUser.uid).get();
+    dynamic userRoutes = userDoc.data()['routes'];
+    if (userRoutes == null) {
+      userRoutes = Map<String, dynamic>();
+    }
+    if (userRoutes[route.gymId] == null) {
+      userRoutes[route.gymId] = Map<String, dynamic>();
+    }
+
+    if (route.isDone || route.isTried) {
+      userRoutes[route.gymId]
+          [route.id] = {"difficulty": route.difficulty, "isDone": route.isDone};
+    } else {
+      userRoutes[route.gymId][route.id] = null;
+      userRoutes[route.gymId]
+          .removeWhere((String key, dynamic value) => key == route.id);
+    }
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .update({"routes": userRoutes});
+  }
+
   Future<void> selectGym(String gymid) async {
     await _firestore
         .collection('users')
         .doc(_auth.currentUser.uid)
-        .set({"selectedGym": gymid});
+        .update({"selectedGym": gymid});
+  }
+
+  Future<bool> deleteUsersGymPrivileges(String gymid) async {
+    try {
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                _firestore
+                    .collection('users')
+                    .doc(user.id)
+                    .collection('privileges')
+                    .get()
+                    .then((docu) => docu.docs.forEach((gym) {
+                          if (gym.id == gymid) {
+                            _firestore
+                                .collection('users')
+                                .doc(user.id)
+                                .collection('privileges')
+                                .doc(gym.id)
+                                .delete();
+                          }
+                        }));
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  String getRegistrationDateFormatted() {
+    String convertedDateTime = '';
+    if (_auth.currentUser != null) {
+      DateTime time = _auth.currentUser.metadata.creationTime;
+      convertedDateTime =
+          "${time.day.toString().padLeft(2, '0')}.${time.month.toString().padLeft(2, '0')}.${time.year.toString()}";
+    }
+    return convertedDateTime;
+  }
+
+  Future<bool> setGymOwner(String email, String gymid) async {
+    try {
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                if (user.exists) {
+                  if (user.data()['email'] == email) {
+                    _firestore
+                        .collection('users')
+                        .doc(user.id)
+                        .collection('privileges')
+                        .doc(gymid)
+                        .set({'gymuser': true});
+                  }
+                }
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> setBuilder(String email, String gymid) async {
+    try {
+      await selectGym(gymid);
+      await _firestore
+          .collection('users')
+          .get()
+          .then((doc) => doc.docs.forEach((user) {
+                if (user.exists) {
+                  if (user.data()['email'] == email) {
+                    _firestore
+                        .collection('users')
+                        .doc(user.id)
+                        .collection('privileges')
+                        .doc(gymid)
+                        .set({'builder': true});
+                  }
+                }
+              }));
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
   }
 }

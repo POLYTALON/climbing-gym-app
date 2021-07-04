@@ -4,7 +4,6 @@ import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
@@ -19,12 +18,24 @@ class GymCard extends StatefulWidget {
 }
 
 class _GymCardState extends State<GymCard> {
-  final Gym gym;
-  final AppUser appUser;
+  Gym gym;
+  AppUser appUser;
   _GymCardState(this.gym, this.appUser);
+
+  @override
+  void didUpdateWidget(GymCard oldWidget) {
+    if (gym != widget.gym || appUser != widget.appUser) {
+      setState(() {
+        gym = widget.gym;
+        appUser = widget.appUser;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
+    final auth = locator<AuthService>();
     return StreamBuilder<AppUser>(
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
@@ -57,9 +68,11 @@ class _GymCardState extends State<GymCard> {
                     children: <Widget>[
                       // Image
                       Expanded(
-                          flex: 5,
+                          flex: 4,
                           child: Stack(children: <Widget>[
-                            Center(child: CircularProgressIndicator()),
+                            Center(
+                                child: CircularProgressIndicator(
+                                    color: Constants.polyGreen)),
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
@@ -68,11 +81,37 @@ class _GymCardState extends State<GymCard> {
                                   image: gym.imageUrl,
                                   fit: BoxFit.fill),
                             ),
+                            if (_getIsPrivileged())
+                              FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Container(
+                                    color: Colors.grey[400],
+                                    child: Column(
+                                      //mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: Colors.white,
+                                          onPressed: onPressEdit,
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.account_circle_outlined),
+                                          color: Colors.white,
+                                          onPressed: () =>
+                                              onPressAccountButton(),
+                                        )
+                                      ],
+                                    )),
+                              ),
                           ])),
                       // Title
                       Expanded(
-                          flex: 7,
+                          flex: 6,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FittedBox(
                                   fit: BoxFit.fitWidth,
@@ -92,7 +131,7 @@ class _GymCardState extends State<GymCard> {
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          8.0, 0.0, 8.0, 0.0),
+                                          8.0, 0.0, 8.0, 8.0),
                                       child: Text(gym.city,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -101,17 +140,6 @@ class _GymCardState extends State<GymCard> {
                                               fontSize: 20)),
                                     ),
                                   )),
-                              if (_getIsPrivileged())
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.white,
-                                      onPressed: onPressEdit,
-                                    ),
-                                  ],
-                                )
                             ],
                           )),
                     ],
@@ -131,5 +159,13 @@ class _GymCardState extends State<GymCard> {
     if (appUser == null) return false;
     return appUser.isOperator ||
         (appUser.roles[gym.id] != null && appUser.roles[gym.id].gymuser);
+  }
+
+  void onPressAccountButton() {
+    if (appUser.isOperator) {
+      locator<GymService>().showSetOwner(this.gym);
+    } else if (appUser.roles.containsKey(this.gym.id)) {
+      locator<GymService>().showEditBuilder(this.gym);
+    }
   }
 }

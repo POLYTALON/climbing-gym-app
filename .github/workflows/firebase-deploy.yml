@@ -1,4 +1,5 @@
 name: Firebase Deploy
+
 on:
   push:
     branches:
@@ -9,6 +10,7 @@ jobs:
   build:
     name: Build and deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 17
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
@@ -16,12 +18,31 @@ jobs:
           java-version: "12.x"
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: "2.0.5"
+          channel: "stable"
+          flutter-version: "2.2.2"
       - run: flutter pub get
+
+      # Copy the productive index.html when pushing to main
+      - run: ./web/copyIndex/copyIndexHtml.sh productive
+        if: github.ref == 'refs/heads/main'
+      # Copy the development index.html when not pushing to main
+      - run: ./web/copyIndex/copyIndexHtml.sh development
+        if: github.ref != 'refs/heads/main'
+
       - run: flutter build web
-      - name: Deploy to Firebase
+
+      - name: Deploy to Production Firebase
+        if: github.ref == 'refs/heads/main'
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --project polyapp-d3d40 --token $FIREBASE_TOKEN
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+
+      - name: Deploy to Development Firebase
+        if: github.ref != 'refs/heads/main'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project polyapp-dev --token $FIREBASE_TOKEN
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
