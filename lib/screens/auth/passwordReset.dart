@@ -44,6 +44,10 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                   ),
                   TextFormField(
                       controller: controllerEmail,
+                      autofillHints: [
+                        AutofillHints.email,
+                        AutofillHints.username
+                      ],
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),
