@@ -150,14 +150,12 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   bool _getPrivileges(AppUser user) {
-    if (user == null ||
-        user.roles == null ||
-        user.roles[user.selectedGym] == null) return false;
+    if (user == null) return false;
     if (user.isOperator) return true;
-    if (user.roles[user.selectedGym].gymuser != null &&
-        user.roles[user.selectedGym].gymuser) return true;
-    if (user.roles[user.selectedGym].builder != null &&
-        user.roles[user.selectedGym].builder) return true;
+    if (user.roles == null || user.roles[user.selectedGym] == null)
+      return false;
+    if (user.roles[user.selectedGym].gymuser) return true;
+    if (user.roles[user.selectedGym].builder) return true;
     return false;
   }
 
@@ -176,10 +174,10 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   String _getUserRoleForCurrentGym(AppUser user) {
+    if (user.isOperator) return 'Operator';
     if (user == null ||
         user.roles == null ||
         user.roles[user.selectedGym] == null) return '';
-    if (user.isOperator) return 'Operator';
     if (user.roles[user.selectedGym].gymuser) return 'Gym Owner';
     if (user.roles[user.selectedGym].builder) return 'Builder';
     return '';
