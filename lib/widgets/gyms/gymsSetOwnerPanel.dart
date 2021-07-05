@@ -202,35 +202,34 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setGymOwner(userEmail, id);
-    if (isSet == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Set Gym Owner',
+    String dialogText = isSet
+        ? userEmail + ' has been set as the gym user.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isSet ? 'Set Gym Owner' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
             ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been set as the gym user.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isSet) {
       gymService.showSetOwnerPanel.close();
-    } else {
-      print("error");
     }
   }
 
@@ -239,35 +238,36 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
     final userEmail = controllerEmail.text.trim();
     final authService = locator<AuthService>();
     bool isRemove = await authService.removeGymOwnerOrBuilder(userEmail, id);
-    if (isRemove == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Remove Gym Owner',
+    String dialogText = isRemove
+        ? userEmail + ' has been removed as the gym user.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isRemove ? 'Remove Gym Owner' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  dialogText,
+                ),
+              ],
             ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been removed as the gym user.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isRemove) {
       gymService.showSetOwnerPanel.close();
-    } else {
-      print("error");
     }
   }
 }

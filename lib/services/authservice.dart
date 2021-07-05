@@ -311,22 +311,22 @@ class AuthService with ChangeNotifier {
 
   Future<bool> setGymOwner(String email, String gymid) async {
     try {
-      await _firestore
-          .collection('users')
-          .get()
-          .then((doc) => doc.docs.forEach((user) {
-                if (user.exists) {
-                  if (user.data()['email'] == email) {
-                    _firestore
-                        .collection('users')
-                        .doc(user.id)
-                        .collection('privileges')
-                        .doc(gymid)
-                        .set({'gymuser': true});
-                  }
-                }
-              }));
-      return true;
+      var doc = await _firestore.collection('users').get();
+      bool isFound = false;
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await _firestore
+                .collection('users')
+                .doc(user.id)
+                .collection('privileges')
+                .doc(gymid)
+                .set({'gymuser': true});
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
     } on FirebaseException catch (e) {
       print(e);
       return false;
@@ -336,22 +336,23 @@ class AuthService with ChangeNotifier {
   Future<bool> setBuilder(String email, String gymid) async {
     try {
       await selectGym(gymid);
-      await _firestore
-          .collection('users')
-          .get()
-          .then((doc) => doc.docs.forEach((user) {
-                if (user.exists) {
-                  if (user.data()['email'] == email) {
-                    _firestore
-                        .collection('users')
-                        .doc(user.id)
-                        .collection('privileges')
-                        .doc(gymid)
-                        .set({'builder': true});
-                  }
-                }
-              }));
-      return true;
+      var doc = await _firestore.collection('users').get();
+      bool isFound = false;
+
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await _firestore
+                .collection('users')
+                .doc(user.id)
+                .collection('privileges')
+                .doc(gymid)
+                .set({'builder': true});
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
     } on FirebaseException catch (e) {
       print(e);
       return false;
@@ -446,17 +447,17 @@ class AuthService with ChangeNotifier {
   Future<bool> removeGymOwnerOrBuilder(String email, String gymId) async {
     try {
       await selectGym(gymId);
-      await _firestore
-          .collection('users')
-          .get()
-          .then((doc) => doc.docs.forEach((user) {
-                if (user.exists) {
-                  if (user.data()['email'] == email) {
-                    deleteGymPrivilege(user.id, gymId);
-                  }
-                }
-              }));
-      return true;
+      bool isFound = false;
+      var doc = await _firestore.collection('users').get();
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await deleteGymPrivilege(user.id, gymId);
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
     } on FirebaseException catch (e) {
       print(e);
       return false;

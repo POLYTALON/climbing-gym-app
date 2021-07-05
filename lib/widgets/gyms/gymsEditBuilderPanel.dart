@@ -205,35 +205,34 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setBuilder(userEmail, id);
+    String dialogText = isSet
+        ? userEmail + ' has been set as a builder.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isSet ? 'Set Builder' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
     if (isSet == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Set Builder',
-            ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been set as a builder.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
       gymService.showEditBuilderPanel.close();
-    } else {
-      print("error");
     }
   }
 
@@ -242,35 +241,34 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isRemove = await authService.removeGymOwnerOrBuilder(userEmail, id);
-    if (isRemove == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Remove Builder',
+    String dialogText = isRemove
+        ? userEmail + ' has been removed as a builder.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isRemove ? 'Remove Builder' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
             ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been removed as a builder.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isRemove) {
       gymService.showEditBuilderPanel.close();
-    } else {
-      print("error");
     }
   }
 }
