@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final controllerPasswordRepeat = TextEditingController(text: "");
   String _errorMessage = "";
   bool isLoggedIn = false;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +166,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // Spacer
               Spacer(flex: 1),
 
+              // Checkbox Privat policy
+              Theme(
+                data: ThemeData(unselectedWidgetColor: Colors.white),
+                child: Row(children: [
+                  Checkbox(
+                    value: isChecked,
+                    checkColor: Colors.green,
+                    activeColor: Colors.white,
+                    onChanged: (bool value) {
+                      setState(() {
+                        isChecked = value;
+                      });
+                    },
+                  ),
+                  Flexible(
+                    child: Text(
+                        "I have read and accepted the Privacy Policy (link). ",
+                        style: TextStyle(color: Colors.white)),
+                  )
+                ]),
+              ),
+
               // Button Register
               ElevatedButton(
                 style: ButtonStyle(
@@ -174,7 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0)),
                     )),
-                onPressed: isLoggedIn ? null : () => doUserRegistration(),
+                onPressed:
+                    isLoggedIn && isChecked ? null : () => doUserRegistration(),
                 child: Text("Register",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.w900)),
@@ -221,30 +245,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
     final String passwordRepeat = controllerPasswordRepeat.text.trim();
+    if (isChecked) {
+      if (_validateAndSave()) {
+        if (password == passwordRepeat) {
+          try {
+            final auth = locator<AuthService>();
+            final usercred = await auth.register(displayName, email, password);
+            await auth.sendVerifyMail(usercred);
+            await auth.userSetup(usercred.user.uid.toString());
 
-    if (_validateAndSave()) {
-      if (password == passwordRepeat) {
-        try {
-          final auth = locator<AuthService>();
-          final usercred = await auth.register(displayName, email, password);
-          await auth.sendVerifyMail(usercred);
-          await auth.userSetup(usercred.user.uid.toString());
-
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-            (Route<dynamic> route) => false,
-          );
-        } catch (e) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+              (Route<dynamic> route) => false,
+            );
+          } catch (e) {
+            setState(() {
+              _errorMessage = e.toString();
+            });
+          }
+        } else {
           setState(() {
-            _errorMessage = e.toString();
+            _errorMessage = "Die Passwörter stimmen nicht überein!";
           });
         }
-      } else {
-        setState(() {
-          _errorMessage = "Die Passwörter stimmen nicht überein!";
-        });
       }
+    } else {
+      setState(() {
+        _errorMessage = "Die Datenschutzerklärung muss akzeptiert werden.";
+      });
     }
   }
 
