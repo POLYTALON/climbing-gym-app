@@ -357,6 +357,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                         keyboardType: TextInputType.text,
                                         // The type should consist of only one line
                                         maxLines: 1,
+                                        maxLength: 12,
                                         decoration: InputDecoration(
                                             hintText: 'e.g. Competition',
                                             contentPadding:
