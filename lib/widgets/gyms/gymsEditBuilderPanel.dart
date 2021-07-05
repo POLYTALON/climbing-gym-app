@@ -160,6 +160,41 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                               ),
                             ),
                           ],
+                        )),
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // Revoke button
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => removeBuilder(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Remove Builder",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ))
                   ],
                 ))));
@@ -170,35 +205,70 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setBuilder(userEmail, id);
+    String dialogText = isSet
+        ? userEmail + ' has been set as a builder.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isSet ? 'Set Builder' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
     if (isSet == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Set Builder',
-            ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been set as a builder.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
       gymService.showEditBuilderPanel.close();
-    } else {
-      print("error");
+    }
+  }
+
+  void removeBuilder() async {
+    final id = gymService.currentGym.value.id;
+    final authService = locator<AuthService>();
+    final userEmail = controllerEmail.text.trim();
+    bool isRemove = await authService.removeGymOwnerOrBuilder(userEmail, id);
+    String dialogText = isRemove
+        ? userEmail + ' has been removed as a builder.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isRemove ? 'Remove Builder' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isRemove) {
+      gymService.showEditBuilderPanel.close();
     }
   }
 }

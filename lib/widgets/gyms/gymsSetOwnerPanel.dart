@@ -157,6 +157,41 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
                               ),
                             ),
                           ],
+                        )),
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // Revoke button
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Constants.polyRed),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0)),
+                                      )),
+                                  onPressed: () => removeGymOwner(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Remove Gym Owner",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ))
                   ],
                 ))));
@@ -167,35 +202,72 @@ class _GymsSetOwnerPanel extends State<GymsSetOwnerPanel> {
     final authService = locator<AuthService>();
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setGymOwner(userEmail, id);
-    if (isSet == true) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              'Set Gym Owner',
+    String dialogText = isSet
+        ? userEmail + ' has been set as the gym user.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isSet ? 'Set Gym Owner' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(dialogText),
+              ],
             ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    userEmail + ' has been set as the gym user.',
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("Close")),
-            ],
-          );
-        },
-      );
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isSet) {
       gymService.showSetOwnerPanel.close();
-    } else {
-      print("error");
+    }
+  }
+
+  void removeGymOwner() async {
+    final id = gymService.currentGym.value.id;
+    final userEmail = controllerEmail.text.trim();
+    final authService = locator<AuthService>();
+    bool isRemove = await authService.removeGymOwnerOrBuilder(userEmail, id);
+    String dialogText = isRemove
+        ? userEmail + ' has been removed as the gym user.'
+        : userEmail + ' has not been found';
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            isRemove ? 'Remove Gym Owner' : 'Error',
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  dialogText,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text("Close")),
+          ],
+        );
+      },
+    );
+    if (isRemove) {
+      gymService.showSetOwnerPanel.close();
     }
   }
 }

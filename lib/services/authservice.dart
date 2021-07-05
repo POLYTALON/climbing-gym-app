@@ -50,6 +50,15 @@ class AuthService with ChangeNotifier {
     return newUser;
   }
 
+  Future<void> unregister(String userEmail, String userPassword) async {
+    await userReauthenticate(userEmail, userPassword);
+    try {
+      await _auth.currentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _auth.signOut();
@@ -151,8 +160,11 @@ class AuthService with ChangeNotifier {
           .doc(_auth.currentUser?.uid ?? '')
           .snapshots()
           .asyncMap((userDoc) async {
+        String selectedGym = '';
+        if (userDoc.id.isNotEmpty && userDoc.data().isNotEmpty) {
+          selectedGym = userDoc.data()['selectedGym'] ?? '';
+        }
         bool isOperator = await getIsOperator();
-        String selectedGym = userDoc.data()['selectedGym'] ?? '';
         Map<String, UserRole> userRoles = await _getUserRoles();
         Map<String, dynamic> userRoutes = await getUserRoutes();
         return AppUser.fromFirebase(
@@ -263,7 +275,7 @@ class AuthService with ChangeNotifier {
         .update({"selectedGym": gymid});
   }
 
-  Future<bool> deleteUsersGymPrivileges(String gymid) async {
+  Future<bool> deleteInAllUsersGymPrivilege(String gymid) async {
     try {
       await _firestore
           .collection('users')
@@ -276,12 +288,7 @@ class AuthService with ChangeNotifier {
                     .get()
                     .then((docu) => docu.docs.forEach((gym) {
                           if (gym.id == gymid) {
-                            _firestore
-                                .collection('users')
-                                .doc(user.id)
-                                .collection('privileges')
-                                .doc(gym.id)
-                                .delete();
+                            deleteGymPrivilege(user.id, gym.id);
                           }
                         }));
               }));
@@ -304,22 +311,22 @@ class AuthService with ChangeNotifier {
 
   Future<bool> setGymOwner(String email, String gymid) async {
     try {
-      await _firestore
-          .collection('users')
-          .get()
-          .then((doc) => doc.docs.forEach((user) {
-                if (user.exists) {
-                  if (user.data()['email'] == email) {
-                    _firestore
-                        .collection('users')
-                        .doc(user.id)
-                        .collection('privileges')
-                        .doc(gymid)
-                        .set({'gymuser': true});
-                  }
-                }
-              }));
-      return true;
+      var doc = await _firestore.collection('users').get();
+      bool isFound = false;
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await _firestore
+                .collection('users')
+                .doc(user.id)
+                .collection('privileges')
+                .doc(gymid)
+                .set({'gymuser': true});
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
     } on FirebaseException catch (e) {
       print(e);
       return false;
@@ -329,22 +336,128 @@ class AuthService with ChangeNotifier {
   Future<bool> setBuilder(String email, String gymid) async {
     try {
       await selectGym(gymid);
+      var doc = await _firestore.collection('users').get();
+      bool isFound = false;
+
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await _firestore
+                .collection('users')
+                .doc(user.id)
+                .collection('privileges')
+                .doc(gymid)
+                .set({'builder': true});
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<UserCredential> userReauthenticate(
+      String userEmail, String userPassword) async {
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: userEmail, password: userPassword);
+    return await _auth.currentUser.reauthenticateWithCredential(credential);
+  }
+
+  Future<bool> deleteUserAccountInDB(
+      String userId, String userEmail, String userPassword) async {
+    try {
+      await userReauthenticate(userEmail, userPassword);
+      bool isProviderPrivDeleted;
+      bool isGymPrivDeleted;
+      isProviderPrivDeleted = await deleteProvidePrivilege(userId);
+      isGymPrivDeleted = await deleteUsersAllGymPrivileges(userId);
+      if (isProviderPrivDeleted && isGymPrivDeleted) {
+        await _firestore.collection('users').doc(userId).delete();
+        return true;
+      } else {
+        return false;
+      }
+    } on FirebaseException catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deleteProvidePrivilege(String userId) async {
+    try {
       await _firestore
           .collection('users')
+          .doc(userId)
+          .collection("private")
+          .doc("operator")
+          .delete();
+      return true;
+    } on FirebaseException catch (e) {
+      if (e.code == "permission-denied") {
+        //print(e.code);
+        return true;
+      } else {
+        print(e);
+        return false;
+      }
+    }
+  }
+
+  Future<bool> deleteUsersAllGymPrivileges(String userId) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection("privileges")
           .get()
-          .then((doc) => doc.docs.forEach((user) {
-                if (user.exists) {
-                  if (user.data()['email'] == email) {
-                    _firestore
-                        .collection('users')
-                        .doc(user.id)
-                        .collection('privileges')
-                        .doc(gymid)
-                        .set({'builder': true});
-                  }
+          .then((doc) => doc.docs.forEach((gymPrivilege) {
+                if (gymPrivilege.exists) {
+                  deleteGymPrivilege(userId, gymPrivilege.id);
                 }
               }));
       return true;
+    } on FirebaseException catch (e) {
+      if (e.code == "permission-denied") {
+        //print(e.code);
+        return true;
+      } else {
+        print(e);
+        return false;
+      }
+    }
+  }
+
+  Future<bool> deleteGymPrivilege(String userId, String gymId) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection("privileges")
+          .doc(gymId)
+          .delete();
+      return true;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> removeGymOwnerOrBuilder(String email, String gymId) async {
+    try {
+      await selectGym(gymId);
+      bool isFound = false;
+      var doc = await _firestore.collection('users').get();
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await deleteGymPrivilege(user.id, gymId);
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
     } on FirebaseException catch (e) {
       print(e);
       return false;
