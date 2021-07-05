@@ -74,6 +74,8 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       controller: controller,
       panel: panel,
       panelBuilder: panelBuilder,
+      backdropEnabled: true,
+      backdropTapClosesPanel: true,
       onPanelClosed: (() {
         pageviewService.setSwipingAllowed(true);
         setState(() {});
