@@ -226,9 +226,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   onPressed: () async {
                     Navigator.of(context, rootNavigator: true).pop();
                     try {
-                      bool isUserInDbDeleted = true;
-                      await authService.deleteUserAccountInDB(
-                          id, userEmail, userPassword);
+                      bool isUserInDbDeleted = await authService
+                          .deleteUserAccountInDB(id, userEmail, userPassword);
                       if (isUserInDbDeleted) {
                         await authService.unregister(userEmail, userPassword);
                         Navigator.push(
