@@ -15,9 +15,8 @@ class AboutScreen extends StatelessWidget {
               //automaticallyImplyLeading: false, // removes back-arrow
               actions: [
                 IconButton(
-                  icon: Image.asset('assets/img/polytalon_logo_notext.png'),
-                  onPressed: () {},
-                )
+                    icon: Image.asset('assets/img/polytalon_logo_notext.png'),
+                    onPressed: null)
               ],
               title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

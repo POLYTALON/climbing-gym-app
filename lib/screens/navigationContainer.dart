@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/locator.dart';
+import 'package:climbing_gym_app/screens/about.dart';
 import 'package:climbing_gym_app/screens/main/gyms.dart';
 import 'package:climbing_gym_app/screens/main/home.dart';
 import 'package:climbing_gym_app/screens/main/news.dart';
@@ -50,7 +51,12 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
               actions: [
                 IconButton(
                   icon: Image.asset('assets/img/polytalon_logo_notext.png'),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AboutScreen()),
+                    );
+                  },
                 )
               ],
               title: Text(_title,
