@@ -3,8 +3,10 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/name_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'login.dart';
 
@@ -181,10 +183,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   Flexible(
-                    child: Text(
-                        "I have read and accepted the Privacy Policy (link). ",
-                        style: TextStyle(color: Colors.white)),
-                  )
+                      child: RichText(
+                          text: TextSpan(children: [
+                    TextSpan(
+                      text: "I have read and accepted the",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    TextSpan(
+                        text: " Privacy Policy.",
+                        style: TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launch(
+                                "https://polytalon.com/datenschutzerklaerung/");
+                          })
+                  ])))
                 ]),
               ),
 
