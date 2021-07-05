@@ -45,147 +45,153 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 ),
               ))),
-      body: Center(
+      body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(
               left: 19.0, right: 19.0, top: 30.0, bottom: 50.0),
-          constraints: BoxConstraints.expand(),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 18.0, right: 18.0, top: 18.0, bottom: 15.0),
-              child: Text("Delete User Account",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-              child: PreferredSize(
-                preferredSize: Size.fromHeight(2.0),
-                child: Container(
-                  color: Constants.polyDark,
-                  height: 2.0,
-                  margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 18.0, right: 18.0, top: 18.0, bottom: 15.0),
+                  child: Text("Delete User Account",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                      )),
                 ),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-                // SlidingUpPanel content
-                child: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Container Delete User Account
-                        Container(
-                            padding: EdgeInsets.only(
-                                top: 16.0, left: 16.0, right: 16.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                  child: PreferredSize(
+                    preferredSize: Size.fromHeight(2.0),
+                    child: Container(
+                      color: Constants.polyDark,
+                      height: 2.0,
+                      margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+                    ),
+                  ),
+                ),
+                Padding(
+                    padding:
+                        EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                    // SlidingUpPanel content
+                    child: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
                             child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Enter your Password',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Divider(
-                                    color: Constants.polyGray,
-                                    thickness: 2,
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                      controller: controllerPassword,
-                                      validator:
-                                          PasswordFieldValidator.validate,
-                                      autocorrect: false,
-                                      obscureText: _hidePassword,
-                                      enableSuggestions: false,
-                                      textCapitalization:
-                                          TextCapitalization.none,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w800),
-                                      // The name keyboard is optimized for names (and phone numbers)
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      // The setter should consist of only one line
-                                      maxLines: 1,
-                                      decoration: InputDecoration(
-                                        hintText: '********',
-                                        contentPadding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(24.0),
-                                            borderSide: BorderSide(
-                                                width: 0,
-                                                style: BorderStyle.none)),
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        suffixIcon: IconButton(
-                                            icon: Icon(
-                                              _hidePassword
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Constants.polyDark,
-                                            ),
-                                            onPressed: _toggleHidePassword),
-                                      )),
-                                ])),
-                        // Error Message
-                        Center(
-                            child: Text(_errorMessage,
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w800))),
-                        // Button Delete User Account
-                        Container(
-                            padding: EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Constants.polyRed),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Container Delete User Account
+                            Container(
+                                padding: EdgeInsets.only(
+                                    top: 16.0, left: 16.0, right: 16.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Enter your Password',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Constants.polyGray,
+                                        thickness: 2,
+                                        height: 20,
+                                      ),
+                                      TextFormField(
+                                          controller: controllerPassword,
+                                          validator:
+                                              PasswordFieldValidator.validate,
+                                          autocorrect: false,
+                                          obscureText: _hidePassword,
+                                          enableSuggestions: false,
+                                          textCapitalization:
+                                              TextCapitalization.none,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w800),
+                                          // The name keyboard is optimized for names (and phone numbers)
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
+                                          // The setter should consist of only one line
+                                          maxLines: 1,
+                                          decoration: InputDecoration(
+                                            hintText: '********',
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                                    left: 16.0),
+                                            border: OutlineInputBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        24.0)),
+                                                    BorderRadius.circular(24.0),
+                                                borderSide: BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none)),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _hidePassword
+                                                      ? Icons.visibility_off
+                                                      : Icons.visibility,
+                                                  color: Constants.polyDark,
+                                                ),
+                                                onPressed: _toggleHidePassword),
                                           )),
-                                      onPressed: () =>
-                                          onPressDeleteUserAccount(context),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text("Delete User Account",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700)),
+                                    ])),
+                            // Error Message
+                            Center(
+                                child: Text(_errorMessage,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w800))),
+                            // Button Delete User Account
+                            Container(
+                                padding: EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Constants.polyRed),
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            24.0)),
+                                              )),
+                                          onPressed: () =>
+                                              onPressDeleteUserAccount(context),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text("Delete User Account",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w700)),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ],
-                    )))),
-          ]),
+                                  ],
+                                )),
+                          ],
+                        )))),
+              ]),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: Constants.polyGray,
