@@ -46,7 +46,6 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
       }
       return x.currentRoute;
     });
-
     return PolySlidingUpPanel(
         controller: routesService.editRoutePanelController,
         onPanelClosed: () {
@@ -54,7 +53,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
           controllerRouteSetter.clear();
           controllerRouteHolds.clear();
           controllerRouteType.clear();
-          _image = null;
+          setState(() {
+            imageCache.clear();
+            _image = null;
+          });
         },
         panelBuilder: (ScrollController sc) {
           return Container(
