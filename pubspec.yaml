@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/img/polytalon_logo.png
     - assets/img/polytalon_logo_notext.png
+    - assets/img/poly_hold_image.jpg
     - assets/img/holdsClean.ico
     - assets/img/holdsFilled.ico
   # To add assets to your application, add an assets section, like this:
