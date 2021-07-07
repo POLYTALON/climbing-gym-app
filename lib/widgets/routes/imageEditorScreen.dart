@@ -238,7 +238,9 @@ class ImageEditor extends CustomPainter {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     var filePath = tempPath +
-        '/routeimage.png'; // file_01.tmp is dump file, can be anything
+        '/routeimage' +
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        '.png';
     var bufferlist = buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     return new File(filePath).writeAsBytes(bufferlist);
   }
