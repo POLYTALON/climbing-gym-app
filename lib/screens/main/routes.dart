@@ -604,6 +604,8 @@ class _RoutesScreenState extends State<RoutesScreen>
     routes.forEach((route) => result
         .add(colors.firstWhere((color) => color.color == route.difficulty)));
 
+    result = result.toSet().toList();
+
     return result;
   }
 
