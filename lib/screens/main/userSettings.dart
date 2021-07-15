@@ -3,7 +3,6 @@ import 'package:climbing_gym_app/screens/main/privacyProtectionScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-
 import 'changePasswordScreen.dart';
 import 'deleteAccountScreen.dart';
 
@@ -112,8 +111,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             Content(title: 'Delete account', screenPage: DeleteAccountScreen()),
             Divider(height: 24.0),
             Content(
-                title: 'Data Protection Privacy',
-                screenPage: PrivacyProtectionScreen())
+                title: 'Privacy Policy', screenPage: PrivacyProtectionScreen())
           ],
         ));
   }

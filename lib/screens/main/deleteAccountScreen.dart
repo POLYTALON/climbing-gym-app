@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
@@ -117,15 +118,15 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      'Enter your password to confirm.',
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
+                                                    AutoSizeText(
+                                                        'Please enter your password to confirm.',
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          color: Colors.white,
+                                                        ),
+                                                        maxLines: 1),
                                                     Divider(
                                                       height: 20,
                                                     ),
