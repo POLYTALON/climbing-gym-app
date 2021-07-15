@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                                 );
                                                               },
                                                               child: Text(
-                                                                  "User Settings",
+                                                                  "Account Settings",
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
