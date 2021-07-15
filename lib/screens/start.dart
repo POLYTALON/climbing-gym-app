@@ -22,7 +22,7 @@ class StartScreen extends StatelessWidget {
             // Headline
             FittedBox(
                 fit: BoxFit.fitWidth,
-                child: Text("CLIMBING-APP",
+                child: Text("GRIP GUIDE",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
