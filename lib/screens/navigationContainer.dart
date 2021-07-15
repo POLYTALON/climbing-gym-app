@@ -112,7 +112,7 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
           ),
           new BottomNavigationBarItem(
             icon: new Icon(Icons.book_rounded),
-            label: 'Routenbuch',
+            label: 'Routes',
           ),
         ],
       ),
@@ -204,7 +204,7 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
           break;
         case 3:
           {
-            _title = 'ROUTENBUCH';
+            _title = 'ROUTES';
           }
           break;
       }
