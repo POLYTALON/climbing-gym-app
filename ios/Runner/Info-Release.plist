@@ -59,9 +59,9 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>PolyApp wants to access your camera</string>
+	<string>$(APP_DISPLAY_NAME) wants to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>PolyApp wants to access your Photo Library</string>
+	<string>$(APP_DISPLAY_NAME) wants to access your Photo Library</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(APP_DISPLAY_NAME)</string>
 </dict>

@@ -63,7 +63,7 @@ android {
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
             multiDexEnabled true
-            resValue "string", "app_name", "PolyApp"
+            resValue "string", "app_name", "GripGuide"
         }
 
         development {
@@ -73,7 +73,7 @@ android {
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
             multiDexEnabled true
-            resValue "string", "app_name", "DEV-PolyApp"
+            resValue "string", "app_name", "DEV-GripGuide"
         }
 
     }
