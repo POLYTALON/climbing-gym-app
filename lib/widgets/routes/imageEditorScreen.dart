@@ -106,7 +106,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(32.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -238,7 +238,9 @@ class ImageEditor extends CustomPainter {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     var filePath = tempPath +
-        '/routeimage.png'; // file_01.tmp is dump file, can be anything
+        '/routeimage' +
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        '.png';
     var bufferlist = buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     return new File(filePath).writeAsBytes(bufferlist);
   }

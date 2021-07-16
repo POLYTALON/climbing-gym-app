@@ -77,9 +77,10 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       backdropEnabled: true,
       backdropTapClosesPanel: true,
       onPanelClosed: (() {
+        FocusScope.of(context).unfocus();
         pageviewService.setSwipingAllowed(true);
         setState(() {});
-        if (onPanelClosed.runtimeType == Function) {
+        if (onPanelClosed != null) {
           onPanelClosed();
         }
       }),

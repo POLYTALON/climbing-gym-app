@@ -428,7 +428,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                       await newsService.cleanUpNewsForGym(id);
                   bool isGymDeleted = await gymService.deleteGym(id);
                   bool isUserPrivilegesDeleted =
-                      await authService.deleteUsersGymPrivileges(id);
+                      await authService.deleteInAllUsersGymPrivilege(id);
 
                   if (isRoutesForGymDelted &&
                       isGymDeleted &&
