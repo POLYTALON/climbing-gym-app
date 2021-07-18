@@ -2,7 +2,6 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
-import 'package:climbing_gym_app/screens/main/userSettings.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -309,45 +308,6 @@ class _HomeScreenState extends State<HomeScreen>
                                                               },
                                                               child: Text(
                                                                   "Logout",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w900)),
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 16.0,
-                                                                    bottom: 16),
-                                                            child:
-                                                                ElevatedButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                      backgroundColor:
-                                                                          MaterialStateProperty.all(Constants
-                                                                              .polyGreen),
-                                                                      shape: MaterialStateProperty
-                                                                          .all<
-                                                                              RoundedRectangleBorder>(
-                                                                        RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(24.0)),
-                                                                      )),
-                                                              onPressed: () {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              UserSettingsScreen()),
-                                                                );
-                                                              },
-                                                              child: Text(
-                                                                  "Account Settings",
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,

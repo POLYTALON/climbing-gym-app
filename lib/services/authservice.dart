@@ -158,7 +158,7 @@ class AuthService with ChangeNotifier {
     final user = _auth.currentUser;
     final cred = EmailAuthProvider.credential(
         email: user.email, password: currentPassword);
-    String msg = "";
+    String msg = "OK";
 
     try {
       await user.reauthenticateWithCredential(cred).then((value) {
