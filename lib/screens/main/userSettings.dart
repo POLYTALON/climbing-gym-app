@@ -7,7 +7,7 @@ import '../start.dart';
 import 'changePasswordScreen.dart';
 import 'deleteAccountScreen.dart';
 
-class Content extends StatefulWidget {
+class Content extends StatelessWidget {
   const Content(
       {this.title,
       this.screenPage,
@@ -22,17 +22,6 @@ class Content extends StatefulWidget {
   final Function overrideOnTap;
 
   @override
-  _ContentState createState() =>
-      _ContentState(disabled, fontColor, overrideOnTap);
-}
-
-class _ContentState extends State<Content> {
-  _ContentState(this.disabled, this.fontColor, this.overrideOnTap);
-  final bool disabled;
-  final Color fontColor;
-  final Function overrideOnTap;
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
@@ -40,7 +29,7 @@ class _ContentState extends State<Content> {
             if (!this.disabled) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => widget.screenPage),
+                MaterialPageRoute(builder: (context) => screenPage),
               );
             }
           } else {
@@ -65,7 +54,7 @@ class _ContentState extends State<Content> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Text(widget.title,
+                        Text(title,
                             style: this.disabled
                                 ? TextStyle(
                                     color: Colors.white30,
