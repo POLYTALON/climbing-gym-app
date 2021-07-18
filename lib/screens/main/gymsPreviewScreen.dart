@@ -65,7 +65,7 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                   ]),
                   // Search Bar
                   Padding(
-                      padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                      padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                       child: TextField(
                           onChanged: (_) => updateSearchList(gyms),
                           controller: controllerGymName,
@@ -97,28 +97,28 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                           return Container(
                               child: GymPreviewCard(gym: gymsList[index]));
                         })),
+                    Divider(),
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            child: Row(children: [
+                              AutoSizeText(
+                                  "Can't find your gym? Please write a mail to",
+                                  style: Constants.defaultTextWhite,
+                                  maxLines: 1),
+                              TextButton(
+                                  onPressed: () =>
+                                      launch(emailLaunchUri().toString()),
+                                  child: AutoSizeText("info@polytalon.com",
+                                      style: TextStyle(
+                                          color: Colors.greenAccent,
+                                          fontSize: 16,
+                                          decoration: TextDecoration.underline),
+                                      maxLines: 1))
+                            ]))),
+                    Divider()
                   ]))),
-                  Divider(),
-                  FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Container(
-                          padding: EdgeInsets.all(16.0),
-                          child: Row(children: [
-                            AutoSizeText(
-                                "Can't find your gym? Please write a mail to",
-                                style: Constants.defaultTextWhite,
-                                maxLines: 1),
-                            TextButton(
-                                onPressed: () =>
-                                    launch(emailLaunchUri().toString()),
-                                child: AutoSizeText("info@polytalon.com",
-                                    style: TextStyle(
-                                        color: Colors.greenAccent,
-                                        fontSize: 16,
-                                        decoration: TextDecoration.underline),
-                                    maxLines: 1))
-                          ]))),
-                  Divider()
                 ]))),
           ]);
         }));
