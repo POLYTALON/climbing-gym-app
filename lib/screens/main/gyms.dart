@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
@@ -12,6 +13,7 @@ import 'package:climbing_gym_app/widgets/gyms/gymsSetOwnerPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GymsScreen extends StatefulWidget {
   @override
@@ -21,6 +23,7 @@ class GymsScreen extends StatefulWidget {
 class _GymsScreenState extends State<GymsScreen>
     with AutomaticKeepAliveClientMixin<GymsScreen> {
   final PanelController _gymsAddPanelController = PanelController();
+  final ScrollController sc = ScrollController();
 
   @override
   bool get wantKeepAlive => true;
@@ -75,16 +78,44 @@ class _GymsScreenState extends State<GymsScreen>
                                   child: CircularProgressIndicator(
                                       color: Constants.polyGreen));
                             } else {
-                              return GridView.count(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: (itemWidth / itemHeight),
-                                  children: List.generate(
-                                      gymsSnapshot.data.length, (index) {
-                                    return Container(
-                                        child: GymCard(
-                                            gym: gymsSnapshot.data[index],
-                                            appUser: snapshot.data));
-                                  }));
+                              return SingleChildScrollView(
+                                  child: Column(children: <Widget>[
+                                GridView.count(
+                                    controller: sc,
+                                    shrinkWrap: true,
+                                    crossAxisCount: 2,
+                                    childAspectRatio: (itemWidth / itemHeight),
+                                    children: List.generate(
+                                        gymsSnapshot.data.length, (index) {
+                                      return Container(
+                                          child: GymCard(
+                                              gym: gymsSnapshot.data[index],
+                                              appUser: snapshot.data));
+                                    })),
+                                Divider(),
+                                FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Container(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Row(children: [
+                                          AutoSizeText(
+                                              "Can't find your gym? Please write a mail to",
+                                              style: Constants.defaultTextWhite,
+                                              maxLines: 1),
+                                          TextButton(
+                                              onPressed: () => launch(
+                                                  emailLaunchUri().toString()),
+                                              child: AutoSizeText(
+                                                  "info@polytalon.com",
+                                                  style: TextStyle(
+                                                      color: Colors.greenAccent,
+                                                      fontSize: 16,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                  maxLines: 1))
+                                        ]))),
+                                Divider()
+                              ]));
                             }
                           }),
                     )
@@ -95,7 +126,7 @@ class _GymsScreenState extends State<GymsScreen>
               if (snapshot.data.isOperator) GymsSetOwnerPanel(),
               if (snapshot.data.isOperator ||
                   _getIsAnyGymUser(snapshot.data.roles))
-                GymsEditPanel()
+                GymsEditPanel(),
             ]);
           }
         });
@@ -119,5 +150,22 @@ class _GymsScreenState extends State<GymsScreen>
       if (value.gymuser) isAnyGymUser = true;
     });
     return isAnyGymUser;
+  }
+
+  Uri emailLaunchUri() {
+    return Uri(
+      scheme: 'mailto',
+      path: 'info@polytalon.com',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Request: Please add our gym to GripGuide'
+      }),
+    );
+  }
+
+  String encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 }
