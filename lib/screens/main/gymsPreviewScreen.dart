@@ -67,6 +67,7 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                   Padding(
                       padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                       child: TextField(
+                          textInputAction: TextInputAction.search,
                           onChanged: (_) => updateSearchList(gyms),
                           controller: controllerGymName,
                           autocorrect: false,
