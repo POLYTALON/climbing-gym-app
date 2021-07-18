@@ -153,22 +153,27 @@ class AuthService with ChangeNotifier {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
-  Future<String> changePassword(String password) async {
+  Future<String> changePassword(
+      String currentPassword, String newPassword) async {
+    final user = _auth.currentUser;
+    final cred = EmailAuthProvider.credential(
+        email: user.email, password: currentPassword);
     String msg = "";
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _auth.currentUser.email,
-        password: password,
-      );
 
-      await _auth.currentUser.updatePassword(password).then((_) {
-        msg = "OK";
-      }).catchError((error) {
-        msg = error.toString();
+    try {
+      await user.reauthenticateWithCredential(cred).then((value) {
+        user.updatePassword(newPassword).then((_) {
+          msg = "OK";
+        }).catchError((error) {
+          msg = error.toString();
+        });
+      }).catchError((err) {
+        msg = err.toString();
       });
     } on FirebaseAuthException catch (e) {
       msg = e.message;
     }
+    print(msg);
     return msg;
   }
 

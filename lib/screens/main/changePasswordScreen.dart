@@ -395,7 +395,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 "Your new password is too similar to the old one.";
           });
         } else {
-          String msg = await this.authService.changePassword(newPassword);
+          String msg =
+              await this.authService.changePassword(oldPassword, newPassword);
           if (msg == "OK") {
             await authService.logout();
             Navigator.push(context,
