@@ -10,24 +10,30 @@ class Content extends StatefulWidget {
   const Content({
     this.title,
     this.screenPage,
+    this.disabled = false,
   });
 
   final String title;
   final Widget screenPage;
+  final bool disabled;
 
   @override
-  _ContentState createState() => _ContentState();
+  _ContentState createState() => _ContentState(disabled);
 }
 
 class _ContentState extends State<Content> {
+  _ContentState(this.disabled);
+  final bool disabled;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => widget.screenPage),
-          );
+          if (!this.disabled) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => widget.screenPage),
+            );
+          }
         },
         child: Container(
             padding:
@@ -48,7 +54,12 @@ class _ContentState extends State<Content> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Text(widget.title,
-                            style: Constants.defaultTextWhite700),
+                            style: this.disabled
+                                ? TextStyle(
+                                    color: Colors.white30,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16)
+                                : Constants.defaultTextWhite700),
                       ],
                     ),
                   ),
@@ -58,7 +69,7 @@ class _ContentState extends State<Content> {
                       child: Icon(
                         Icons.chevron_right,
                         size: 25.0,
-                        color: Colors.white,
+                        color: this.disabled ? Colors.white30 : Colors.white,
                       ),
                     ),
                   ),
@@ -74,10 +85,9 @@ class UserSettingsScreen extends StatefulWidget {
 }
 
 class _UserSettingsScreenState extends State<UserSettingsScreen> {
+  final _auth = locator<AuthService>();
   @override
   Widget build(BuildContext context) {
-    final auth = locator<AuthService>();
-
     return Scaffold(
         // AppBar
         backgroundColor: Constants.polyDark,
@@ -107,12 +117,18 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
           padding: EdgeInsets.only(top: 32.0),
           children: [
             Content(
-                title: 'Change password', screenPage: ChangePasswordScreen()),
+                title: 'Change password',
+                screenPage: ChangePasswordScreen(),
+                disabled: !getIsFirebaseProvider()),
             Content(title: 'Delete account', screenPage: DeleteAccountScreen()),
             Divider(height: 24.0),
             Content(
                 title: 'Privacy Policy', screenPage: PrivacyProtectionScreen())
           ],
         ));
+  }
+
+  bool getIsFirebaseProvider() {
+    return this._auth.isFirebaseProvider();
   }
 }

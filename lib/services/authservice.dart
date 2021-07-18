@@ -482,4 +482,14 @@ class AuthService with ChangeNotifier {
       return false;
     }
   }
+
+  bool isFirebaseProvider() {
+    // Returns true, if auth provider is Firebase.
+    // Returns false, if provider is something else (e.g. Google, Apple, ...)
+    List<UserInfo> providerData = _auth.currentUser.providerData;
+    if (providerData[0] != null && providerData[0].providerId == 'password') {
+      return true;
+    }
+    return false;
+  }
 }
