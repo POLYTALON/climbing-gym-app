@@ -272,50 +272,6 @@ class _HomeScreenState extends State<HomeScreen>
                                                                         }),
                                                                   )
                                                                 ]),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 16.0,
-                                                                    bottom: 16),
-                                                            child:
-                                                                ElevatedButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                      backgroundColor:
-                                                                          MaterialStateProperty.all(Constants
-                                                                              .polyRed),
-                                                                      shape: MaterialStateProperty
-                                                                          .all<
-                                                                              RoundedRectangleBorder>(
-                                                                        RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(24.0)),
-                                                                      )),
-                                                              onPressed:
-                                                                  () async {
-                                                                final auth =
-                                                                    locator<
-                                                                        AuthService>();
-                                                                await auth
-                                                                    .logout();
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                StartScreen()));
-                                                              },
-                                                              child: Text(
-                                                                  "Logout",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w900)),
-                                                            ),
-                                                          ),
                                                         ]),
                                                   ),
                                                 ],

@@ -3,36 +3,48 @@ import 'package:climbing_gym_app/screens/main/privacyProtectionScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import '../start.dart';
 import 'changePasswordScreen.dart';
 import 'deleteAccountScreen.dart';
 
 class Content extends StatefulWidget {
-  const Content({
-    this.title,
-    this.screenPage,
-    this.disabled = false,
-  });
+  const Content(
+      {this.title,
+      this.screenPage,
+      this.disabled = false,
+      this.fontColor = Colors.white,
+      this.overrideOnTap});
 
   final String title;
   final Widget screenPage;
   final bool disabled;
+  final Color fontColor;
+  final Function overrideOnTap;
 
   @override
-  _ContentState createState() => _ContentState(disabled);
+  _ContentState createState() =>
+      _ContentState(disabled, fontColor, overrideOnTap);
 }
 
 class _ContentState extends State<Content> {
-  _ContentState(this.disabled);
+  _ContentState(this.disabled, this.fontColor, this.overrideOnTap);
   final bool disabled;
+  final Color fontColor;
+  final Function overrideOnTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          if (!this.disabled) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => widget.screenPage),
-            );
+          if (overrideOnTap == null) {
+            if (!this.disabled) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => widget.screenPage),
+              );
+            }
+          } else {
+            overrideOnTap();
           }
         },
         child: Container(
@@ -59,7 +71,10 @@ class _ContentState extends State<Content> {
                                     color: Colors.white30,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16)
-                                : Constants.defaultTextWhite700),
+                                : TextStyle(
+                                    color: this.fontColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16)),
                       ],
                     ),
                   ),
@@ -113,19 +128,38 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                     margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                   ),
                 ))),
-        body: ListView(
-          padding: EdgeInsets.only(top: 32.0),
-          children: [
-            Content(
-                title: 'Change password',
-                screenPage: ChangePasswordScreen(),
-                disabled: !getIsFirebaseProvider()),
-            Content(title: 'Delete account', screenPage: DeleteAccountScreen()),
-            Divider(height: 24.0),
-            Content(
-                title: 'Privacy Policy', screenPage: PrivacyProtectionScreen())
-          ],
-        ));
+        body: Column(children: <Widget>[
+          Flexible(
+              child: ListView(
+                  shrinkWrap: false,
+                  padding: EdgeInsets.only(top: 32.0),
+                  children: [
+                Content(
+                    title: 'Privacy Policy',
+                    screenPage: PrivacyProtectionScreen()),
+                Content(
+                    title: 'Change password',
+                    screenPage: ChangePasswordScreen(),
+                    disabled: !getIsFirebaseProvider()),
+                Divider(height: 24.0),
+                Content(
+                  title: 'Logout',
+                  screenPage: Container(),
+                  fontColor: Colors.redAccent,
+                  overrideOnTap: () async {
+                    final auth = locator<AuthService>();
+                    await auth.logout();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => StartScreen()));
+                  },
+                ),
+              ])),
+          Content(
+            title: 'Delete account',
+            screenPage: DeleteAccountScreen(),
+            fontColor: Colors.redAccent,
+          ),
+        ]));
   }
 
   bool getIsFirebaseProvider() {
