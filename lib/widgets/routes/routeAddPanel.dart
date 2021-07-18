@@ -41,6 +41,9 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final FocusNode fnSetter = new FocusNode();
+  final FocusNode fnType = new FocusNode();
+  final FocusNode fnHolds = new FocusNode();
   String _errorMessage = "";
   File _image;
   int selectedColorIndex = 0;
@@ -209,8 +212,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnSetter,
                                         controller: controllerRouteSetter,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnSetter.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -346,8 +357,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnType,
                                         controller: controllerRouteType,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnType.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -394,8 +413,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnHolds,
                                         controller: controllerRouteHolds,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnHolds.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
