@@ -16,6 +16,8 @@ class GymsPreviewScreen extends StatefulWidget {
 
 class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
   final ScrollController sc = ScrollController();
+  final controllerGymName = TextEditingController(text: "");
+  List<Gym> gymsList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,27 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                               fontSize: 24)),
                     ),
                   ]),
+                  // Search Bar
+                  Padding(
+                      padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                      child: TextField(
+                          onChanged: (_) => updateSearchList(gyms),
+                          controller: controllerGymName,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              hintText: 'Search',
+                              contentPadding: const EdgeInsets.only(left: 16.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  borderSide: BorderSide(
+                                      width: 0, style: BorderStyle.none)),
+                              fillColor: Colors.white,
+                              filled: true))),
+
                   // GridView (with GymPreviewCards)
                   Expanded(
                       child: SingleChildScrollView(
@@ -70,9 +93,9 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                         shrinkWrap: true,
                         crossAxisCount: 2,
                         childAspectRatio: (itemWidth / itemHeight),
-                        children: List.generate(gyms.length, (index) {
+                        children: List.generate(gymsList.length, (index) {
                           return Container(
-                              child: GymPreviewCard(gym: gyms[index]));
+                              child: GymPreviewCard(gym: gymsList[index]));
                         })),
                   ]))),
                   Divider(),
@@ -99,6 +122,27 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                 ]))),
           ]);
         }));
+  }
+
+  void updateSearchList(List<Gym> gyms) {
+    if (controllerGymName.text.trim().isEmpty)
+      this.gymsList = gyms;
+    else {
+      this.gymsList = [];
+      controllerGymName.text
+          .toLowerCase()
+          .trim()
+          .split(" ")
+          .forEach((searchTerm) {
+        this.gymsList.addAll(gyms
+            .where((gym) => (gym.name + '' + gym.city)
+                .toLowerCase()
+                .trim()
+                .contains(searchTerm))
+            .toList());
+      });
+      this.gymsList = this.gymsList.toSet().toList();
+    }
   }
 
   Uri emailLaunchUri() {
