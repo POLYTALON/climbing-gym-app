@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -6,7 +8,7 @@ import 'package:climbing_gym_app/widgets/gyms/gymPreviewCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GymsPreviewScreen extends StatefulWidget {
   @override
@@ -14,7 +16,10 @@ class GymsPreviewScreen extends StatefulWidget {
 }
 
 class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
-  final PanelController _gymsAddPanelController = PanelController();
+  final ScrollController sc = ScrollController();
+  final controllerGymName = TextEditingController(text: "");
+  List<Gym> gymsList = [];
+  bool isSearched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +65,110 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                               fontSize: 24)),
                     ),
                   ]),
+                  // Search Bar
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                      child: TextField(
+                          textInputAction: TextInputAction.search,
+                          onChanged: (_) => updateSearchList(gyms),
+                          controller: controllerGymName,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              hintText: 'Search',
+                              contentPadding: const EdgeInsets.only(left: 16.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  borderSide: BorderSide(
+                                      width: 0, style: BorderStyle.none)),
+                              fillColor: Colors.white,
+                              filled: true))),
+
                   // GridView (with GymPreviewCards)
                   Expanded(
-                    child: GridView.count(
+                      child: SingleChildScrollView(
+                          child: Column(children: <Widget>[
+                    GridView.count(
+                        controller: sc,
+                        shrinkWrap: true,
                         crossAxisCount: 2,
                         childAspectRatio: (itemWidth / itemHeight),
-                        children: List.generate(gyms.length, (index) {
+                        children: List.generate(
+                            isSearched ? gymsList.length : gyms.length,
+                            (index) {
                           return Container(
-                              child: GymPreviewCard(gym: gyms[index]));
+                              child: GymPreviewCard(
+                                  gym: isSearched
+                                      ? gymsList[index]
+                                      : gyms[index]));
                         })),
-                  )
+                    Divider(),
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            child: Row(children: [
+                              AutoSizeText(
+                                  "Can't find your gym? Please write a mail to",
+                                  style: Constants.defaultTextWhite,
+                                  maxLines: 1),
+                              TextButton(
+                                  onPressed: () =>
+                                      launch(emailLaunchUri().toString()),
+                                  child: AutoSizeText("info@polytalon.com",
+                                      style: TextStyle(
+                                          color: Colors.greenAccent,
+                                          fontSize: 16,
+                                          decoration: TextDecoration.underline),
+                                      maxLines: 1))
+                            ]))),
+                    Divider()
+                  ]))),
                 ]))),
           ]);
         }));
+  }
+
+  void updateSearchList(List<Gym> gyms) {
+    print("seacrhgin");
+    this.isSearched = true;
+    if (controllerGymName.text.trim().isEmpty)
+      this.gymsList = gyms;
+    else {
+      this.gymsList = [];
+      controllerGymName.text
+          .toLowerCase()
+          .trim()
+          .split(" ")
+          .forEach((searchTerm) {
+        this.gymsList.addAll(gyms
+            .where((gym) => (gym.name + '' + gym.city)
+                .toLowerCase()
+                .trim()
+                .contains(searchTerm))
+            .toList());
+      });
+      this.gymsList = this.gymsList.toSet().toList();
+    }
+  }
+
+  Uri emailLaunchUri() {
+    return Uri(
+      scheme: 'mailto',
+      path: 'info@polytalon.com',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Request: Please add our gym to GripGuide'
+      }),
+    );
+  }
+
+  String encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 }
