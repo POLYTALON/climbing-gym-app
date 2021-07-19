@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -18,6 +19,7 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
   final ScrollController sc = ScrollController();
   final controllerGymName = TextEditingController(text: "");
   List<Gym> gymsList = [];
+  bool isSearched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +96,14 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
                         shrinkWrap: true,
                         crossAxisCount: 2,
                         childAspectRatio: (itemWidth / itemHeight),
-                        children: List.generate(gymsList.length, (index) {
+                        children: List.generate(
+                            isSearched ? gymsList.length : gyms.length,
+                            (index) {
                           return Container(
-                              child: GymPreviewCard(gym: gymsList[index]));
+                              child: GymPreviewCard(
+                                  gym: isSearched
+                                      ? gymsList[index]
+                                      : gyms[index]));
                         })),
                     Divider(),
                     FittedBox(
@@ -126,6 +133,8 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
   }
 
   void updateSearchList(List<Gym> gyms) {
+    print("seacrhgin");
+    this.isSearched = true;
     if (controllerGymName.text.trim().isEmpty)
       this.gymsList = gyms;
     else {

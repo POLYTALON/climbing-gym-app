@@ -28,6 +28,7 @@ class _GymsScreenState extends State<GymsScreen>
   final ScrollController sc = ScrollController();
   final controllerGymName = TextEditingController(text: "");
   List<Gym> gymsList = [];
+  bool isSearched = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -60,12 +61,14 @@ class _GymsScreenState extends State<GymsScreen>
                 body: StreamBuilder(
                     stream: locator<GymService>().streamGyms(),
                     builder: (context, gymsSnapshot) {
-                      if (snapshot.connectionState != ConnectionState.active ||
+                      if (gymsSnapshot.connectionState !=
+                              ConnectionState.active ||
                           !gymsSnapshot.hasData) {
                         return Center(
                             child: CircularProgressIndicator(
                                 color: Constants.polyGreen));
                       } else {
+                        // gymsList = gymsSnapshot.data;
                         return Container(
                             child: Column(children: [
                           // Text
@@ -113,11 +116,15 @@ class _GymsScreenState extends State<GymsScreen>
                                 shrinkWrap: true,
                                 crossAxisCount: 2,
                                 childAspectRatio: (itemWidth / itemHeight),
-                                children:
-                                    List.generate(gymsList.length, (index) {
+                                children: List.generate(
+                                    isSearched
+                                        ? gymsList.length
+                                        : gymsSnapshot.data.length, (index) {
                                   return Container(
                                       child: GymCard(
-                                          gym: gymsList[index],
+                                          gym: isSearched
+                                              ? gymsList[index]
+                                              : gymsSnapshot.data[index],
                                           appUser: snapshot.data));
                                 })),
                             Divider(),
@@ -184,6 +191,7 @@ class _GymsScreenState extends State<GymsScreen>
     if (controllerGymName.text.trim().isEmpty)
       setState(() {
         this.gymsList = gyms;
+        this.isSearched = true;
       });
     else {
       this.gymsList = [];
@@ -201,6 +209,7 @@ class _GymsScreenState extends State<GymsScreen>
       });
       setState(() {
         this.gymsList = this.gymsList.toSet().toList();
+        this.isSearched = true;
       });
     }
   }
