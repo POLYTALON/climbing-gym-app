@@ -30,6 +30,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final FocusNode fnSetter = new FocusNode();
+  final FocusNode fnType = new FocusNode();
+  final FocusNode fnHolds = new FocusNode();
+
   int lastSelectedColorIndex = -1;
   File _image;
   final picker = ImagePicker();
@@ -218,10 +222,17 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               height: 20,
                                             ),
                                             TextFormField(
+                                                focusNode: fnSetter,
                                                 controller:
                                                     controllerRouteSetter,
-                                                validator:
-                                                    NameFieldValidator.validate,
+                                                validator: (value) {
+                                                  String result =
+                                                      NameFieldValidator
+                                                          .validate(value);
+                                                  if (result != null)
+                                                    fnSetter.requestFocus();
+                                                  return result;
+                                                },
                                                 autocorrect: false,
                                                 textCapitalization:
                                                     TextCapitalization.words,
@@ -348,9 +359,16 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               height: 20,
                                             ),
                                             TextFormField(
+                                                focusNode: fnType,
                                                 controller: controllerRouteType,
-                                                validator:
-                                                    NameFieldValidator.validate,
+                                                validator: (value) {
+                                                  String result =
+                                                      NameFieldValidator
+                                                          .validate(value);
+                                                  if (result != null)
+                                                    fnType.requestFocus();
+                                                  return result;
+                                                },
                                                 autocorrect: false,
                                                 textCapitalization:
                                                     TextCapitalization.words,
@@ -402,10 +420,17 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               height: 20,
                                             ),
                                             TextFormField(
+                                                focusNode: fnHolds,
                                                 controller:
                                                     controllerRouteHolds,
-                                                validator:
-                                                    NameFieldValidator.validate,
+                                                validator: (value) {
+                                                  String result =
+                                                      NameFieldValidator
+                                                          .validate(value);
+                                                  if (result != null)
+                                                    fnHolds.requestFocus();
+                                                  return result;
+                                                },
                                                 autocorrect: false,
                                                 textCapitalization:
                                                     TextCapitalization.words,
