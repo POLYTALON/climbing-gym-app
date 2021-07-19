@@ -153,6 +153,30 @@ class AuthService with ChangeNotifier {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
+  Future<String> changePassword(
+      String currentPassword, String newPassword) async {
+    final user = _auth.currentUser;
+    final cred = EmailAuthProvider.credential(
+        email: user.email, password: currentPassword);
+    String msg = "OK";
+
+    try {
+      await user.reauthenticateWithCredential(cred).then((value) {
+        user.updatePassword(newPassword).then((_) {
+          msg = "OK";
+        }).catchError((error) {
+          msg = error.toString();
+        });
+      }).catchError((err) {
+        msg = err.toString();
+      });
+    } on FirebaseAuthException catch (e) {
+      msg = e.message;
+    }
+    print(msg);
+    return msg;
+  }
+
   Stream<AppUser> streamAppUser() {
     if (_auth.currentUser != null) {
       return _firestore
@@ -462,5 +486,15 @@ class AuthService with ChangeNotifier {
       print(e);
       return false;
     }
+  }
+
+  bool isFirebaseProvider() {
+    // Returns true, if auth provider is Firebase.
+    // Returns false, if provider is something else (e.g. Google, Apple, ...)
+    List<UserInfo> providerData = _auth.currentUser.providerData;
+    if (providerData[0] != null && providerData[0].providerId == 'password') {
+      return true;
+    }
+    return false;
   }
 }
