@@ -6,11 +6,13 @@ import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 
@@ -241,6 +243,27 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.w900)),
                     ),
+
+                    // Spacer
+                    Spacer(flex: 1),
+
+                    //Text Privat policy
+                    Center(
+                        child: RichText(
+                            text: TextSpan(children: [
+                      TextSpan(
+                        text: "I have read and accepted the",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      TextSpan(
+                          text: " Privacy Policy.",
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  "https://polytalon.com/datenschutz-grip-guide/");
+                            })
+                    ]))),
 
                     // Spacer
                     Spacer(flex: 1),
