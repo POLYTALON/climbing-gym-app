@@ -175,38 +175,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // Spacer
               Spacer(flex: 1),
 
-              // Checkbox Privat policy
-              Theme(
-                data: ThemeData(unselectedWidgetColor: Colors.white),
-                child: Row(children: [
-                  Checkbox(
-                    value: isChecked,
-                    checkColor: Colors.green,
-                    activeColor: Colors.white,
-                    onChanged: (bool value) {
-                      setState(() {
-                        isChecked = value;
-                      });
-                    },
-                  ),
-                  Flexible(
-                      child: RichText(
-                          text: TextSpan(children: [
-                    TextSpan(
-                      text: "I have read and accepted the",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    TextSpan(
-                        text: " Privacy Policy.",
-                        style: TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            launch(
-                                "https://polytalon.com/datenschutzerklaerung/");
-                          })
-                  ])))
-                ]),
-              ),
+              //Text Privat policy
+              Center(
+                  child: RichText(
+                      text: TextSpan(children: [
+                TextSpan(
+                  text: "I have read and accepted the",
+                  style: TextStyle(color: Colors.white),
+                ),
+                TextSpan(
+                    text: " Privacy Policy.",
+                    style: TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launch("https://polytalon.com/datenschutz-grip-guide/");
+                      })
+              ]))),
 
               // Button Register
               ElevatedButton(
