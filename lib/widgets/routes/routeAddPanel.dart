@@ -11,6 +11,7 @@ import 'package:climbing_gym_app/widgets/slidingUpPanel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -40,6 +41,9 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final FocusNode fnSetter = new FocusNode();
+  final FocusNode fnType = new FocusNode();
+  final FocusNode fnHolds = new FocusNode();
   String _errorMessage = "";
   File _image;
   int selectedColorIndex = 0;
@@ -208,8 +212,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnSetter,
                                         controller: controllerRouteSetter,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnSetter.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -345,8 +357,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnType,
                                         controller: controllerRouteType,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnType.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -393,8 +413,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                       height: 20,
                                     ),
                                     TextFormField(
+                                        focusNode: fnHolds,
                                         controller: controllerRouteHolds,
-                                        validator: NameFieldValidator.validate,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          if (result != null)
+                                            fnHolds.requestFocus();
+                                          return result;
+                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -545,9 +573,16 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
 
   Future _getImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source, imageQuality: 25);
+    ImageProperties properties =
+        await FlutterNativeImage.getImageProperties(pickedFile.path);
+    File compressedFile = await FlutterNativeImage.compressImage(
+        pickedFile.path,
+        quality: 25,
+        targetWidth: 1024,
+        targetHeight: (properties.height * 1024 / properties.width).round());
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        _image = File(compressedFile.path);
       } else {
         print('No image selected.');
       }
