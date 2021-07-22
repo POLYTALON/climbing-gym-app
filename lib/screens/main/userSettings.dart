@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/screens/main/privacyProtectionScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:url_launcher/url_launcher.dart';
 import '../start.dart';
 import 'changePasswordScreen.dart';
 import 'deleteAccountScreen.dart';
@@ -125,7 +126,10 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   children: [
                 Content(
                     title: 'Privacy Policy',
-                    screenPage: PrivacyProtectionScreen()),
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch("https://polytalon.com/datenschutz-grip-guide/");
+                    }),
                 Content(
                     title: 'Change password',
                     screenPage: ChangePasswordScreen(),
