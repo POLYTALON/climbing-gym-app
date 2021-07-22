@@ -249,35 +249,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final String email = controllerEmail.text.trim();
     final String password = controllerPassword.text.trim();
     final String passwordRepeat = controllerPasswordRepeat.text.trim();
-    if (isChecked) {
-      if (_validateAndSave()) {
-        if (password == passwordRepeat) {
-          try {
-            final auth = locator<AuthService>();
-            final usercred = await auth.register(displayName, email, password);
-            await auth.sendVerifyMail(usercred);
-            await auth.userSetup(usercred.user.uid.toString());
+    if (_validateAndSave()) {
+      if (password == passwordRepeat) {
+        try {
+          final auth = locator<AuthService>();
+          final usercred = await auth.register(displayName, email, password);
+          await auth.sendVerifyMail(usercred);
+          await auth.userSetup(usercred.user.uid.toString());
 
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-              (Route<dynamic> route) => false,
-            );
-          } catch (e) {
-            setState(() {
-              _errorMessage = e.toString();
-            });
-          }
-        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+            (Route<dynamic> route) => false,
+          );
+        } catch (e) {
           setState(() {
-            _errorMessage = "Die Passwörter stimmen nicht überein!";
+            _errorMessage = e.toString();
           });
         }
+      } else {
+        setState(() {
+          _errorMessage = "Die Passwörter stimmen nicht überein!";
+        });
       }
-    } else {
-      setState(() {
-        _errorMessage = "Die Datenschutzerklärung muss akzeptiert werden.";
-      });
     }
   }
 
