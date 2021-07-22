@@ -24,15 +24,15 @@ jobs:
       # - run: flutter test
 
       # Compile and test the production apk on merges to main
-      - run: flutter build apk --flavor productive -t lib/main.dart
+      - run: flutter build apk --debug --flavor productive -t lib/main.dart
         if: github.base_ref == 'refs/heads/main'
       # Compile and test the development apk on merges that are not on main
-      - run: flutter build apk --flavor development -t lib/main_dev.dart
+      - run: flutter build apk --debug --flavor development -t lib/main_dev.dart
         if: github.base_ref != 'refs/heads/main'
 
       # Build the production version on merges that are to main
-      - run: flutter build appbundle --flavor productive -t lib/main.dart
+      - run: flutter build appbundle --debug --flavor productive -t lib/main.dart
         if: github.base_ref == 'refs/heads/main'
       # Build the development version on merges that are not to main
-      - run: flutter build appbundle --flavor development -t lib/main_dev.dart
+      - run: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
         if: github.base_ref != 'refs/heads/main'

@@ -73,3 +73,5 @@ doc/api/
 *.js.deps
 *.js.map
 
+#Android key properties
+/android/key.properties
