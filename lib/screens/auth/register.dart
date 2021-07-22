@@ -244,7 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         } catch (e) {
           setState(() {
-            _errorMessage = e.toString();
+            _errorMessage = e.message;
           });
         }
       } else {
