@@ -5,29 +5,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      //Command Line "flutter run -t lib/main_dev.dart --flavor development"
+      //Commnd Line "flutter run -t lib/main_dev.dart --debug --flavor development"
       "name": "Development-Debug",
       "request": "launch",
       "program": "lib/main_dev.dart",
       "type": "dart",
       "args": [
+        "--debug",
         "--flavor",
         "development"
       ]
     },
     {
-      //Command Line "flutter run -t lib/main.dart --flavor productive"
+      //Command Line "flutter run -t lib/main.dart --debug --flavor productive"
       "name": "Productive-Debug",
       "request": "launch",
       "program": "lib/main.dart",
       "type": "dart",
       "args": [
+        "--debug",
         "--flavor",
         "productive"
       ]
     },
     {
-      //Command Line "flutter run --release -t lib/main.dart --flavor productive"
+      //Command Line "flutter run --release -t lib/main.dart --flavor release-productive"
       "name": "iOS-ReleaseMode-Productive",
       "request": "launch",
       "program": "lib/main.dart",
@@ -39,7 +41,7 @@
       ]
     },
     {
-      //Command Line "flutter run --release -t lib/main_dev.dart --flavor development"
+      //Command Line "flutter run --release -t lib/main_dev.dart --flavor release-development"
       "name": "iOS-ReleaseMode-Development",
       "request": "launch",
       "program": "lib/main_dev.dart",
@@ -48,6 +50,30 @@
         "--release",
         "--flavor",
         "release-development"
+      ]
+    },
+    {
+      //Command Line "flutter run --release -t lib/main_dev.dart --flavor development"
+      "name": "Android-ReleaseMode-Development",
+      "request": "launch",
+      "program": "lib/main_dev.dart",
+      "type": "dart",
+      "args": [
+        "--release",
+        "--flavor",
+        "development"
+      ]
+    },
+    {
+      //Command Line "flutter run --release -t lib/main.dart --flavor productive"
+      "name": "Android-ReleaseMode-Productive",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "type": "dart",
+      "args": [
+        "--release",
+        "--flavor",
+        "productive"
       ]
     },
     {

@@ -22,7 +22,9 @@ jobs:
       # Flutter test breaks, as we currently do not test ❤️
       # - run: flutter test
 
+      # Build the development version on merges that are not to main
       - run: flutter build ios -t lib/main_dev.dart --flavor release-development --release --no-codesign
         if: github.base_ref != 'refs/heads/main'
+      # Build the productive version on merges to main
       - run: flutter build ios -t lib/main.dart --flavor release-productive --release --no-codesign
         if: github.base_ref == 'refs/heads/main'

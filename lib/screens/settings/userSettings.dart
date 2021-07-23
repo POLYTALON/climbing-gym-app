@@ -1,5 +1,5 @@
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/screens/main/privacyProtectionScreen.dart';
+import 'package:climbing_gym_app/screens/settings/authorizeOperatorScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -134,6 +134,20 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                     title: 'Change password',
                     screenPage: ChangePasswordScreen(),
                     disabled: !getIsFirebaseProvider()),
+                FutureBuilder(
+                    future: this._auth.getIsOperator(),
+                    initialData: false,
+                    builder: (context, operatorSnapshot) {
+                      if (!operatorSnapshot.hasData || !operatorSnapshot.data) {
+                        return Container();
+                      } else {
+                        return Content(
+                            title: 'Manage Operators',
+                            screenPage: AuthorizeOperatorScreen(),
+                            fontColor: Colors.greenAccent,
+                            disabled: !operatorSnapshot.data);
+                      }
+                    }),
                 Divider(height: 24.0),
                 Content(
                   title: 'Logout',
