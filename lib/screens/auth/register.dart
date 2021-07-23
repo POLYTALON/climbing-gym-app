@@ -56,6 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextFormField(
                         controller: controllerDisplayName,
                         autofillHints: [AutofillHints.name],
+                        maxLength: 64,
                         enabled: !isLoggedIn,
                         autocorrect: false,
                         textCapitalization: TextCapitalization.words,
@@ -85,6 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           AutofillHints.newUsername,
                           AutofillHints.email
                         ],
+                        maxLength: 320,
                         enabled: !isLoggedIn,
                         autocorrect: false,
                         textCapitalization: TextCapitalization.none,
@@ -112,6 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextFormField(
                         controller: controllerPassword,
                         autofillHints: [AutofillHints.newPassword],
+                        maxLength: 256,
                         enabled: !isLoggedIn,
                         textCapitalization: TextCapitalization.none,
                         style: TextStyle(fontWeight: FontWeight.w800),
@@ -141,6 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextFormField(
                         controller: controllerPasswordRepeat,
                         autofillHints: [AutofillHints.newPassword],
+                        maxLength: 256,
                         enabled: !isLoggedIn,
                         textCapitalization: TextCapitalization.none,
                         style: TextStyle(fontWeight: FontWeight.w800),

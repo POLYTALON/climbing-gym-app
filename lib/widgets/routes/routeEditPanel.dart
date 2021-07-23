@@ -225,6 +225,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 focusNode: fnSetter,
                                                 controller:
                                                     controllerRouteSetter,
+                                                maxLength: 64,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator
@@ -361,6 +362,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                             TextFormField(
                                                 focusNode: fnType,
                                                 controller: controllerRouteType,
+                                                maxLength: 32,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator
@@ -423,6 +425,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 focusNode: fnHolds,
                                                 controller:
                                                     controllerRouteHolds,
+                                                maxLength: 64,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator

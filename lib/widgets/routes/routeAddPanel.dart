@@ -214,6 +214,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnSetter,
                                         controller: controllerRouteSetter,
+                                        maxLength: 64,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(
@@ -359,6 +360,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnType,
                                         controller: controllerRouteType,
+                                        maxLength: 32,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(
@@ -415,6 +417,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnHolds,
                                         controller: controllerRouteHolds,
+                                        maxLength: 32,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(

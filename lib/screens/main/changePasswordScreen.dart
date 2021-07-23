@@ -119,6 +119,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerOldPassword,
+                                                        maxLength: 256,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -180,6 +181,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerNewPassword,
+                                                        maxLength: 256,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -241,6 +243,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerConfirmNewPassword,
+                                                        maxLength: 256,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
