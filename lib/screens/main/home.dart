@@ -2,7 +2,6 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
-import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
@@ -44,9 +43,15 @@ class _HomeScreenState extends State<HomeScreen>
             if (userSnapshot.data.selectedGym == null ||
                 userSnapshot.data.selectedGym.isEmpty) {
               return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 16.0, right: 16.0, top: 32),
+                      child: ProfileCard(appUser: userSnapshot.data),
+                    ),
+                    Divider(),
                     FittedBox(
                         fit: BoxFit.fitWidth,
                         child: Text('Please choose a gym first.',

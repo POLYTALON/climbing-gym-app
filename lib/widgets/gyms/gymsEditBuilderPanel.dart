@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class GymsEditBuilderPanel extends StatefulWidget
     with GetItStatefulWidgetMixin {
