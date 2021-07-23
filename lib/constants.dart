@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 const displayNameLength = 64;
 // Currently not necessarily linked to the display name
 const setterNameLength = 64;
-const emailLength = 320;
+const emailLength = 254;
 const passwordLength = 256;
 const gymNameLength = 64;
 const locationLength = 64;
