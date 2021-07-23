@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+// text input length
+
+const displayNameLength = 64;
+// Currently not necessarily linked to the display name
+const setterNameLength = 64;
+const emailLength = 320;
+const passwordLength = 256;
+const gymNameLength = 64;
+const locationLength = 64;
+const newsTitleLength = 128;
+const newsLinkLength = 512;
+const routeTypeLength = 12;
+const holdsLength = 32;
+
 // custom colors
 
 const Color polyGreen = Color(0xFF00bb56);

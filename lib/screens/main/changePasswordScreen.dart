@@ -119,7 +119,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerOldPassword,
-                                                        maxLength: 256,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -181,7 +182,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerNewPassword,
-                                                        maxLength: 256,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -243,7 +245,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerConfirmNewPassword,
-                                                        maxLength: 256,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,

@@ -225,7 +225,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 focusNode: fnSetter,
                                                 controller:
                                                     controllerRouteSetter,
-                                                maxLength: 64,
+                                                maxLength:
+                                                    Constants.setterNameLength,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator
@@ -362,7 +363,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                             TextFormField(
                                                 focusNode: fnType,
                                                 controller: controllerRouteType,
-                                                maxLength: 32,
+                                                maxLength:
+                                                    Constants.routeTypeLength,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator
@@ -425,7 +427,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 focusNode: fnHolds,
                                                 controller:
                                                     controllerRouteHolds,
-                                                maxLength: 64,
+                                                maxLength:
+                                                    Constants.holdsLength,
                                                 validator: (value) {
                                                   String result =
                                                       NameFieldValidator

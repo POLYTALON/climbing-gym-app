@@ -133,7 +133,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerPassword,
-                                                        maxLength: 256,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,

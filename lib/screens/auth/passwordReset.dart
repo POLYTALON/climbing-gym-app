@@ -48,7 +48,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         AutofillHints.email,
                         AutofillHints.username
                       ],
-                      maxLength: 320,
+                      maxLength: Constants.emailLength,
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
                       style: TextStyle(fontWeight: FontWeight.w800),

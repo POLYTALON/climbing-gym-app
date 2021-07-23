@@ -78,7 +78,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                             ),
                             TextFormField(
                                 controller: controllerEmail,
-                                maxLength: 320,
+                                maxLength: Constants.emailLength,
                                 validator: NameFieldValidator.validate,
                                 textCapitalization: TextCapitalization.none,
                                 style: TextStyle(fontWeight: FontWeight.w800),

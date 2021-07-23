@@ -119,7 +119,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                               ),
                               TextFormField(
                                   controller: controllerGymName,
-                                  maxLength: 64,
+                                  maxLength: Constants.gymNameLength,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -165,7 +165,7 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                               ),
                               TextFormField(
                                   controller: controllerLocation,
-                                  maxLength: 64,
+                                  maxLength: Constants.locationLength,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
