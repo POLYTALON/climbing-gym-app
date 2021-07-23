@@ -101,6 +101,9 @@ class _HomeScreenState extends State<HomeScreen>
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.stretch,
                                                 children: [
+                                                  ProfileCard(
+                                                      appUser:
+                                                          userSnapshot.data),
                                                   Container(
                                                     margin:
                                                         const EdgeInsets.all(8),
