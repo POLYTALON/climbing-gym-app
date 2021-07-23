@@ -4,7 +4,7 @@ import 'package:climbing_gym_app/screens/main/gyms.dart';
 import 'package:climbing_gym_app/screens/main/home.dart';
 import 'package:climbing_gym_app/screens/main/news.dart';
 import 'package:climbing_gym_app/screens/main/routes.dart';
-import 'package:climbing_gym_app/screens/main/developers.dart';
+import 'package:climbing_gym_app/screens/developers.dart';
 import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;

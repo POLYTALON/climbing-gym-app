@@ -1,5 +1,5 @@
 import 'package:climbing_gym_app/locator.dart';
-import 'package:climbing_gym_app/screens/main/authorizeOperatorScreen.dart';
+import 'package:climbing_gym_app/screens/settings/authorizeOperatorScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -142,7 +142,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                         return Container();
                       } else {
                         return Content(
-                            title: 'Authorize Operator',
+                            title: 'Manage Operators',
                             screenPage: AuthorizeOperatorScreen(),
                             fontColor: Colors.greenAccent,
                             disabled: !operatorSnapshot.data);

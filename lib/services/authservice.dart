@@ -408,6 +408,31 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future<bool> removeOperator(String email) async {
+    try {
+      var doc = await _firestore.collection('users').get();
+      bool isFound = false;
+
+      await Future.forEach(doc.docs, (user) async {
+        if (user.exists) {
+          if (user.data()['email'] == email) {
+            await _firestore
+                .collection('users')
+                .doc(user.id)
+                .collection('private')
+                .doc('operator')
+                .set({'operator': false});
+            isFound = true;
+          }
+        }
+      });
+      return isFound;
+    } on FirebaseException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<UserCredential> userReauthenticate(
       String userEmail, String userPassword) async {
     AuthCredential credential =

@@ -176,12 +176,55 @@ class _AuthorizeOperatorScreenState extends State<AuthorizeOperatorScreen> {
                                                   )),
                                               onPressed: () =>
                                                   _onPressAuthorizeOperator(
-                                                      context),
+                                                      true, context),
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                     "Authorize Operator",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w700)),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                Container(
+                                    padding: EdgeInsets.only(
+                                        left: 16, right: 16, bottom: 16),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Constants.polyRed),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    24.0)),
+                                                  )),
+                                              onPressed: () =>
+                                                  _onPressAuthorizeOperator(
+                                                      false, context),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    "Unauthorize Operator",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:
@@ -205,7 +248,7 @@ class _AuthorizeOperatorScreenState extends State<AuthorizeOperatorScreen> {
             ))));
   }
 
-  void _onPressAuthorizeOperator(BuildContext context) {
+  void _onPressAuthorizeOperator(bool isAuthorizing, BuildContext context) {
     final email = this.controllerEmail.text.trim();
 
     if (this._validateAndSave()) {
@@ -214,14 +257,18 @@ class _AuthorizeOperatorScreenState extends State<AuthorizeOperatorScreen> {
         builder: (_) {
           return AlertDialog(
             title: Text(
-              'Authorize Operator',
+              isAuthorizing ? 'Authorize Operator' : 'Unauthorize Operator',
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text(
-                    'Are you sure you want to authorize this account as operator?',
-                  ),
+                  isAuthorizing
+                      ? Text(
+                          'Are you sure you want to authorize this account as operator?',
+                        )
+                      : Text(
+                          'Are you sure you want to unauthorize this account as operator?',
+                        ),
                 ],
               ),
             ),
@@ -233,10 +280,15 @@ class _AuthorizeOperatorScreenState extends State<AuthorizeOperatorScreen> {
               TextButton(
                   onPressed: () async {
                     Navigator.of(context, rootNavigator: true).pop();
-                    var found = await this._auth.setOperator(email);
+                    var found = isAuthorizing
+                        ? await this._auth.setOperator(email)
+                        : await this._auth.removeOperator(email);
                     setState(() {
-                      this._confirmMessage =
-                          found ? 'Successfully authorized operator.' : '';
+                      this._confirmMessage = found
+                          ? (isAuthorizing
+                              ? 'Successfully authorized operator.'
+                              : 'Successfully unauthorized operator.')
+                          : '';
                       this._errorMessage = found ? '' : 'E-Mail not found.';
                     });
                   },
