@@ -214,6 +214,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnSetter,
                                         controller: controllerRouteSetter,
+                                        maxLength: Constants.setterNameLength,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(
@@ -359,6 +360,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnType,
                                         controller: controllerRouteType,
+                                        maxLength: Constants.routeTypeLength,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(
@@ -377,7 +379,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                         keyboardType: TextInputType.text,
                                         // The type should consist of only one line
                                         maxLines: 1,
-                                        maxLength: 12,
                                         decoration: InputDecoration(
                                             hintText: 'e.g. Competition',
                                             contentPadding:
@@ -415,6 +416,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         focusNode: fnHolds,
                                         controller: controllerRouteHolds,
+                                        maxLength: Constants.holdsLength,
                                         validator: (value) {
                                           String result =
                                               NameFieldValidator.validate(

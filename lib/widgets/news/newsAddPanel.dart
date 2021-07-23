@@ -128,6 +128,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               ),
                               TextFormField(
                                   controller: controllerNewsTitle,
+                                  maxLength: Constants.newsTitleLength,
                                   validator: TitleFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -203,6 +204,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                               ),
                               TextFormField(
                                   controller: controllerNewsLink,
+                                  maxLength: Constants.newsLinkLength,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
                                   style: Constants.defaultText,

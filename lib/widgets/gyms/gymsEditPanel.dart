@@ -128,6 +128,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                               ),
                               TextFormField(
                                   controller: controllerGymName,
+                                  maxLength: Constants.gymNameLength,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,
@@ -173,6 +174,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                               ),
                               TextFormField(
                                   controller: controllerLocation,
+                                  maxLength: Constants.locationLength,
                                   validator: NameFieldValidator.validate,
                                   autocorrect: false,
                                   textCapitalization: TextCapitalization.words,

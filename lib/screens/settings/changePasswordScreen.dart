@@ -119,6 +119,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerOldPassword,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -180,6 +182,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerNewPassword,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,
@@ -241,6 +245,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextFormField(
                                                         controller:
                                                             controllerConfirmNewPassword,
+                                                        maxLength: Constants
+                                                            .passwordLength,
                                                         validator:
                                                             PasswordFieldValidator
                                                                 .validate,

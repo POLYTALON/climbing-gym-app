@@ -90,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                               controller: controllerEmail,
                               autofillHints: [AutofillHints.username],
+                              maxLength: Constants.emailLength,
                               enabled: !isLoggedIn,
                               autocorrect: false,
                               textCapitalization: TextCapitalization.words,
@@ -118,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                               controller: controllerPassword,
                               autofillHints: [AutofillHints.password],
+                              maxLength: Constants.passwordLength,
                               enabled: !isLoggedIn,
                               textCapitalization: TextCapitalization.none,
                               style: TextStyle(fontWeight: FontWeight.w800),
