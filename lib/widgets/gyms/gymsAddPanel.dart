@@ -56,7 +56,8 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
             // SlidingUpPanel content
             child: Form(
                 key: _formKey,
-                child: Column(
+                child: SingleChildScrollView(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Take photo button
@@ -258,9 +259,10 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    Divider()
                   ],
-                ))));
+                )))));
   }
 
   void _showImageSourceActionSheet(BuildContext context) {

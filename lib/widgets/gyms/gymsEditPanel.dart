@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
@@ -63,7 +64,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
             // SlidingUpPanel content
             child: Form(
                 key: _formKey,
-                child: Column(
+                child: SingleChildScrollView(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Take photo button
@@ -222,7 +224,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                                 onPressed: () => editGym(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("Update Gym",
+                                  child: AutoSizeText("Update Gym",
+                                      maxLines: 1,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700)),
@@ -250,7 +253,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                                     gymService.panelControl.close(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("Cancel",
+                                  child: AutoSizeText("Cancel",
+                                      maxLines: 1,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700)),
@@ -258,6 +262,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                               ),
                             ),
                           ),
+                          Divider()
                         ],
                       ),
                     ),
@@ -279,7 +284,7 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                                   Expanded(
                                     child: Container(
                                       margin: const EdgeInsets.only(
-                                          left: 100, right: 100),
+                                          left: 24.0, right: 24.0),
                                       child: ElevatedButton(
                                         style: ButtonStyle(
                                             backgroundColor:
@@ -307,7 +312,8 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                                                 child: Icon(Icons.delete,
                                                     size: 20),
                                               ),
-                                              Text("Delete Gym",
+                                              AutoSizeText("Delete Gym",
+                                                  maxLines: 1,
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
@@ -322,9 +328,10 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                               ),
                             );
                           }
-                        })
+                        }),
+                    Divider()
                   ],
-                ))));
+                )))));
   }
 
   void _showImageSourceActionSheet(BuildContext context) {

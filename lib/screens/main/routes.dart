@@ -109,8 +109,9 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                                 Radius.circular(
                                                                     16.0)),
                                                     color: Constants.polyGray),
-                                                child: Column(
-                                                    children: <Widget>[
+                                                child: SingleChildScrollView(
+                                                    child: Column(
+                                                        children: <Widget>[
                                                       Padding(
                                                           padding:
                                                               const EdgeInsets
@@ -444,7 +445,7 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                                       CircleBorder(),
                                                                 )
                                                               ]))
-                                                    ])))),
+                                                    ]))))),
 
                                     // Page content
                                     body: Container(
