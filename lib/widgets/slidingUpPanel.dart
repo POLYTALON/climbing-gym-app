@@ -5,6 +5,7 @@ import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart'
     as FlutterSlidingUpPanel;
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class PolySlidingUpPanel extends StatefulWidget {
   PolySlidingUpPanel(
@@ -36,6 +37,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
 
   _SlidingUpPanelState(this.controller, this.panel, this.panelBuilder,
       this.onPanelClosed, this.header);
+
   FlutterSlidingUpPanel.PanelController controller;
   Widget panel;
   Widget Function(ScrollController) panelBuilder;
@@ -67,29 +69,33 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterSlidingUpPanel.SlidingUpPanel(
-      header: header,
-      minHeight: 0.0,
-      borderRadius: radius,
-      panelSnapping: true,
-      snapPoint: 0.999,
-      // maxHeight: MediaQuery.of(context).size.height * 0.8, (occlusion of widgets with virtual keyboard)
-      controller: controller,
-      panel: panel,
-      panelBuilder: panelBuilder,
-      backdropEnabled: true,
-      backdropTapClosesPanel: true,
-      onPanelClosed: (() {
-        FocusScope.of(context).unfocus();
-        pageviewService.setSwipingAllowed(true);
-        setState(() {});
-        if (onPanelClosed != null) {
-          onPanelClosed();
-        }
-      }),
-      onPanelOpened: (() {
-        pageviewService.setSwipingAllowed(false);
-      }),
-    );
+    return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+      return FlutterSlidingUpPanel.SlidingUpPanel(
+        header: header,
+        minHeight: 0.0,
+        borderRadius: radius,
+        panelSnapping: true,
+        snapPoint: 0.999,
+        maxHeight: isKeyboardVisible
+            ? (MediaQuery.of(context).size.height * 0.4)
+            : (MediaQuery.of(context).size.height * 0.8),
+        controller: controller,
+        panel: panel,
+        panelBuilder: panelBuilder,
+        backdropEnabled: true,
+        backdropTapClosesPanel: true,
+        onPanelClosed: (() {
+          FocusScope.of(context).unfocus();
+          pageviewService.setSwipingAllowed(true);
+          setState(() {});
+          if (onPanelClosed != null) {
+            onPanelClosed();
+          }
+        }),
+        onPanelOpened: (() {
+          pageviewService.setSwipingAllowed(false);
+        }),
+      );
+    });
   }
 }
