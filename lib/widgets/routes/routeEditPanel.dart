@@ -561,7 +561,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                           child: Container(
                                             alignment: Alignment.center,
                                             margin: EdgeInsets.only(
-                                                left: 16.0, right: 16.0),
+                                                left: 24.0, right: 24.0),
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor:
