@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
@@ -323,11 +324,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                                             });
                                                                           }),
                                                                       shape: (selectedRouteColorIndex == index) ? CircleBorder(side: BorderSide(width: 3.0, color: Constants.polyGray)) : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
-                                                              Text(
+                                                              AutoSizeText(
                                                                   routeColorSnapshot
                                                                       .data[
                                                                           index]
                                                                       .color,
+                                                                  maxLines: 1,
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -496,8 +498,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                     selectedRouteColorIndex),
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text("Update Route",
+                                                      const EdgeInsets.all(4.0),
+                                                  child: AutoSizeText(
+                                                      "Update Route",
+                                                      maxLines: 1,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
@@ -532,8 +536,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                     .close(),
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text("Cancel",
+                                                      const EdgeInsets.all(4.0),
+                                                  child: AutoSizeText("Cancel",
+                                                      maxLines: 1,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
@@ -554,8 +559,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                       children: [
                                         Expanded(
                                           child: Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 100, right: 100),
+                                            alignment: Alignment.center,
+                                            margin: EdgeInsets.only(
+                                                left: 24.0, right: 24.0),
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor:
@@ -588,7 +594,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                       child: Icon(Icons.delete,
                                                           size: 20),
                                                     ),
-                                                    Text("Delete Route",
+                                                    AutoSizeText("Delete Route",
+                                                        maxLines: 1,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight:
@@ -602,7 +609,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                         ),
                                       ],
                                     ),
-                                  )
+                                  ),
+                                  Divider()
                                 ],
                               ));
                         }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
@@ -21,21 +22,23 @@ class AboutScreen extends StatelessWidget {
               title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text("ABOUT",
-                            style: TextStyle(
-                                fontSize: 28, fontWeight: FontWeight.w900)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text("POLYTALON",
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          AutoSizeText("ABOUT ",
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.w900)),
+                          AutoSizeText("POLYTALON",
+                              maxLines: 1,
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w900)),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    )
                   ]),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(2.0),

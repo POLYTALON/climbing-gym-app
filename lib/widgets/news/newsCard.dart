@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
@@ -76,8 +77,9 @@ class _NewsCardState extends State<NewsCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
-                              child: Text(
+                              child: AutoSizeText(
                             this.news.title,
+                            maxLines: 1,
                             textAlign: TextAlign.center,
                             style: Constants.subHeaderText,
                           )),

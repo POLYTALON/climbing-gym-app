@@ -1,19 +1,17 @@
 import 'dart:io';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/screens/auth/passwordReset.dart';
 import 'package:climbing_gym_app/screens/auth/register.dart';
 import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/validators/email_validator.dart';
 import 'package:climbing_gym_app/validators/password_validator.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../main.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,35 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Material(
         color: Constants.polyDark,
-        child: Container(
-          child: Stack(children: [
-            Container(
-              child: Positioned(
-                top: 0.0,
-                left: 0.0,
-                child: Row(children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
-                    // back button
-                    child: RawMaterialButton(
-                        onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (countext) => StartScreen()))
-                            },
-                        elevation: 2.0,
-                        fillColor: Colors.grey,
-                        child: Icon(Icons.arrow_back_rounded, size: 32.0),
-                        padding: EdgeInsets.all(8.0),
-                        shape: CircleBorder()),
-                  )
-                ]),
-              ),
-            ),
-            Container(
+        child: Stack(children: <Widget>[
+          SingleChildScrollView(
+            child: Container(
+              height: constraints.maxHeight * 1.1,
               margin: const EdgeInsets.only(left: 64.0, right: 64.0, top: 32),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     // Spacer
-                    Spacer(),
+                    Spacer(flex: 1),
 
                     Platform.isIOS
                         ? SignInWithAppleButton(
@@ -249,30 +226,55 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Spacer
                     Spacer(flex: 1),
 
-                    //Text Privat policy
-                    Center(
-                        child: RichText(
-                            text: TextSpan(children: [
-                      TextSpan(
-                        text: "I have read and accepted the",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      TextSpan(
-                          text: " Privacy Policy.",
-                          style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              launch(
-                                  "https://polytalon.com/datenschutz-grip-guide/");
-                            })
-                    ]))),
-
+                    // Text Privat policy
+                    FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            child: Row(children: [
+                              AutoSizeText("I have read and accepted the ",
+                                  style: Constants.defaultTextWhite,
+                                  maxLines: 1),
+                              TextButton(
+                                  onPressed: () => launch(
+                                      "https://polytalon.com/datenschutz-grip-guide/"),
+                                  child: AutoSizeText("Privacy Policy",
+                                      style: TextStyle(
+                                          color: Colors.greenAccent,
+                                          fontSize: 16,
+                                          decoration: TextDecoration.underline),
+                                      maxLines: 1))
+                            ]))),
                     // Spacer
-                    Spacer(flex: 1),
+                    Spacer(),
                   ]),
             ),
-          ]),
-        ));
+          ),
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            child: Row(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 48.0, 0.0, 16.0),
+                // back button
+                child: RawMaterialButton(
+                    onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (countext) => StartScreen()))
+                        },
+                    elevation: 2.0,
+                    fillColor: Colors.grey,
+                    child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                    padding: EdgeInsets.all(8.0),
+                    shape: CircleBorder()),
+              )
+            ]),
+          ),
+        ]),
+      );
+    });
   }
 
   void doUserLogin() async {
