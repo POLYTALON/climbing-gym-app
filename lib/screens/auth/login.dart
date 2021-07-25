@@ -259,7 +259,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 // back button
                 child: RawMaterialButton(
                     onPressed: () => {
-                          print("Bla"),
                           Navigator.push(
                               context,
                               MaterialPageRoute(
