@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
@@ -103,7 +104,7 @@ class _RouteCardState extends State<RouteCard> {
                         ])),
                     // Title
                     Expanded(
-                        flex: 5,
+                        flex: 6,
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           child: Column(
@@ -131,20 +132,23 @@ class _RouteCardState extends State<RouteCard> {
                                       Expanded(
                                         flex: 6,
                                         child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: PolyRatingBar(
-                                              allowHalfRating: true,
-                                              onRated: (v) {},
-                                              starCount: 5,
-                                              rating: route.rating,
-                                              size: 17.0,
-                                              isReadOnly: true,
-                                              activeColor: Colors.orangeAccent,
-                                              inactiveColor:
-                                                  Constants.lightGray,
-                                              borderColor: Colors.black,
-                                              spacing: 0.0),
-                                        ),
+                                            alignment: Alignment.topRight,
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: PolyRatingBar(
+                                                  allowHalfRating: true,
+                                                  onRated: (v) {},
+                                                  starCount: 5,
+                                                  rating: route.rating,
+                                                  size: 17.0,
+                                                  isReadOnly: true,
+                                                  activeColor:
+                                                      Colors.orangeAccent,
+                                                  inactiveColor:
+                                                      Constants.lightGray,
+                                                  borderColor: Colors.black,
+                                                  spacing: 0.0),
+                                            )),
                                       ),
                                     ]),
                                 Row(
@@ -172,57 +176,65 @@ class _RouteCardState extends State<RouteCard> {
                                               ),
                                             );
                                           }),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 4.0),
-                                        child: route.isDone
-                                            ? Row(
-                                                children: [
-                                                  Icon(Icons.check_circle,
-                                                      color: Colors.white),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 2.0),
-                                                    child: Text("Done",
-                                                        style: Constants
-                                                            .defaultTextWhite),
-                                                  ),
-                                                ],
-                                              )
-                                            : route.isTried
+                                      FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 4.0),
+                                            child: route.isDone
                                                 ? Row(
                                                     children: [
-                                                      Icon(Icons.pending,
+                                                      Icon(Icons.check_circle,
                                                           color: Colors.white),
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
                                                                     .only(
                                                                 left: 2.0),
-                                                        child: Text("Tried",
+                                                        child: AutoSizeText(
+                                                            "Done",
+                                                            maxLines: 1,
                                                             style: Constants
                                                                 .defaultTextWhite),
                                                       ),
                                                     ],
                                                   )
-                                                : Row(
-                                                    children: [
-                                                      Icon(
-                                                          Icons.circle_outlined,
-                                                          color: Colors.white),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
-                                                        child: Text("Open",
-                                                            style: Constants
-                                                                .defaultTextWhite),
+                                                : route.isTried
+                                                    ? Row(
+                                                        children: [
+                                                          Icon(Icons.pending,
+                                                              color:
+                                                                  Colors.white),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text("Tried",
+                                                                style: Constants
+                                                                    .defaultTextWhite),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons
+                                                                  .circle_outlined,
+                                                              color:
+                                                                  Colors.white),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text("Open",
+                                                                style: Constants
+                                                                    .defaultTextWhite),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                      )
+                                          ))
                                     ]),
                               ]),
                         ))

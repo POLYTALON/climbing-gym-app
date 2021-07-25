@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
@@ -321,11 +322,12 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                                                           ? CircleBorder(
                                                                               side: BorderSide(width: 3.0, color: Constants.polyGray))
                                                                           : CircleBorder(side: BorderSide(width: 0.0, color: Colors.transparent)))),
-                                                              Text(
+                                                              AutoSizeText(
                                                                   routeColorSnapshot
                                                                       .data[
                                                                           index]
                                                                       .color,
+                                                                  maxLines: 1,
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -484,7 +486,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                             addRoute(appUser.selectedGym),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text("Create Route",
+                                          child: AutoSizeText("Create Route",
+                                              maxLines: 1,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700)),
@@ -513,7 +516,8 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                             _panelController.close(),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text("Cancel",
+                                          child: AutoSizeText("Cancel",
+                                              maxLines: 1,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700)),
@@ -523,6 +527,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                   ),
                                 ],
                               )),
+                          Divider()
                         ],
                       ))));
         });
