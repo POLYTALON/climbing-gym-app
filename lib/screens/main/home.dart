@@ -194,19 +194,14 @@ class _HomeScreenState extends State<HomeScreen>
                                                                               .data
                                                                               .values
                                                                               .toList();
-                                                                          return Column(children: <
-                                                                              Widget>[
-                                                                            CircularPercentIndicator(
-                                                                                radius: 90.0,
-                                                                                backgroundColor: Constants.polyGray,
-                                                                                animation: true,
-                                                                                animationDuration: 1000,
-                                                                                percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes) / amount[index]).clamp(0.0, 1.0).toDouble(),
-                                                                                center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite),
-                                                                                progressColor: _getRouteColor(colorStrings[index], routeColorSnapshot.data)),
-                                                                            Text(colorStrings[index],
-                                                                                style: Constants.smallTextWhite600),
-                                                                          ]);
+                                                                          return FittedBox(
+                                                                              fit: BoxFit.scaleDown,
+                                                                              child: Padding(
+                                                                                  padding: EdgeInsets.only(bottom: 16.0),
+                                                                                  child: Column(children: <Widget>[
+                                                                                    CircularPercentIndicator(radius: 90.0, backgroundColor: Constants.polyGray, animation: true, animationDuration: 1000, percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes) / amount[index]).clamp(0.0, 1.0).toDouble(), center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite), progressColor: _getRouteColor(colorStrings[index], routeColorSnapshot.data)),
+                                                                                    Text(colorStrings[index], style: Constants.smallTextWhite600),
+                                                                                  ])));
                                                                         }),
                                                               ],
                                                             ),
@@ -399,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen>
         color: Color(availableColors
             .firstWhere((routeColor) => routeColor.color == entry.key)
             .colorCode),
-        radius: 80.0,
+        radius: MediaQuery.of(context).size.width * 0.2,
         showTitle: false,
       ));
     });
