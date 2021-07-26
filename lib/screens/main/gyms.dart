@@ -69,12 +69,8 @@ class _GymsScreenState extends State<GymsScreen>
                                 color: Constants.polyGreen));
                       } else {
                         // gymsList = gymsSnapshot.data;
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              top:
-                                  90.0), // Workaround for Sliding Up Panel Keyboard Bug
-                          child: Container(
-                              child: Column(children: [
+                        return Container(
+                          child: Column(children: [
                             // Text
                             Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -158,7 +154,7 @@ class _GymsScreenState extends State<GymsScreen>
                                       ]))),
                               Divider()
                             ])))
-                          ])),
+                          ]),
                         );
                       }
                     }),

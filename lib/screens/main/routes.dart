@@ -84,11 +84,7 @@ class _RoutesScreenState extends State<RoutesScreen>
                                   !routeColorSnapshot.hasData) {
                                 return Container(width: 0.0, height: 0.0);
                               } else {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                            top:
-                                90.0), // Workaround for Sliding Up Panel Keyboard Bug
-                                  child: Scaffold(
+                                return Scaffold(
                                       key: _scaffoldKey,
                                       // Add route button
                                       floatingActionButton:
@@ -553,7 +549,7 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                 }
                                               }),
                                         )
-                                      ]))),
+                                      ])),
                                 );
                               }
                             });
