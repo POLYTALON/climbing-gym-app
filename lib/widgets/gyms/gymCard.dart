@@ -123,9 +123,9 @@ class _GymCardState extends State<GymCard> {
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                          )),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 18)),
                                     ),
                                   )),
                               FittedBox(
@@ -138,9 +138,9 @@ class _GymCardState extends State<GymCard> {
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                          )),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 18)),
                                     ),
                                   )),
                             ],
