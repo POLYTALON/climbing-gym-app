@@ -170,6 +170,7 @@ class _RouteCardState extends State<RouteCard> {
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
                                                   child: Icon(Icons.circle,
+                                                      size: 20,
                                                       color: routeColorSnapshot
                                                           .data),
                                                 ),
@@ -185,6 +186,7 @@ class _RouteCardState extends State<RouteCard> {
                                                 ? Row(
                                                     children: [
                                                       Icon(Icons.check_circle,
+                                                          size: 20,
                                                           color: Colors.white),
                                                       Padding(
                                                         padding:
@@ -203,6 +205,7 @@ class _RouteCardState extends State<RouteCard> {
                                                     ? Row(
                                                         children: [
                                                           Icon(Icons.pending,
+                                                              size: 20,
                                                               color:
                                                                   Colors.white),
                                                           Padding(
@@ -210,7 +213,9 @@ class _RouteCardState extends State<RouteCard> {
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 2.0),
-                                                            child: Text("Tried",
+                                                            child: AutoSizeText(
+                                                                "Tried",
+                                                                maxLines: 1,
                                                                 style: Constants
                                                                     .defaultTextWhite),
                                                           ),
@@ -221,6 +226,7 @@ class _RouteCardState extends State<RouteCard> {
                                                           Icon(
                                                               Icons
                                                                   .circle_outlined,
+                                                              size: 20,
                                                               color:
                                                                   Colors.white),
                                                           Padding(
@@ -228,7 +234,9 @@ class _RouteCardState extends State<RouteCard> {
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 2.0),
-                                                            child: Text("Open",
+                                                            child: AutoSizeText(
+                                                                "Open",
+                                                                maxLines: 1,
                                                                 style: Constants
                                                                     .defaultTextWhite),
                                                           ),
