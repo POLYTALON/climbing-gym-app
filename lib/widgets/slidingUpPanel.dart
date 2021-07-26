@@ -73,7 +73,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       borderRadius: radius,
       panelSnapping: true,
       snapPoint: 0.999,
-      maxHeight: MediaQuery.of(context).size.height * 0.8,
+      maxHeight: MediaQuery.of(context).size.height * 0.75,
       controller: controller,
       panel: panel,
       panelBuilder: panelBuilder,

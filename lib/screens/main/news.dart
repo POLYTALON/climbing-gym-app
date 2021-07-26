@@ -59,37 +59,42 @@ class _NewsScreenState extends State<NewsScreen>
                       NewsService().streamNews(userSnapshot.data.selectedGym),
                   child: Consumer<List<News>>(builder: (context, news, _) {
                     return Stack(children: <Widget>[
-                      Scaffold(
-                          floatingActionButton:
-                              _getIsPrivileged(userSnapshot.data)
-                                  ? FloatingActionButton(
-                                      heroTag: "news",
-                                      child: const Icon(Icons.add),
-                                      backgroundColor: Constants.polyGreen,
-                                      onPressed: () => _toggleAddPanel(),
-                                    )
-                                  : null,
-                          body: Container(
-                              color: Constants.polyDark,
-                              child: ListView.builder(
-                                  padding: const EdgeInsets.all(32),
-                                  itemCount: news.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        child: NewsCard(
-                                            news: news[index],
-                                            isDeletable: userSnapshot
-                                                    .data.isOperator
-                                                ? true
-                                                : userSnapshot
-                                                            .data.selectedGym ==
-                                                        news[index].gymid &&
-                                                    _getIsPrivileged(
-                                                        userSnapshot.data)));
-                                  }))),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top:
+                                90.0), // Workaround for Sliding Up Panel Keyboard Bug
+                        child: Scaffold(
+                            floatingActionButton:
+                                _getIsPrivileged(userSnapshot.data)
+                                    ? FloatingActionButton(
+                                        heroTag: "news",
+                                        child: const Icon(Icons.add),
+                                        backgroundColor: Constants.polyGreen,
+                                        onPressed: () => _toggleAddPanel(),
+                                      )
+                                    : null,
+                            body: Container(
+                                color: Constants.polyDark,
+                                child: ListView.builder(
+                                    padding: const EdgeInsets.all(32),
+                                    itemCount: news.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                          margin: const EdgeInsets.only(
+                                              bottom: 10.0),
+                                          child: NewsCard(
+                                              news: news[index],
+                                              isDeletable: userSnapshot
+                                                      .data.isOperator
+                                                  ? true
+                                                  : userSnapshot.data
+                                                              .selectedGym ==
+                                                          news[index].gymid &&
+                                                      _getIsPrivileged(
+                                                          userSnapshot.data)));
+                                    }))),
+                      ),
                       if (_getIsPrivileged(userSnapshot.data))
                         NewsAddPanel(
                             panelController: _newsAddPanelController,
