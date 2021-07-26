@@ -69,89 +69,97 @@ class _GymsScreenState extends State<GymsScreen>
                                 color: Constants.polyGreen));
                       } else {
                         // gymsList = gymsSnapshot.data;
-                        return Container(
-                            child: Column(children: [
-                          // Text
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text("Choose Your Gym",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24)),
-                          ),
-                          // Search Bar
-                          Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                              child: TextField(
-                                  textInputAction: TextInputAction.search,
-                                  onSubmitted: (_) => updateSearchList(
-                                      gymsSnapshot.data as List<Gym>),
-                                  controller: controllerGymName,
-                                  autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                  keyboardType: TextInputType.text,
-                                  maxLines: 1,
-                                  decoration: InputDecoration(
-                                      hintText: 'Search',
-                                      contentPadding:
-                                          const EdgeInsets.only(left: 16.0),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24.0),
-                                          borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none)),
-                                      fillColor: Colors.white,
-                                      filled: true))),
-                          // GridView (with GymCards)
-                          Expanded(
-                              child: SingleChildScrollView(
-                                  child: Column(children: <Widget>[
-                            GridView.count(
-                                controller: sc,
-                                shrinkWrap: true,
-                                crossAxisCount: 2,
-                                childAspectRatio: (itemWidth / itemHeight),
-                                children: List.generate(
-                                    isSearched
-                                        ? gymsList.length
-                                        : gymsSnapshot.data.length, (index) {
-                                  return Container(
-                                      child: GymCard(
-                                          gym: isSearched
-                                              ? gymsList[index]
-                                              : gymsSnapshot.data[index],
-                                          appUser: snapshot.data));
-                                })),
-                            Divider(),
-                            FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Container(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Row(children: [
-                                      AutoSizeText(
-                                          "Can't find your gym? Please write a mail to",
-                                          style: Constants.defaultTextWhite,
-                                          maxLines: 1),
-                                      TextButton(
-                                          onPressed: () => launch(
-                                              emailLaunchUri().toString()),
-                                          child: AutoSizeText(
-                                              "info@polytalon.com",
-                                              style: TextStyle(
-                                                  color: Colors.greenAccent,
-                                                  fontSize: 16,
-                                                  decoration:
-                                                      TextDecoration.underline),
-                                              maxLines: 1))
-                                    ]))),
-                            Divider()
-                          ])))
-                        ]));
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              top:
+                                  90.0), // Workaround for Sliding Up Panel Keyboard Bug
+                          child: Container(
+                              child: Column(children: [
+                            // Text
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text("Choose Your Gym",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                            ),
+                            // Search Bar
+                            Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                                child: TextField(
+                                    textInputAction: TextInputAction.search,
+                                    onSubmitted: (_) => updateSearchList(
+                                        gymsSnapshot.data as List<Gym>),
+                                    controller: controllerGymName,
+                                    autocorrect: false,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w800),
+                                    keyboardType: TextInputType.text,
+                                    maxLines: 1,
+                                    decoration: InputDecoration(
+                                        hintText: 'Search',
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0),
+                                            borderSide: BorderSide(
+                                                width: 0,
+                                                style: BorderStyle.none)),
+                                        fillColor: Colors.white,
+                                        filled: true))),
+                            // GridView (with GymCards)
+                            Expanded(
+                                child: SingleChildScrollView(
+                                    child: Column(children: <Widget>[
+                              GridView.count(
+                                  padding: const EdgeInsets.all(0),
+                                  controller: sc,
+                                  shrinkWrap: true,
+                                  crossAxisCount: 2,
+                                  childAspectRatio: (itemWidth / itemHeight),
+                                  children: List.generate(
+                                      isSearched
+                                          ? gymsList.length
+                                          : gymsSnapshot.data.length, (index) {
+                                    return Container(
+                                        child: GymCard(
+                                            gym: isSearched
+                                                ? gymsList[index]
+                                                : gymsSnapshot.data[index],
+                                            appUser: snapshot.data));
+                                  })),
+                              Divider(),
+                              FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Container(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Row(children: [
+                                        AutoSizeText(
+                                            "Can't find your gym? Please write a mail to",
+                                            style: Constants.defaultTextWhite,
+                                            maxLines: 1),
+                                        TextButton(
+                                            onPressed: () => launch(
+                                                emailLaunchUri().toString()),
+                                            child: AutoSizeText(
+                                                "info@polytalon.com",
+                                                style: TextStyle(
+                                                    color: Colors.greenAccent,
+                                                    fontSize: 16,
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                                maxLines: 1))
+                                      ]))),
+                              Divider()
+                            ])))
+                          ])),
+                        );
                       }
                     }),
               ),
