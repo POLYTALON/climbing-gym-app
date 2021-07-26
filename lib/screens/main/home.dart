@@ -79,184 +79,204 @@ class _HomeScreenState extends State<HomeScreen>
                                     child: CircularProgressIndicator(
                                         color: Constants.polyGreen));
                               }
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    top:
-                                        90.0), // Workaround for Sliding Up Panel Keyboard Bug
-                                child: SingleChildScrollView(
-                                    controller: scrollController,
-                                    child: Container(
-                                        margin: const EdgeInsets.only(
-                                            left: 16.0, right: 16.0, top: 32),
-                                        color: Constants.polyDark,
-                                        child: FutureBuilder<Map<String, int>>(
-                                            future: _getRouteAmountPerColor(
-                                                userSnapshot.data.selectedGym),
-                                            builder: (context,
-                                                routeAmountColorSnapshot) {
-                                              if (!routeAmountColorSnapshot
-                                                  .hasData) {
-                                                return Container(
-                                                  width: 0.0,
-                                                  height: 0.0,
-                                                );
-                                              } else {
-                                                return Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .stretch,
-                                                  children: [
-                                                    ProfileCard(
-                                                        appUser:
-                                                            userSnapshot.data),
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .stretch,
-                                                          children: [
-                                                            if (routes.length >
-                                                                0)
-                                                              Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
+                              return SingleChildScrollView(
+                                controller: scrollController,
+                                child: Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 16.0, right: 16.0, top: 32),
+                                    color: Constants.polyDark,
+                                    child: FutureBuilder<Map<String, int>>(
+                                        future: _getRouteAmountPerColor(
+                                            userSnapshot.data.selectedGym),
+                                        builder: (context,
+                                            routeAmountColorSnapshot) {
+                                          if (!routeAmountColorSnapshot
+                                              .hasData) {
+                                            return Container(
+                                              width: 0.0,
+                                              height: 0.0,
+                                            );
+                                          } else {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                ProfileCard(
+                                                    appUser: userSnapshot.data),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(8),
+                                                  child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .stretch,
+                                                      children: [
+                                                        if (routes.length > 0)
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
                                                                             .only(
                                                                         top:
                                                                             16.0,
                                                                         bottom:
                                                                             16),
-                                                                    child: Text(
-                                                                        'Accomplished routes in the current gym:',
-                                                                        style: Constants
-                                                                            .subHeaderTextWhite600),
-                                                                  ),
-                                                                  LinearPercentIndicator(
-                                                                      lineHeight:
-                                                                          32.0,
-                                                                      percent: _getAccomplishedRoutesRatioInCurrentGym(
-                                                                          userSnapshot
-                                                                              .data,
-                                                                          routes),
-                                                                      backgroundColor: Constants
+                                                                child: Text(
+                                                                    'Accomplished routes in the current gym:',
+                                                                    style: Constants
+                                                                        .subHeaderTextWhite600),
+                                                              ),
+                                                              LinearPercentIndicator(
+                                                                  lineHeight:
+                                                                      32.0,
+                                                                  percent: _getAccomplishedRoutesRatioInCurrentGym(
+                                                                      userSnapshot
+                                                                          .data,
+                                                                      routes),
+                                                                  backgroundColor:
+                                                                      Constants
                                                                           .polyGray,
-                                                                      progressColor:
-                                                                          Constants
-                                                                              .polyGreen,
-                                                                      animation:
-                                                                          true,
-                                                                      animationDuration:
-                                                                          1000,
-                                                                      center: Text(
-                                                                          (_getAccomplishedRoutesRatioInCurrentGym(userSnapshot.data, routes) * 100).toStringAsPrecision(3) +
-                                                                              '%',
-                                                                          style:
-                                                                              Constants.defaultTextWhite700)),
-                                                                  // Currently accomplished routes
+                                                                  progressColor:
+                                                                      Constants
+                                                                          .polyGreen,
+                                                                  animation:
+                                                                      true,
+                                                                  animationDuration:
+                                                                      1000,
+                                                                  center: Text(
+                                                                      (_getAccomplishedRoutesRatioInCurrentGym(userSnapshot.data, routes) * 100).toStringAsPrecision(
+                                                                              3) +
+                                                                          '%',
+                                                                      style: Constants
+                                                                          .defaultTextWhite700)),
+                                                              // Currently accomplished routes
 
-                                                                  Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          top:
-                                                                              16.0,
-                                                                          bottom:
-                                                                              16.0),
-                                                                      child: Text(
-                                                                          'Currently accomplished routes:',
-                                                                          style:
-                                                                              Constants.subHeaderTextWhite600)),
-                                                                  GridView.builder(
-                                                                      padding: const EdgeInsets.all(0),
-                                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                                        crossAxisCount:
-                                                                            3,
-                                                                        childAspectRatio:
-                                                                            1,
-                                                                      ),
-                                                                      controller: scrollController,
-                                                                      shrinkWrap: true,
-                                                                      itemCount: routeAmountColorSnapshot.data.entries.length,
-                                                                      itemBuilder: (BuildContext context, int index) {
-                                                                        final colorStrings = routeAmountColorSnapshot
+                                                              Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: 16.0,
+                                                                      bottom:
+                                                                          16.0),
+                                                                  child: Text(
+                                                                      'Currently accomplished routes:',
+                                                                      style: Constants
+                                                                          .subHeaderTextWhite600)),
+                                                              GridView.builder(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          0),
+                                                                  gridDelegate:
+                                                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    crossAxisCount:
+                                                                        3,
+                                                                    childAspectRatio:
+                                                                        1,
+                                                                  ),
+                                                                  controller:
+                                                                      scrollController,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  itemCount:
+                                                                      routeAmountColorSnapshot
+                                                                          .data
+                                                                          .entries
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                              context,
+                                                                          int index) {
+                                                                    final colorStrings =
+                                                                        routeAmountColorSnapshot
                                                                             .data
                                                                             .keys
                                                                             .toList();
-                                                                        final amount = routeAmountColorSnapshot
+                                                                    final amount =
+                                                                        routeAmountColorSnapshot
                                                                             .data
                                                                             .values
                                                                             .toList();
-                                                                        return FittedBox(
-                                                                            fit:
-                                                                                BoxFit.scaleDown,
-                                                                            child: Padding(
-                                                                                padding: EdgeInsets.only(bottom: 16.0),
-                                                                                child: Column(children: <Widget>[
-                                                                                  CircularPercentIndicator(radius: 90.0, backgroundColor: Constants.polyGray, animation: true, animationDuration: 1000, percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes) / amount[index]).clamp(0.0, 1.0).toDouble(), center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite), progressColor: _getRouteColor(colorStrings[index], routeColorSnapshot.data)),
-                                                                                  Text(colorStrings[index], style: Constants.smallTextWhite600),
-                                                                                ])));
-                                                                      }),
-                                                                ],
-                                                              ),
-                                                            if (_getTotalAccomplishedRouteAmountPerColor(
-                                                                    userSnapshot
-                                                                        .data)
-                                                                .isNotEmpty)
-                                                              // All accomplished routes
-                                                              Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              16.0),
-                                                                  child: Text(
-                                                                      'All accomplished routes: ' +
-                                                                          _getTotalAccomplishedRoutesAmount(userSnapshot.data)
-                                                                              .toString(),
-                                                                      style: Constants
-                                                                          .subHeaderTextWhite600)),
-                                                            if (_getTotalAccomplishedRouteAmountPerColor(
-                                                                    userSnapshot
-                                                                        .data)
-                                                                .isNotEmpty)
-                                                              Row(
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Expanded(
-                                                                        flex: 5,
-                                                                        child: Column(
-                                                                            children: <Widget>[
-                                                                              SizedBox(
-                                                                                height: 230,
-                                                                                child:
-                                                                                    // Pie chart
-                                                                                    PieChart(
-                                                                                  _getPieChartData(userSnapshot.data, routeColorSnapshot.data),
-                                                                                  swapAnimationDuration: Duration(milliseconds: 150),
-                                                                                  swapAnimationCurve: Curves.linear,
-                                                                                ),
-                                                                              ),
-                                                                            ])),
-                                                                    Expanded(
-                                                                      flex: 5,
-                                                                      child: GridView.builder(
-                                                                          padding: const EdgeInsets.all(0),
-                                                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    return FittedBox(
+                                                                        fit: BoxFit
+                                                                            .scaleDown,
+                                                                        child: Padding(
+                                                                            padding: EdgeInsets.only(bottom: 16.0),
+                                                                            child: Column(children: <Widget>[
+                                                                              CircularPercentIndicator(radius: 90.0, backgroundColor: Constants.polyGray, animation: true, animationDuration: 1000, percent: (_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes) / amount[index]).clamp(0.0, 1.0).toDouble(), center: Text(_getAccomplishedRoutesAmount(userSnapshot.data, colorStrings[index], routes).toString() + '/' + amount[index].toString(), style: Constants.headerTextWhite), progressColor: _getRouteColor(colorStrings[index], routeColorSnapshot.data)),
+                                                                              Text(colorStrings[index], style: Constants.smallTextWhite600),
+                                                                            ])));
+                                                                  }),
+                                                            ],
+                                                          ),
+                                                        if (_getTotalAccomplishedRouteAmountPerColor(
+                                                                userSnapshot
+                                                                    .data)
+                                                            .isNotEmpty)
+                                                          // All accomplished routes
+                                                          Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      top:
+                                                                          16.0),
+                                                              child: Text(
+                                                                  'All accomplished routes: ' +
+                                                                      _getTotalAccomplishedRoutesAmount(userSnapshot
+                                                                              .data)
+                                                                          .toString(),
+                                                                  style: Constants
+                                                                      .subHeaderTextWhite600)),
+                                                        if (_getTotalAccomplishedRouteAmountPerColor(
+                                                                userSnapshot
+                                                                    .data)
+                                                            .isNotEmpty)
+                                                          Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                Expanded(
+                                                                    flex: 5,
+                                                                    child: Column(
+                                                                        children: <
+                                                                            Widget>[
+                                                                          SizedBox(
+                                                                            height:
+                                                                                230,
+                                                                            child:
+                                                                                // Pie chart
+                                                                                PieChart(
+                                                                              _getPieChartData(userSnapshot.data, routeColorSnapshot.data),
+                                                                              swapAnimationDuration: Duration(milliseconds: 150),
+                                                                              swapAnimationCurve: Curves.linear,
+                                                                            ),
+                                                                          ),
+                                                                        ])),
+                                                                Expanded(
+                                                                  flex: 5,
+                                                                  child: GridView
+                                                                      .builder(
+                                                                          padding: const EdgeInsets.all(
+                                                                              0),
+                                                                          gridDelegate:
+                                                                              SliverGridDelegateWithFixedCrossAxisCount(
                                                                             crossAxisCount:
                                                                                 2,
                                                                             childAspectRatio:
                                                                                 1,
                                                                           ),
-                                                                          controller: scrollController,
-                                                                          shrinkWrap: true,
-                                                                          itemCount: _getTotalAccomplishedRouteAmountPerColor(userSnapshot.data).entries.length,
-                                                                          itemBuilder: (BuildContext context, int index) {
+                                                                          controller:
+                                                                              scrollController,
+                                                                          shrinkWrap:
+                                                                              true,
+                                                                          itemCount: _getTotalAccomplishedRouteAmountPerColor(userSnapshot.data)
+                                                                              .entries
+                                                                              .length,
+                                                                          itemBuilder:
+                                                                              (BuildContext context, int index) {
                                                                             List<MapEntry<String, int>>
                                                                                 data =
                                                                                 _getTotalAccomplishedRouteAmountPerColor(userSnapshot.data).entries.toList();
@@ -266,14 +286,14 @@ class _HomeScreenState extends State<HomeScreen>
                                                                               Padding(padding: EdgeInsets.only(left: 8.0, right: 8.0), child: Text(data[index].value.toString(), style: Constants.subHeaderTextWhite600))
                                                                             ]));
                                                                           }),
-                                                                    )
-                                                                  ]),
-                                                          ]),
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                            }))),
+                                                                )
+                                                              ]),
+                                                      ]),
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                        })),
                               );
                             }));
                   }));
