@@ -77,7 +77,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
         panelSnapping: true,
         snapPoint: 0.999,
         maxHeight: isKeyboardVisible
-            ? (MediaQuery.of(context).size.height * 0.4)
+            ? (MediaQuery.of(context).size.height * 0.6)
             : (MediaQuery.of(context).size.height * 0.8),
         controller: controller,
         panel: panel,
