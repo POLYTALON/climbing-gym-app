@@ -21,13 +21,13 @@ class StartScreen extends StatelessWidget {
             Spacer(flex: 1),
             // Headline
             FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text("GRIP GUIDE",
+                fit: BoxFit.scaleDown,
+                child: Text("GripGuide",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
-                        fontSize: 34))),
+                        fontSize: 48))),
 
             // Spacer
             Spacer(flex: 2),
