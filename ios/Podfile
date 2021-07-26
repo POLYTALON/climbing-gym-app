@@ -1,0 +1,72 @@
+# Uncomment this line to define a global platform for your project
+#platform :ios, '10.0'
+
+# add the Firebase pod for Google Analytics
+pod 'Firebase/Analytics'
+# or pod ‘Firebase/AnalyticsWithoutAdIdSupport
+# for Analytics without IDFA collection capability
+
+# add pods for any other desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
+pod 'Firebase/Auth'
+
+# We use a Precompiled Version of the Cloud Firestore Pod to reduce the iOS build time.
+# For more Information see:
+# https://github.com/FirebaseExtended/flutterfire/issues/349#issuecomment-643054499
+# and
+# https://github.com/FirebaseExtended/flutterfire/issues/2751
+pod 'Firebase/Firestore'
+pod 'Firebase/Storage'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+
+# add pods for desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
+
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+  'Debug-development' => :debug,
+  'Debug-Runner-development' => :debug,
+  'Profile-development' => :release,
+  'Release-development' => :release,
+  'Debug-productive' => :debug,
+  'Profile-productive' => :release,
+  'Release-productive' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.0.0'
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
+end
