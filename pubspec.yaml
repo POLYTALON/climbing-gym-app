@@ -56,7 +56,6 @@ dependencies:
   auto_size_text: ^2.1.0
   sign_in_with_apple: ^3.0.0
   crypto: ^3.0.1
-  flutter_keyboard_visibility: ^5.0.3
 
 dev_dependencies:
   flutter_test:
