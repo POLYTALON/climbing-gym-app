@@ -166,6 +166,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             screenPage: DeleteAccountScreen(),
             fontColor: Colors.redAccent,
           ),
+          Padding(padding: EdgeInsets.only(bottom: 48.0))
         ]));
   }
 
