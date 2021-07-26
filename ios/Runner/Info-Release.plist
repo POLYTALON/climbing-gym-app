@@ -46,8 +46,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -59,9 +57,9 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>$(APP_DISPLAY_NAME) wants to access your camera</string>
+	<string>$(APP_DISPLAY_NAME) wants to access your camera to add a picture on the content you will create.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(APP_DISPLAY_NAME) wants to access your Photo Library</string>
+	<string>$(APP_DISPLAY_NAME) wants to access your Photo Library to add a picture on the content you will create.</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(APP_DISPLAY_NAME)</string>
 </dict>

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -43,8 +45,12 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>$(APP_DISPLAY_NAME) wants to access your camera to add a picture on the content you will create.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Allow Flutter tools on yout computer to connect and debug the app. Greetings :). Info for all PolyDevs: For the App Store Deploy there is a Info-Release.plist. This is not allowed on App Store</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(APP_DISPLAY_NAME) wants to access your Photo Library to add a picture on the content you will create.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -52,8 +58,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -64,11 +68,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>$(APP_DISPLAY_NAME) wants to access your camera</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(APP_DISPLAY_NAME) wants to access your Photo Library</string>
-	<key>CFBundleDisplayName</key>
-	<string>$(APP_DISPLAY_NAME)</string>
 </dict>
 </plist>
