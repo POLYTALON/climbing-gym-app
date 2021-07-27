@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/News.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
 
 class NewsCard extends StatefulWidget {
@@ -93,13 +93,14 @@ class _NewsCardState extends State<NewsCard> {
                       child: Stack(
                         children: <Widget>[
                           Center(
-                              child: CircularProgressIndicator(
-                                  color: Constants.polyGreen)),
-                          Center(
-                            child: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: this.news.imageUrls[0],
-                            ),
+                            child: CachedNetworkImage(
+                                placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator(
+                                        color: Constants.polyGreen,
+                                      ),
+                                    ),
+                                imageUrl: this.news.imageUrls[0],
+                                fit: BoxFit.fill),
                           ),
                           if (this.isDeletable)
                             Align(

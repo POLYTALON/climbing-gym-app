@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:transparent_image/transparent_image.dart';
 
 class GymPreviewCard extends StatefulWidget {
   final Gym gym;
@@ -42,15 +42,16 @@ class _GymPreviewCardState extends State<GymPreviewCard> {
             Expanded(
                 flex: 4,
                 child: Stack(children: <Widget>[
-                  Center(
-                      child: CircularProgressIndicator(
-                          color: Constants.polyGreen)),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: gym.imageUrl,
+                    child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(
+                                color: Constants.polyGreen,
+                              ),
+                            ),
+                        imageUrl: gym.imageUrl,
                         fit: BoxFit.fill),
                   ),
                 ])),

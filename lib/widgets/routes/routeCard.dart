@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
@@ -8,7 +9,6 @@ import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
 class RouteCard extends StatefulWidget {
@@ -61,18 +61,19 @@ class _RouteCardState extends State<RouteCard> {
                     Expanded(
                         flex: 7,
                         child: Stack(children: <Widget>[
-                          Center(
-                              child: CircularProgressIndicator(
-                                  color: Constants.polyGreen)),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             child: Hero(
                               tag: route.id,
-                              child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: route.imageUrl,
-                                  fit: BoxFit.cover),
+                              child: CachedNetworkImage(
+                                  placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: Constants.polyGreen,
+                                        ),
+                                      ),
+                                  imageUrl: route.imageUrl,
+                                  fit: BoxFit.fill),
                             ),
                           ),
                           if (_getIsPrivileged())
