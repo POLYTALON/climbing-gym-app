@@ -37,7 +37,6 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   image_picker: ^0.8.0+3
   transparent_image: ^2.0.0
-  image_picker_web_redux: any
   universal_html: ^2.0.8
   firebase: ^9.0.1
   uuid: ^3.0.4
