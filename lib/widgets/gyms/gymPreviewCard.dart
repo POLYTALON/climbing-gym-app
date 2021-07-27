@@ -40,21 +40,20 @@ class _GymPreviewCardState extends State<GymPreviewCard> {
           children: <Widget>[
             // Image
             Expanded(
-                flex: 4,
-                child: Stack(children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: CachedNetworkImage(
-                        placeholder: (context, url) => Center(
-                              child: CircularProgressIndicator(
-                                color: Constants.polyGreen,
-                              ),
-                            ),
-                        imageUrl: gym.imageUrl,
-                        fit: BoxFit.fill),
-                  ),
-                ])),
+              flex: 4,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            color: Constants.polyGreen,
+                          ),
+                        ),
+                    imageUrl: gym.imageUrl,
+                    fit: BoxFit.fill),
+              ),
+            ),
             // Title
             Expanded(
                 flex: 6,
