@@ -73,7 +73,7 @@ class _RouteCardState extends State<RouteCard> {
                                         ),
                                       ),
                                   imageUrl: route.imageUrl,
-                                  fit: BoxFit.fill),
+                                  fit: BoxFit.cover),
                             ),
                           ),
                           if (_getIsPrivileged())
