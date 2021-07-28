@@ -89,10 +89,12 @@ class _NewsCardState extends State<NewsCard> {
                   ),
                   Expanded(
                     flex: 7,
-                    child: ClipRRect(
-                      child: Stack(
-                        children: <Widget>[
-                          Center(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                             child: CachedNetworkImage(
                                 placeholder: (context, url) => Center(
                                       child: CircularProgressIndicator(
@@ -100,23 +102,23 @@ class _NewsCardState extends State<NewsCard> {
                                       ),
                                     ),
                                 imageUrl: this.news.imageUrls[0],
-                                fit: BoxFit.fill),
+                                fit: BoxFit.cover),
                           ),
-                          if (this.isDeletable)
-                            Align(
-                                alignment: Alignment.bottomRight,
-                                child: IconButton(
-                                    onPressed: () {
-                                      onPressDelete(context);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Constants.polyRed,
-                                    )))
-                        ],
-                      ),
+                        ),
+                        if (this.isDeletable)
+                          Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                  onPressed: () {
+                                    onPressDelete(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Constants.polyRed,
+                                  )))
+                      ],
                     ),
-                  )
+                  ),
                 ]),
           ),
         ),
