@@ -201,7 +201,7 @@ class _ProfileCardState extends State<ProfileCard> {
         user.roles == null ||
         user.roles[user.selectedGym] == null) return '';
     if (user.roles[user.selectedGym].gymuser) return 'Gym Owner';
-    if (user.roles[user.selectedGym].builder) return 'Builder';
+    if (user.roles[user.selectedGym].builder) return 'Setter';
     return '';
   }
 }
