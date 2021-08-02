@@ -1,5 +1,6 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/settings/authorizeOperatorScreen.dart';
+import 'package:climbing_gym_app/screens/settings/legalNotesScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -161,6 +162,16 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   },
                 ),
               ])),
+          Content(
+              title: 'Legal Notes',
+              screenPage: Container(),
+              fontColor: Colors.white,
+              overrideOnTap: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LegalNotesScreen()));
+              }),
           Content(
             title: 'Delete account',
             screenPage: DeleteAccountScreen(),
