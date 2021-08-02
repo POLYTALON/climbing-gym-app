@@ -66,9 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           // Text Field Email-Address
                           Padding(
-                            padding:
-                                const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                            child: Text("E-Mail-Adresse:",
+                            padding: const EdgeInsets.only(
+                                left: 16.0, top: 16, bottom: 8.0),
+                            child: Text("Email:",
                                 style: TextStyle(color: Colors.white)),
                           ),
                           TextFormField(
@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               keyboardType: TextInputType.emailAddress,
                               validator: EmailFieldValidator.validate,
                               decoration: InputDecoration(
+                                  counterText: "",
                                   contentPadding:
                                       const EdgeInsets.only(left: 16.0),
                                   hintText: 'max.mustermann@polytalon.com',
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Text Field Password
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 16.0, top: 4.0, bottom: 4.0),
+                                left: 16.0, top: 16.0, bottom: 8.0),
                             child: Text("Password:",
                                 style: TextStyle(color: Colors.white)),
                           ),
@@ -117,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 contentPadding:
                                     const EdgeInsets.only(left: 16.0),
                                 hintText: '********',
+                                counterText: "",
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(24.0),
                                     borderSide: BorderSide(
@@ -137,11 +139,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     // Error Message
-                    Center(
-                        child: Text(_errorMessage,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w800))),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                      child: Center(
+                          child: Text(_errorMessage,
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w800))),
+                    ),
 
                     // Button Login
                     ElevatedButton(

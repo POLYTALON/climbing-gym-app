@@ -72,6 +72,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.name,
                               validator: NameFieldValidator.validate,
                               decoration: InputDecoration(
+                                  counterStyle:
+                                      const TextStyle(color: Colors.white),
                                   contentPadding:
                                       const EdgeInsets.only(left: 16.0),
                                   hintText: 'Max Mustermann',
@@ -104,6 +106,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.emailAddress,
                               validator: EmailFieldValidator.validate,
                               decoration: InputDecoration(
+                                  counterStyle:
+                                      const TextStyle(color: Colors.white),
                                   contentPadding:
                                       const EdgeInsets.only(left: 16.0),
                                   hintText: 'max.mustermann@polytalon.com',
@@ -135,6 +139,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.visiblePassword,
                               validator: PasswordFieldValidator.validate,
                               decoration: InputDecoration(
+                                  counterStyle:
+                                      const TextStyle(color: Colors.white),
                                   contentPadding:
                                       const EdgeInsets.only(left: 16.0),
                                   hintText: '********',
@@ -166,6 +172,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.visiblePassword,
                               validator: PasswordFieldValidator.validate,
                               decoration: InputDecoration(
+                                  counterStyle:
+                                      const TextStyle(color: Colors.white),
                                   contentPadding:
                                       const EdgeInsets.only(left: 16.0),
                                   hintText: '********',
