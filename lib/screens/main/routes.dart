@@ -456,8 +456,10 @@ class _RoutesScreenState extends State<RoutesScreen>
                                             child: IconButton(
                                                 icon: Icon(
                                                     Icons.filter_list_rounded,
-                                                    size: 32.0),
-                                                color: Colors.white,
+                                                    size: 32.0,
+                                                    color: _getIsFilterActive()
+                                                        ? Colors.greenAccent
+                                                        : Colors.white),
                                                 onPressed: () => openDrawer()),
                                           )
                                         ]),
@@ -682,5 +684,15 @@ class _RoutesScreenState extends State<RoutesScreen>
       _categoryFilter = 'All';
       _routeStateFilterIndex = 0;
     });
+  }
+
+  bool _getIsFilterActive() {
+    if (_sortFilter == 'Date descending' &&
+        _routeColorFilter.isEmpty &&
+        _categoryFilter == 'All' &&
+        _routeStateFilterIndex == 0) {
+      return false;
+    }
+    return true;
   }
 }
