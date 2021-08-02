@@ -332,7 +332,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Holds",
+                                  Text("Sector",
                                       style: Constants.defaultTextWhite),
                                   Text(this.route.holds,
                                       style: Constants.defaultTextWhite)

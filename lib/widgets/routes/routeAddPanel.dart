@@ -347,7 +347,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Route Type',
+                                      'Sector',
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w300,
