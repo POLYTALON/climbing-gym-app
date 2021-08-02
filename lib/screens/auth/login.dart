@@ -42,13 +42,20 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Stack(children: <Widget>[
           SingleChildScrollView(
             child: Container(
-              height: constraints.maxHeight * 1.1,
-              margin: const EdgeInsets.only(left: 64.0, right: 64.0, top: 32),
+              height: constraints.maxHeight,
+              margin: const EdgeInsets.only(
+                left: 64.0,
+                right: 64.0,
+              ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Polytalon Logo
-                    Image.asset('assets/img/polytalon_logo.png'),
+                    Spacer(flex: 2),
+                    Container(
+                        height: 50,
+                        child: Image.asset(
+                            'assets/img/polytalon_logo_notext.png')),
 
                     // Spacer
                     Spacer(flex: 1),
@@ -128,8 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    // Spacer
-                    Spacer(flex: 1),
 
                     // Error Message
                     Center(
@@ -137,9 +142,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.w800))),
-
-                    // Spacer
-                    Spacer(flex: 1),
 
                     // Button Login
                     ElevatedButton(
@@ -197,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     // Spacer
-                    Spacer(flex: 2),
+                    Spacer(flex: 1),
 
                     // Register Button
                     Text(
