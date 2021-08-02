@@ -350,7 +350,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Route Type',
+                                              'Sector',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w300,

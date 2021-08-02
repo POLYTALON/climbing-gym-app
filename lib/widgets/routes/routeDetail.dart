@@ -307,8 +307,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Category",
-                                  style: Constants.defaultTextWhite),
+                              Text("Sector", style: Constants.defaultTextWhite),
                               Text(this.route.type,
                                   style: Constants.defaultTextWhite)
                             ],
