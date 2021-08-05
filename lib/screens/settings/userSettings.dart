@@ -174,7 +174,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                               builder: (context) => LegalNotesScreen()));
                     }),
                 Content(
-                    title: 'Privacy Policy',
+                    title: 'Terms of Use & Privacy Policy',
                     screenPage: Container(),
                     overrideOnTap: () async {
                       launch("https://polytalon.com/datenschutz-grip-guide/");
