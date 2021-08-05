@@ -347,6 +347,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                 ]));
           } else {
             return Scaffold(
+                backgroundColor: Constants.polyDark,
                 body: Center(
                     child:
                         CircularProgressIndicator(color: Constants.polyGreen)));

@@ -59,13 +59,17 @@ class AboutScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 18.0, right: 18.0, top: 18.0, bottom: 10.0),
-                child: Text(
-                    "INNOVATIONS THROUGHOUT\nTHE VALUE CHAIN FOR YOUR\nADVANTAGES",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white)),
+                child: Semantics(
+                  label:
+                      "Innovations throughout the value chain for your addantages.",
+                  child: Text(
+                      "INNOVATIONS THROUGHOUT\nTHE VALUE CHAIN FOR YOUR\nADVANTAGES",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white)),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
@@ -81,12 +85,16 @@ class AboutScreen extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.only(left: 18.0, right: 18.0, top: 15.0),
-                child: Text(
-                    "POLYTALON produces climbing holds in a ground-breaking way: Automated, fast and sustainable. Local production for reasonable prices – realised by outstanding engineering. \n\nOur long lasting silicon molds (patent pending)save material and provide a fully automated demoulding – Essential when it comes to production in the heart of europe. \n\nMade-to-measure PU resins ensure high durabilty and ultimate grip of our climbing holds. Preventing breakage of edges maximizing lifetime at the wall. \n\nLess waste and less production time. POLYTALON ensures highest production standards putting the customer first.",
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white)),
+                child: Semantics(
+                  label:
+                      "POLYTALON produces climbing holds in a ground-breaking way: Automated, fast and sustainable. Local production for reasonable prices – realised by outstanding engineering. Our long lasting silicon molds (patent pending)save material and provide a fully automated demoulding – Essential when it comes to production in the heart of europe. Made-to-measure PU resins ensure high durabilty and ultimate grip of our climbing holds. Preventing breakage of edges maximizing lifetime at the wall. Less waste and less production time. POLYTALON ensures highest production standards putting the customer first.",
+                  child: Text(
+                      "POLYTALON produces climbing holds in a ground-breaking way: Automated, fast and sustainable. Local production for reasonable prices – realised by outstanding engineering. \n\nOur long lasting silicon molds (patent pending)save material and provide a fully automated demoulding – Essential when it comes to production in the heart of europe. \n\nMade-to-measure PU resins ensure high durabilty and ultimate grip of our climbing holds. Preventing breakage of edges maximizing lifetime at the wall. \n\nLess waste and less production time. POLYTALON ensures highest production standards putting the customer first.",
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white)),
+                ),
               ),
               Expanded(
                 child: Center(
