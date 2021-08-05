@@ -231,7 +231,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextButton(
                                   onPressed: () => launch(
                                       "https://polytalon.com/datenschutz-grip-guide/"),
-                                  child: AutoSizeText("Privacy Policy",
+                                  child: AutoSizeText(
+                                      "Terms of Use and Privacy Policy",
                                       style: TextStyle(
                                           color: Colors.greenAccent,
                                           fontSize: 16,
