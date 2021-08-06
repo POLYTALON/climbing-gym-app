@@ -341,6 +341,24 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                       style: Constants.defaultTextWhite)
                                 ],
                               ),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Visibility(
+                                visible: this.route.notes != "",
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("", style: Constants.defaultTextWhite),
+                                    Flexible(
+                                      child: Text(
+                                        this.route.notes,
+                                        style: Constants.defaultTextWhite,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),

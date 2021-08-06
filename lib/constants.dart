@@ -13,6 +13,7 @@ const newsTitleLength = 128;
 const newsLinkLength = 512;
 const routeTypeLength = 30;
 const holdsLength = 32;
+const routeNoteLength = 512;
 
 // custom colors
 

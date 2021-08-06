@@ -93,8 +93,15 @@ class RoutesService extends ChangeNotifier with FileService {
     return userRating.exists ? userRating['rating'] : 0;
   }
 
-  Future<void> addRoute(String gymid, String difficulty, String type,
-      String holds, String builder, File image, DateTime date) async {
+  Future<void> addRoute(
+      String gymid,
+      String difficulty,
+      String type,
+      String holds,
+      String builder,
+      String notes,
+      File image,
+      DateTime date) async {
     DocumentReference docRef;
     try {
       docRef = _firestore.collection('routes').doc();
@@ -111,6 +118,7 @@ class RoutesService extends ChangeNotifier with FileService {
         'imageUrl': imageUrl,
         'date': date,
         'builder': builder,
+        'notes': notes,
       });
     } on FirebaseException catch (e) {
       print(e);
@@ -118,7 +126,7 @@ class RoutesService extends ChangeNotifier with FileService {
   }
 
   Future<void> editRoute(String id, String gymid, String difficulty,
-      String type, String holds, String builder, DateTime date,
+      String type, String holds, String builder, String notes, DateTime date,
       [File image]) async {
     String imageUrl;
     String oldImageUrl;
@@ -138,6 +146,7 @@ class RoutesService extends ChangeNotifier with FileService {
           'imageUrl': imageUrl,
           'date': date,
           'builder': builder,
+          'notes': notes,
         });
         await deleteFile(oldImageUrl);
       } on FirebaseException catch (e) {
@@ -152,6 +161,7 @@ class RoutesService extends ChangeNotifier with FileService {
           'holds': holds,
           'date': date,
           'builder': builder,
+          'notes': notes,
         });
       } on FirebaseException catch (e) {
         print(e);

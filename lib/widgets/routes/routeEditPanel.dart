@@ -31,6 +31,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final controllerRouteNotes = TextEditingController(text: "");
   final FocusNode fnSetter = new FocusNode();
   final FocusNode fnType = new FocusNode();
   final FocusNode fnHolds = new FocusNode();
@@ -49,6 +50,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
         controllerRouteSetter.text = x.currentRoute.value.builder;
         controllerRouteType.text = x.currentRoute.value.type;
         controllerRouteHolds.text = x.currentRoute.value.holds;
+        controllerRouteNotes.text = x.currentRoute.value.notes;
       }
       return x.currentRoute;
     });
@@ -467,6 +469,61 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                     fillColor: Colors.white,
                                                     filled: true)),
                                           ])),
+                                  // Notes
+                                  Container(
+                                      padding: EdgeInsets.only(
+                                          top: 16.0, left: 16.0, right: 16.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Notes',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: Constants.polyGray,
+                                              thickness: 2,
+                                              height: 20,
+                                            ),
+                                            TextFormField(
+                                                controller:
+                                                    controllerRouteNotes,
+                                                maxLength:
+                                                    Constants.routeNoteLength,
+                                                autocorrect: false,
+                                                textCapitalization:
+                                                    TextCapitalization.words,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                                // The name keyboard is optimized for names and phone numbers
+                                                // Therefore we should use the default keyboard
+                                                keyboardType:
+                                                    TextInputType.multiline,
+                                                minLines: 4,
+                                                maxLines: 7,
+                                                decoration: InputDecoration(
+                                                    hintText: '',
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            top: 16.0,
+                                                            left: 16.0),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24.0),
+                                                        borderSide: BorderSide(
+                                                            width: 0,
+                                                            style: BorderStyle
+                                                                .none)),
+                                                    fillColor: Colors.white,
+                                                    filled: true)),
+                                          ])),
                                   // Buttons
                                   Container(
                                       padding: EdgeInsets.all(16),
@@ -689,11 +746,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
     final gymId = getX((RoutesService x) => x.currentRoute.value.gymId);
     final holds = controllerRouteHolds.text.trim();
     final type = controllerRouteType.text.trim();
+    final notes = controllerRouteNotes.text.trim();
 
     if (_validateAndSave()) {
       // edit Route
-      routesService.editRoute(
-          id, gymId, difficulty, type, holds, builder, DateTime.now(), _image);
+      routesService.editRoute(id, gymId, difficulty, type, holds, builder,
+          notes, DateTime.now(), _image);
       routesService.editRoutePanelController.close();
     }
   }

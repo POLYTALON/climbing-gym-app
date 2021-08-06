@@ -10,6 +10,7 @@ class AppRoute extends Equatable {
   final String gymId;
   final String holds;
   final String imageUrl;
+  final String notes;
   bool isTried;
   bool isDone;
   int ratingCount;
@@ -24,6 +25,7 @@ class AppRoute extends Equatable {
         difficulty,
         gymId,
         holds,
+        notes,
         imageUrl,
         isTried,
         isDone,
@@ -39,6 +41,7 @@ class AppRoute extends Equatable {
       this.difficulty,
       this.gymId,
       this.holds,
+      this.notes,
       this.imageUrl,
       this.isTried,
       this.isDone,
@@ -58,6 +61,7 @@ class AppRoute extends Equatable {
         difficulty: docData['difficulty'] ?? '',
         gymId: docData['gymid'] ?? '',
         holds: docData['holds'] ?? '',
+        notes: docData['notes'] ?? '',
         type: docData['type'] ?? '',
         imageUrl: docData['imageUrl'] ?? '',
         isTried: isTried,
