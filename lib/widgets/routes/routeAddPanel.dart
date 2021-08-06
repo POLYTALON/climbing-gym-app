@@ -486,7 +486,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                         minLines: 4,
                                         maxLines: 7,
                                         decoration: InputDecoration(
-                                            hintText: 'Hints and Tips',
+                                            hintText: '',
                                             contentPadding:
                                                 const EdgeInsets.only(
                                                     left: 16.0),
