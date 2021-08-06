@@ -188,7 +188,6 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                     }),
                 Content(
                     title: 'Report inappropriate content',
-                    fontColor: Colors.redAccent,
                     screenPage: Container(),
                     overrideOnTap: () async {
                       launch(emailReportLaunchUri().toString());
