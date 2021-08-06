@@ -117,6 +117,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                 backgroundColor: Constants.polyGray,
                 body: CustomScrollView(slivers: [
                   SliverAppBar(
+                    centerTitle: true,
                     brightness: Brightness.dark,
                     leading: RawMaterialButton(
                         onPressed: () => Navigator.of(context).pop(routeRating),
