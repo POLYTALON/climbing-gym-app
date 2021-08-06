@@ -133,7 +133,6 @@ class _GymsPreviewScreenState extends State<GymsPreviewScreen> {
   }
 
   void updateSearchList(List<Gym> gyms) {
-    print("seacrhgin");
     this.isSearched = true;
     if (controllerGymName.text.trim().isEmpty)
       this.gymsList = gyms;

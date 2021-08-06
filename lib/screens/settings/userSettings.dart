@@ -185,6 +185,13 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                     overrideOnTap: () async {
                       launch("https://polytalon.com/impressum/");
                     }),
+                Content(
+                    title: 'Report inappropriate content',
+                    fontColor: Colors.redAccent,
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch(emailReportLaunchUri().toString());
+                    }),
               ])),
           Content(
             title: 'Delete account',
@@ -197,5 +204,22 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
 
   bool getIsFirebaseProvider() {
     return this._auth.isFirebaseProvider();
+  }
+
+  Uri emailReportLaunchUri() {
+    return Uri(
+      scheme: 'mailto',
+      path: 'info@polytalon.com',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Report: I found inappropriate content in GripGuide'
+      }),
+    );
+  }
+
+  String encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 }

@@ -5,6 +5,7 @@ import 'package:climbing_gym_app/screens/main/home.dart';
 import 'package:climbing_gym_app/screens/main/news.dart';
 import 'package:climbing_gym_app/screens/main/routes.dart';
 import 'package:climbing_gym_app/screens/developers.dart';
+import 'package:climbing_gym_app/services/navigationService.dart';
 import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -18,9 +19,7 @@ class NavigationContainer extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
-  PageController _pageController = new PageController(
-    initialPage: 0,
-  );
+  PageController _pageController = locator<NavigationService>().pageController;
   int _navBarIndex = 0;
   String _title;
   List<Widget> _children;
@@ -178,8 +177,7 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
   }
 
   void onTabTapped(int index) async {
-    await _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+    locator<NavigationService>().animateToPage(index);
     changeTitle(index);
   }
 
