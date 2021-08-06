@@ -53,10 +53,11 @@ class AboutScreen extends StatelessWidget {
         margin: const EdgeInsets.only(
             left: 19.0, right: 19.0, top: 30.0, bottom: 50.0),
         constraints: BoxConstraints.expand(),
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+        child: SingleChildScrollView(
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
               Padding(
                 padding: const EdgeInsets.only(
                     left: 18.0, right: 18.0, top: 18.0, bottom: 10.0),
@@ -105,7 +106,8 @@ class AboutScreen extends StatelessWidget {
                         fontSize: 16,
                       ),
                       maxLines: 1)),
-              Expanded(
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: Center(
                   child: Container(
                       margin: const EdgeInsets.all(16),
@@ -117,7 +119,7 @@ class AboutScreen extends StatelessWidget {
                               fit: BoxFit.cover))),
                 ),
               ),
-            ]),
+            ])),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           color: Constants.polyGray,
