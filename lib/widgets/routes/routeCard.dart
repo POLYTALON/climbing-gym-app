@@ -123,7 +123,9 @@ class _RouteCardState extends State<RouteCard> {
                                           child: FittedBox(
                                             fit: BoxFit.scaleDown,
                                             child: Center(
-                                              child: Text(route.type,
+                                              child: AutoSizeText(
+                                                  truncate(route.type, 15),
+                                                  maxLines: 1,
                                                   style: Constants
                                                       .defaultTextWhite),
                                             ),
@@ -278,5 +280,11 @@ class _RouteCardState extends State<RouteCard> {
     return (appUser.roles[appUser.selectedGym] != null &&
         (appUser.roles[appUser.selectedGym].gymuser ||
             appUser.roles[appUser.selectedGym].builder));
+  }
+
+  String truncate(String str, int amt) {
+    return str.length > 4 && str.length > amt
+        ? str.substring(0, amt) + '...'
+        : str;
   }
 }

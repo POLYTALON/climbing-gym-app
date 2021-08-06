@@ -11,7 +11,7 @@ const gymNameLength = 64;
 const locationLength = 64;
 const newsTitleLength = 128;
 const newsLinkLength = 512;
-const routeTypeLength = 12;
+const routeTypeLength = 30;
 const holdsLength = 32;
 const routeNoteLength = 512;
 
