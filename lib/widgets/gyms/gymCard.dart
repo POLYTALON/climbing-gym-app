@@ -85,6 +85,7 @@ class _GymCardState extends State<GymCard> {
                               FittedBox(
                                 fit: BoxFit.fitHeight,
                                 child: Container(
+                                    padding: const EdgeInsets.only(top: 10.0),
                                     color: Colors.grey[400],
                                     child: Column(
                                       //mainAxisAlignment: MainAxisAlignment.end,
