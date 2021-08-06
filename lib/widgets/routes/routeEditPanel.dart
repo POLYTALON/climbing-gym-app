@@ -50,6 +50,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
         controllerRouteSetter.text = x.currentRoute.value.builder;
         controllerRouteType.text = x.currentRoute.value.type;
         controllerRouteHolds.text = x.currentRoute.value.holds;
+        controllerRouteNotes.text = x.currentRoute.value.notes;
       }
       return x.currentRoute;
     });
