@@ -65,6 +65,7 @@ class AuthService with ChangeNotifier {
       await GoogleSignIn().isSignedIn().then((value) => {
             if (value) {GoogleSignIn().signOut()}
           });
+      notifyListeners();
     } catch (e) {
       print(e);
     }
