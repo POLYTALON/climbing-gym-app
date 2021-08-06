@@ -81,7 +81,7 @@ class _GymCardState extends State<GymCard> {
                                         ),
                                       ),
                                   imageUrl: gym.imageUrl,
-                                  fit: BoxFit.fill),
+                                  fit: BoxFit.cover),
                             ),
                             if (_getIsPrivileged())
                               FittedBox(
