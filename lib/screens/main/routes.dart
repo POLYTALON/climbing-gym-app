@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
@@ -447,22 +448,44 @@ class _RoutesScreenState extends State<RoutesScreen>
                                   body: Container(
                                       child: Column(children: [
                                     // filter button
-                                    Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: IconButton(
-                                                icon: Icon(
-                                                    Icons.filter_list_rounded,
+                                    GestureDetector(
+                                        onTap: openDrawer,
+                                        child: Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              8.0, 16.0, 16.0, 8.0),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: AutoSizeText("Filter",
+                                                      textAlign: TextAlign
+                                                          .center,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                          color:
+                                                              _getIsFilterActive()
+                                                                  ? Colors
+                                                                      .greenAccent
+                                                                  : Colors
+                                                                      .white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 16)),
+                                                ),
+                                                Icon(Icons.filter_list_rounded,
                                                     size: 32.0,
                                                     color: _getIsFilterActive()
                                                         ? Colors.greenAccent
                                                         : Colors.white),
-                                                onPressed: () => openDrawer()),
-                                          )
-                                        ]),
+                                              ]),
+                                        )),
                                     // Grid view (with RouteCards)
                                     Expanded(
                                       child: StreamBuilder<List<AppRoute>>(
