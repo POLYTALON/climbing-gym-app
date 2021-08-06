@@ -724,6 +724,6 @@ class _RoutesScreenState extends State<RoutesScreen>
   }
 
   String truncate(String str, int amt) {
-    return str.length > amt - 3 ? str.substring(0, amt) + '...' : str;
+    return str.length > amt ? str.substring(0, amt) + '...' : str;
   }
 }
