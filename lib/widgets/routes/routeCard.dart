@@ -283,6 +283,8 @@ class _RouteCardState extends State<RouteCard> {
   }
 
   String truncate(String str, int amt) {
-    return str.length > amt ? str.substring(0, amt - 3) + '...' : str;
+    return str.length > 4 && str.length > amt
+        ? str.substring(0, amt) + '...'
+        : str;
   }
 }
