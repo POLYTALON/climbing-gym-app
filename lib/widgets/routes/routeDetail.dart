@@ -343,15 +343,20 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                               Visibility(
                                 visible: this.route.notes != "",
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("", style: Constants.defaultTextWhite),
+                                    Text("Info",
+                                        style: Constants.defaultTextWhite),
                                     Flexible(
-                                      child: Text(
-                                        this.route.notes,
-                                        style: Constants.defaultTextWhite,
-                                        textAlign: TextAlign.right,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          this.route.notes,
+                                          style: Constants.defaultTextWhite,
+                                          textAlign: TextAlign.right,
+                                        ),
                                       ),
                                     )
                                   ],
