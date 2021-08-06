@@ -126,12 +126,6 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   padding: EdgeInsets.only(top: 32.0),
                   children: [
                 Content(
-                    title: 'Privacy Policy',
-                    screenPage: Container(),
-                    overrideOnTap: () async {
-                      launch("https://polytalon.com/datenschutz-grip-guide/");
-                    }),
-                Content(
                     title: 'Change password',
                     screenPage: ChangePasswordScreen(),
                     disabled: !getIsFirebaseProvider()),
@@ -161,17 +155,37 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                         MaterialPageRoute(builder: (context) => StartScreen()));
                   },
                 ),
+                Divider(height: 48.0),
+                Content(
+                    title: 'License',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch(
+                          "https://github.com/POLYTALON/climbing-gym-app/blob/main/LICENSE");
+                    }),
+                Content(
+                    title: 'Legal Notes',
+                    screenPage: Container(),
+                    fontColor: Colors.white,
+                    overrideOnTap: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LegalNotesScreen()));
+                    }),
+                Content(
+                    title: 'Terms of Use & Privacy Policy',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch("https://polytalon.com/datenschutz-grip-guide/");
+                    }),
+                Content(
+                    title: 'Impress',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch("https://polytalon.com/impressum/");
+                    }),
               ])),
-          Content(
-              title: 'Legal Notes',
-              screenPage: Container(),
-              fontColor: Colors.white,
-              overrideOnTap: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LegalNotesScreen()));
-              }),
           Content(
             title: 'Delete account',
             screenPage: DeleteAccountScreen(),

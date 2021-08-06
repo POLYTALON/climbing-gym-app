@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatelessWidget {
   @override
@@ -96,6 +97,14 @@ class AboutScreen extends StatelessWidget {
                           color: Colors.white)),
                 ),
               ),
+              TextButton(
+                  onPressed: () => launch("https://polytalon.com/impressum/"),
+                  child: AutoSizeText("Impress",
+                      style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 16,
+                      ),
+                      maxLines: 1)),
               Expanded(
                 child: Center(
                   child: Container(
@@ -107,7 +116,7 @@ class AboutScreen extends StatelessWidget {
                               ),
                               fit: BoxFit.cover))),
                 ),
-              )
+              ),
             ]),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
