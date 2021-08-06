@@ -322,7 +322,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Category",
+                                  Text("Sector",
                                       style: Constants.defaultTextWhite),
                                   Text(this.route.type,
                                       style: Constants.defaultTextWhite)
@@ -333,11 +333,29 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Sector",
+                                  Text("Holds",
                                       style: Constants.defaultTextWhite),
                                   Text(this.route.holds,
                                       style: Constants.defaultTextWhite)
                                 ],
+                              ),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Visibility(
+                                visible: this.route.notes != "",
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("", style: Constants.defaultTextWhite),
+                                    Flexible(
+                                      child: Text(
+                                        this.route.notes,
+                                        style: Constants.defaultTextWhite,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),

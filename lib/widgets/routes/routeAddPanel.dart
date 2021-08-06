@@ -475,12 +475,6 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                     TextFormField(
                                         controller: controllerRouteNotes,
                                         maxLength: Constants.routeNoteLength,
-                                        validator: (value) {
-                                          String result =
-                                              NameFieldValidator.validate(
-                                                  value);
-                                          return result;
-                                        },
                                         autocorrect: false,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -666,6 +660,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
         controllerRouteSetter.clear();
         controllerRouteHolds.clear();
         controllerRouteType.clear();
+        controllerRouteNotes.clear();
         selectedColorIndex = 0;
         _image = null;
       } else {
