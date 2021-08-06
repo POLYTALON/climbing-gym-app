@@ -6,7 +6,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
-import 'package:climbing_gym_app/widgets/routes/home/profileCard.dart';
+import 'package:climbing_gym_app/widgets/home/profileCard.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
