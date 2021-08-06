@@ -10,6 +10,7 @@ class DevelopersScreen extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(64.0),
           child: AppBar(
+              centerTitle: true,
               brightness: Brightness.dark,
               backgroundColor: Constants.polyDark,
               actions: [
