@@ -1,4 +1,5 @@
 import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/navigationService.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/services/pageviewService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
@@ -14,4 +15,5 @@ void setupLocator() {
   locator.registerSingleton(NewsService());
   locator.registerSingleton(AuthService());
   locator.registerSingleton(PageViewService());
+  locator.registerLazySingleton(() => NavigationService());
 }

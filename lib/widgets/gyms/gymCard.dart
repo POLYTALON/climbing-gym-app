@@ -1,11 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
+import 'package:climbing_gym_app/services/navigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
 class GymCard extends StatefulWidget {
@@ -50,6 +51,7 @@ class _GymCardState extends State<GymCard> {
               child: GestureDetector(
                 onTap: () {
                   auth.selectGym(gym.id);
+                  locator<NavigationService>().jumpToPage(3);
                 },
                 child: Card(
                   clipBehavior: Clip.antiAlias,
@@ -71,21 +73,23 @@ class _GymCardState extends State<GymCard> {
                       Expanded(
                           flex: 4,
                           child: Stack(children: <Widget>[
-                            Center(
-                                child: CircularProgressIndicator(
-                                    color: Constants.polyGreen)),
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
-                              child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: gym.imageUrl,
-                                  fit: BoxFit.fill),
+                              child: CachedNetworkImage(
+                                  placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: Constants.polyGreen,
+                                        ),
+                                      ),
+                                  imageUrl: gym.imageUrl,
+                                  fit: BoxFit.cover),
                             ),
                             if (_getIsPrivileged())
                               FittedBox(
                                 fit: BoxFit.fitHeight,
                                 child: Container(
+                                    padding: const EdgeInsets.only(top: 10.0),
                                     color: Colors.grey[400],
                                     child: Column(
                                       //mainAxisAlignment: MainAxisAlignment.end,

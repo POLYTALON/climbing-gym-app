@@ -6,7 +6,7 @@ import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
 import 'package:climbing_gym_app/services/routesService.dart';
-import 'package:climbing_gym_app/widgets/routes/home/profileCard.dart';
+import 'package:climbing_gym_app/widgets/home/profileCard.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
                   value: routesService.streamRoutes(
                       userSnapshot.data.selectedGym,
                       userSnapshot.data.userRoutes),
+                  catchError: (_, __) => null,
                   child:
                       Consumer<List<AppRoute>>(builder: (context, routes, _) {
                     return ChangeNotifierProvider<RoutesService>(
@@ -114,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                           CrossAxisAlignment
                                                               .stretch,
                                                       children: [
-                                                        if (routes.length > 0)
+                                                        if (routes != null &&
+                                                            routes.length > 0)
                                                           Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment

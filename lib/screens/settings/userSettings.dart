@@ -1,5 +1,6 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/settings/authorizeOperatorScreen.dart';
+import 'package:climbing_gym_app/screens/settings/legalNotesScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
@@ -99,6 +100,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(64.0),
             child: AppBar(
+                centerTitle: true,
                 brightness: Brightness.dark,
                 backgroundColor: Constants.polyDark,
                 actions: [
@@ -125,12 +127,6 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   padding: EdgeInsets.only(top: 32.0),
                   children: [
                 Content(
-                    title: 'Privacy Policy',
-                    screenPage: Container(),
-                    overrideOnTap: () async {
-                      launch("https://polytalon.com/datenschutz-grip-guide/");
-                    }),
-                Content(
                     title: 'Change password',
                     screenPage: ChangePasswordScreen(),
                     disabled: !getIsFirebaseProvider()),
@@ -156,10 +152,47 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   overrideOnTap: () async {
                     final auth = locator<AuthService>();
                     await auth.logout();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => StartScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => StartScreen()),
+                        (Route<dynamic> route) => false);
                   },
                 ),
+                Divider(height: 48.0),
+                Content(
+                    title: 'License',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch(
+                          "https://github.com/POLYTALON/climbing-gym-app/blob/main/LICENSE");
+                    }),
+                Content(
+                    title: 'Legal Notes',
+                    screenPage: Container(),
+                    fontColor: Colors.white,
+                    overrideOnTap: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LegalNotesScreen()));
+                    }),
+                Content(
+                    title: 'Terms of Use & Privacy Policy',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch("https://polytalon.com/datenschutz-grip-guide/");
+                    }),
+                Content(
+                    title: 'Impress',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch("https://polytalon.com/impressum/");
+                    }),
+                Content(
+                    title: 'Report inappropriate content',
+                    screenPage: Container(),
+                    overrideOnTap: () async {
+                      launch(emailReportLaunchUri().toString());
+                    }),
               ])),
           Content(
             title: 'Delete account',
@@ -172,5 +205,22 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
 
   bool getIsFirebaseProvider() {
     return this._auth.isFirebaseProvider();
+  }
+
+  Uri emailReportLaunchUri() {
+    return Uri(
+      scheme: 'mailto',
+      path: 'info@polytalon.com',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Report: I found inappropriate content in GripGuide'
+      }),
+    );
+  }
+
+  String encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 }

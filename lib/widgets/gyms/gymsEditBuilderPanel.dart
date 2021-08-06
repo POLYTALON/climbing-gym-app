@@ -63,7 +63,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                           children: [
                             //Gym Owner
                             Text(
-                              'Set Builder',
+                              'Manage Setters',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
@@ -83,7 +83,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                                 style: TextStyle(fontWeight: FontWeight.w800),
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                    hintText: 'Insert email of new builder',
+                                    hintText: 'Insert email of user',
                                     contentPadding:
                                         const EdgeInsets.only(left: 16.0),
                                     border: OutlineInputBorder(
@@ -122,7 +122,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Set Builder",
+                                      "Add Setter",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700),
@@ -186,7 +186,7 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
                                   onPressed: () => removeBuilder(),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text("Remove Builder",
+                                    child: Text("Remove Setter",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700)),
@@ -206,14 +206,14 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
     final userEmail = controllerEmail.text.trim();
     bool isSet = await authService.setBuilder(userEmail, id);
     String dialogText = isSet
-        ? userEmail + ' has been set as a builder.'
+        ? userEmail + ' has been added as a setter.'
         : userEmail + ' has not been found';
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text(
-            isSet ? 'Set Builder' : 'Error',
+            isSet ? 'Add Setter' : 'Error',
           ),
           content: SingleChildScrollView(
             child: ListBody(
@@ -242,14 +242,14 @@ class _GymsEditBuilderPanel extends State<GymsEditBuilderPanel>
     final userEmail = controllerEmail.text.trim();
     bool isRemove = await authService.removeGymOwnerOrBuilder(userEmail, id);
     String dialogText = isRemove
-        ? userEmail + ' has been removed as a builder.'
+        ? userEmail + ' has been removed as a setter.'
         : userEmail + ' has not been found';
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text(
-            isRemove ? 'Remove Builder' : 'Error',
+            isRemove ? 'Remove Setter' : 'Error',
           ),
           content: SingleChildScrollView(
             child: ListBody(
