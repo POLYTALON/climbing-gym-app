@@ -72,6 +72,7 @@ class _RoutesScreenState extends State<RoutesScreen>
                 children: <Widget>[
                   StreamProvider<List<AppRoute>>.value(
                       initialData: [],
+                      catchError: (_, __) => null,
                       value: routesService.streamRoutes(
                           snapshot.data.selectedGym, snapshot.data.userRoutes),
                       child: Consumer<List<AppRoute>>(

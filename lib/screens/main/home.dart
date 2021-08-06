@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
                   value: routesService.streamRoutes(
                       userSnapshot.data.selectedGym,
                       userSnapshot.data.userRoutes),
+                  catchError: (_, __) => null,
                   child:
                       Consumer<List<AppRoute>>(builder: (context, routes, _) {
                     return ChangeNotifierProvider<RoutesService>(
@@ -114,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                           CrossAxisAlignment
                                                               .stretch,
                                                       children: [
-                                                        if (routes.length > 0)
+                                                        if (routes != null &&
+                                                            routes.length > 0)
                                                           Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment

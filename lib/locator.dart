@@ -15,5 +15,5 @@ void setupLocator() {
   locator.registerSingleton(NewsService());
   locator.registerSingleton(AuthService());
   locator.registerSingleton(PageViewService());
-  locator.registerSingleton(NavigationService());
+  locator.registerLazySingleton(() => NavigationService());
 }

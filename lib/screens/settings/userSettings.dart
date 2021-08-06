@@ -152,8 +152,9 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   overrideOnTap: () async {
                     final auth = locator<AuthService>();
                     await auth.logout();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => StartScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => StartScreen()),
+                        (Route<dynamic> route) => false);
                   },
                 ),
                 Divider(height: 48.0),

@@ -178,7 +178,8 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
   }
 
   void onTabTapped(int index) async {
-    locator<NavigationService>().animateToPage(index);
+    await _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 100), curve: Curves.easeOut);
     changeTitle(index);
   }
 
