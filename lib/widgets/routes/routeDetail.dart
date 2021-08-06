@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
@@ -322,9 +323,10 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Category",
+                                  Text("Sector",
                                       style: Constants.defaultTextWhite),
-                                  Text(this.route.type,
+                                  AutoSizeText(this.route.type,
+                                      maxLines: 2,
                                       style: Constants.defaultTextWhite)
                                 ],
                               ),
@@ -333,7 +335,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Sector",
+                                  Text("Holds",
                                       style: Constants.defaultTextWhite),
                                   Text(this.route.holds,
                                       style: Constants.defaultTextWhite)

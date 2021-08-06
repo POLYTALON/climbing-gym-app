@@ -208,7 +208,7 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                   thickness: 2,
                                                   height: 20,
                                                 ),
-                                                // Category
+                                                // Sector
                                                 Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -253,8 +253,12 @@ class _RoutesScreenState extends State<RoutesScreen>
                                                                     value:
                                                                         value,
                                                                     child:
-                                                                        new Text(
-                                                                      value,
+                                                                        AutoSizeText(
+                                                                      truncate(
+                                                                          value,
+                                                                          9),
+                                                                      maxLines:
+                                                                          1,
                                                                       style: Constants
                                                                           .defaultTextWhite,
                                                                     ),
@@ -717,5 +721,11 @@ class _RoutesScreenState extends State<RoutesScreen>
       return false;
     }
     return true;
+  }
+
+  String truncate(String str, int amt) {
+    return str.length > 4 && str.length > amt
+        ? str.substring(0, amt) + '...'
+        : str;
   }
 }
