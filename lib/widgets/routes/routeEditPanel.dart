@@ -508,9 +508,10 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                 minLines: 4,
                                                 maxLines: 7,
                                                 decoration: InputDecoration(
-                                                    hintText: 'Hints and Tips',
+                                                    hintText: '',
                                                     contentPadding:
                                                         const EdgeInsets.only(
+                                                            top: 16.0,
                                                             left: 16.0),
                                                     border: OutlineInputBorder(
                                                         borderRadius:

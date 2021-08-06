@@ -489,7 +489,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                             hintText: '',
                                             contentPadding:
                                                 const EdgeInsets.only(
-                                                    left: 16.0),
+                                                    top: 16.0, left: 16.0),
                                             border: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(24.0),
