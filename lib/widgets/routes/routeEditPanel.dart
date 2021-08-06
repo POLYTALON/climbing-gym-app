@@ -31,6 +31,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final controllerRouteNotes = TextEditingController(text: "");
   final FocusNode fnSetter = new FocusNode();
   final FocusNode fnType = new FocusNode();
   final FocusNode fnHolds = new FocusNode();
@@ -689,11 +690,12 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
     final gymId = getX((RoutesService x) => x.currentRoute.value.gymId);
     final holds = controllerRouteHolds.text.trim();
     final type = controllerRouteType.text.trim();
+    final notes = controllerRouteNotes.text.trim();
 
     if (_validateAndSave()) {
       // edit Route
       routesService.editRoute(
-          id, gymId, difficulty, type, holds, builder, DateTime.now(), _image);
+          id, gymId, difficulty, type, holds, builder, notes, DateTime.now(), _image);
       routesService.editRoutePanelController.close();
     }
   }

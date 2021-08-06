@@ -42,6 +42,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
   final controllerRouteSetter = TextEditingController(text: "");
   final controllerRouteType = TextEditingController(text: "");
   final controllerRouteHolds = TextEditingController(text: "");
+  final controllerRouteNotes = TextEditingController(text: "");
   final FocusNode fnSetter = new FocusNode();
   final FocusNode fnType = new FocusNode();
   final FocusNode fnHolds = new FocusNode();
@@ -451,7 +452,59 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                             fillColor: Colors.white,
                                             filled: true)),
                                   ])),
-
+// Notes
+                          Container(
+                              padding: EdgeInsets.only(
+                                  top: 16.0, left: 16.0, right: 16.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Notes',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: Constants.polyGray,
+                                      thickness: 2,
+                                      height: 20,
+                                    ),
+                                    TextFormField(
+                                        controller: controllerRouteNotes,
+                                        maxLength: Constants.routeNoteLength,
+                                        validator: (value) {
+                                          String result =
+                                              NameFieldValidator.validate(
+                                                  value);
+                                          return result;
+                                        },
+                                        autocorrect: false,
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800),
+                                        // The name keyboard is optimized for names and phone numbers
+                                        // Therefore we should use the default keyboard
+                                        keyboardType: TextInputType.multiline,
+                                        minLines: 4,
+                                        maxLines: 7,
+                                        decoration: InputDecoration(
+                                            hintText: 'Hints and Tips',
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                                    left: 16.0),
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(24.0),
+                                                borderSide: BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none)),
+                                            fillColor: Colors.white,
+                                            filled: true)),
+                                  ])),
                           // Error Message
                           Center(
                               child: Text(_errorMessage,
@@ -602,12 +655,13 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
     final difficulty = routeColors[this.selectedColorIndex];
     final holds = controllerRouteHolds.text.trim();
     final type = controllerRouteType.text.trim();
+    final notes = controllerRouteNotes.text.trim();
 
     if (_validateAndSave()) {
       if (_image != null) {
         // add Route
         routesService.addRoute(gymId, difficulty.color, type, holds, builder,
-            _image, DateTime.now());
+            notes, _image, DateTime.now());
         _panelController.close();
         controllerRouteSetter.clear();
         controllerRouteHolds.clear();
