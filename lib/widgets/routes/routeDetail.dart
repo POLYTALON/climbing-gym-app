@@ -113,224 +113,241 @@ class _RouteDetailScreenState extends State<RouteDetailScreen>
             bool hochkant = snapshot.data.width < snapshot.data.height;
 
             return Scaffold(
+                backgroundColor: Constants.polyGray,
                 body: CustomScrollView(slivers: [
-              SliverAppBar(
-                leading: RawMaterialButton(
-                    onPressed: () => Navigator.of(context).pop(routeRating),
-                    elevation: 2.0,
-                    fillColor: Color(0x88000000),
-                    child: Icon(Icons.arrow_back_rounded, size: 32.0),
-                    padding: EdgeInsets.all(8.0),
-                    shape: CircleBorder()),
-                backgroundColor: Constants.polyDark,
-                //pinned: true,
-                expandedHeight: MediaQuery.of(context).size.height *
-                    (hochkant ? 0.85 : 0.305),
-                flexibleSpace: FlexibleSpaceBar(
-                  //title: Text("Route"),
-                  background: Stack(children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Hero(
-                          tag: this.route.id,
-                          child: Image.network(this.route.imageUrl,
-                              fit: BoxFit.cover)),
+                  SliverAppBar(
+                    leading: RawMaterialButton(
+                        onPressed: () => Navigator.of(context).pop(routeRating),
+                        elevation: 2.0,
+                        fillColor: Color(0x88000000),
+                        child: Icon(Icons.arrow_back_rounded, size: 32.0),
+                        padding: EdgeInsets.all(8.0),
+                        shape: CircleBorder()),
+                    backgroundColor: Constants.polyDark,
+                    //pinned: true,
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        (hochkant ? 0.85 : 0.305),
+                    flexibleSpace: FlexibleSpaceBar(
+                      //title: Text("Route"),
+                      background: Stack(children: [
+                        Container(
+                          alignment: Alignment.center,
+                          child: Hero(
+                              tag: this.route.id,
+                              child: Image.network(this.route.imageUrl,
+                                  fit: BoxFit.cover)),
+                        ),
+                        Align(
+                            child: AnimatedCheck(
+                          progress: _animation,
+                          color: Constants.polyGreen,
+                          size: 200,
+                        )),
+                        Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Icon(Icons.arrow_drop_up_outlined,
+                                color: Colors.white)),
+                      ]),
                     ),
-                    Align(
-                        child: AnimatedCheck(
-                      progress: _animation,
-                      color: Constants.polyGreen,
-                      size: 200,
-                    )),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Icon(Icons.arrow_drop_up_outlined,
-                            color: Colors.white)),
-                  ]),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Container(
-                      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                      color: Constants.polyGray,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 25),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Status",
-                                    style: Constants.defaultTextWhite),
-                                ToggleSwitch(
-                                  initialLabelIndex: isSelected,
-                                  inactiveBgColor: Constants.lightGray,
-                                  inactiveFgColor: Colors.white,
-                                  activeBgColors: [
-                                    [Colors.lightBlueAccent],
-                                    [Colors.orangeAccent],
-                                    [Constants.polyGreen]
-                                  ],
-                                  activeFgColor: Colors.white,
-                                  totalSwitches: 3,
-                                  animate: true,
-                                  radiusStyle: true,
-                                  labels: ['Open', 'Tried', 'Done'],
-                                  onToggle: (index) {
-                                    isSelected = index;
-                                    if (index == 2) {
-                                      _animationController.forward();
-                                    } else {
-                                      _animationController.reset();
-                                    }
-                                    route.isDone = index == 2;
-                                    route.isTried = index == 1;
-                                    authService.updateUserRouteStatus(route);
-                                  },
-                                ),
-                              ]),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Rating",
-                                    style: Constants.defaultTextWhite),
-                                isRatingLoading
-                                    ? SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: CircularProgressIndicator(
-                                            color: Constants.polyGreen))
-                                    : Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          PolyRatingBar(
-                                              allowHalfRating: true,
-                                              onRated: (v) {},
-                                              starCount: 5,
-                                              rating: routeRating,
-                                              size: 30.0,
-                                              isReadOnly: true,
-                                              activeColor: Colors.orangeAccent,
-                                              inactiveColor:
-                                                  Constants.lightGray,
-                                              borderColor: Colors.black,
-                                              spacing: 0.0),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8, right: 8),
-                                              child: Text(
-                                                  "(" +
-                                                      routeRatingCount
-                                                          .toString() +
-                                                      ")",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Constants
-                                                          .lightGray))),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: GestureDetector(
-                                                child: myRating == null
-                                                    ? Icon(
-                                                        Icons.add_circle,
-                                                        size: 30,
-                                                        color:
-                                                            Constants.lightGray,
-                                                      )
-                                                    : Icon(
-                                                        Icons.edit,
-                                                        size: 27,
-                                                        color:
-                                                            Constants.lightGray,
-                                                      ),
-                                                onTap: () {
-                                                  openRatingDialog(context);
-                                                }),
-                                          ),
-                                        ],
-                                      )
-                              ]),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Difficulty",
-                                    style: Constants.defaultTextWhite),
-                                FutureBuilder<Color>(
-                                    future:
-                                        routeColorService.getColorFromString(
-                                            this.route.difficulty),
-                                    builder: (context, routeColorSnapshot) {
-                                      if (!routeColorSnapshot.hasData) {
-                                        return CircularProgressIndicator(
-                                            color: Constants.polyGreen);
-                                      }
-                                      return Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: Text(this.route.difficulty,
-                                                style:
-                                                    Constants.defaultTextWhite),
-                                          ),
-                                          Icon(Icons.circle,
-                                              color: routeColorSnapshot.data),
-                                        ],
-                                      );
-                                    }),
-                              ]),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Date", style: Constants.defaultTextWhite),
-                                Text(
-                                    DateFormat('dd.MM.yyyy')
-                                        .format(this.route.date),
-                                    style: Constants.defaultTextWhite)
-                              ]),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Setter",
-                                    style: Constants.defaultTextWhite),
-                                Text(this.route.builder,
-                                    style: Constants.defaultTextWhite)
-                              ]),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Container(
+                          padding:
+                              EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                          color: Constants.polyGray,
+                          child: Column(
                             children: [
-                              Text("Category",
-                                  style: Constants.defaultTextWhite),
-                              Text(this.route.type,
-                                  style: Constants.defaultTextWhite)
+                              SizedBox(height: 25),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Status",
+                                        style: Constants.defaultTextWhite),
+                                    ToggleSwitch(
+                                      initialLabelIndex: isSelected,
+                                      inactiveBgColor: Constants.lightGray,
+                                      inactiveFgColor: Colors.white,
+                                      activeBgColors: [
+                                        [Colors.lightBlueAccent],
+                                        [Colors.orangeAccent],
+                                        [Constants.polyGreen]
+                                      ],
+                                      activeFgColor: Colors.white,
+                                      totalSwitches: 3,
+                                      animate: true,
+                                      radiusStyle: true,
+                                      labels: ['Open', 'Tried', 'Done'],
+                                      onToggle: (index) {
+                                        isSelected = index;
+                                        if (index == 2) {
+                                          _animationController.forward();
+                                        } else {
+                                          _animationController.reset();
+                                        }
+                                        route.isDone = index == 2;
+                                        route.isTried = index == 1;
+                                        authService
+                                            .updateUserRouteStatus(route);
+                                      },
+                                    ),
+                                  ]),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Rating",
+                                        style: Constants.defaultTextWhite),
+                                    isRatingLoading
+                                        ? SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: CircularProgressIndicator(
+                                                color: Constants.polyGreen))
+                                        : Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              PolyRatingBar(
+                                                  allowHalfRating: true,
+                                                  onRated: (v) {},
+                                                  starCount: 5,
+                                                  rating: routeRating,
+                                                  size: 30.0,
+                                                  isReadOnly: true,
+                                                  activeColor:
+                                                      Colors.orangeAccent,
+                                                  inactiveColor:
+                                                      Constants.lightGray,
+                                                  borderColor: Colors.black,
+                                                  spacing: 0.0),
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8, right: 8),
+                                                  child: Text(
+                                                      "(" +
+                                                          routeRatingCount
+                                                              .toString() +
+                                                          ")",
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: Constants
+                                                              .lightGray))),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: GestureDetector(
+                                                    child: myRating == null
+                                                        ? Icon(
+                                                            Icons.add_circle,
+                                                            size: 30,
+                                                            color: Constants
+                                                                .lightGray,
+                                                          )
+                                                        : Icon(
+                                                            Icons.edit,
+                                                            size: 27,
+                                                            color: Constants
+                                                                .lightGray,
+                                                          ),
+                                                    onTap: () {
+                                                      openRatingDialog(context);
+                                                    }),
+                                              ),
+                                            ],
+                                          )
+                                  ]),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Difficulty",
+                                        style: Constants.defaultTextWhite),
+                                    FutureBuilder<Color>(
+                                        future: routeColorService
+                                            .getColorFromString(
+                                                this.route.difficulty),
+                                        builder: (context, routeColorSnapshot) {
+                                          if (!routeColorSnapshot.hasData) {
+                                            return CircularProgressIndicator(
+                                                color: Constants.polyGreen);
+                                          }
+                                          return Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Text(
+                                                    this.route.difficulty,
+                                                    style: Constants
+                                                        .defaultTextWhite),
+                                              ),
+                                              Icon(Icons.circle,
+                                                  color:
+                                                      routeColorSnapshot.data),
+                                            ],
+                                          );
+                                        }),
+                                  ]),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Date",
+                                        style: Constants.defaultTextWhite),
+                                    Text(
+                                        DateFormat('dd.MM.yyyy')
+                                            .format(this.route.date),
+                                        style: Constants.defaultTextWhite)
+                                  ]),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Setter",
+                                        style: Constants.defaultTextWhite),
+                                    Text(this.route.builder,
+                                        style: Constants.defaultTextWhite)
+                                  ]),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Category",
+                                      style: Constants.defaultTextWhite),
+                                  Text(this.route.type,
+                                      style: Constants.defaultTextWhite)
+                                ],
+                              ),
+                              Divider(color: Constants.lightGray, height: 50),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Sector",
+                                      style: Constants.defaultTextWhite),
+                                  Text(this.route.holds,
+                                      style: Constants.defaultTextWhite)
+                                ],
+                              ),
                             ],
                           ),
-                          Divider(color: Constants.lightGray, height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Holds", style: Constants.defaultTextWhite),
-                              Text(this.route.holds,
-                                  style: Constants.defaultTextWhite)
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ]));
+                  ),
+                ]));
           } else {
             return Scaffold(
+                backgroundColor: Constants.polyDark,
                 body: Center(
                     child:
                         CircularProgressIndicator(color: Constants.polyGreen)));

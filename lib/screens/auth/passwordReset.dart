@@ -39,8 +39,8 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                   // Text Field Email-Address
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                    child: Text("E-Mail-Adresse:",
-                        style: TextStyle(color: Colors.white)),
+                    child:
+                        Text("Email:", style: TextStyle(color: Colors.white)),
                   ),
                   TextFormField(
                       controller: controllerEmail,

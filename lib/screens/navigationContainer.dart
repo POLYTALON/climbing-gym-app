@@ -41,7 +41,6 @@ class _NavigationState extends State<NavigationContainer> with GetItStateMixin {
     bool isPageSwiping = watchX((PageViewService s) => s.isSwipingAllowed);
     return Scaffold(
       // AppBar
-      extendBodyBehindAppBar: true,
       backgroundColor: Constants.polyDark,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(64.0),

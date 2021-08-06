@@ -1,10 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
-import 'package:transparent_image/transparent_image.dart';
 import '../../locator.dart';
 
 class GymCard extends StatefulWidget {
@@ -70,15 +71,16 @@ class _GymCardState extends State<GymCard> {
                       Expanded(
                           flex: 4,
                           child: Stack(children: <Widget>[
-                            Center(
-                                child: CircularProgressIndicator(
-                                    color: Constants.polyGreen)),
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
-                              child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: gym.imageUrl,
+                              child: CachedNetworkImage(
+                                  placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: Constants.polyGreen,
+                                        ),
+                                      ),
+                                  imageUrl: gym.imageUrl,
                                   fit: BoxFit.fill),
                             ),
                             if (_getIsPrivileged())
@@ -119,12 +121,13 @@ class _GymCardState extends State<GymCard> {
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(gym.name,
+                                      child: AutoSizeText(gym.name,
+                                          maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w800,
-                                              fontSize: 20)),
+                                              fontSize: 18)),
                                     ),
                                   )),
                               FittedBox(
@@ -133,12 +136,13 @@ class _GymCardState extends State<GymCard> {
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           8.0, 0.0, 8.0, 8.0),
-                                      child: Text(gym.city,
+                                      child: AutoSizeText(gym.city,
+                                          maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w800,
-                                              fontSize: 20)),
+                                              fontSize: 18)),
                                     ),
                                   )),
                             ],

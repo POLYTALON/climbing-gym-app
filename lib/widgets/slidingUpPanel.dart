@@ -36,6 +36,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
 
   _SlidingUpPanelState(this.controller, this.panel, this.panelBuilder,
       this.onPanelClosed, this.header);
+
   FlutterSlidingUpPanel.PanelController controller;
   Widget panel;
   Widget Function(ScrollController) panelBuilder;
@@ -73,7 +74,7 @@ class _SlidingUpPanelState extends State<PolySlidingUpPanel> {
       borderRadius: radius,
       panelSnapping: true,
       snapPoint: 0.999,
-      maxHeight: MediaQuery.of(context).size.height * 0.75,
+      maxHeight: MediaQuery.of(context).size.height * 0.6,
       controller: controller,
       panel: panel,
       panelBuilder: panelBuilder,

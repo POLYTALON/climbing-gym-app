@@ -37,7 +37,6 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   image_picker: ^0.8.0+3
   transparent_image: ^2.0.0
-  image_picker_web_redux: any
   universal_html: ^2.0.8
   firebase: ^9.0.1
   uuid: ^3.0.4
@@ -56,6 +55,8 @@ dependencies:
   auto_size_text: ^2.1.0
   sign_in_with_apple: ^3.0.0
   crypto: ^3.0.1
+  cached_network_image: ^3.1.0
+  flutter_native_splash: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -122,3 +123,11 @@ flutter_icons:
   image_path: "assets/img/polytalon_icon.png"
   adaptive_icon_background: "#000000"
   adaptive_icon_foreground: "assets/img/polytalon_icon_android_adaptive_foreground.png"
+
+flutter_native_splash:
+  color: "#121212"
+  image: "assets/img/polytalon_logo_notext.png"
+
+  info_plist_files:
+    - 'ios/Runner/Info-Debug.plist'
+    - 'ios/Runner/Info-Release.plist'
