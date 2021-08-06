@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Polytalon Logo
                     Spacer(flex: 2),
                     Container(
+                        margin: const EdgeInsets.only(top: 16),
                         height: 50,
                         child: Image.asset(
                             'assets/img/polytalon_logo_notext.png')),
