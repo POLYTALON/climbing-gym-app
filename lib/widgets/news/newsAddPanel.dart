@@ -171,7 +171,8 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                                   controller: controllerNewsContent,
                                   validator: ContentFieldValidator.validate,
                                   autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   style: Constants.defaultText,
                                   // The news body may contains multiple lines, so enter should insert a newline
                                   keyboardType: TextInputType.multiline,
@@ -292,7 +293,10 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    Divider(
+                      height: 64,
+                    ),
                   ],
                 ),
               ),
