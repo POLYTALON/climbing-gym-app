@@ -348,7 +348,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final auth = locator<AuthService>();
       final usercred = await auth.signInWithApple();
-      print('dasda: ' + usercred.user.uid.toString());
+
       await auth.userSetup(usercred.user.uid.toString());
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));
