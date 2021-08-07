@@ -243,6 +243,7 @@ class _DeleteAccountSSOScreenState extends State<DeleteAccountSSOScreen> {
                           break;
                       }
                       if (isUserDeleted) {
+                        authService.logout();
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => StartScreen()),

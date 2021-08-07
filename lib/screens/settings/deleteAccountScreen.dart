@@ -295,6 +295,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       bool isUserDeleted = await authService.unregister(
                           id, userEmail, userPassword);
                       if (isUserDeleted) {
+                        authService.logout();
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => StartScreen()),
