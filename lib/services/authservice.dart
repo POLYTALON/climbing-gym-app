@@ -222,8 +222,15 @@ class AuthService with ChangeNotifier {
 
     // Set the displayname on first apple sign in
     if (firebaseUserCredential.user.displayName == null) {
-      firebaseUserCredential.user.updateDisplayName(
-          appleCredential.givenName + " " + appleCredential.familyName);
+      if (appleCredential.givenName == null &&
+          appleCredential.familyName == null) {
+        firebaseUserCredential.user.updateDisplayName('no Name available');
+      } else {
+        firebaseUserCredential.user.updateDisplayName(
+            appleCredential.givenName.toString() +
+                ' ' +
+                appleCredential.familyName.toString());
+      }
     }
     return firebaseUserCredential;
   }
