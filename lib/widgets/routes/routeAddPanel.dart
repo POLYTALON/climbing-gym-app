@@ -477,7 +477,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                         maxLength: Constants.routeNoteLength,
                                         autocorrect: false,
                                         textCapitalization:
-                                            TextCapitalization.words,
+                                            TextCapitalization.sentences,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w800),
                                         // The name keyboard is optimized for names and phone numbers
@@ -574,7 +574,9 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                   ),
                                 ],
                               )),
-                          Divider()
+                          Container(
+                            height: 64,
+                          ),
                         ],
                       ))));
         });

@@ -268,7 +268,7 @@ class AuthService with ChangeNotifier {
           .asyncMap((userDoc) async {
         String selectedGym = '';
         if (userDoc.id.isNotEmpty && userDoc.data().isNotEmpty) {
-          selectedGym = userDoc.data()['selectedGym'] ?? '';
+          selectedGym = userDoc.data()['selectedGym'] ?? null;
         }
         bool isOperator = await getIsOperator();
         Map<String, UserRole> userRoles = await _getUserRoles();
