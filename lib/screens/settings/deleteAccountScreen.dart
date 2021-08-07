@@ -295,10 +295,15 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       bool isUserDeleted = await authService.unregister(
                           id, userEmail, userPassword);
                       if (isUserDeleted) {
-                        Navigator.push(
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => StartScreen()),
+                            (Route<dynamic> route) => false);
+
+                        /*Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => StartScreen()));
+                                builder: (context) => StartScreen()));*/
                       }
                     } on FirebaseAuthException catch (e) {
                       String message;
