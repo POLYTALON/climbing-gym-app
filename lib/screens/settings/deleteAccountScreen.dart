@@ -299,11 +299,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             MaterialPageRoute(
                                 builder: (context) => StartScreen()),
                             (Route<dynamic> route) => false);
-
-                        /*Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StartScreen()));*/
                       }
                     } on FirebaseAuthException catch (e) {
                       String message;
