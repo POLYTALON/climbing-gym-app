@@ -668,7 +668,7 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                       ],
                                     ),
                                   ),
-                                  Divider(
+                                  Container(
                                     height: 64,
                                   ),
                                 ],

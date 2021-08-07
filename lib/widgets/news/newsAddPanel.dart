@@ -294,7 +294,7 @@ class _NewsAddPanelState extends State<NewsAddPanel> {
                         ],
                       ),
                     ),
-                    Divider(
+                    Container(
                       height: 64,
                     ),
                   ],

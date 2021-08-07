@@ -574,7 +574,7 @@ class _RouteAddPanelState extends State<RouteAddPanel> {
                                   ),
                                 ],
                               )),
-                          Divider(
+                          Container(
                             height: 64,
                           ),
                         ],
