@@ -1,24 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
-import 'package:climbing_gym_app/validators/password_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:climbing_gym_app/constants.dart' as Constants;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../locator.dart';
 import '../start.dart';
 
-class DeleteAccountScreen extends StatefulWidget {
+class DeleteAccountSSOScreen extends StatefulWidget {
   @override
-  _DeleteAccountScreenState createState() => _DeleteAccountScreenState();
+  _DeleteAccountSSOScreenState createState() => _DeleteAccountSSOScreenState();
 }
 
-class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+class _DeleteAccountSSOScreenState extends State<DeleteAccountSSOScreen> {
   final authService = locator<AuthService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final controllerEmail = TextEditingController(text: "");
-  final controllerPassword = TextEditingController(text: "");
-  bool _hidePassword = true;
   String _errorMessage = "";
 
   @override
@@ -119,7 +116,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     AutoSizeText(
-                                                        'Please enter your password to confirm.',
+                                                        'You will need to re-authenticate yourself!',
                                                         style: TextStyle(
                                                           fontSize: 20,
                                                           fontWeight:
@@ -130,66 +127,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                                     Divider(
                                                       height: 20,
                                                     ),
-                                                    TextFormField(
-                                                        controller:
-                                                            controllerPassword,
-                                                        maxLength: Constants
-                                                            .passwordLength,
-                                                        validator:
-                                                            PasswordFieldValidator
-                                                                .validate,
-                                                        autocorrect: false,
-                                                        obscureText:
-                                                            _hidePassword,
-                                                        enableSuggestions:
-                                                            false,
-                                                        textCapitalization:
-                                                            TextCapitalization
-                                                                .none,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w800),
-                                                        // The name keyboard is optimized for names (and phone numbers)
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .visiblePassword,
-                                                        // The setter should consist of only one line
-                                                        maxLines: 1,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          hintText: '********',
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 16.0),
-                                                          border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          24.0),
-                                                              borderSide: BorderSide(
-                                                                  width: 0,
-                                                                  style:
-                                                                      BorderStyle
-                                                                          .none)),
-                                                          fillColor:
-                                                              Colors.white,
-                                                          filled: true,
-                                                          suffixIcon:
-                                                              IconButton(
-                                                                  icon: Icon(
-                                                                    _hidePassword
-                                                                        ? Icons
-                                                                            .visibility_off
-                                                                        : Icons
-                                                                            .visibility,
-                                                                    color: Constants
-                                                                        .polyDark,
-                                                                  ),
-                                                                  onPressed:
-                                                                      _toggleHidePassword),
-                                                        )),
                                                   ])),
                                           // Error Message
                                           Center(
@@ -228,7 +165,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                                                               24.0)),
                                                             )),
                                                         onPressed: () =>
-                                                            onPressDeleteUserAccount(
+                                                            onPressDeleteSSOUserAccount(
                                                                 context),
                                                         child: Padding(
                                                           padding:
@@ -261,10 +198,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             }));
   }
 
-  void onPressDeleteUserAccount(BuildContext context) {
+  void onPressDeleteSSOUserAccount(BuildContext context) {
     final id = authService.currentUser.uid;
-    final userEmail = authService.currentUser.email;
-    final userPassword = controllerPassword.text.trim();
 
     if (this._validateAndSave()) {
       showDialog(
@@ -292,12 +227,23 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   onPressed: () async {
                     Navigator.of(context, rootNavigator: true).pop();
                     try {
-                      //bool isUserInDbDeleted = await authService
-                      //    .deleteUserAccountInDB(id, userEmail, userPassword);
-                      bool isUserDeleted = await authService.unregister(
-                          id, userEmail, userPassword);
+                      bool isUserDeleted;
+                      switch (
+                          authService.currentUser.providerData[0].providerId) {
+                        case 'google.com':
+                          {
+                            isUserDeleted =
+                                await authService.unregisterGoogle(id);
+                          }
+                          break;
+                        case 'apple.com':
+                          {
+                            isUserDeleted =
+                                await authService.unregisterApple(id);
+                          }
+                          break;
+                      }
                       if (isUserDeleted) {
-                        //await authService.unregister(userEmail, userPassword);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -305,8 +251,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       }
                     } on FirebaseAuthException catch (e) {
                       String message;
-                      if (e.code == 'wrong-password') {
-                        message = 'Wrong password provided for that user.';
+                      if (e.code == 'user-mismatch') {
+                        message =
+                            'The Account does not match with your signed in Account.';
                       } else {
                         message = 'Something went wrong :(';
                       }
@@ -330,11 +277,5 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       return true;
     }
     return false;
-  }
-
-  void _toggleHidePassword() {
-    setState(() {
-      _hidePassword = !_hidePassword;
-    });
   }
 }
