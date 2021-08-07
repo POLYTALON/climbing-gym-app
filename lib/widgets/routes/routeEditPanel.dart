@@ -497,7 +497,8 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                                     Constants.routeNoteLength,
                                                 autocorrect: false,
                                                 textCapitalization:
-                                                    TextCapitalization.words,
+                                                    TextCapitalization
+                                                        .sentences,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.w800),
@@ -667,7 +668,9 @@ class _RouteEditPanelState extends State<RouteEditPanel> with GetItStateMixin {
                                       ],
                                     ),
                                   ),
-                                  Divider()
+                                  Container(
+                                    height: 64,
+                                  ),
                                 ],
                               ));
                         }

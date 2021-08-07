@@ -260,7 +260,9 @@ class _GymsAddPanelState extends State<GymsAddPanel> {
                         ],
                       ),
                     ),
-                    Divider()
+                    Container(
+                      height: 64,
+                    ),
                   ],
                 )))));
   }
