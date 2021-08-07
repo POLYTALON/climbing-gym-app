@@ -203,13 +203,13 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                     _auth.currentUser.providerData[0].providerId ==
                         'apple.com') {
                   return Content(
-                    title: 'Delete Account SSO',
+                    title: 'Delete Account',
                     screenPage: DeleteAccountSSOScreen(),
                     fontColor: Colors.redAccent,
                   );
                 } else {
                   return Content(
-                    title: 'Delete Account FB',
+                    title: 'Delete Account',
                     screenPage: DeleteAccountScreen(),
                     fontColor: Colors.redAccent,
                   );
