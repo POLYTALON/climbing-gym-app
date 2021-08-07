@@ -46,7 +46,7 @@ class AppUser {
         imageUrl: firebaseUser.photoURL ?? '',
         isOperator: isOperator ?? false,
         roles: userRoles ?? Map<String, UserRole>(),
-        selectedGym: selectedGym ?? '',
+        selectedGym: selectedGym ?? null,
         userRoutes: userRoutes ?? {});
   }
 
@@ -56,7 +56,7 @@ class AppUser {
         email: '',
         displayName: '',
         imageUrl: '',
-        selectedGym: '',
+        selectedGym: null,
         isOperator: false,
         roles: Map<String, UserRole>(),
         userRoutes: {});
