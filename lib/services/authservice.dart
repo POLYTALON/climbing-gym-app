@@ -65,13 +65,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> unregisterGoogle(String userId) async {
-    try {
-      await userGoogleReauthenticate();
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      return false;
-    }
-    //await signInWithGoogle();
+    await userGoogleReauthenticate();
     await deleteUserAccountInDB(userId);
     try {
       await _auth.currentUser.delete();
@@ -89,7 +83,6 @@ class AuthService with ChangeNotifier {
       print(e);
       return false;
     }
-    //await userAppleReauthenticate();
     await deleteUserAccountInDB(userId);
     try {
       await _auth.currentUser.delete();
