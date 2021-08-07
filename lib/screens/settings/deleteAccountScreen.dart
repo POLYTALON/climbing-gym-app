@@ -292,12 +292,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   onPressed: () async {
                     Navigator.of(context, rootNavigator: true).pop();
                     try {
-                      //bool isUserInDbDeleted = await authService
-                      //    .deleteUserAccountInDB(id, userEmail, userPassword);
                       bool isUserDeleted = await authService.unregister(
                           id, userEmail, userPassword);
                       if (isUserDeleted) {
-                        //await authService.unregister(userEmail, userPassword);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
