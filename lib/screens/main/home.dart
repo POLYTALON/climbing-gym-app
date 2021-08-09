@@ -38,10 +38,6 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active ||
               !userSnapshot.hasData) {
-            if (authService.currentUser == null) {
-              authService.logout();
-              return locator<AuthService>().showLogoutDialog(context);
-            }
             return Container();
           } else {
             if (userSnapshot.data.selectedGym == null ||

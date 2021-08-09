@@ -50,10 +50,6 @@ class _RoutesScreenState extends State<RoutesScreen>
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
-            if (auth.currentUser == null) {
-              auth.logout();
-              return locator<AuthService>().showLogoutDialog(context);
-            }
             return Center(
                 child: CircularProgressIndicator(color: Constants.polyGreen));
           } else {

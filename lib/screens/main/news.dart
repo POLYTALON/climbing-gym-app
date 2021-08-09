@@ -37,10 +37,6 @@ class _NewsScreenState extends State<NewsScreen>
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active ||
               !userSnapshot.hasData) {
-            if (auth.currentUser == null) {
-              auth.logout();
-              return locator<AuthService>().showLogoutDialog(context);
-            }
             return Container(width: 0.0, height: 0.0);
           } else {
             if (userSnapshot.data.selectedGym == null ||

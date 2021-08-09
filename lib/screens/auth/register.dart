@@ -297,7 +297,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       } else {
         setState(() {
-          _errorMessage = "Die Passwörter stimmen nicht überein!";
+          _errorMessage = "The passwords do not match!";
         });
       }
     }

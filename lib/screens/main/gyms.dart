@@ -47,10 +47,6 @@ class _GymsScreenState extends State<GymsScreen>
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
-            if (auth.currentUser == null) {
-              auth.logout();
-              return locator<AuthService>().showLogoutDialog(context);
-            }
             return Center(
               child: CircularProgressIndicator(color: Constants.polyGreen),
             );
