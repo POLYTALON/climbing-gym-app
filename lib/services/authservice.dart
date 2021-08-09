@@ -17,7 +17,7 @@ class AuthService with ChangeNotifier {
 
   AuthService() {
     _auth.userChanges().listen((User user) {
-      if (user.emailVerified) {
+      if (user != null && user.emailVerified) {
         _loggedIn = user != null;
         notifyListeners();
       }
