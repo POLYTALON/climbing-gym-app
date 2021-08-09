@@ -35,7 +35,8 @@ class _NewsScreenState extends State<NewsScreen>
         stream: auth.streamAppUser(),
         initialData: new AppUser().empty(),
         builder: (context, userSnapshot) {
-          if (userSnapshot.connectionState != ConnectionState.active) {
+          if (userSnapshot.connectionState != ConnectionState.active ||
+              !userSnapshot.hasData) {
             if (auth.currentUser == null) {
               auth.logout();
               return AlertDialog(
