@@ -329,7 +329,9 @@ class _GymsEditPanelState extends State<GymsEditPanel> with GetItStateMixin {
                             );
                           }
                         }),
-                    Divider()
+                    Container(
+                      height: 64,
+                    ),
                   ],
                 )))));
   }

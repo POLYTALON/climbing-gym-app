@@ -1,5 +1,6 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/screens/settings/authorizeOperatorScreen.dart';
+import 'package:climbing_gym_app/screens/settings/deleteAccountSSOScreen.dart';
 import 'package:climbing_gym_app/screens/settings/legalNotesScreen.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:flutter/material.dart';
@@ -194,11 +195,26 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                       launch(emailReportLaunchUri().toString());
                     }),
               ])),
-          Content(
-            title: 'Delete account',
-            screenPage: DeleteAccountScreen(),
-            fontColor: Colors.redAccent,
-          ),
+          FutureBuilder(
+              initialData: false,
+              builder: (context, operatorSnapshot) {
+                if (_auth.currentUser.providerData[0].providerId ==
+                        'google.com' ||
+                    _auth.currentUser.providerData[0].providerId ==
+                        'apple.com') {
+                  return Content(
+                    title: 'Delete Account',
+                    screenPage: DeleteAccountSSOScreen(),
+                    fontColor: Colors.redAccent,
+                  );
+                } else {
+                  return Content(
+                    title: 'Delete Account',
+                    screenPage: DeleteAccountScreen(),
+                    fontColor: Colors.redAccent,
+                  );
+                }
+              }),
           Padding(padding: EdgeInsets.only(bottom: 48.0))
         ]));
   }
