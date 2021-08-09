@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               maxLength: Constants.emailLength,
                               enabled: !isLoggedIn,
                               autocorrect: false,
-                              textCapitalization: TextCapitalization.words,
+                              textCapitalization: TextCapitalization.none,
                               style: TextStyle(fontWeight: FontWeight.w800),
                               // it's a text field to type in an email address, duh!
                               keyboardType: TextInputType.emailAddress,
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void doUserLogin() async {
-    final email = controllerEmail.text.trim();
+    final email = controllerEmail.text.trim().toLowerCase();
     final password = controllerPassword.text.trim();
     if (_validateAndSave()) {
       try {

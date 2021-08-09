@@ -273,7 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void doUserRegistration() async {
     final String displayName = controllerDisplayName.text.trim();
-    final String email = controllerEmail.text.trim();
+    final String email = controllerEmail.text.trim().toLowerCase();
     final String password = controllerPassword.text.trim();
     final String passwordRepeat = controllerPasswordRepeat.text.trim();
     if (_validateAndSave()) {
