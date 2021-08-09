@@ -16,9 +16,11 @@ class AuthService with ChangeNotifier {
   bool _loggedIn = false;
 
   AuthService() {
-    _auth.authStateChanges().listen((User user) {
-      _loggedIn = user != null;
-      notifyListeners();
+    _auth.userChanges().listen((User user) {
+      if (user != null && user.emailVerified) {
+        _loggedIn = user != null;
+        notifyListeners();
+      }
     });
     notifyListeners();
   }
@@ -261,18 +263,30 @@ class AuthService with ChangeNotifier {
 
   Stream<AppUser> streamAppUser() {
     if (_auth.currentUser != null) {
+      _auth.userChanges();
+      _auth.currentUser.reload().catchError((onError) {
+        logout();
+        _loggedIn = false;
+        return Stream.empty();
+      });
       return _firestore
           .collection('users')
           .doc(_auth.currentUser?.uid ?? '')
           .snapshots()
           .asyncMap((userDoc) async {
         String selectedGym = '';
-        if (userDoc.id.isNotEmpty && userDoc.data().isNotEmpty) {
-          selectedGym = userDoc.data()['selectedGym'] ?? null;
+        selectedGym = null;
+        bool isOperator;
+        Map<String, UserRole> userRoles;
+        Map<String, dynamic> userRoutes;
+        if (userDoc.exists) {
+          if (userDoc.id.isNotEmpty && userDoc.data().isNotEmpty) {
+            selectedGym = userDoc.data()['selectedGym'] ?? null;
+          }
+          isOperator = await getIsOperator();
+          userRoles = await _getUserRoles();
+          userRoutes = await getUserRoutes();
         }
-        bool isOperator = await getIsOperator();
-        Map<String, UserRole> userRoles = await _getUserRoles();
-        Map<String, dynamic> userRoutes = await getUserRoutes();
         return AppUser.fromFirebase(
             _auth.currentUser, isOperator, userRoles, selectedGym, userRoutes);
       });
