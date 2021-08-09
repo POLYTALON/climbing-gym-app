@@ -1,6 +1,6 @@
 # GripGuide
 
-[![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml) [![Firebase Deploy](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/firebase-deploy.yml)
+[![Flutter Android Build](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml/badge.svg)](https://github.com/POLYTALON/climbing-gym-app/actions/workflows/flutter-android-build.yml)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/35730788/118404186-15035900-b672-11eb-92ca-1f5e7d62a452.PNG">
@@ -24,8 +24,8 @@ Gyms, their owner and global news can only be added by an operator, while a gym 
 
 ## Technology
 
-To build the user-interface, we use [Flutter](https://flutter.dev/) which compiles down to iOS and Android.
-The backend is build with [Firebase](https://firebase.google.com/), as it provides an easy Flutter integration.
+To build the user-interface, we use [Flutter](https://flutter.dev/), which compiles down to native iOS and Android apps.
+The backend is build using [Firebase](https://firebase.google.com/), as it provides an easy Flutter integration.
 
 We test and deploy our code using automated [GitHub Actions](https://github.com/POLYTALON/climbing-gym-app/actions) that ran on different points during the development process.
 Our GitHub Actions include automatic testing of builds for iOS and Android.
