@@ -39,31 +39,7 @@ class _NewsScreenState extends State<NewsScreen>
               !userSnapshot.hasData) {
             if (auth.currentUser == null) {
               auth.logout();
-              return AlertDialog(
-                title: Text(
-                  'Logged out',
-                ),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text(
-                        'The User does not exist, you logged out!',
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => StartScreen()),
-                            (Route<dynamic> route) => false);
-                      },
-                      child: Text("OK")),
-                ],
-              );
+              return locator<AuthService>().showLogoutDialog(context);
             }
             return Container(width: 0.0, height: 0.0);
           } else {

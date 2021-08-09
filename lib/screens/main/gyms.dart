@@ -49,31 +49,7 @@ class _GymsScreenState extends State<GymsScreen>
               !snapshot.hasData) {
             if (auth.currentUser == null) {
               auth.logout();
-              return AlertDialog(
-                title: Text(
-                  'Logged out',
-                ),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text(
-                        'The User does not exist, you logged out!',
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => StartScreen()),
-                            (Route<dynamic> route) => false);
-                      },
-                      child: Text("OK")),
-                ],
-              );
+              return locator<AuthService>().showLogoutDialog(context);
             }
             return Center(
               child: CircularProgressIndicator(color: Constants.polyGreen),

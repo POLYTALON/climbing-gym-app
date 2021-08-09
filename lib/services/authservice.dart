@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -639,5 +640,32 @@ class AuthService with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  Widget showLogoutDialog(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'You are logged out.',
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(
+              'The User does not exist, you will be logged out!',
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => StartScreen()),
+                  (Route<dynamic> route) => false);
+            },
+            child: Text("OK")),
+      ],
+    );
   }
 }
