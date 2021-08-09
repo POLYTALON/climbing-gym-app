@@ -348,6 +348,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final auth = locator<AuthService>();
       final usercred = await auth.signInWithApple();
+
       await auth.userSetup(usercred.user.uid.toString());
       await Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => MyApp()));
@@ -406,6 +407,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     usercred.user.sendEmailVerification();
+                    Navigator.pop(context, true);
                   }),
               MaterialButton(
                   elevation: 5.0,

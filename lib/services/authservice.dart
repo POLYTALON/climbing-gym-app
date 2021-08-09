@@ -50,13 +50,87 @@ class AuthService with ChangeNotifier {
     return newUser;
   }
 
-  Future<void> unregister(String userEmail, String userPassword) async {
+  Future<bool> unregister(
+      String userId, String userEmail, String userPassword) async {
     await userReauthenticate(userEmail, userPassword);
+    await deleteUserAccountInDB(userId);
+    try {
+      await _auth.currentUser.delete();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> unregisterGoogle(String userId) async {
+    await userGoogleReauthenticate();
+    await deleteUserAccountInDB(userId);
     try {
       await _auth.currentUser.delete();
     } on FirebaseAuthException catch (e) {
       print(e);
+      return false;
     }
+    return true;
+  }
+
+  Future<bool> unregisterApple(String userId) async {
+    try {
+      await userAppleReauthenticate();
+    } on SignInWithAppleAuthorizationException catch (e) {
+      print(e);
+      return false;
+    }
+    await deleteUserAccountInDB(userId);
+    try {
+      await _auth.currentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      return false;
+    }
+    return true;
+  }
+
+  Future<UserCredential> userGoogleReauthenticate() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+    return await _auth.currentUser.reauthenticateWithCredential(credential);
+  }
+
+  Future<UserCredential> userAppleReauthenticate() async {
+    // To prevent replay attacks with the credential returned from Apple, we
+    // include a nonce in the credential request. When signing in with
+    // Firebase, the nonce in the id token returned by Apple, is expected to
+    // match the sha256 hash of `rawNonce`.
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: nonce,
+    );
+
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    //UserCredential firebaseUserCredential =
+    //    await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    return await _auth.currentUser
+        .reauthenticateWithCredential(oauthCredential);
   }
 
   Future<void> logout() async {
@@ -140,8 +214,15 @@ class AuthService with ChangeNotifier {
 
     // Set the displayname on first apple sign in
     if (firebaseUserCredential.user.displayName == null) {
-      firebaseUserCredential.user.updateDisplayName(
-          appleCredential.givenName + " " + appleCredential.familyName);
+      if (appleCredential.givenName == null &&
+          appleCredential.familyName == null) {
+        firebaseUserCredential.user.updateDisplayName('no Name available');
+      } else {
+        firebaseUserCredential.user.updateDisplayName(
+            appleCredential.givenName.toString() +
+                ' ' +
+                appleCredential.familyName.toString());
+      }
     }
     return firebaseUserCredential;
   }
@@ -441,10 +522,9 @@ class AuthService with ChangeNotifier {
     return await _auth.currentUser.reauthenticateWithCredential(credential);
   }
 
-  Future<bool> deleteUserAccountInDB(
-      String userId, String userEmail, String userPassword) async {
+  Future<bool> deleteUserAccountInDB(String userId) async {
     try {
-      await userReauthenticate(userEmail, userPassword);
+      //await userReauthenticate(userEmail, userPassword);
       bool isProviderPrivDeleted;
       bool isGymPrivDeleted;
       isProviderPrivDeleted = await deleteProvidePrivilege(userId);
@@ -465,8 +545,8 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("private")
-          .doc("operator")
+          .collection('private')
+          .doc('operator')
           .delete();
       return true;
     } on FirebaseException catch (e) {
@@ -485,7 +565,7 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("privileges")
+          .collection('privileges')
           .get()
           .then((doc) => doc.docs.forEach((gymPrivilege) {
                 if (gymPrivilege.exists) {
@@ -509,7 +589,7 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("privileges")
+          .collection('privileges')
           .doc(gymId)
           .delete();
       return true;
