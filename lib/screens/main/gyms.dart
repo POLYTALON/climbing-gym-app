@@ -3,6 +3,7 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/Gym.dart';
 import 'package:climbing_gym_app/models/UserRole.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/widgets/gyms/gymCard.dart';
@@ -46,6 +47,34 @@ class _GymsScreenState extends State<GymsScreen>
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.active ||
               !snapshot.hasData) {
+            if (auth.currentUser == null) {
+              auth.logout();
+              return AlertDialog(
+                title: Text(
+                  'Logged out',
+                ),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                        'The User does not exist, you logged out!',
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => StartScreen()),
+                            (Route<dynamic> route) => false);
+                      },
+                      child: Text("OK")),
+                ],
+              );
+            }
             return Center(
               child: CircularProgressIndicator(color: Constants.polyGreen),
             );

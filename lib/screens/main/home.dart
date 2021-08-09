@@ -2,6 +2,7 @@ import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppRoute.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/RouteColor.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/gymService.dart';
 import 'package:climbing_gym_app/services/routeColorService.dart';
@@ -38,6 +39,34 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active ||
               !userSnapshot.hasData) {
+            if (authService.currentUser == null) {
+              authService.logout();
+              return AlertDialog(
+                title: Text(
+                  'Logged out',
+                ),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                        'The User does not exist, you logged out!',
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => StartScreen()),
+                            (Route<dynamic> route) => false);
+                      },
+                      child: Text("OK")),
+                ],
+              );
+            }
             return Container();
           } else {
             if (userSnapshot.data.selectedGym == null ||

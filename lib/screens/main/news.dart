@@ -1,6 +1,7 @@
 import 'package:climbing_gym_app/locator.dart';
 import 'package:climbing_gym_app/models/AppUser.dart';
 import 'package:climbing_gym_app/models/News.dart';
+import 'package:climbing_gym_app/screens/start.dart';
 import 'package:climbing_gym_app/services/authservice.dart';
 import 'package:climbing_gym_app/services/newsService.dart';
 import 'package:climbing_gym_app/widgets/news/newsAddPanel.dart';
@@ -35,6 +36,34 @@ class _NewsScreenState extends State<NewsScreen>
         initialData: new AppUser().empty(),
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState != ConnectionState.active) {
+            if (auth.currentUser == null) {
+              auth.logout();
+              return AlertDialog(
+                title: Text(
+                  'Logged out',
+                ),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                        'The User does not exist, you logged out!',
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => StartScreen()),
+                            (Route<dynamic> route) => false);
+                      },
+                      child: Text("OK")),
+                ],
+              );
+            }
             return Container(width: 0.0, height: 0.0);
           } else {
             if (userSnapshot.data.selectedGym == null ||
