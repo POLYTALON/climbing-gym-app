@@ -559,8 +559,8 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("private")
-          .doc("operator")
+          .collection('private')
+          .doc('operator')
           .delete();
       return true;
     } on FirebaseException catch (e) {
@@ -579,7 +579,7 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("privileges")
+          .collection('privileges')
           .get()
           .then((doc) => doc.docs.forEach((gymPrivilege) {
                 if (gymPrivilege.exists) {
@@ -603,7 +603,7 @@ class AuthService with ChangeNotifier {
       await _firestore
           .collection('users')
           .doc(userId)
-          .collection("privileges")
+          .collection('privileges')
           .doc(gymId)
           .delete();
       return true;
