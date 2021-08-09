@@ -407,6 +407,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     usercred.user.sendEmailVerification();
+                    Navigator.pop(context, true);
                   }),
               MaterialButton(
                   elevation: 5.0,
